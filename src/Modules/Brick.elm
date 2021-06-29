@@ -1,3 +1,49 @@
+module Brick exposing
+    ( BrickVisibility(..), BrickCollision(..), BrickMove(..), BrickAppearance(..), Brick
+    , init, quickInit, defBrickCollisionBox
+    , view
+    , update
+    )
+
+{-| The block unit. The most common unit in the game
+
+
+# Brick
+
+@docs BrickVisibility, BrickCollision, BrickMove, BrickAppearance, Brick
+
+
+# Brick Constant
+
+@docs brickWidth, brickHeight
+
+
+# Init
+
+@docs init, quickInit, defBrick, defBrickCollisionBox
+
+
+# View
+
+@docs view, viewOneBrick
+
+
+# Update
+
+@docs update, updateOneBrick, updateOneBrickVisibility, updateOneBrickCollision, updateOneBrickMove
+
+-}
+
+import Array exposing (Array)
+import Event
+import GlobalBasics
+import MainType
+import Maybe exposing (withDefault)
+import Player
+import Svg exposing (Svg)
+import Svg.Attributes as SvgAttr
+
+
 {-| `BrickVisibility` describes the visibility of the block. `Visible/Invisible (nextVisibility: BrickVisibility)`:
 nextVisibility means what will happen after this visibility. `NoNextBrickVisibility` means no further visibility
 change (Caution! Don't put it the first place). `VisibleAfterEvent/InvisibleAfterEvent (eventID: Int) (nextVisibility:
@@ -49,7 +95,6 @@ type BrickCollision
     | CollideAfterEvent Int BrickCollision
     | NoCollideAfterEvent Int BrickCollision
     | NoNextBrickCollision
-
 
 
 {-| `BrickMove` describes whether and how the brick will move in the game. `Move (arrayPos : Array Pos) (speed :
