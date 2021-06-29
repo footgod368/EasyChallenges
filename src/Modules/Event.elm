@@ -1,3 +1,38 @@
+module Event exposing
+    ( ActEvent, IfActEventAct(..), ifActEventById, ifActEventByName, ifActEvent
+    , EventInfo, EventIfStartAct(..), EventActType(..), EventActCounter(..), EventDuration, Event
+    , init, quickDuration
+    , update
+    )
+
+{-| The events that are essential for all other units.
+
+
+# ActivatedEvent
+
+@docs ActEvent, IfActEventAct, ifActEventById, sumActEventById, ifActEventByName, sumActEventByName, ifActEvent
+@docs sumActEvent, activateEvent, deactivateEventById, deactivateEventByName, deactivateEvent
+
+
+# Event
+
+@docs EventInfo, EventIfStartAct, EventActType, EventActCounter, EventDuration, Event
+
+
+# init
+
+@docs init, quickDuration
+
+
+# update
+
+@docs update, updateOneEvent, updateOneEventIfStartAct, eventUpdateActivateEvent, updateOneEventActType
+@docs updateOneEventActCounter, defEvent
+
+-}
+
+--module Event exposing (..)
+
 import Array exposing (Array)
 import GlobalBasics
 import MainType
@@ -42,7 +77,6 @@ sumActEventById id actEvent sum =
 
     else
         sum
-
 
 
 {-| `ifActEventById` returns whether a event with a given id is activated. Normally, in all levels, there should be a
@@ -160,35 +194,6 @@ ifActEvent model eventInfo =
 
     else
         ActEventAct
-
-
-{-| `activateEvent` activates a event. Normally, in all levels, there should be a `Array ActEvent` value `actEvent` in
-`Model`. `activeEvent` takes the `Model`, `Event` and returns `Model` with this `Event` activated. You can use it this
-way:
-
-    type alias EgModel =
-        { actEvent : Array ActEvent
-        }
-
-    egModel : EgModel
-    egModel =
-        EgModel
-            (Array.fromList
-                [ ActEvent 2 "Event2"
-                , ActEvent 4 "Event4"
-                ]
-            )
-
-    --event == { id = 3, name = "Event3" }
-    event : Event
-
-    --egModel2 == { actEvent = Array.fromList [{ id = 2, name = "Event2" },{ id = 4, name = "Event4" },{ id = 3, name = "Event3" }] }
-    egModel2 : EgModel
-    egModel2 =
-        activateEvent egModel Event
-
--}
-
 
 
 {-| `activateEvent` activates a event. Normally, in all levels, there should be a `Array ActEvent` value `actEvent` in
@@ -394,7 +399,6 @@ type alias Event =
     }
 
 
-
 {-| `eventInit` initiates an event. You can use it like this:
 
     event : Event
@@ -443,3 +447,132 @@ update ( model, cmd ) =
 
 {-| `updateOneEvent` updates one event, used in `update`. Not exposed.
 -}
+updateOneEvent : { model | actEvent : Array ActEvent, player : Player.Player, event : Array Event } -> Int -> { model | actEvent : Array ActEvent, player : Player.Player, event : Array Event }
+updateOneEvent model index =
+    let
+        event =
+            Array.get index model.event
+                |> withDefault defEvent
+    in
+    if event == defEvent then
+        model
+
+    else
+        let
+            ( newModel, newEvent ) =
+                updateOneEventActCounter ( model, event )
+                    |> updateOneEventIfStartAct
+
+            newEventModel =
+                { newModel | event = Array.set index newEvent newModel.event }
+        in
+        newEventModel
+
+
+{-| `updateOneEventIfStartAct` updates one event's `ifStartAct`, used in `updateOneEvent`. Not exposed.
+-}
+updateOneEventIfStartAct : ( { model | actEvent : Array ActEvent, player : Player.Player }, Event ) -> ( { model | actEvent : Array ActEvent, player : Player.Player }, Event )
+updateOneEventIfStartAct ( model, event ) =
+    case event.ifStartAct of
+        AfterActEvent eventInfo ->
+            if ifActEvent model eventInfo == ActEventAct then
+                let
+                    newEvent =
+                        { event | ifStartAct = StartActivated }
+                in
+                updateOneEventIfStartAct ( model, newEvent )
+
+            else
+                ( model, event )
+
+        StartActivated ->
+            updateOneEventActType ( model, event )
+
+
+{-| `eventUpdateActivateEvent` activates the event. Used in `updateOneEventActType`. Not exposed.
+-}
+eventUpdateActivateEvent : ( { model | actEvent : Array ActEvent }, Event ) -> ( { model | actEvent : Array ActEvent }, Event )
+eventUpdateActivateEvent ( model, event ) =
+    let
+        newModel =
+            activateEvent model event.info
+
+        oldDuration =
+            event.duration
+
+        newDuration =
+            { oldDuration
+                | leftActTimes = oldDuration.leftActTimes - 1
+                , nowInterval = oldDuration.nowInterval
+            }
+
+        newActCounter =
+            EventActTill oldDuration.actDuration
+
+        newEvent =
+            { event | duration = newDuration, actCounter = newActCounter }
+    in
+    ( newModel, newEvent )
+
+
+{-| `updateOneEventActType` updates one event's `eventActType`, used in `updateOneEvent`. Not exposed.
+-}
+updateOneEventActType : ( { model | actEvent : Array ActEvent, player : Player.Player }, Event ) -> ( { model | actEvent : Array ActEvent, player : Player.Player }, Event )
+updateOneEventActType ( model, event ) =
+    if event.duration.leftActTimes == 0 then
+        ( model, event )
+
+    else if event.duration.nowInterval /= 0 then
+        let
+            oldEventDuration =
+                event.duration
+
+            newEventDuration =
+                { oldEventDuration | nowInterval = oldEventDuration.nowInterval - 1 }
+
+            newEvent =
+                { event | duration = newEventDuration }
+        in
+        ( model, newEvent )
+
+    else
+        case event.actType of
+            TimeAfterStart timeLeft ->
+                if timeLeft == 0 then
+                    eventUpdateActivateEvent ( model, event )
+
+                else
+                    ( model, { event | actType = TimeAfterStart (timeLeft - 1) } )
+
+            PlayerCollide collisionBox ->
+                if Player.playerIfCollidePoly model { pos = ( 0.0, 0.0 ), collisionBox = collisionBox } == GlobalBasics.Collided then
+                    eventUpdateActivateEvent ( model, event )
+
+                else
+                    ( model, event )
+
+
+{-| `updateOneEventActType` updates one event's `eventActType`, used in `updateOneEvent`. Not exposed.
+-}
+updateOneEventActCounter : ( { model | actEvent : Array ActEvent, player : Player.Player }, Event ) -> ( { model | actEvent : Array ActEvent, player : Player.Player }, Event )
+updateOneEventActCounter ( model, event ) =
+    case event.actCounter of
+        EventNotAct ->
+            ( model, event )
+
+        EventActTill timeLeft ->
+            if timeLeft == 0 then
+                let
+                    newModel =
+                        deactivateEvent model event.info
+
+                    newEvent =
+                        { event | actCounter = EventNotAct }
+                in
+                ( newModel, newEvent )
+
+            else if timeLeft == -1 then
+                ( model, event )
+
+            else
+                ( model, { event | actCounter = EventActTill (timeLeft - 1) } )
