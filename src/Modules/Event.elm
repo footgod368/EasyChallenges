@@ -393,3 +393,53 @@ type alias Event =
     , actCounter : EventActCounter
     }
 
+
+
+{-| `eventInit` initiates an event. You can use it like this:
+
+    event : Event
+    event =
+        init { id = 1, name = "Event1" } StartActivated (TimeAfterStart 60) (quickDuration 60)
+
+-}
+init : EventInfo -> EventIfStartAct -> EventActType -> EventDuration -> Event
+init eventInfo eventIfStartAct eventActType eventDuration =
+    Event eventInfo eventIfStartAct eventActType eventDuration EventNotAct
+
+
+{-| `quickDuration` returns a simple `EventDuration` that only activates once, and lasts for `duration`. You can use
+it like this:
+
+    eventDuration : EventDuration
+    eventDuration =
+        quickDuration 60
+
+-}
+quickDuration : Int -> EventDuration
+quickDuration duration =
+    EventDuration 1 0 duration 0
+
+
+{-| `nulEvent` is used in maybe's withDefault function. Use it directly, noe exposed.
+-}
+defEvent : Event
+defEvent =
+    init { id = 0, name = "" } StartActivated (TimeAfterStart 0) (quickDuration 0)
+
+
+update :
+    ( { model | actEvent : Array ActEvent, player : Player.Player, event : Array Event }, Cmd MainType.Msg )
+    -> ( { model | actEvent : Array ActEvent, player : Player.Player, event : Array Event }, Cmd MainType.Msg )
+update ( model, cmd ) =
+    let
+        newModel =
+            List.foldl
+                (\i tmpModel -> updateOneEvent tmpModel i)
+                model
+                (List.range 0 (Array.length model.event - 1))
+    in
+    ( newModel, cmd )
+
+
+{-| `updateOneEvent` updates one event, used in `update`. Not exposed.
+-}
