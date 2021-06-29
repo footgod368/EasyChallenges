@@ -1,4 +1,42 @@
 module GlobalBasics exposing
+    ( Pos, addPosPos, minusPosPos, distPosPos
+    , LineSeg, addLSPos, minusLSPos, addPolyPos
+    , defPos, defLineSeg, defPoly
+    , CollisionStatus(..), CollisionBox(..), ifCollideLSPoly, ifCollidePolyPoly
+    , blockPos, blockSize
+    )
+
+{-| The global types that are used in all game.
+
+
+# Position
+
+@docs Pos, addPosPos, minusPosPos, distPosPos
+
+
+# LineSegment
+
+@docs LineSeg, addLSPos, minusLSPos, addPolyPos
+
+
+# Default
+
+@docs defPos, defLineSeg, defPoly
+
+
+# Collide
+
+@docs CollisionStatus, CollisionBox, vecCrossProd, ifPosOneLs, ifCollideLSLS, ifCollideLSPoly, ifCollidePolyPoly
+
+
+# Stage Index
+
+@ docs blockSize, blockPos
+
+-}
+
+--module GlobalBasics exposing (..)
+
 import Array exposing (Array)
 
 
@@ -199,7 +237,6 @@ defPoly =
     Array.fromList []
 
 
-
 {-| `CollisionStatus` is a typed used in collide function return
 -}
 type CollisionStatus
@@ -270,3 +307,131 @@ ifPosOnLs p ls =
     else
         False
 
+
+{-| `ifCollideLineSegLineSeg judges whether two LineSeg Collides. Used in`ifCollideLsPoly\`. Not exposed.
+-}
+ifCollideLSLS : LineSeg -> LineSeg -> CollisionStatus
+ifCollideLSLS ls1 ls2 =
+    let
+        ( ls1P1, ls1P2 ) =
+            ls1
+
+        ( ls2P1, ls2P2 ) =
+            ls2
+    in
+    if ifPosOnLs ls1P1 ls2 || ifPosOnLs ls1P2 ls2 || ifPosOnLs ls2P1 ls1 || ifPosOnLs ls2P2 ls1 then
+        Collided
+
+    else
+        let
+            v1P1_1P2 =
+                minusPosPos ls1P1 ls1P2
+
+            v2P1_2P2 =
+                minusPosPos ls2P1 ls2P2
+
+            v1P1_2P1 =
+                minusPosPos ls1P1 ls2P1
+
+            v1P1_2P2 =
+                minusPosPos ls1P1 ls2P2
+
+            v1P2_2P1 =
+                minusPosPos ls1P2 ls2P1
+
+            v1P2_2P2 =
+                minusPosPos ls1P2 ls2P2
+
+            if1P1 =
+                vecCrossProd v1P1_2P1 v1P1_1P2 * vecCrossProd v1P1_2P2 v1P1_1P2 < 0
+
+            if2P1 =
+                vecCrossProd v1P2_2P1 v2P1_2P2 * vecCrossProd v1P1_2P1 v2P1_2P2 < 0
+        in
+        if if1P1 && if2P1 then
+            Collided
+
+        else
+            NotCollided
+
+
+{-| `ifCollideLSPoly` judges whether a `LineSeg` collides with any `LineSeg` in an array, which can be viewed as a
+polygon. You can use it this way:
+
+    ls : LineSeg
+    ls =
+        ( ( 0.0, 0.0 ), ( 2.0, 2.0 ) )
+
+    poly : Array LineSeg
+    poly =
+        Array.fromList [ ( ( 0.0, 2.0 ), ( 2.0, 0.0 ) ), ( ( 2.0, 0.0 ), ( 0.0, -2.0 ) ) ]
+
+    --collisionStatus == Collided
+    collisionStatus : CollisionStatus
+    collisionStatus =
+        ifCollideLsPoly ls poly
+
+-}
+ifCollideLSPoly : LineSeg -> Array LineSeg -> CollisionStatus
+ifCollideLSPoly ls poly =
+    let
+        ifNotCollided =
+            Array.filter (\polyLS -> ifCollideLSLS ls polyLS == Collided) poly
+                |> Array.isEmpty
+    in
+    if ifNotCollided then
+        NotCollided
+
+    else
+        Collided
+
+
+{-| `ifCollidePolyPoly` judges whether two polygons collide with each other in any two `LineSegment` in them. Polygons
+are defined as Array LineSegment. You can use it this way.
+
+    poly1 : Array LineSeg
+    poly1 =
+        Array.fromList [ ( ( 0.0, 2.0 ), ( 2.0, 2.0 ) ), ( ( 2.0, 2.0 ), ( 4.0, 0.0 ) ) ]
+
+    poly2 : Array LineSeg
+    poly2 =
+        Array.fromList [ ( ( 0.0, 2.0 ), ( 2.0, 0.0 ) ), ( ( 2.0, 0.0 ), ( 0.0, -2.0 ) ) ]
+
+    --collisionStatus == Collided
+    collisionStatus : CollisionStatus
+    collisionStatus =
+        ifCollidePolyPoly poly1 poly2
+
+-}
+ifCollidePolyPoly : Array LineSeg -> Array LineSeg -> CollisionStatus
+ifCollidePolyPoly poly1 poly2 =
+    let
+        ifNotCollided =
+            Array.filter (\poly1LS -> ifCollideLSPoly poly1LS poly2 == Collided) poly1
+                |> Array.isEmpty
+    in
+    if ifNotCollided then
+        NotCollided
+
+    else
+        Collided
+
+
+blockSize : ( Float, Float )
+blockSize =
+    ( 40.0, 40.0 )
+
+
+blockPos : ( Int, Int ) -> ( Float, Float )
+blockPos ( x, y ) =
+    let
+        ( blockX, blockY ) =
+            blockSize
+
+        posX =
+            (toFloat x - 1.0) * blockX
+
+        posY =
+            (toFloat y - 1.0) * blockY
+    in
+    ( posX, posY )
