@@ -104,3 +104,92 @@ type alias Brick =
     , brickMove : BrickMove
     }
 
+
+{-| DefaultBrick used with withDefault
+-}
+defBrick : Brick
+defBrick =
+    quickInit ( 0, 0 )
+
+
+{-| initiate a brick, with full functions
+-}
+init : ( Float, Float ) -> GlobalBasics.CollisionBox -> BrickAppearance -> BrickVisibility -> BrickCollision -> BrickMove -> Brick
+init ( x, y ) collisionBox brickAppearance brickVisibility brickCollision brickMove =
+    { pos = ( x, y )
+    , collisionBox = collisionBox
+    , appearance = brickAppearance
+    , brickVisibility = brickVisibility
+    , brickCollision = brickCollision
+    , brickMove = brickMove
+    }
+
+
+{-| default appearance, always visible, have collision, don't move
+-}
+quickInit : ( Float, Float ) -> Brick
+quickInit ( x, y ) =
+    { pos = ( x, y )
+    , collisionBox = defBrickCollisionBox
+    , appearance = NoAppearance
+    , brickVisibility = Visible NoNextBrickVisibility
+    , brickCollision = Collide NoNextBrickCollision
+    , brickMove = NoNextBrickMove
+    }
+
+
+{-| default collisionBox
+-}
+defBrickCollisionBox : GlobalBasics.CollisionBox
+defBrickCollisionBox =
+    GlobalBasics.Polygon
+        (Array.fromList
+            [ ( ( 0.0, 0.0 ), ( brickWidth, 0.0 ) )
+            , ( ( brickWidth, 0.0 ), ( brickWidth, brickHeight ) )
+            , ( ( brickWidth, brickHeight ), ( 0.0, brickHeight ) )
+            , ( ( 0.0, brickHeight ), ( 0.0, 0.0 ) )
+            ]
+        )
+
+
+{-| view one brick, used in view, not exposed.
+-}
+viewOneBrick : Brick -> List (Svg MainType.Msg)
+viewOneBrick brick =
+    case brick.brickVisibility of
+        Visible nextVisibility ->
+            let
+                ( brickX, brickY ) =
+                    brick.pos
+            in
+            [ Svg.rect
+                [ SvgAttr.x (String.fromFloat brickX)
+                , SvgAttr.y (String.fromFloat brickY)
+                , SvgAttr.width (String.fromFloat brickWidth)
+                , SvgAttr.height (String.fromFloat brickHeight)
+                , SvgAttr.strokeWidth "2"
+                , SvgAttr.stroke "#000000"
+                , SvgAttr.fill "#00000050"
+                ]
+                []
+            ]
+
+        Invisible nextVisibility ->
+            []
+
+        _ ->
+            []
+
+
+{-| view function of brick
+-}
+view : { model | bricks : Array Brick } -> List (Svg MainType.Msg)
+view model =
+    let
+        bricksList =
+            Array.toList model.bricks
+
+        svgBrickListList =
+            List.map (\brick -> viewOneBrick brick) bricksList
+    in
+    List.concat svgBrickListList
