@@ -193,3 +193,72 @@ view model =
             List.map (\brick -> viewOneBrick brick) bricksList
     in
     List.concat svgBrickListList
+
+
+{-| update function of brick unit
+-}
+update : ( { model | player : Player.Player, bricks : Array Brick, actEvent : Array Event.ActEvent }, Cmd MainType.Msg ) -> ( { model | player : Player.Player, bricks : Array Brick, actEvent : Array Event.ActEvent }, Cmd MainType.Msg )
+update ( model, cmd ) =
+    ( List.foldl updateOneBrick model (List.range 0 (Array.length model.bricks - 1)), cmd )
+
+
+{-| update one brick. Used in update. Not exposed.
+-}
+updateOneBrick : Int -> { model | player : Player.Player, bricks : Array Brick, actEvent : Array Event.ActEvent } -> { model | player : Player.Player, bricks : Array Brick, actEvent : Array Event.ActEvent }
+updateOneBrick id model =
+    model
+        |> updateOneBrickVisibility id
+        |> updateOneBrickCollision id
+        |> updateOneBrickMove id
+
+
+{-| update brick visibility. Used in update. Not exposed.
+-}
+updateOneBrickVisibility : Int -> { model | player : Player.Player, bricks : Array Brick, actEvent : Array Event.ActEvent } -> { model | player : Player.Player, bricks : Array Brick, actEvent : Array Event.ActEvent }
+updateOneBrickVisibility id model =
+    let
+        brick =
+            Array.get id model.bricks
+                |> withDefault defBrick
+
+        nextVisibility =
+            case brick.brickVisibility of
+                Visible tempNextVisibility ->
+                    tempNextVisibility
+
+                Invisible tempNextVisibility ->
+                    tempNextVisibility
+
+                _ ->
+                    NoNextBrickVisibility
+
+        newBrickVisibility =
+            case nextVisibility of
+                VisibleAfterEvent eventID nextNextVisibility ->
+                    if Event.ifActEventById model eventID == Event.ActEventAct then
+                        Visible nextNextVisibility
+
+                    else
+                        brick.brickVisibility
+
+                InvisibleAfterEvent eventID nextNextVisibility ->
+                    if Event.ifActEventById model eventID == Event.ActEventAct then
+                        Invisible nextNextVisibility
+
+                    else
+                        brick.brickVisibility
+
+                _ ->
+                    brick.brickVisibility
+
+        newBrick =
+            { brick | brickVisibility = newBrickVisibility }
+
+        newBricks =
+            Array.set id newBrick model.bricks
+
+        newModel =
+            { model | bricks = newBricks }
+    in
+    newModel
+
