@@ -239,3 +239,57 @@ view model =
         []
     ]
 
+
+{-| `playerRefreshJump` turns the number of jumps the player can do into jumpNum constant. You can use it like this.
+
+    egModel =
+        { player = init ( 0.0, 0.0 ) }
+
+    newModel =
+        playerRefreshJump egModel
+
+-}
+playerRefreshJump : { model | player : Player } -> { model | player : Player }
+playerRefreshJump model =
+    let
+        oldPlayer =
+            model.player
+
+        newPlayer =
+            { oldPlayer | jump = Jump playerJumpNum -1 }
+    in
+    { model | player = newPlayer }
+
+
+{-| `playerIfCollidePoly` judges whether the player collide with a given unit. Input a model, in which always contain
+a `Player` and input a unit, in which there should be a `pos` and a `collisionBox`. Return `CollisionStatus`. You
+can use it this way:
+
+    egModel =
+        { player = init ( 0.0, 0.0 ) }
+
+    egCollisionBox : CollisionBox
+    egCollisionBox =
+        Polygon (Array.fromList [ ( ( 20.0, 10.0 ), ( 20.0, 50.0 ) ), ( ( 20.0, 50.0 ), ( 60.0, 50.0 ) ) ])
+
+    -- collideStatus == Collided
+    collisionStatus : CollisionStatus
+    collisionStatus =
+        playerIfCollidePoly egModel { pos = ( 5.0, 10.0 ), collisionBox = egCollisionBox }
+
+-}
+playerIfCollidePoly : { model | player : Player } -> { unit | pos : GlobalBasics.Pos, collisionBox : GlobalBasics.CollisionBox } -> GlobalBasics.CollisionStatus
+playerIfCollidePoly model unit =
+    case model.player.collisionBox of
+        GlobalBasics.Polygon playerPoly ->
+            case unit.collisionBox of
+                GlobalBasics.Polygon unitPoly ->
+                    let
+                        playerPosCollisionBox =
+                            GlobalBasics.addPolyPos playerPoly model.player.pos
+
+                        unitCollisionBox =
+                            GlobalBasics.addPolyPos unitPoly unit.pos
+                    in
+                    GlobalBasics.ifCollidePolyPoly playerPosCollisionBox unitCollisionBox
+
