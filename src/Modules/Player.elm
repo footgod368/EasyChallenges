@@ -293,3 +293,198 @@ playerIfCollidePoly model unit =
                     in
                     GlobalBasics.ifCollidePolyPoly playerPosCollisionBox unitCollisionBox
 
+
+{-| `playerVerticalCollide` handles vertical collision happens on player. Used in `playerCollideRigidBody`. Not exposed.
+-}
+playerVerticalCollide : { model | player : Player } -> { model | player : Player }
+playerVerticalCollide model =
+    let
+        oldPlayer =
+            model.player
+
+        newPlayerChangeVelocity =
+            { oldPlayer | velocity = ( Tuple.first oldPlayer.velocity, 0.0 ) }
+
+        --newPlayerChangePos =
+        --    { newPlayerChangeVelocity | pos = newPlayerChangeVelocity.lastPos }
+        newModel =
+            { model | player = newPlayerChangeVelocity }
+    in
+    newModel
+
+
+{-| `playerHorizontalCollide` handles horizontal collision happens on player. Used in `playerCollideRigidBody`. Not
+exposed.
+-}
+playerHorizontalCollide : { model | player : Player } -> { model | player : Player }
+playerHorizontalCollide model =
+    let
+        oldPlayer =
+            model.player
+
+        newPlayerChangeVelocity =
+            { oldPlayer | velocity = ( 0.0, Tuple.second oldPlayer.velocity ) }
+
+        --newPlayerChangePos =
+        --    { newPlayerChangeVelocity | pos = newPlayerChangeVelocity.lastPos }
+        newModel =
+            { model | player = newPlayerChangeVelocity }
+    in
+    newModel
+
+
+{-| `playerCollideRigidBody` handles player collide into a unit, which is a rigid body. Since a unit should have
+`pos` and `collisionBox` in its definition. You can use it like this way:
+
+    egPlayer : Player
+    egPlayer =
+        init ( 10.0, 10.0 )
+
+    egModel : { player : Player }
+    egModel =
+        { player = egPlayer }
+
+    unit : { pos : Pos, collisionBox : CollisionBox }
+    unit =
+        { pos = ( 5.0, 5.0 )
+        , collisionBox =
+            Polygon
+                (Array.fromList
+                    [ ( ( 0, 0 ), ( 10, 0 ) )
+                    , ( ( 10, 0 ), ( 10, 10 ) )
+                    , ( ( 10, 10 ), ( 0, 10 ) )
+                    , ( ( 0, 10 ), ( 0, 0 ) )
+                    ]
+                )
+        }
+
+    resultModel : { player : Player }
+    resultModel =
+        playerCollideRigidBody egModel player
+
+-}
+playerCollideRigidBody : { model | player : Player } -> { unit | pos : GlobalBasics.Pos, collisionBox : GlobalBasics.CollisionBox } -> { model | player : Player }
+playerCollideRigidBody model unit =
+    case model.player.collisionBox of
+        GlobalBasics.Polygon playerPoly ->
+            case unit.collisionBox of
+                GlobalBasics.Polygon unitPoly ->
+                    if playerIfCollidePoly model unit /= GlobalBasics.Collided then
+                        model
+
+                    else
+                        let
+                            playerPolyNow =
+                                GlobalBasics.addPolyPos playerPoly model.player.pos
+
+                            unitPolyNow =
+                                GlobalBasics.addPolyPos unitPoly unit.pos
+
+                            playerCollideStatusNow =
+                                Array.map (\ls -> GlobalBasics.ifCollideLSPoly ls unitPolyNow) playerPolyNow
+
+                            playerCollideSum =
+                                Array.foldl
+                                    (\collideStatus sum ->
+                                        if collideStatus == GlobalBasics.Collided then
+                                            sum + 1
+
+                                        else
+                                            sum
+                                    )
+                                    0
+                                    playerCollideStatusNow
+                        in
+                        case playerCollideSum of
+                            1 ->
+                                if
+                                    (withDefault GlobalBasics.NotCollided (Array.get 0 playerCollideStatusNow)
+                                        == GlobalBasics.Collided
+                                    )
+                                        || (withDefault GlobalBasics.NotCollided
+                                                (Array.get 2
+                                                    playerCollideStatusNow
+                                                )
+                                                == GlobalBasics.Collided
+                                           )
+                                then
+                                    playerVerticalCollide model
+
+                                else
+                                    playerHorizontalCollide model
+
+                            2 ->
+                                if
+                                    withDefault GlobalBasics.NotCollided (Array.get 0 playerCollideStatusNow)
+                                        == GlobalBasics.Collided
+                                        && withDefault GlobalBasics.NotCollided (Array.get 2 playerCollideStatusNow)
+                                        == GlobalBasics.Collided
+                                then
+                                    playerHorizontalCollide model
+
+                                else if
+                                    withDefault GlobalBasics.NotCollided (Array.get 1 playerCollideStatusNow)
+                                        == GlobalBasics.Collided
+                                        && withDefault GlobalBasics.NotCollided (Array.get 3 playerCollideStatusNow)
+                                        == GlobalBasics.Collided
+                                then
+                                    playerVerticalCollide model
+
+                                else
+                                    let
+                                        playerPolyXNow =
+                                            GlobalBasics.addPolyPos
+                                                playerPoly
+                                                ( Tuple.first model.player.pos, Tuple.second model.player.lastPos )
+
+                                        playerPolyYNow =
+                                            GlobalBasics.addPolyPos
+                                                playerPoly
+                                                ( Tuple.first model.player.lastPos, Tuple.second model.player.pos )
+
+                                        collideXModel =
+                                            if
+                                                GlobalBasics.ifCollidePolyPoly playerPolyXNow unitPolyNow
+                                                    == GlobalBasics.Collided
+                                            then
+                                                playerHorizontalCollide model
+
+                                            else
+                                                model
+
+                                        collideYModel =
+                                            if
+                                                GlobalBasics.ifCollidePolyPoly playerPolyYNow unitPolyNow
+                                                    == GlobalBasics.Collided
+                                            then
+                                                playerVerticalCollide collideXModel
+
+                                            else
+                                                collideXModel
+
+                                        --newModel =
+                                        --    let
+                                        --        oldPlayer =
+                                        --            collideYModel.player
+                                        --
+                                        --        newPlayer =
+                                        --                { oldPlayer | pos = oldPlayer.lastPos }
+                                        --    in
+                                        --    { collideYModel | player = newPlayer }
+                                    in
+                                    collideYModel
+
+                            3 ->
+                                if
+                                    withDefault GlobalBasics.NotCollided (Array.get 0 playerCollideStatusNow)
+                                        == GlobalBasics.Collided
+                                        && withDefault GlobalBasics.NotCollided (Array.get 2 playerCollideStatusNow)
+                                        == GlobalBasics.Collided
+                                then
+                                    playerHorizontalCollide model
+
+                                else
+                                    playerVerticalCollide model
+
+                            _ ->
+                                model
