@@ -341,3 +341,55 @@ deactivateEvent model event =
     in
     newModel
 
+
+{-| `EventInfo` is a record that stores the basic information (id and name) of a event. Used in all places that use
+events
+-}
+type alias EventInfo =
+    { id : Int
+    , name : String
+    }
+
+
+type EventIfStartAct
+    = AfterActEvent EventInfo
+    | StartActivated
+
+
+type EventActType
+    = TimeAfterStart Int
+    | PlayerCollide GlobalBasics.CollisionBox
+
+
+{-| `EventActivatedCounter` is a type that records the current event activation status. `NotActivated` means not
+activated. `ActivatedTill (tillNum: Int)` means after `tillNum` frames, the `Event` will be deactivated.
+-}
+type EventActCounter
+    = EventNotAct
+    | EventActTill Int
+
+
+{-| `EventDuration` is a record that stores event activation status. `leftActTimes` means the left times the event
+can be activated, -1 means infinitely. `actInterval` means after a activation, how many frames will the next activation
+not activated though fits the activation pending. `actDuration` means how many frames will this `Event` be activated,
+-1 means infinitely. `nowInterval` should be initialized with 0, it means until when will this `EventDuration` be
+activated again.
+-}
+type alias EventDuration =
+    { leftActTimes : Int
+    , actInterval : Int
+    , actDuration : Int
+    , nowInterval : Int
+    }
+
+
+{-| `Event` is a record that stores the core unit: event. See individual type for details.
+-}
+type alias Event =
+    { info : EventInfo
+    , ifStartAct : EventIfStartAct
+    , actType : EventActType
+    , duration : EventDuration
+    , actCounter : EventActCounter
+    }
+
