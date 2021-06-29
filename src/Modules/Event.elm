@@ -188,3 +188,156 @@ way:
         activateEvent egModel Event
 
 -}
+
+
+
+{-| `activateEvent` activates a event. Normally, in all levels, there should be a `Array ActEvent` value `actEvent` in
+`Model`. `activeEvent` takes the `Model`, `Event` and returns `Model` with this `Event` activated. You can use it this
+way:
+
+    type alias EgModel =
+        { actEvent : Array ActEvent
+        }
+
+    egModel : EgModel
+    egModel =
+        EgModel
+            (Array.fromList
+                [ ActEvent 2 "Event2"
+                , ActEvent 4 "Event4"
+                ]
+            )
+
+    --event == { id = 3, name = "Event3" }
+    event : Event
+
+    --egModel2 == { actEvent = Array.fromList [{ id = 2, name = "Event2" },{ id = 4, name = "Event4" },{ id = 3, name = "Event3" }] }
+    egModel2 : EgModel
+    egModel2 =
+        activateEvent egModel Event
+
+-}
+activateEvent : { model | actEvent : Array ActEvent } -> ActEvent -> { model | actEvent : Array ActEvent }
+activateEvent model event =
+    let
+        actEvent =
+            ActEvent event.id event.name
+
+        newActEvent =
+            if List.member event (Array.toList model.actEvent) then
+                model.actEvent
+
+            else
+                Array.push actEvent model.actEvent
+
+        newModel =
+            { model | actEvent = newActEvent }
+    in
+    newModel
+
+
+{-| `deactivateEventById` deactivates a event by `id`. Normally, in all levels, there should be a `Array ActEvent` value
+`actEvent` in `Model`. `deactivateEventById` takes the `Model` and `id` of `Event` and returns `Model` with this `Event`
+deactivated. Note: if not found this `Event` in `actEvent`, it will be ignored and doesn't send error. You can use it
+like this:
+
+    type alias EgModel =
+        { actEvent : Array ActEvent
+        }
+
+    egModel : EgModel
+    egModel =
+        EgModel
+            (Array.fromList
+                [ ActEvent 2 "Event2"
+                , ActEvent 4 "Event4"
+                ]
+            )
+
+    --egModel2 == { actEvent = Array.fromList [{ id = 4, name = "Event4" }] }
+    egModel2 : EgModel
+    egModel2 =
+        deactivateEventById egModel 2
+
+-}
+deactivateEventById : { model | actEvent : Array ActEvent } -> Int -> { model | actEvent : Array ActEvent }
+deactivateEventById model id =
+    let
+        newActEvent =
+            Array.filter (\actEvent -> actEvent.id /= id) model.actEvent
+
+        newModel =
+            { model | actEvent = newActEvent }
+    in
+    newModel
+
+
+{-| `deactivateEventByName` deactivates a event by `name`. Normally, in all levels, there should be a `Array ActEvent`
+value `actEvent` in `Model`. `deactivateEventByName` takes the `Model` and `name` of `Event` and returns `Model` with
+this `Event` deactivated. Note: if not found this `Event` in `actEvent`, it will be ignored and doesn't send error. You
+can use it like this:
+
+    type alias EgModel =
+        { actEvent : Array ActEvent
+        }
+
+    egModel : EgModel
+    egModel =
+        EgModel
+            (Array.fromList
+                [ ActEvent 2 "Event2"
+                , ActEvent 4 "Event4"
+                ]
+            )
+
+    --egModel2 == { actEvent = Array.fromList [{ id = 4, name = "Event4" }] }
+    egModel2 : EgModel
+    egModel2 =
+        deactivateEventById egModel 2
+
+-}
+deactivateEventByName : { model | actEvent : Array ActEvent } -> String -> { model | actEvent : Array ActEvent }
+deactivateEventByName model name =
+    let
+        newActEvent =
+            Array.filter (\actEvent -> actEvent.name /= name) model.actEvent
+
+        newModel =
+            { model | actEvent = newActEvent }
+    in
+    newModel
+
+
+{-| `deactivateEvent` deactivates a event by `name` and `id`. Only deactivates when both of them matches, really
+similar to `deactivateEventByName` and `deactivateEventById`. You can use it like this:
+
+    type alias EgModel =
+        { actEvent : Array ActEvent
+        }
+
+    egModel : EgModel
+    egModel =
+        EgModel
+            (Array.fromList
+                [ ActEvent 2 "Event2"
+                , ActEvent 4 "Event4"
+                ]
+            )
+
+    --egModel2 == { actEvent = Array.fromList [{ id = 4, name = "Event4" }] }
+    egModel2 : EgModel
+    egModel2 =
+        deactivateEvent egModel { id = 2, name = "Event2" }
+
+-}
+deactivateEvent : { model | actEvent : Array ActEvent } -> { event | id : Int, name : String } -> { model | actEvent : Array ActEvent }
+deactivateEvent model event =
+    let
+        newActEvent =
+            Array.filter (\actEvent -> event.name /= actEvent.name && event.name /= actEvent.name) model.actEvent
+
+        newModel =
+            { model | actEvent = newActEvent }
+    in
+    newModel
+
