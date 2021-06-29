@@ -197,3 +197,76 @@ defLineSeg =
 defPoly : Array LineSeg
 defPoly =
     Array.fromList []
+
+
+
+{-| `CollisionStatus` is a typed used in collide function return
+-}
+type CollisionStatus
+    = Collided
+    | NotCollided
+
+
+{-| `CollisionBox` is a type used in collide judgement, `Polygon` is a polygon collisionBox, storing all the
+`LineSeg` that construct the polygon, `Circle (heart : Pos) (radius : Float)` is a circle collisionBox, storing the
+heart and the radius of the circle.
+-}
+type CollisionBox
+    = Polygon (Array LineSeg)
+
+
+
+--| Circle Pos Float
+
+
+{-| `vecCrossProd` is a number that judges the relative direction of two vectors by the positive or negative value.
+Used in collision judgement. Not exposed
+-}
+vecCrossProd : Pos -> Pos -> Float
+vecCrossProd p1 p2 =
+    let
+        ( p1X, p1Y ) =
+            p1
+
+        ( p2X, p2Y ) =
+            p2
+    in
+    p1X * p2Y - p2X * p1Y
+
+
+{-| `ifPosOnLs` judges whether a point is one a `LineSegment`. Used in `ifCollideLsLs`. Not exposed.
+-}
+ifPosOnLs : Pos -> LineSeg -> Bool
+ifPosOnLs p ls =
+    let
+        ( pX, pY ) =
+            p
+
+        ( lsP1, lsP2 ) =
+            ls
+
+        ( ( ls1X, ls1Y ), ( ls2X, ls2Y ) ) =
+            ls
+
+        minLSX =
+            min ls1X ls2X
+
+        maxLSX =
+            max ls1X ls2X
+
+        minLSY =
+            min ls1Y ls2Y
+
+        maxLSY =
+            max ls1Y ls2Y
+    in
+    if minLSX <= pX && pX <= maxLSX && minLSY <= pY && pY <= maxLSY then
+        if vecCrossProd (minusPosPos p lsP1) (minusPosPos p lsP2) == 0.0 then
+            True
+
+        else
+            False
+
+    else
+        False
+
