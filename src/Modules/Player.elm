@@ -193,3 +193,49 @@ updatePlayerVelocity ( model, cmd ) =
     in
     ( { model | player = newPlayer }, cmd )
 
+
+{-| Updates player pos due to velocity
+-}
+updatePlayerPos : ( { model | player : Player, keyPressed : List Int }, Cmd MainType.Msg ) -> ( { model | player : Player, keyPressed : List Int }, Cmd MainType.Msg )
+updatePlayerPos ( model, cmd ) =
+    let
+        ( velocityX, velocityY ) =
+            model.player.velocity
+
+        ( oldX, oldY ) =
+            if model.player.ifChangeBackToLastPos then
+                model.player.lastPos
+
+            else
+                model.player.pos
+
+        ( newX, newY ) =
+            ( oldX + velocityX, oldY + velocityY )
+
+        oldPlayer =
+            model.player
+
+        newPlayer =
+            { oldPlayer | pos = ( newX, newY ), lastPos = ( oldX, oldY ), ifChangeBackToLastPos = False }
+    in
+    ( { model | player = newPlayer }, cmd )
+
+
+{-| View of this player unit
+-}
+view : { model | player : Player } -> List (Svg MainType.Msg)
+view model =
+    let
+        ( playerX, playerY ) =
+            model.player.pos
+    in
+    [ Svg.rect
+        [ SvgAttr.x (String.fromFloat playerX)
+        , SvgAttr.y (String.fromFloat playerY)
+        , SvgAttr.width (String.fromFloat playerWidth)
+        , SvgAttr.height (String.fromFloat playerHeight)
+        , SvgAttr.fill "#000000"
+        ]
+        []
+    ]
+
