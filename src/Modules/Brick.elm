@@ -262,3 +262,193 @@ updateOneBrickVisibility id model =
     in
     newModel
 
+
+{-| update brick collision. Used in update. Not exposed.
+-}
+updateOneBrickCollision : Int -> { model | player : Player.Player, bricks : Array Brick, actEvent : Array Event.ActEvent } -> { model | player : Player.Player, bricks : Array Brick, actEvent : Array Event.ActEvent }
+updateOneBrickCollision id model =
+    let
+        brick =
+            Array.get id model.bricks
+                |> withDefault defBrick
+
+        nextCollision =
+            case brick.brickCollision of
+                Collide tempNextCollision ->
+                    tempNextCollision
+
+                NoCollide tempNextCollision ->
+                    tempNextCollision
+
+                _ ->
+                    NoNextBrickCollision
+
+        newBrickCollision =
+            case nextCollision of
+                CollideAfterEvent eventID nextNextCollision ->
+                    if Event.ifActEventById model eventID == Event.ActEventAct then
+                        Collide nextNextCollision
+
+                    else
+                        brick.brickCollision
+
+                NoCollideAfterEvent eventID nextNextCollision ->
+                    if Event.ifActEventById model eventID == Event.ActEventAct then
+                        NoCollide nextNextCollision
+
+                    else
+                        brick.brickCollision
+
+                _ ->
+                    brick.brickCollision
+
+        newBrick =
+            { brick | brickCollision = newBrickCollision }
+
+        newBricks =
+            Array.set id newBrick model.bricks
+
+        newBricksModel =
+            { model | bricks = newBricks }
+
+        newPlayerModel =
+            case newBrickCollision of
+                Collide tempNextCollision ->
+                    if Player.playerIfCollidePoly newBricksModel brick == GlobalBasics.NotCollided then
+                        newBricksModel
+
+                    else
+                        case brick.collisionBox of
+                            GlobalBasics.Polygon poly ->
+                                let
+                                    ( ( p1X, p1Y ), ( p2X, p2Y ) ) =
+                                        withDefault GlobalBasics.defLineSeg (Array.get 0 poly)
+
+                                    upLS =
+                                        ( ( p1X + 2.01, p1Y ), ( p2X - 2.01, p2Y ) )
+
+                                    refreshJumpModel =
+                                        if
+                                            Player.playerIfCollidePoly
+                                                newBricksModel
+                                                { pos = brick.pos
+                                                , collisionBox = GlobalBasics.Polygon (Array.fromList [ upLS ])
+                                                }
+                                                == GlobalBasics.Collided
+                                        then
+                                            Player.playerRefreshJump newBricksModel
+
+                                        else
+                                            newBricksModel
+
+                                    collideModel =
+                                        Player.playerCollideRigidBody refreshJumpModel brick
+
+                                    oldPlayer =
+                                        collideModel.player
+
+                                    newPlayer =
+                                        { oldPlayer | ifChangeBackToLastPos = True }
+
+                                    newModel =
+                                        { collideModel | player = newPlayer }
+                                in
+                                newModel
+
+                _ ->
+                    newBricksModel
+    in
+    newPlayerModel
+
+{-| update brick move event. Used in `updateOneBrick`. Not exposed
+-}
+updateOneBrickMove :  Int -> { model | player : Player.Player, bricks : Array Brick, actEvent : Array Event.ActEvent } -> { model | player : Player.Player, bricks : Array Brick, actEvent : Array Event.ActEvent }
+updateOneBrickMove id model =
+    let
+        brick =
+            Array.get id model.bricks
+                |> withDefault defBrick
+    in
+    case brick.brickMove of
+        Move posArray speed eventID nextMove ->
+            if Array.isEmpty posArray then
+                if Event.ifActEventById model eventID == Event.ActEventAct then
+                    let
+                        newBrick =
+                            { brick | brickMove = nextMove }
+
+                        newBricks =
+                            Array.set id newBrick model.bricks
+
+                    in
+                    { model | bricks = newBricks }
+
+                else
+                    model
+
+            else
+                let
+                    destination =
+                        withDefault GlobalBasics.defPos ( Array.get 0 posArray )
+                in
+
+                if GlobalBasics.distPosPos destination brick.pos <= speed then
+                    let
+                        newPosArray =
+                            Array.slice 1 ( Array.length posArray ) posArray
+
+                        newBrick =
+                            { brick | pos = destination, brickMove = Move newPosArray speed eventID nextMove }
+
+                        newBricks =
+                            Array.set id newBrick model.bricks
+                    in
+                    { model | bricks = newBricks }
+
+                else
+                    let
+                        ( destinationX, destinationY ) =
+                            destination
+
+                        ( posX, posY ) =
+                            brick.pos
+
+                        newPos =
+                            if posX == destinationX then
+                                if destinationY > posY then
+                                    ( posX, posY + speed )
+
+                                else
+                                    ( posX, posY - speed )
+
+                            else
+                                let
+                                    degree =
+                                        atan ( ( destinationY - posY ) / ( destinationX - posX ) )
+
+                                    deltaX =
+                                        if destinationX > posX then
+                                            abs ( speed * ( cos degree ) )
+
+                                        else
+                                            -(abs ( speed * ( cos degree ) ) )
+
+                                    deltaY =
+                                        if destinationY > posY then
+                                            abs ( speed * ( sin degree ) )
+
+                                        else
+                                            -(abs ( speed * ( sin degree ) ))
+                                in
+                                ( posX + deltaX, posY + deltaY )
+
+                        newBrick =
+                            { brick | pos = newPos }
+
+                        newBricks =
+                            Array.set id newBrick model.bricks
+                    in
+                    { model | bricks = newBricks }
+
+        NoNextBrickMove ->
+            model
