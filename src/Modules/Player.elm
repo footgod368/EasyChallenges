@@ -100,3 +100,96 @@ playerJumpAcce frameNum =
     in
     acce
 
+
+{-| Initiate the player with its initial position.
+-}
+init : GlobalBasics.Pos -> Player
+init pos =
+    { pos = pos
+    , lastPos = pos
+    , velocity = ( 0.0, 0.0 )
+    , jump = Jump 2 -1
+    , collisionBox =
+        GlobalBasics.Polygon
+            (Array.fromList
+                [ ( ( 0.0, 0.0 ), ( playerWidth, 0.0 ) )
+                , ( ( playerWidth, 0.0 ), ( playerWidth, playerHeight ) )
+                , ( ( playerWidth, playerHeight ), ( 0.0, playerHeight ) )
+                , ( ( 0.0, playerHeight ), ( 0.0, 0.0 ) )
+                ]
+            )
+    , ifChangeBackToLastPos = False
+    }
+
+
+{-| Update of player unit. Calls sub update.
+-}
+update : ( { model | player : Player, keyPressed : List Int }, Cmd MainType.Msg ) -> ( { model | player : Player, keyPressed : List Int }, Cmd MainType.Msg )
+update ( model, cmd ) =
+    ( model, cmd )
+        |> updatePlayerPos
+        |> updatePlayerVelocity
+
+
+{-| Updates player control, move left, right and jump. Not exposed.
+-}
+updatePlayerVelocity : ( { model | player : Player, keyPressed : List Int }, Cmd MainType.Msg ) -> ( { model | player : Player, keyPressed : List Int }, Cmd MainType.Msg )
+updatePlayerVelocity ( model, cmd ) =
+    let
+        ( oldVelocityX, oldVelocityY ) =
+            model.player.velocity
+
+        velocityX =
+            if List.member 37 model.keyPressed || List.member 65 model.keyPressed then
+                if List.member 68 model.keyPressed || List.member 39 model.keyPressed then
+                    0.0
+
+                else
+                    -playerHorizontalSpeed
+
+            else if List.member 68 model.keyPressed || List.member 39 model.keyPressed then
+                playerHorizontalSpeed
+
+            else
+                0.0
+
+        ( newJump, velocityY ) =
+            case model.player.jump of
+                Jump jumpNum jumpFrame ->
+                    if jumpNum <= 0 then
+                        ( model.player.jump, oldVelocityY + gravityAcce )
+
+                    else if List.member 38 model.keyPressed || List.member 87 model.keyPressed then
+                        if jumpFrame == -1 then
+                            ( Jump jumpNum (playerJumpFrames - 1)
+                            , playerInitialJumpSpeed
+                                + playerJumpAcce
+                                    playerJumpFrames
+                            )
+
+                        else if jumpFrame > 0 then
+                            ( Jump jumpNum (jumpFrame - 1), oldVelocityY + gravityAcce - playerJumpAcce jumpFrame )
+
+                        else if jumpFrame == 0 then
+                            ( Jump (jumpNum - 1) -2, oldVelocityY + gravityAcce )
+
+                        else
+                            ( Jump jumpNum jumpFrame, oldVelocityY + gravityAcce )
+
+                    else if jumpFrame == -2 then
+                        ( Jump jumpNum -1, oldVelocityY + gravityAcce )
+
+                    else if jumpFrame > 0 then
+                        ( Jump (jumpNum - 1) -1, oldVelocityY + gravityAcce )
+
+                    else
+                        ( Jump jumpNum jumpFrame, oldVelocityY + gravityAcce )
+
+        oldPlayer =
+            model.player
+
+        newPlayer =
+            { oldPlayer | jump = newJump, velocity = ( velocityX, velocityY ) }
+    in
+    ( { model | player = newPlayer }, cmd )
+
