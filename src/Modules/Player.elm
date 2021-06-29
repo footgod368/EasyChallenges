@@ -1,3 +1,46 @@
+module Player exposing
+    ( Player
+    , init
+    , update
+    , view
+    , playerRefreshJump, playerIfCollidePoly, playerCollideRigidBody
+    )
+
+{-| The Player unit, the figure that player controls.
+
+
+# Player
+
+@docs Player, PlayerJump
+
+
+# Player Constant
+
+@docs playerWidth, playerHeight, playerJumpNum, playerJumpFrames, playerJumpInitialAcce, playerHorizontalSpeed
+@docs playerInitialJumpSpeed, gravityAcce, playerJumpAcce
+
+
+# init
+
+@docs init
+
+
+# update
+
+@docs update, updatePlayerVelocity, updatePlayerPos
+
+
+# view
+
+@docs view
+
+
+# api to other units
+
+@docs playerRefreshJump, playerIfCollidePoly, playerVerticalCollide, playerHorizontalCollide, playerCollideRigidBody
+
+-}
+
 import Array exposing (Array)
 import GlobalBasics
 import MainType
