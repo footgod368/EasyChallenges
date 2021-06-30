@@ -66,6 +66,7 @@ type alias Player =
     , lastPos : GlobalBasics.Pos
     , velocity : GlobalBasics.Pos
     , jump : PlayerJump
+    , ifThisFrameOnGround : Bool
     , collisionBox : GlobalBasics.CollisionBox
     , ifChangeBackToLastPos : Bool
     }
@@ -90,6 +91,12 @@ playerHeight =
 playerJumpNum : Int
 playerJumpNum =
     2
+
+{-| If only one jump and must be the ground
+-}
+ifOneJumpAndOnTheGround : Bool
+ifOneJumpAndOnTheGround =
+    True
 
 
 {-| Constant of how many frames can one jump lasts
@@ -152,6 +159,7 @@ init pos =
     , lastPos = pos
     , velocity = ( 0.0, 0.0 )
     , jump = Jump 2 -1
+    , ifThisFrameOnGround = False
     , collisionBox =
         GlobalBasics.Polygon
             (Array.fromList
@@ -203,10 +211,9 @@ updatePlayerVelocity ( model, cmd ) =
                         ( model.player.jump, oldVelocityY + gravityAcce )
 
                     else if List.member 38 model.keyPressed || List.member 87 model.keyPressed then
-                        if jumpFrame == -1 then
+                        if jumpFrame == -1 && ((not ifOneJumpAndOnTheGround) || model.player.ifThisFrameOnGround)then
                             ( Jump jumpNum (playerJumpFrames - 1)
-                            , playerInitialJumpSpeed
-                                + playerJumpAcce
+                            , playerInitialJumpSpeed + playerJumpAcce
                                     playerJumpFrames
                             )
 
@@ -232,7 +239,7 @@ updatePlayerVelocity ( model, cmd ) =
             model.player
 
         newPlayer =
-            { oldPlayer | jump = newJump, velocity = ( velocityX, velocityY ) }
+                { oldPlayer | jump = newJump, velocity = ( velocityX, velocityY ), ifThisFrameOnGround = False }
     in
     ( { model | player = newPlayer }, cmd )
 
@@ -299,7 +306,7 @@ playerRefreshJump model =
             model.player
 
         newPlayer =
-            { oldPlayer | jump = Jump playerJumpNum -1 }
+            { oldPlayer | jump = Jump playerJumpNum -1, ifThisFrameOnGround = True }
     in
     { model | player = newPlayer }
 
