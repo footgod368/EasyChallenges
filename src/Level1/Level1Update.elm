@@ -19,6 +19,8 @@ import Brick
 update : MainType.Msg -> Level1Type.Model -> ( Level1Type.Model, Cmd MainType.Msg )
 update msg model =
     case msg of
+        MainType.GetViewport viewport ->
+            ({model | size = (viewport.viewport.width, viewport.viewport.height)}, Cmd.none)
         MainType.KeyUp keyNum ->
             ( { model | keyPressed = ( List.filter (\x -> x /= keyNum) model.keyPressed ) }, Cmd.none )
 

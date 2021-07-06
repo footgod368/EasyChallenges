@@ -12,11 +12,13 @@ import Array exposing (Array)
 import Event
 import Player
 import Brick
+import Browser.Dom exposing (Viewport)
 
 {-| `Model` that used in level1
 -}
 type alias Model =
-    { actEvent : Array Event.ActEvent
+    { size : (Float, Float)
+    , actEvent : Array Event.ActEvent
     , event : Array Event.Event
     , player : Player.Player
     , bricks : Array Brick.Brick

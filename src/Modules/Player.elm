@@ -196,10 +196,18 @@ updatePlayerVelocity ( model, cmd ) =
                     0.0
 
                 else
-                    -playerHorizontalSpeed
+                    if abs oldVelocityY <= 0.1 then
+                        -playerHorizontalSpeed * 2
+
+                    else
+                        -playerHorizontalSpeed
 
             else if List.member 68 model.keyPressed || List.member 39 model.keyPressed then
-                playerHorizontalSpeed
+                    if abs oldVelocityY <= 0.1 then
+                        playerHorizontalSpeed * 2
+
+                    else
+                        playerHorizontalSpeed
 
             else
                 0.0

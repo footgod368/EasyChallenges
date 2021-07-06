@@ -13,7 +13,7 @@ module MainType exposing
 -}
 
 import Time exposing (Posix)
-
+import Browser.Dom exposing (Viewport)
 
 {-| `MainScene` stores the game stage.
 -}
@@ -32,3 +32,4 @@ type Msg
     | OnMouseUp Int
     | OnMouseOver Int
     | OnMouseOut Int
+    | GetViewport Viewport

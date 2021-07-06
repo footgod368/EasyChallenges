@@ -12,13 +12,16 @@ module MainInit exposing (init)
 import Level1Init
 import MainType
 import MainModel
+import Task
+import Browser.Dom exposing (Viewport)
+import Browser.Dom exposing (getViewport)
 
 {-| The `init` of MainModel.
 -}
-init : () -> ( MainModel.Model, Cmd msg )
+init : () -> ( MainModel.Model, Cmd MainType.Msg )
 init a =
     ( MainModel.Model
         MainType.Level1
         Level1Init.init
-    , Cmd.none
+    , Task.perform MainType.GetViewport getViewport
     )
