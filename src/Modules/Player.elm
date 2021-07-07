@@ -32,7 +32,7 @@ module Player exposing
 
 # view
 
-@docs view
+@docs view, playerDeltaX, playerDeltaY
 
 
 # api to other units
@@ -91,6 +91,7 @@ playerHeight =
 playerJumpNum : Int
 playerJumpNum =
     2
+
 
 {-| If only one jump and must be the ground
 -}
@@ -195,19 +196,18 @@ updatePlayerVelocity ( model, cmd ) =
                 if List.member 68 model.keyPressed || List.member 39 model.keyPressed then
                     0.0
 
-                else
-                    if abs oldVelocityY <= 0.1 then
-                        -playerHorizontalSpeed * 2
+                else if abs oldVelocityY <= 0.1 then
+                    -playerHorizontalSpeed * 2
 
-                    else
-                        -playerHorizontalSpeed
+                else
+                    -playerHorizontalSpeed
 
             else if List.member 68 model.keyPressed || List.member 39 model.keyPressed then
-                    if abs oldVelocityY <= 0.1 then
-                        playerHorizontalSpeed * 2
+                if abs oldVelocityY <= 0.1 then
+                    playerHorizontalSpeed * 2
 
-                    else
-                        playerHorizontalSpeed
+                else
+                    playerHorizontalSpeed
 
             else
                 0.0
@@ -219,9 +219,10 @@ updatePlayerVelocity ( model, cmd ) =
                         ( model.player.jump, oldVelocityY + gravityAcce )
 
                     else if List.member 38 model.keyPressed || List.member 87 model.keyPressed then
-                        if jumpFrame == -1 && ((not ifOneJumpAndOnTheGround) || model.player.ifThisFrameOnGround)then
+                        if jumpFrame == -1 && (not ifOneJumpAndOnTheGround || model.player.ifThisFrameOnGround) then
                             ( Jump jumpNum (playerJumpFrames - 1)
-                            , playerInitialJumpSpeed + playerJumpAcce
+                            , playerInitialJumpSpeed
+                                + playerJumpAcce
                                     playerJumpFrames
                             )
 
@@ -247,7 +248,7 @@ updatePlayerVelocity ( model, cmd ) =
             model.player
 
         newPlayer =
-                { oldPlayer | jump = newJump, velocity = ( velocityX, velocityY ), ifThisFrameOnGround = False }
+            { oldPlayer | jump = newJump, velocity = ( velocityX, velocityY ), ifThisFrameOnGround = False }
     in
     ( { model | player = newPlayer }, cmd )
 
@@ -279,23 +280,83 @@ updatePlayerPos ( model, cmd ) =
     ( { model | player = newPlayer }, cmd )
 
 
-{-| View of this player unit
+{-| ViewMove of this player unit
 -}
-view : { model | player : Player } -> List (Svg MainType.Msg)
+view : { model | player : Player, windowBoundary : ( Float, Float ), levelBoundary : ( Float, Float ) } -> List (Svg MainType.Msg)
 view model =
     let
         ( playerX, playerY ) =
             model.player.pos
     in
     [ Svg.rect
-        [ SvgAttr.x (String.fromFloat playerX)
-        , SvgAttr.y (String.fromFloat playerY)
+        [ SvgAttr.x (String.fromFloat (playerX + playerDeltaX model))
+        , SvgAttr.y (String.fromFloat (playerY + playerDeltaY model))
         , SvgAttr.width (String.fromFloat playerWidth)
         , SvgAttr.height (String.fromFloat playerHeight)
         , SvgAttr.fill "#000000"
         ]
         []
     ]
+
+
+{-| Change the x position of player, making the camera to move with player. Used in `view`. Not exposed.
+-}
+playerDeltaX : { model | windowBoundary : GlobalBasics.Pos, levelBoundary : GlobalBasics.Pos, player : Player } -> Float
+playerDeltaX model =
+    let
+        windowBoundaryX =
+            model.windowBoundary
+                |> Tuple.first
+
+        levelBoundaryX =
+            model.levelBoundary
+                |> Tuple.first
+
+        playerX =
+            model.player.pos
+                |> Tuple.first
+    in
+    if levelBoundaryX < windowBoundaryX then
+        0.0
+
+    else if playerX < windowBoundaryX / 2.0 then
+        0.0
+
+    else if playerX + windowBoundaryX / 2.0 > levelBoundaryX then
+        windowBoundaryX - levelBoundaryX
+
+    else
+        windowBoundaryX / 2.0 - playerX
+
+
+{-| Change the y position of player, making the camera to move with player. Used in `view`. Not exposed.
+-}
+playerDeltaY : { model | windowBoundary : GlobalBasics.Pos, levelBoundary : GlobalBasics.Pos, player : Player } -> Float
+playerDeltaY model =
+    let
+        windowBoundaryY =
+            model.windowBoundary
+                |> Tuple.second
+
+        levelBoundaryY =
+            model.levelBoundary
+                |> Tuple.second
+
+        playerY =
+            model.player.pos
+                |> Tuple.second
+    in
+    if levelBoundaryY < windowBoundaryY then
+        0.0
+
+    else if playerY < windowBoundaryY / 2.0 then
+        0.0
+
+    else if playerY + windowBoundaryY / 2.0 > levelBoundaryY then
+        windowBoundaryY - levelBoundaryY
+
+    else
+        windowBoundaryY / 2.0 - playerY
 
 
 {-| `playerRefreshJump` turns the number of jumps the player can do into jumpNum constant. You can use it like this.

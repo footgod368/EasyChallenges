@@ -23,7 +23,7 @@ module Brick exposing
 @docs init, quickInit, defBrick, defBrickCollisionBox
 
 
-# View
+# ViewMove
 
 @docs view, viewOneBrick
 
@@ -42,6 +42,7 @@ import Maybe exposing (withDefault)
 import Player
 import Svg exposing (Svg)
 import Svg.Attributes as SvgAttr
+import ViewMove
 
 
 {-| `BrickVisibility` describes the visibility of the block. `Visible/Invisible (nextVisibility: BrickVisibility)`:
@@ -199,8 +200,8 @@ defBrickCollisionBox =
 
 {-| view one brick, used in view, not exposed.
 -}
-viewOneBrick : Brick -> List (Svg MainType.Msg)
-viewOneBrick brick =
+viewOneBrick : { model | windowBoundary : GlobalBasics.Pos, levelBoundary : GlobalBasics.Pos, player : Player.Player } -> Brick -> List (Svg MainType.Msg)
+viewOneBrick model brick =
     case brick.brickVisibility of
         Visible nextVisibility ->
             let
@@ -208,8 +209,8 @@ viewOneBrick brick =
                     brick.pos
             in
             [ Svg.rect
-                [ SvgAttr.x (String.fromFloat brickX)
-                , SvgAttr.y (String.fromFloat brickY)
+                [ SvgAttr.x (String.fromFloat (ViewMove.deltaX model + brickX))
+                , SvgAttr.y (String.fromFloat (ViewMove.deltaY model + brickY))
                 , SvgAttr.width (String.fromFloat brickWidth)
                 , SvgAttr.height (String.fromFloat brickHeight)
                 , SvgAttr.strokeWidth "2"
@@ -228,14 +229,14 @@ viewOneBrick brick =
 
 {-| view function of brick
 -}
-view : { model | bricks : Array Brick } -> List (Svg MainType.Msg)
+view : { model | bricks : Array Brick, windowBoundary : GlobalBasics.Pos, levelBoundary : GlobalBasics.Pos, player : Player.Player } -> List (Svg MainType.Msg)
 view model =
     let
         bricksList =
             Array.toList model.bricks
 
         svgBrickListList =
-            List.map (\brick -> viewOneBrick brick) bricksList
+            List.map (\brick -> viewOneBrick model brick) bricksList
     in
     List.concat svgBrickListList
 
@@ -405,9 +406,10 @@ updateOneBrickCollision id model =
     in
     newPlayerModel
 
+
 {-| update brick move event. Used in `updateOneBrick`. Not exposed
 -}
-updateOneBrickMove :  Int -> { model | player : Player.Player, bricks : Array Brick, actEvent : Array Event.ActEvent } -> { model | player : Player.Player, bricks : Array Brick, actEvent : Array Event.ActEvent }
+updateOneBrickMove : Int -> { model | player : Player.Player, bricks : Array Brick, actEvent : Array Event.ActEvent } -> { model | player : Player.Player, bricks : Array Brick, actEvent : Array Event.ActEvent }
 updateOneBrickMove id model =
     let
         brick =
@@ -424,7 +426,6 @@ updateOneBrickMove id model =
 
                         newBricks =
                             Array.set id newBrick model.bricks
-
                     in
                     { model | bricks = newBricks }
 
@@ -434,13 +435,12 @@ updateOneBrickMove id model =
             else
                 let
                     destination =
-                        withDefault GlobalBasics.defPos ( Array.get 0 posArray )
+                        withDefault GlobalBasics.defPos (Array.get 0 posArray)
                 in
-
                 if GlobalBasics.distPosPos destination brick.pos <= speed then
                     let
                         newPosArray =
-                            Array.slice 1 ( Array.length posArray ) posArray
+                            Array.slice 1 (Array.length posArray) posArray
 
                         newBrick =
                             { brick | pos = destination, brickMove = Move newPosArray speed eventID nextMove }
@@ -469,21 +469,21 @@ updateOneBrickMove id model =
                             else
                                 let
                                     degree =
-                                        atan ( ( destinationY - posY ) / ( destinationX - posX ) )
+                                        atan ((destinationY - posY) / (destinationX - posX))
 
                                     deltaX =
                                         if destinationX > posX then
-                                            abs ( speed * ( cos degree ) )
+                                            abs (speed * cos degree)
 
                                         else
-                                            -(abs ( speed * ( cos degree ) ) )
+                                            -(abs (speed * cos degree))
 
                                     deltaY =
                                         if destinationY > posY then
-                                            abs ( speed * ( sin degree ) )
+                                            abs (speed * sin degree)
 
                                         else
-                                            -(abs ( speed * ( sin degree ) ))
+                                            -(abs (speed * sin degree))
                                 in
                                 ( posX + deltaX, posY + deltaY )
 

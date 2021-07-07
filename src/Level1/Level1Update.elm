@@ -20,7 +20,7 @@ update : MainType.Msg -> Level1Type.Model -> ( Level1Type.Model, Cmd MainType.Ms
 update msg model =
     case msg of
         MainType.GetViewport viewport ->
-            ({model | size = (viewport.viewport.width, viewport.viewport.height)}, Cmd.none)
+            ({model | windowBoundary = (viewport.viewport.width * 0.97, viewport.viewport.height * 0.97)}, Cmd.none)
         MainType.KeyUp keyNum ->
             ( { model | keyPressed = ( List.filter (\x -> x /= keyNum) model.keyPressed ) }, Cmd.none )
 

@@ -2,6 +2,7 @@ module Level1Type exposing (Model)
 
 {-| stores level1 Model
 
+
 # Model
 
 @docs Model
@@ -9,15 +10,18 @@ module Level1Type exposing (Model)
 -}
 
 import Array exposing (Array)
-import Event
-import Player
 import Brick
 import Browser.Dom exposing (Viewport)
+import Event
+import Player
+import GlobalBasics
+
 
 {-| `Model` that used in level1
 -}
 type alias Model =
-    { size : (Float, Float)
+    { windowBoundary : GlobalBasics.Pos
+    , levelBoundary : GlobalBasics.Pos
     , actEvent : Array Event.ActEvent
     , event : Array Event.Event
     , player : Player.Player
