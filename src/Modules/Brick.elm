@@ -388,7 +388,7 @@ updateOneBrickCollision id model =
                                                 }
                                                 == GlobalBasics.Collided
                                                 && abs (Tuple.second model.player.velocity) <= 0.2
-                                                && abs (playerDownY - blockUpY) <= 0.01
+                                                && abs (playerDownY - blockUpY) <= 0.1
                                         then
                                             Player.playerRefreshJump newBricksModel
 

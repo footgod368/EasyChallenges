@@ -28,83 +28,70 @@ init =
     , event =
         Array.fromList
             [
-            --Event.init
-            --    { id = 1, name = "Event1" }
-            --    Event.StartActivated
-            --    (Event.PlayerCollide
-            --        (GlobalBasics.Polygon
-            --            (Array.fromList
-            --                [ ( ( 360, 0 ), ( 360.0, 520.0 ) )
-            --                ]
-            --            )
-            --        )
-            --    )
-            --    (Event.quickDuration 10)
-            --, Event.init
-            --    { id = 2, name = "Event2" }
-            --    Event.StartActivated
-            --    (Event.PlayerCollide
-            --        (GlobalBasics.Polygon
-            --            (Array.fromList
-            --                [ ( ( 200, 440 ), ( 240.0, 440.0 ) )
-            --                , ( ( 240, 440 ), ( 240.0, 480.0 ) )
-            --                , ( ( 240, 480 ), ( 200.0, 480.0 ) )
-            --                , ( ( 200, 480 ), ( 200.0, 440.0 ) )
-            --                ]
-            --            )
-            --        )
-            --    )
-            --    (Event.quickDuration 10)
+            Event.init
+                { id = 1, name = "Event1" }
+                Event.StartActivated
+                (Event.PlayerCollide
+                    (GlobalBasics.Polygon
+                        (Array.fromList
+                            [ ( ( 360, 0 ), ( 360.0, 520.0 ) )
+                            ]
+                        )
+                    )
+                )
+                (Event.quickDuration 10)
+            , Event.init
+                { id = 2, name = "Event2" }
+                Event.StartActivated
+                (Event.PlayerCollide
+                    (GlobalBasics.Polygon
+                        (Array.fromList
+                            [ ( ( 200, 440 ), ( 240.0, 440.0 ) )
+                            , ( ( 240, 440 ), ( 240.0, 480.0 ) )
+                            , ( ( 240, 480 ), ( 200.0, 480.0 ) )
+                            , ( ( 200, 480 ), ( 200.0, 440.0 ) )
+                            ]
+                        )
+                    )
+                )
+                (Event.quickDuration 10)
             ]
     , boundary = Boundary.normalInit
     , player = Player.init ( 50.0, 490.0 )
     , bricks =
         Array.fromList
             (List.concat
-                [ List.map (\i -> Brick.quickInit (GlobalBasics.blockPos ( i, 15 ))) (List.range 1 30)
-                , List.map (\i -> Brick.quickInit (GlobalBasics.blockPos ( i, 12 ))) (List.range 5 7)
-                , [ Brick.quickInit (GlobalBasics.blockPos ( 1, 14 ) )]
-                , [ Brick.quickInit (GlobalBasics.blockPos ( 1, 13 ) )]
-                , [ Brick.quickInit (GlobalBasics.blockPos ( 1, 12 ) )]
-                , [ Brick.quickInit (GlobalBasics.blockPos ( 1, 11 ) )]
-                , [ Brick.quickInit (GlobalBasics.blockPos ( 1, 10 ) )]
-                --, [ Brick.init
-                --        (GlobalBasics.blockPos ( 5, 12 ))
-                --        Brick.defBrickCollisionBox
-                --        Brick.NoAppearance
-                --        (Brick.Visible Brick.NoNextBrickVisibility)
-                --        (Brick.Collide Brick.NoNextBrickCollision)
-                --        Brick.NoNextBrickMove
-                --  ]
-                --, [ Brick.init
-                --        (GlobalBasics.blockPos ( 6, 12 ))
-                --        Brick.defBrickCollisionBox
-                --        Brick.NoAppearance
-                --        (Brick.Invisible (Brick.VisibleAfterEvent 2 Brick.NoNextBrickVisibility))
-                --        (Brick.Collide Brick.NoNextBrickCollision)
-                --        Brick.NoNextBrickMove
-                --  ]
-                --, [ Brick.init
-                --        (GlobalBasics.blockPos ( 10, 14 ))
-                --        Brick.defBrickCollisionBox
-                --        Brick.NoAppearance
-                --        (Brick.Visible Brick.NoNextBrickVisibility)
-                --        (Brick.Collide Brick.NoNextBrickCollision)
-                --        (Brick.Move
-                --            (Array.fromList [])
-                --            0.0
-                --            1
-                --            (Brick.Move
-                --                (Array.fromList
-                --                    [ GlobalBasics.blockPos ( 13, 14 )
-                --                    ]
-                --                )
-                --                5.0
-                --                -1
-                --                Brick.NoNextBrickMove
-                --            )
-                --        )
-                --  ]
+                [ List.map (\i -> Brick.quickInit (GlobalBasics.blockPos ( i, 15 ))) (List.range 1 5)
+                , List.map (\i -> Brick.quickInit (GlobalBasics.blockPos ( i, 12 ))) (List.range 2 5)
+                , [ Brick.init
+                        (GlobalBasics.blockPos ( 6, 12 ))
+                        Brick.defBrickCollisionBox
+                        Brick.NoAppearance
+                        (Brick.Invisible (Brick.VisibleAfterEvent 2 Brick.NoNextBrickVisibility))
+                        (Brick.Collide Brick.NoNextBrickCollision)
+                        Brick.NoNextBrickMove
+                  ]
+                , [ Brick.init
+                        (GlobalBasics.blockPos ( 10, 14 ))
+                        Brick.defBrickCollisionBox
+                        Brick.NoAppearance
+                        (Brick.Visible Brick.NoNextBrickVisibility)
+                        (Brick.Collide Brick.NoNextBrickCollision)
+                        (Brick.Move
+                            (Array.fromList [])
+                            0.0
+                            1
+                            (Brick.Move
+                                (Array.fromList
+                                    [ GlobalBasics.blockPos ( 13, 14 )
+                                    ]
+                                )
+                                5.0
+                                -1
+                                Brick.NoNextBrickMove
+                            )
+                        )
+                  ]
                 ]
             )
     , keyPressed = []

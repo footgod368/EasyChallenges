@@ -38,6 +38,7 @@ update msg model =
                         |> Player.update
                         |> Event.update
                         |> Brick.update
+                        |> Boundary.update
                         |> Player.updateJustPlayerPos
             in
             ( newModel, cmd )

@@ -127,10 +127,10 @@ view model =
         ( levelBoundaryX, levelBoundaryY ) =
             model.levelBoundary
     in
-    [ viewOneBoundary model ( 0, 0 ) ( levelBoundaryX, boundaryWidth ) model.boundary.upBoundary
-    , viewOneBoundary model ( 0, levelBoundaryY ) ( levelBoundaryX, boundaryWidth ) model.boundary.downBoundary
+    [ viewOneBoundary model ( boundaryWidth, 0 ) ( levelBoundaryX, boundaryWidth ) model.boundary.upBoundary
+    , viewOneBoundary model ( boundaryWidth, levelBoundaryY - boundaryWidth ) ( levelBoundaryX, boundaryWidth ) model.boundary.downBoundary
     , viewOneBoundary model ( 0, 0 ) ( boundaryWidth, levelBoundaryY ) model.boundary.leftBoundary
-    , viewOneBoundary model ( levelBoundaryX, 0 ) ( boundaryWidth, levelBoundaryY ) model.boundary.rightBoundary
+    , viewOneBoundary model ( levelBoundaryX - boundaryWidth, 0 ) ( boundaryWidth, levelBoundaryY ) model.boundary.rightBoundary
     ]
 
 
