@@ -120,7 +120,7 @@ playerJumpInitialAcce =
 -}
 playerHorizontalSpeed : Float
 playerHorizontalSpeed =
-    2.00
+    1.93
 
 
 {-| Constant of initial speed of jump.

@@ -371,7 +371,13 @@ updateOneBrickCollision id model =
                                         withDefault GlobalBasics.defLineSeg (Array.get 0 poly)
 
                                     upLS =
-                                        ( ( p1X + 0.3, p1Y ), ( p2X - 0.3, p2Y ) )
+                                        ( ( p1X, p1Y ), ( p2X, p2Y ) )
+
+                                    ( playerDownX, playerDownY ) =
+                                        GlobalBasics.addPosPos model.player.pos ( 20, 20 )
+
+                                    ( blockUpX, blockUpY ) =
+                                        GlobalBasics.addPosPos brick.pos ( 20, 0 )
 
                                     refreshJumpModel =
                                         if
@@ -381,6 +387,8 @@ updateOneBrickCollision id model =
                                                 , collisionBox = GlobalBasics.Polygon (Array.fromList [ upLS ])
                                                 }
                                                 == GlobalBasics.Collided
+                                                && abs (Tuple.second model.player.velocity) <= 0.2
+                                                && abs (playerDownY - blockUpY) <= 0.01
                                         then
                                             Player.playerRefreshJump newBricksModel
 

@@ -57,13 +57,17 @@ init =
             --    (Event.quickDuration 10)
             ]
     , boundary = Boundary.normalInit
-    , player = Player.init ( 60.0, 520.0 )
+    , player = Player.init ( 50.0, 490.0 )
     , bricks =
         Array.fromList
             (List.concat
-                [ List.map (\i -> Brick.quickInit (GlobalBasics.blockPos ( i, 15 ))) (List.range 2 2)
+                [ List.map (\i -> Brick.quickInit (GlobalBasics.blockPos ( i, 15 ))) (List.range 1 30)
                 --, List.map (\i -> Brick.quickInit (GlobalBasics.blockPos ( i, 12 ))) (List.range 2 4)
                 , [ Brick.quickInit (GlobalBasics.blockPos ( 1, 14 ) )]
+                , [ Brick.quickInit (GlobalBasics.blockPos ( 1, 13 ) )]
+                , [ Brick.quickInit (GlobalBasics.blockPos ( 1, 12 ) )]
+                , [ Brick.quickInit (GlobalBasics.blockPos ( 1, 11 ) )]
+                , [ Brick.quickInit (GlobalBasics.blockPos ( 1, 10 ) )]
                 --, [ Brick.init
                 --        (GlobalBasics.blockPos ( 5, 12 ))
                 --        Brick.defBrickCollisionBox
