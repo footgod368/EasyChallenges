@@ -62,7 +62,7 @@ init =
         Array.fromList
             (List.concat
                 [ List.map (\i -> Brick.quickInit (GlobalBasics.blockPos ( i, 15 ))) (List.range 1 30)
-                --, List.map (\i -> Brick.quickInit (GlobalBasics.blockPos ( i, 12 ))) (List.range 2 4)
+                , List.map (\i -> Brick.quickInit (GlobalBasics.blockPos ( i, 12 ))) (List.range 5 7)
                 , [ Brick.quickInit (GlobalBasics.blockPos ( 1, 14 ) )]
                 , [ Brick.quickInit (GlobalBasics.blockPos ( 1, 13 ) )]
                 , [ Brick.quickInit (GlobalBasics.blockPos ( 1, 12 ) )]
