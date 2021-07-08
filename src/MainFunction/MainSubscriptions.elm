@@ -13,8 +13,8 @@ like this.
 import Browser.Events exposing (onAnimationFrameDelta, onKeyDown, onKeyUp)
 import Html.Events exposing (keyCode)
 import Json.Decode as Decode
-import MainType
 import MainModel
+import MainType
 import Time
 
 

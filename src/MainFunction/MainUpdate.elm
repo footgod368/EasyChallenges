@@ -10,8 +10,9 @@ module MainUpdate exposing (update)
 -}
 
 import Level1Update
-import MainType
 import MainModel
+import MainType
+
 
 {-| `update` of main game
 -}

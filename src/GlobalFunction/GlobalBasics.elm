@@ -417,11 +417,15 @@ ifCollidePolyPoly poly1 poly2 =
         Collided
 
 
+{-| The size of the block
+-}
 blockSize : ( Float, Float )
 blockSize =
     ( 40.0, 40.0 )
 
 
+{-| Along current block size, input the position returns the actual position
+-}
 blockPos : ( Int, Int ) -> ( Float, Float )
 blockPos ( x, y ) =
     let

@@ -2,8 +2,8 @@ module MainView exposing (..)
 
 import Html exposing (Html, div)
 import Level1View
-import MainType
 import MainModel
+import MainType
 
 
 view : MainModel.Model -> Html MainType.Msg

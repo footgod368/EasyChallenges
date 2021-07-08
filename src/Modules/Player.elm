@@ -282,7 +282,7 @@ updatePlayerPos ( model, cmd ) =
 
 {-| ViewMove of this player unit
 -}
-view : { model | player : Player, windowBoundary : ( Float, Float ), levelBoundary : ( Float, Float ) } -> List (Svg MainType.Msg)
+view : { model | player : Player, windowBoundary : GlobalBasics.Pos, levelBoundary : GlobalBasics.Pos } -> List (Svg MainType.Msg)
 view model =
     let
         ( playerX, playerY ) =

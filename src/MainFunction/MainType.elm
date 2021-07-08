@@ -12,8 +12,9 @@ module MainType exposing
 
 -}
 
-import Time exposing (Posix)
 import Browser.Dom exposing (Viewport)
+import Time exposing (Posix)
+
 
 {-| `MainScene` stores the game stage.
 -}

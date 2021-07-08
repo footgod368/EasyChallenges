@@ -371,7 +371,7 @@ updateOneBrickCollision id model =
                                         withDefault GlobalBasics.defLineSeg (Array.get 0 poly)
 
                                     upLS =
-                                        ( ( p1X , p1Y ), ( p2X , p2Y ) )
+                                        ( ( p1X + 0.3, p1Y ), ( p2X - 0.3, p2Y ) )
 
                                     refreshJumpModel =
                                         if

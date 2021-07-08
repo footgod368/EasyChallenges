@@ -9,12 +9,12 @@ module MainInit exposing (init)
 
 -}
 
+import Browser.Dom exposing (Viewport, getViewport)
 import Level1Init
-import MainType
 import MainModel
+import MainType
 import Task
-import Browser.Dom exposing (Viewport)
-import Browser.Dom exposing (getViewport)
+
 
 {-| The `init` of MainModel.
 -}

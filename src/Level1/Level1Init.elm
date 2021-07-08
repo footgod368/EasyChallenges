@@ -10,6 +10,7 @@ module Level1Init exposing (init)
 -}
 
 import Array
+import Boundary
 import Brick
 import Event
 import GlobalBasics
@@ -54,6 +55,7 @@ init =
                 )
                 (Event.quickDuration 10)
             ]
+    , boundary = Boundary.normalInit
     , player = Player.init ( 60.0, 520.0 )
     , bricks =
         Array.fromList
