@@ -1,7 +1,7 @@
 module Player exposing
     ( Player
     , init
-    , update
+    , update, updateJustPlayerPos
     , view
     , playerRefreshJump, playerIfCollidePoly, playerCollideRigidBody
     )
@@ -27,7 +27,7 @@ module Player exposing
 
 # update
 
-@docs update, updatePlayerVelocity, updatePlayerPos
+@docs update, updatePlayerVelocity, updatePlayerPos, updateJustPlayerPos
 
 
 # view
@@ -64,11 +64,13 @@ many times it can jump.
 type alias Player =
     { pos : GlobalBasics.Pos
     , lastPos : GlobalBasics.Pos
+    , lastOutPos : GlobalBasics.Pos
     , velocity : GlobalBasics.Pos
     , jump : PlayerJump
     , ifThisFrameOnGround : Bool
     , collisionBox : GlobalBasics.CollisionBox
-    , ifChangeBackToLastPos : Bool
+    , ifChangeBackToLastPosX : Bool
+    , ifChangeBackToLastPosY : Bool
     }
 
 
@@ -118,7 +120,7 @@ playerJumpInitialAcce =
 -}
 playerHorizontalSpeed : Float
 playerHorizontalSpeed =
-    1.93
+    2.00
 
 
 {-| Constant of initial speed of jump.
@@ -158,6 +160,7 @@ init : GlobalBasics.Pos -> Player
 init pos =
     { pos = pos
     , lastPos = pos
+    , lastOutPos = pos
     , velocity = ( 0.0, 0.0 )
     , jump = Jump 2 -1
     , ifThisFrameOnGround = False
@@ -170,7 +173,8 @@ init pos =
                 , ( ( 0.0, playerHeight ), ( 0.0, 0.0 ) )
                 ]
             )
-    , ifChangeBackToLastPos = False
+    , ifChangeBackToLastPosX = False
+    , ifChangeBackToLastPosY = False
     }
 
 
@@ -196,17 +200,17 @@ updatePlayerVelocity ( model, cmd ) =
                 if List.member 68 model.keyPressed || List.member 39 model.keyPressed then
                     0.0
 
-                else if abs oldVelocityY <= 0.1 then
-                    -playerHorizontalSpeed * 2
-
+                --else if abs oldVelocityY <= 0.1 then
+                --    -playerHorizontalSpeed * 2
+                --
                 else
                     -playerHorizontalSpeed
 
             else if List.member 68 model.keyPressed || List.member 39 model.keyPressed then
-                if abs oldVelocityY <= 0.1 then
-                    playerHorizontalSpeed * 2
+                --if abs oldVelocityY <= 0.1 then
+                --    playerHorizontalSpeed * 2
 
-                else
+                --else
                     playerHorizontalSpeed
 
             else
@@ -252,6 +256,35 @@ updatePlayerVelocity ( model, cmd ) =
     in
     ( { model | player = newPlayer }, cmd )
 
+updateJustPlayerPos : ( { model | player : Player, keyPressed : List Int }, Cmd MainType.Msg ) -> ( { model | player : Player, keyPressed : List Int }, Cmd MainType.Msg )
+updateJustPlayerPos ( model, cmd ) =
+    let
+        ( newX, newY ) =
+            if model.player.ifChangeBackToLastPosX then
+                if model.player.ifChangeBackToLastPosY then
+                    model.player.lastPos
+
+                else
+                    ( Tuple.first model.player.lastPos, Tuple.second model.player.pos )
+
+            else
+                if model.player.ifChangeBackToLastPosY then
+                    ( Tuple.first model.player.pos, Tuple.second model.player.lastPos )
+
+                else
+                    model.player.pos
+
+        oldPlayer =
+            model.player
+
+        newPlayer =
+            { oldPlayer | pos = ( newX, newY ), ifChangeBackToLastPosX = False, ifChangeBackToLastPosY = False }
+
+        newModel =
+            { model | player = newPlayer }
+    in
+    ( newModel, cmd )
+
 
 {-| Updates player pos due to velocity
 -}
@@ -262,11 +295,19 @@ updatePlayerPos ( model, cmd ) =
             model.player.velocity
 
         ( oldX, oldY ) =
-            if model.player.ifChangeBackToLastPos then
-                model.player.lastPos
+            if model.player.ifChangeBackToLastPosX then
+                if model.player.ifChangeBackToLastPosY then
+                    model.player.lastPos
+
+                else
+                    ( Tuple.first model.player.lastPos, Tuple.second model.player.pos )
 
             else
-                model.player.pos
+                if model.player.ifChangeBackToLastPosY then
+                    ( Tuple.first model.player.pos, Tuple.second model.player.lastPos )
+
+                else
+                    model.player.pos
 
         ( newX, newY ) =
             ( oldX + velocityX, oldY + velocityY )
@@ -275,7 +316,7 @@ updatePlayerPos ( model, cmd ) =
             model.player
 
         newPlayer =
-            { oldPlayer | pos = ( newX, newY ), lastPos = ( oldX, oldY ), ifChangeBackToLastPos = False }
+            { oldPlayer | pos = ( newX, newY ), lastPos = ( oldX, oldY), lastOutPos = ( newX, newY ), ifChangeBackToLastPosX = False, ifChangeBackToLastPosY = False }
     in
     ( { model | player = newPlayer }, cmd )
 
@@ -289,9 +330,9 @@ view model =
             model.player.pos
     in
     [ Svg.rect
-        [ SvgAttr.x (String.fromFloat (playerX + playerDeltaX model))
+        [ SvgAttr.x (String.fromFloat (playerX - 1.0 + playerDeltaX model))
         , SvgAttr.y (String.fromFloat (playerY + playerDeltaY model))
-        , SvgAttr.width (String.fromFloat playerWidth)
+        , SvgAttr.width (String.fromFloat (playerWidth + 1.0))
         , SvgAttr.height (String.fromFloat playerHeight)
         , SvgAttr.fill "#000000"
         ]
@@ -422,7 +463,7 @@ playerVerticalCollide model =
             model.player
 
         newPlayerChangeVelocity =
-            { oldPlayer | velocity = ( Tuple.first oldPlayer.velocity, 0.0 ) }
+            { oldPlayer | velocity = ( Tuple.first oldPlayer.velocity, 0.0 ), ifChangeBackToLastPosY = True }
 
         --newPlayerChangePos =
         --    { newPlayerChangeVelocity | pos = newPlayerChangeVelocity.lastPos }
@@ -442,7 +483,7 @@ playerHorizontalCollide model =
             model.player
 
         newPlayerChangeVelocity =
-            { oldPlayer | velocity = ( 0.0, Tuple.second oldPlayer.velocity ) }
+            { oldPlayer | velocity = ( 0.0, Tuple.second oldPlayer.velocity ), ifChangeBackToLastPosX = True }
 
         --newPlayerChangePos =
         --    { newPlayerChangeVelocity | pos = newPlayerChangeVelocity.lastPos }

@@ -389,17 +389,8 @@ updateOneBrickCollision id model =
 
                                     collideModel =
                                         Player.playerCollideRigidBody refreshJumpModel brick
-
-                                    oldPlayer =
-                                        collideModel.player
-
-                                    newPlayer =
-                                        { oldPlayer | ifChangeBackToLastPos = True }
-
-                                    newModel =
-                                        { collideModel | player = newPlayer }
                                 in
-                                newModel
+                                collideModel
 
                 _ ->
                     newBricksModel

@@ -1,9 +1,10 @@
-module Boundary exposing
-    ( BoundaryType, Boundary
-    , init, normalInit
-    , view
-    , update
-    )
+--module Boundary exposing
+--    ( BoundaryType, Boundary
+--    , init, normalInit
+--    , view
+--    , update
+--    )
+module Boundary exposing(..)
 
 {-| The boundaries in each level
 
@@ -25,10 +26,11 @@ module Boundary exposing
 
 # Update
 
-@docs update
+@docs update, updateOneBoundary
 
 -}
 
+import Array
 import GlobalBasics
 import MainType
 import Player
@@ -38,11 +40,13 @@ import ViewMove
 
 
 {-| `BoundaryType` describes what if the player collide with the boundary. `BoundaryNoCollide` will have no effect,
-`BoundaryCollide` will collide with player, `BoundaryDeath` will makes player dead.
+`BoundaryCollide` will collide with player, `BoundaryCollideGround` will refresh player jump once he collides,
+`BoundaryDeath` will makes player dead.
 -}
 type BoundaryType
     = BoundaryNoCollide
     | BoundaryCollide
+    | BoundaryCollideGround
     | BoundaryDeath
 
 
@@ -105,6 +109,9 @@ viewOneBoundary model anchor area boundaryType =
                 BoundaryCollide ->
                     "#000000FF"
 
+                BoundaryCollideGround ->
+                    "#000000FF"
+
                 BoundaryDeath ->
                     "#FF0000"
             )
@@ -117,23 +124,88 @@ viewOneBoundary model anchor area boundaryType =
 view : { model | boundary : Boundary, windowBoundary : GlobalBasics.Pos, levelBoundary : GlobalBasics.Pos, player : Player.Player } -> List (Svg MainType.Msg)
 view model =
     let
-        windowBoundaryX =
+        ( levelBoundaryX, levelBoundaryY ) =
             model.levelBoundary
-                |> Tuple.first
-
-        windowBoundaryY =
-            model.levelBoundary
-                |> Tuple.second
     in
-    [ viewOneBoundary model ( 0, 0 ) ( windowBoundaryX, boundaryWidth ) model.boundary.upBoundary
-    , viewOneBoundary model ( 0, windowBoundaryY ) ( windowBoundaryX, boundaryWidth ) model.boundary.downBoundary
-    , viewOneBoundary model ( 0, 0 ) ( boundaryWidth, windowBoundaryY ) model.boundary.leftBoundary
-    , viewOneBoundary model ( windowBoundaryX, 0 ) ( boundaryWidth, windowBoundaryY ) model.boundary.rightBoundary
+    [ viewOneBoundary model ( 0, 0 ) ( levelBoundaryX, boundaryWidth ) model.boundary.upBoundary
+    , viewOneBoundary model ( 0, levelBoundaryY ) ( levelBoundaryX, boundaryWidth ) model.boundary.downBoundary
+    , viewOneBoundary model ( 0, 0 ) ( boundaryWidth, levelBoundaryY ) model.boundary.leftBoundary
+    , viewOneBoundary model ( levelBoundaryX, 0 ) ( boundaryWidth, levelBoundaryY ) model.boundary.rightBoundary
     ]
+
+
+{-| update one boundary's collision with player, used in `update`, not exposed.
+-}
+updateOneBoundary : GlobalBasics.Pos -> GlobalBasics.Pos -> BoundaryType -> ( { model | player : Player.Player }, Cmd MainType.Msg ) -> ( { model | player : Player.Player }, Cmd MainType.Msg )
+updateOneBoundary anchor area boundaryType ( model, cmd ) =
+    let
+        ( anchorX, anchorY ) =
+            anchor
+
+        ( areaX, areaY ) =
+            area
+
+        collisionBox =
+            GlobalBasics.Polygon
+                (Array.fromList
+                    [ ( ( anchorX, anchorY ), ( anchorX + areaX, anchorY ) )
+                    , ( ( anchorX + areaX, anchorY ), ( anchorX + areaX, anchorY + areaY ) )
+                    , ( ( anchorX + areaX, anchorY + areaY ), ( anchorX, anchorY + areaY ) )
+                    , ( ( anchorX, anchorY + areaY ), ( anchorX, anchorY ) )
+                    ]
+                )
+    in
+    case boundaryType of
+        BoundaryNoCollide ->
+            ( model, cmd )
+
+        BoundaryCollide ->
+            ( Player.playerCollideRigidBody
+                model
+                { pos = ( 0.0, 0.0 )
+                , collisionBox = collisionBox
+                }
+            , cmd
+            )
+
+        BoundaryCollideGround ->
+            if Player.playerIfCollidePoly model { pos = ( 0.0, 0.0 ), collisionBox = collisionBox } == GlobalBasics.Collided then
+                let
+                    refreshJumpModel =
+                        Player.playerRefreshJump model
+
+                    newModel =
+                        Player.playerCollideRigidBody
+                            refreshJumpModel
+                            { pos = ( 0.0, 0.0 )
+                            , collisionBox = collisionBox
+                            }
+                in
+                ( newModel, cmd )
+
+            else
+                ( model, cmd )
+
+        BoundaryDeath ->
+            ( Player.playerCollideRigidBody
+                model
+                { pos = ( 0.0, 0.0 )
+                , collisionBox = collisionBox
+                }
+            , cmd
+            )
 
 
 {-| `update` updates collision of the boundaries
 -}
-update : ( { model | boundary : Boundary, windowBoundary : GlobalBasics.Pos, levelBoundary : GlobalBasics.Pos, player : Player.Player }, Cmd MainType.Msg ) -> ( { model | boundary : Boundary, windowBoundary : GlobalBasics.Pos,   levelBoundary :  GlobalBasics.Pos, player : Player.Player }, Cmd MainType.Msg )
+update : ( { model | boundary : Boundary, windowBoundary : GlobalBasics.Pos, levelBoundary : GlobalBasics.Pos, player : Player.Player }, Cmd MainType.Msg ) -> ( { model | boundary : Boundary, windowBoundary : GlobalBasics.Pos, levelBoundary : GlobalBasics.Pos, player : Player.Player }, Cmd MainType.Msg )
 update ( model, cmd ) =
+    let
+        ( levelBoundaryX, levelBoundaryY ) =
+            model.levelBoundary
+    in
     ( model, cmd )
+        |> updateOneBoundary ( 0, 0 ) ( levelBoundaryX, boundaryWidth ) model.boundary.upBoundary
+        |> updateOneBoundary ( 0, levelBoundaryY ) ( levelBoundaryX, boundaryWidth ) model.boundary.downBoundary
+        |> updateOneBoundary ( 0, 0 ) ( boundaryWidth, levelBoundaryY ) model.boundary.leftBoundary
+        |> updateOneBoundary ( levelBoundaryX, 0 ) ( boundaryWidth, levelBoundaryY ) model.boundary.rightBoundary
