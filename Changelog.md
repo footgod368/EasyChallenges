@@ -1,4 +1,4 @@
-## Pre-Alpha version (MVP)
+## Pre-Alpha version (MVP), V0.1.0
 - Adding Core unit: `Player`, `Event`, `Brick`
 - Adding Core function: `Structure`, `viewChange`, `collision`
 - Fixing bugs
