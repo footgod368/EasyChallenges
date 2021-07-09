@@ -55,6 +55,21 @@ init =
                     )
                 )
                 (Event.quickDuration 10)
+            , Event.init
+                { id = 3, name = "Event3" }
+                Event.StartActivated
+                (Event.PlayerCollide
+                    (GlobalBasics.Polygon
+                        (Array.fromList
+                            [ ( ( 620, 500 ), ( 620, 540 ) )
+                            , ( ( 620, 540 ), ( 660, 540 ) )
+                            , ( ( 660, 540 ), ( 660, 520 ) )
+                            , ( ( 660, 520 ), ( 620, 500 ) )
+                            ]
+                        )
+                    )
+                )
+                (Event.quickDuration 10)
             ]
     , boundary = Boundary.normalInit
     , player = Player.init ( 50.0, 490.0 )
@@ -63,6 +78,15 @@ init =
             (List.concat
                 [ List.map (\i -> Brick.quickInit (GlobalBasics.blockPos ( i, 15 ))) (List.range 1 5)
                 , List.map (\i -> Brick.quickInit (GlobalBasics.blockPos ( i, 12 ))) (List.range 2 5)
+                , [ Brick.init
+                        (GlobalBasics.blockPos ( 17, 14 ))
+                        Brick.defBrickCollisionBox
+                        Brick.NoAppearance
+                        (Brick.Visible (Brick.InvisibleAfterEvent 3 Brick.NoNextBrickVisibility))
+                        (Brick.NoCollide Brick.NoNextBrickCollision)
+                        (Brick.NoNextBrickMove)
+                  ]
+                , List.map (\i -> Brick.quickInit (GlobalBasics.blockPos ( 18, i ))) (List.range 11 14)
                 , [ Brick.init
                         (GlobalBasics.blockPos ( 6, 12 ))
                         Brick.defBrickCollisionBox

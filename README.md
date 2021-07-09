@@ -2,7 +2,8 @@
 - Finish MVP, you can play this game by entering "elm make src/Main.elm" in this directory and open index.html, or 
   use makefile directly.
 - In this scene, the **black block** is you, you need to jump to the **right-hand block**. You may be trapped at 
-  most 2 times. Currently, death hasn't been made yet, you need to refresh when you touch the red line at the bottom.
+  most 3 times. Currently, death hasn't been made yet, you need to refresh when you touch the red line at the bottom 
+  (where you can no longer jump).
 - Finish (according to roadmap)
   - core unit: `player`, `event`, `brick`.
   - core function: `structure`, `viewChange`, `collision`.
