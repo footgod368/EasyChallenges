@@ -237,7 +237,7 @@ defPoly =
     Array.fromList []
 
 
-{-| `CollisionStatus` is a typed used in collide function return
+{-| `CollisionStatus` is a type used in collide function return
 -}
 type CollisionStatus
     = Collided

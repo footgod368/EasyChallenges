@@ -77,7 +77,7 @@ type BrickVisibility
     | NoNextBrickVisibility
 
 
-{-| `BrickCollision` describes the if the collision of the block is considered. This is almost the same as
+{-| `BrickCollision` describes if the collision of the block is considered. This is almost the same as
 `BrickVisibility`, see details in `BrickVisibility`. Here is just a example. You want it to have no collision at
 first, then when `Event` whose id = 1 activates, it has collision, then finally, when `Event` whose id = 2 activates,
 it has no collision, write:
@@ -128,7 +128,6 @@ type BrickAppearance
 -}
 brickWidth : Float
 brickWidth =
-    --30.0
     Tuple.first GlobalBasics.blockSize
 
 
@@ -203,7 +202,7 @@ defBrickCollisionBox =
 viewOneBrick : { model | windowBoundary : GlobalBasics.Pos, levelBoundary : GlobalBasics.Pos, player : Player.Player } -> Brick -> List (Svg MainType.Msg)
 viewOneBrick model brick =
     case brick.brickVisibility of
-        Visible nextVisibility ->
+        Visible _ ->
             let
                 ( brickX, brickY ) =
                     brick.pos
@@ -220,7 +219,7 @@ viewOneBrick model brick =
                 []
             ]
 
-        Invisible nextVisibility ->
+        Invisible _ ->
             []
 
         _ ->
