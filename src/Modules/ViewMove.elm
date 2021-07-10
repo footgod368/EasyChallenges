@@ -1,7 +1,7 @@
 module ViewMove exposing (deltaX, deltaY)
 
-{-| This changes the camera to move with the player
-
+{-| This let the camera move with the player
+ 
 
 # view
 

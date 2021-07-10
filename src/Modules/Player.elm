@@ -106,7 +106,7 @@ playerJumpNum =
     2
 
 
-{-| If only one jump and must be the ground
+{-| If only one-time on-ground jump is allowed 
 -}
 ifOneJumpAndOnTheGround : Bool
 ifOneJumpAndOnTheGround =
