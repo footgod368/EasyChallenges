@@ -25,15 +25,15 @@ import Svg.Attributes as SvgAttr
 view : Level1Type.Model -> Html MainType.Msg
 view model =
     div
-        [ HtmlAttr.style "position" "absolute"
-        , HtmlAttr.style "width" "100%"
-        , HtmlAttr.style "height" "100%"
+        [ HtmlAttr.style "position" "relative"
+        , HtmlAttr.style "width" "95%"
+        , HtmlAttr.style "height" "95%"
         , HtmlAttr.style "left" "5px"
         , HtmlAttr.style "top" "5px"
         ]
         [ Svg.svg
-            [ SvgAttr.width (String.fromFloat (Tuple.first model.windowBoundary * 1.01 ) )
-            , SvgAttr.height (String.fromFloat (Tuple.second model.windowBoundary * 1.01 ) )
+            [ SvgAttr.width (String.fromFloat (Tuple.first model.windowBoundary * 0.98 ) )
+            , SvgAttr.height (String.fromFloat (Tuple.second model.windowBoundary * 0.98 ) )
             ]
             (Player.view model
                 ++ Brick.view model
