@@ -187,8 +187,16 @@ updateOneBoundary anchor area boundaryType ( model, cmd ) =
                 ( model, cmd )
 
         BoundaryDeath ->
+            let
+                ifCollide = Player.playerIfCollidePoly model { pos = ( 0.0, 0.0 ), collisionBox = collisionBox }
+                newModel = 
+                    if ifCollide == GlobalBasics.Collided then
+                        { model | player = Player.playerDead model.player }
+                    else
+                        model
+            in
             ( Player.playerCollideRigidBody
-                model
+                newModel
                 { pos = ( 0.0, 0.0 )
                 , collisionBox = collisionBox
                 }
