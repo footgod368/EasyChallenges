@@ -3,7 +3,7 @@ module Player exposing
     , init
     , update, updateJustPlayerPos
     , view
-    , playerRefreshJump, playerIfCollidePoly, playerCollideRigidBody
+    , playerRefreshJump, playerIfCollidePoly, playerCollideRigidBody, playerDead
     )
 
 {-| The Player unit, the figure that player controls.
@@ -71,7 +71,16 @@ type alias Player =
     , collisionBox : GlobalBasics.CollisionBox
     , ifChangeBackToLastPosX : Bool
     , ifChangeBackToLastPosY : Bool
+    , liveState : LiveState
+    , deadTimes: Int
     }
+
+{-| LiveState defines if the player is live, dead, or win this level.
+-}
+type LiveState
+    = Live
+    | Dead
+    | Win
 
 
 {-| Constant width of player object
@@ -136,6 +145,13 @@ gravityAcce : Float
 gravityAcce =
     0.1
 
+{-| Change the state of player to Dead
+-}
+playerDead : Player -> Player
+playerDead player =
+    { player | liveState = Dead }
+
+
 
 {-| When the jumps takes place in fameNum, return the corresponding acceleration.
 -}
@@ -175,6 +191,8 @@ init pos =
             )
     , ifChangeBackToLastPosX = False
     , ifChangeBackToLastPosY = False
+    , liveState = Live
+    , deadTimes = 0
     }
 
 
@@ -182,9 +200,15 @@ init pos =
 -}
 update : ( { model | player : Player, keyPressed : List Int }, Cmd MainType.Msg ) -> ( { model | player : Player, keyPressed : List Int }, Cmd MainType.Msg )
 update ( model, cmd ) =
-    ( model, cmd )
-        |> updatePlayerPos
-        |> updatePlayerVelocity
+    case model.player.liveState of
+        Live ->
+            ( model, cmd )
+            |> updatePlayerPos
+            |> updatePlayerVelocity
+        Dead ->
+            ( model, cmd )
+        Win ->
+            ( model, cmd )
 
 
 {-| Updates player control, move left, right and jump. Not exposed.
@@ -328,6 +352,11 @@ view model =
     let
         ( playerX, playerY ) =
             model.player.pos
+        deadOpacity = 
+            if model.player.liveState == Dead then
+                1
+            else
+                0
     in
     [ Svg.rect
         [ SvgAttr.x (String.fromFloat (playerX - 1.0 + playerDeltaX model))
@@ -337,6 +366,17 @@ view model =
         , SvgAttr.fill "#000000"
         ]
         []
+      ,
+      Svg.text_
+        [ SvgAttr.x "500"
+        , SvgAttr.y "250"
+        , SvgAttr.fontSize "50"
+        , SvgAttr.textAnchor "middle"
+        , SvgAttr.fill "#000000"
+        , SvgAttr.opacity (String.fromInt deadOpacity)
+        ]
+        [ Svg.text ("You dead!")
+        ]
     ]
 
 
