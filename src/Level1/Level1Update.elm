@@ -18,6 +18,7 @@ import Player
 import Boundary
 import Level1Init
 import SavePoint
+import EndPoint
 
 
 {-| `update` of Level1
@@ -42,6 +43,7 @@ update msg model =
                         |> Event.update
                         |> Brick.update
                         |> SavePoint.update
+                        |> EndPoint.update
                         |> Boundary.update
                         |> Player.updateJustPlayerPos
                 initModel = Tuple.first Level1Init.init

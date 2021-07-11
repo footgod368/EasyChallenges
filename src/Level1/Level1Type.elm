@@ -16,6 +16,7 @@ import Event
 import GlobalBasics
 import Player
 import SavePoint
+import EndPoint
 
 
 {-| `Model` that used in level1
@@ -29,5 +30,6 @@ type alias Model =
     , player : Player.Player
     , bricks : Array Brick.Brick
     , savePoints : Array SavePoint.SavePoint
+    , endPoint : EndPoint.EndPoint
     , keyPressed : List Int
     }

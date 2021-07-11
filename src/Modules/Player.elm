@@ -3,7 +3,7 @@ module Player exposing
     , init
     , update, updateJustPlayerPos
     , view
-    , playerRefreshJump, playerIfCollidePoly, playerCollideRigidBody, playerDead, checkDead
+    , playerRefreshJump, playerIfCollidePoly, playerCollideRigidBody, playerDead, checkDead, playerWin
     )
 
 {-| The Player unit, the figure that player controls.
@@ -153,6 +153,11 @@ playerDead : Player -> Player
 playerDead player =
     { player | liveState = Dead }
 
+{-| Change the state of player to Win
+-}
+playerWin : Player -> Player
+playerWin player =
+    { player | liveState = Win }
 
 {-| Check if the state of player is Dead
 -}
@@ -369,6 +374,11 @@ view model =
                 1
             else
                 0
+        winOpacity =
+            if model.player.liveState == Win then
+                1
+            else
+                0
     in
     [ Svg.rect
         [ SvgAttr.x (String.fromFloat (playerX - 1.0 + playerDeltaX model))
@@ -388,6 +398,17 @@ view model =
         , SvgAttr.opacity (String.fromInt deadOpacity)
         ]
         [ Svg.text ("You dead! Dead times: " ++ (String.fromInt model.player.deadTimes) )
+        ]
+      ,
+      Svg.text_
+        [ SvgAttr.x (String.fromFloat (playerX  + playerDeltaX model))
+        , SvgAttr.y (String.fromFloat (playerY + playerDeltaY model))
+        , SvgAttr.fontSize "50"
+        , SvgAttr.textAnchor "middle"
+        , SvgAttr.fill "#ff3366"
+        , SvgAttr.opacity (String.fromInt winOpacity)
+        ]
+        [ Svg.text ("You Win!")
         ]
     ]
 
