@@ -377,8 +377,8 @@ view model =
         []
       ,
       Svg.text_
-        [ SvgAttr.x "500"
-        , SvgAttr.y "250"
+        [ SvgAttr.x (String.fromFloat (playerX  + playerDeltaX model))
+        , SvgAttr.y (String.fromFloat (playerY + playerDeltaY model))
         , SvgAttr.fontSize "50"
         , SvgAttr.textAnchor "middle"
         , SvgAttr.fill "#000000"

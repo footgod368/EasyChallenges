@@ -32,8 +32,8 @@ view model =
         , HtmlAttr.style "top" "5px"
         ]
         [ Svg.svg
-            [ SvgAttr.width (String.fromFloat (Tuple.first model.windowBoundary * 0.98 ) )
-            , SvgAttr.height (String.fromFloat (Tuple.second model.windowBoundary * 0.98 ) )
+            [ SvgAttr.width (String.fromFloat (Tuple.first model.windowBoundary) )
+            , SvgAttr.height (String.fromFloat (Tuple.second model.windowBoundary) )
             ]
             (Player.view model
                 ++ Brick.view model
