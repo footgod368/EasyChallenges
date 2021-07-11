@@ -12,18 +12,21 @@ module Level1Init exposing (init)
 import Array
 import Boundary
 import Brick
+import Browser.Dom exposing (getViewport)
 import Event
 import GlobalBasics
 import Level1Type
+import MainType
 import Player
+import Task
 
 
 {-| `init` of Level1 \`Model
 -}
-init : Level1Type.Model
+init : ( Level1Type.Model, Cmd MainType.Msg )
 init =
-    { windowBoundary = ( 0, 0 )
-    , levelBoundary = ( 1000.0, 640.0 )
+    ( { windowBoundary = ( 1000.0, 800.0 )
+    , levelBoundary = ( 1000.0, 680.0 )
     , actEvent = Array.fromList []
     , event =
         Array.fromList
@@ -119,4 +122,5 @@ init =
                 ]
             )
     , keyPressed = []
-    }
+    },
+    Task.perform MainType.GetViewport getViewport)

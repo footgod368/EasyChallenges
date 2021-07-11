@@ -43,7 +43,7 @@ update msg model =
                         |> Player.updateJustPlayerPos
             in
             if (Player.checkDead newModel.player) && (List.member 82 newModel.keyPressed) then
-                ( Level1Init.init, Cmd.none )
+                Level1Init.init
             else
                 ( newModel, cmd )
 

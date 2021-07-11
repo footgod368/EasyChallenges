@@ -128,7 +128,8 @@ view model =
             model.levelBoundary
     in
     [ viewOneBoundary model ( boundaryWidth, 0 ) ( levelBoundaryX, boundaryWidth ) model.boundary.upBoundary
-    , viewOneBoundary model ( boundaryWidth, levelBoundaryY - boundaryWidth ) ( levelBoundaryX, boundaryWidth ) model.boundary.downBoundary
+    , viewOneBoundary model ( boundaryWidth, levelBoundaryY - boundaryWidth ) ( levelBoundaryX, boundaryWidth )
+    model.boundary.downBoundary
     , viewOneBoundary model ( 0, 0 ) ( boundaryWidth, levelBoundaryY ) model.boundary.leftBoundary
     , viewOneBoundary model ( levelBoundaryX - boundaryWidth, 0 ) ( boundaryWidth, levelBoundaryY ) model.boundary.rightBoundary
     ]
