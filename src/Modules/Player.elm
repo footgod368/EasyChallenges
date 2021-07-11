@@ -3,7 +3,7 @@ module Player exposing
     , init
     , update, updateJustPlayerPos
     , view
-    , playerRefreshJump, playerIfCollidePoly, playerCollideRigidBody
+    , playerRefreshJump, playerIfCollidePoly, playerCollideRigidBody, playerDead, checkDead, playerWin
     )
 
 {-| The Player unit, the figure that player controls.
@@ -59,7 +59,8 @@ type PlayerJump
 
 {-| Definition of player, `pos` is current position, `lastPos` store the last position, used in collision test,
 `velocity` is its velocity, divided into x-axis and y-axis. `collisionBox` is its `CollisionBox`, `jumpNum` is how
-many times it can jump.
+many times it can jump, "deadTimes" is how many times the player dead, "saveNumber" describes which savePoint 
+the player last saved, saveNumber = 0 means saved at the first savePoint, 1 means the second, ...
 -}
 type alias Player =
     { pos : GlobalBasics.Pos
@@ -71,7 +72,17 @@ type alias Player =
     , collisionBox : GlobalBasics.CollisionBox
     , ifChangeBackToLastPosX : Bool
     , ifChangeBackToLastPosY : Bool
+    , liveState : LiveState
+    , deadTimes: Int
+    , saveNumber: Int
     }
+
+{-| LiveState defines if the player is live, dead, or win this level.
+-}
+type LiveState
+    = Live
+    | Dead
+    | Win
 
 
 {-| Constant width of player object
@@ -136,6 +147,27 @@ gravityAcce : Float
 gravityAcce =
     0.1
 
+{-| Change the state of player to Dead
+-}
+playerDead : Player -> Player
+playerDead player =
+    { player | liveState = Dead }
+
+{-| Change the state of player to Win
+-}
+playerWin : Player -> Player
+playerWin player =
+    { player | liveState = Win }
+
+{-| Check if the state of player is Dead
+-}
+checkDead : Player -> Bool
+checkDead player =
+    if player.liveState == Dead then
+        True
+    else
+        False
+
 
 {-| When the jumps takes place in fameNum, return the corresponding acceleration.
 -}
@@ -175,6 +207,9 @@ init pos =
             )
     , ifChangeBackToLastPosX = False
     , ifChangeBackToLastPosY = False
+    , liveState = Live
+    , deadTimes = 1
+    , saveNumber = -1
     }
 
 
@@ -182,9 +217,15 @@ init pos =
 -}
 update : ( { model | player : Player, keyPressed : List Int }, Cmd MainType.Msg ) -> ( { model | player : Player, keyPressed : List Int }, Cmd MainType.Msg )
 update ( model, cmd ) =
-    ( model, cmd )
-        |> updatePlayerPos
-        |> updatePlayerVelocity
+    case model.player.liveState of
+        Live ->
+            ( model, cmd )
+            |> updatePlayerPos
+            |> updatePlayerVelocity
+        Dead ->
+            ( model, cmd )
+        Win ->
+            ( model, cmd )
 
 
 {-| Updates player control, move left, right and jump. Not exposed.
@@ -328,6 +369,16 @@ view model =
     let
         ( playerX, playerY ) =
             model.player.pos
+        deadOpacity = 
+            if model.player.liveState == Dead then
+                1
+            else
+                0
+        winOpacity =
+            if model.player.liveState == Win then
+                1
+            else
+                0
     in
     [ Svg.rect
         [ SvgAttr.x (String.fromFloat (playerX - 1.0 + playerDeltaX model))
@@ -337,6 +388,28 @@ view model =
         , SvgAttr.fill "#000000"
         ]
         []
+      ,
+      Svg.text_
+        [ SvgAttr.x (String.fromFloat (playerX  + playerDeltaX model))
+        , SvgAttr.y (String.fromFloat (playerY + playerDeltaY model))
+        , SvgAttr.fontSize "50"
+        , SvgAttr.textAnchor "middle"
+        , SvgAttr.fill "#000000"
+        , SvgAttr.opacity (String.fromInt deadOpacity)
+        ]
+        [ Svg.text ("You dead! Dead times: " ++ (String.fromInt model.player.deadTimes) )
+        ]
+      ,
+      Svg.text_
+        [ SvgAttr.x (String.fromFloat (playerX  + playerDeltaX model))
+        , SvgAttr.y (String.fromFloat (playerY + playerDeltaY model))
+        , SvgAttr.fontSize "50"
+        , SvgAttr.textAnchor "middle"
+        , SvgAttr.fill "#ff3366"
+        , SvgAttr.opacity (String.fromInt winOpacity)
+        ]
+        [ Svg.text ("You Win!")
+        ]
     ]
 
 

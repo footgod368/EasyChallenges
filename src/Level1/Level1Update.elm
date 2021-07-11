@@ -8,13 +8,17 @@ module Level1Update exposing (testUpdate, update)
 update
 
 -}
-
+import Array exposing (Array)
+import Maybe exposing (withDefault)
 import Brick
 import Event
 import Level1Type
 import MainType
 import Player
 import Boundary
+import Level1Init
+import SavePoint
+import EndPoint
 
 
 {-| `update` of Level1
@@ -38,10 +42,24 @@ update msg model =
                         |> Player.update
                         |> Event.update
                         |> Brick.update
+                        |> SavePoint.update
+                        |> EndPoint.update
                         |> Boundary.update
                         |> Player.updateJustPlayerPos
+                initModel = Tuple.first Level1Init.init
+                oldSavePoints = model.savePoints
+                oldSaveNumber = model.player.saveNumber
+                oldDeadTimes = model.player.deadTimes
+                lastsavePoint = Array.get oldSaveNumber oldSavePoints |> withDefault SavePoint.defSavePoint
+                player = Player.init lastsavePoint.pos
+                newPlayer = { player | saveNumber = oldSaveNumber, deadTimes = oldDeadTimes + 1 }
+
+                newInitModel = { initModel | savePoints = oldSavePoints, player = newPlayer }
             in
-            ( newModel, cmd )
+            if (Player.checkDead newModel.player) && (List.member 82 newModel.keyPressed) then
+                ( newInitModel, Tuple.second Level1Init.init )
+            else
+                ( newModel, cmd )
 
         _ ->
             ( model, Cmd.none )

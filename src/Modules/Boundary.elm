@@ -128,7 +128,8 @@ view model =
             model.levelBoundary
     in
     [ viewOneBoundary model ( boundaryWidth, 0 ) ( levelBoundaryX, boundaryWidth ) model.boundary.upBoundary
-    , viewOneBoundary model ( boundaryWidth, levelBoundaryY - boundaryWidth ) ( levelBoundaryX, boundaryWidth ) model.boundary.downBoundary
+    , viewOneBoundary model ( boundaryWidth, levelBoundaryY - boundaryWidth ) ( levelBoundaryX, boundaryWidth )
+    model.boundary.downBoundary
     , viewOneBoundary model ( 0, 0 ) ( boundaryWidth, levelBoundaryY ) model.boundary.leftBoundary
     , viewOneBoundary model ( levelBoundaryX - boundaryWidth, 0 ) ( boundaryWidth, levelBoundaryY ) model.boundary.rightBoundary
     ]
@@ -187,8 +188,16 @@ updateOneBoundary anchor area boundaryType ( model, cmd ) =
                 ( model, cmd )
 
         BoundaryDeath ->
+            let
+                ifCollide = Player.playerIfCollidePoly model { pos = ( 0.0, 0.0 ), collisionBox = collisionBox }
+                newModel = 
+                    if ifCollide == GlobalBasics.Collided then
+                        { model | player = Player.playerDead model.player }
+                    else
+                        model
+            in
             ( Player.playerCollideRigidBody
-                model
+                newModel
                 { pos = ( 0.0, 0.0 )
                 , collisionBox = collisionBox
                 }

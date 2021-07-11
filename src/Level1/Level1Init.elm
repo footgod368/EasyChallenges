@@ -12,18 +12,23 @@ module Level1Init exposing (init)
 import Array
 import Boundary
 import Brick
+import Browser.Dom exposing (getViewport)
 import Event
 import GlobalBasics
 import Level1Type
+import MainType
 import Player
+import Task
+import SavePoint
+import EndPoint
 
 
 {-| `init` of Level1 \`Model
 -}
-init : Level1Type.Model
+init : ( Level1Type.Model, Cmd MainType.Msg )
 init =
-    { windowBoundary = ( 0, 0 )
-    , levelBoundary = ( 1000.0, 640.0 )
+    ( { windowBoundary = ( 1000.0, 800.0 )
+    , levelBoundary = ( 1000.0, 680.0 )
     , actEvent = Array.fromList []
     , event =
         Array.fromList
@@ -61,10 +66,10 @@ init =
                 (Event.PlayerCollide
                     (GlobalBasics.Polygon
                         (Array.fromList
-                            [ ( ( 620, 500 ), ( 620, 540 ) )
-                            , ( ( 620, 540 ), ( 660, 540 ) )
-                            , ( ( 660, 540 ), ( 660, 520 ) )
-                            , ( ( 660, 520 ), ( 620, 500 ) )
+                            [ ( ( 660, 500 ), ( 660, 540 ) )
+                            , ( ( 660, 540 ), ( 700, 540 ) )
+                            , ( ( 700, 540 ), ( 700, 520 ) )
+                            , ( ( 700, 520 ), ( 660, 500 ) )
                             ]
                         )
                     )
@@ -79,14 +84,16 @@ init =
                 [ List.map (\i -> Brick.quickInit (GlobalBasics.blockPos ( i, 15 ))) (List.range 1 5)
                 , List.map (\i -> Brick.quickInit (GlobalBasics.blockPos ( i, 12 ))) (List.range 2 5)
                 , [ Brick.init
-                        (GlobalBasics.blockPos ( 17, 14 ))
+                        (GlobalBasics.blockPos ( 18, 14 ))
                         Brick.defBrickCollisionBox
                         Brick.NoAppearance
                         (Brick.Visible (Brick.InvisibleAfterEvent 3 Brick.NoNextBrickVisibility))
                         (Brick.NoCollide Brick.NoNextBrickCollision)
                         (Brick.NoNextBrickMove)
                   ]
-                , List.map (\i -> Brick.quickInit (GlobalBasics.blockPos ( 18, i ))) (List.range 11 14)
+                , [ Brick.quickInit (GlobalBasics.blockPos ( 14, 14 ))
+                  ]
+                , List.map (\i -> Brick.quickInit (GlobalBasics.blockPos ( 19, i ))) (List.range 11 14)
                 , [ Brick.init
                         (GlobalBasics.blockPos ( 6, 12 ))
                         Brick.defBrickCollisionBox
@@ -118,5 +125,9 @@ init =
                   ]
                 ]
             )
+    , savePoints = 
+        Array.fromList([SavePoint.init (GlobalBasics.blockPos (2, 14)), SavePoint.init (GlobalBasics.blockPos (14, 13))])
+    , endPoint = EndPoint.init ( GlobalBasics.blockPos( 22, 14 ))
     , keyPressed = []
-    }
+    },
+    Task.perform MainType.GetViewport getViewport)
