@@ -2,6 +2,34 @@ module SavePoint exposing
     ( SavePointAppearance(..), SavePoint
     , init, view, update, defSaveBox, defSavePoint
     )
+{-| The SavePoint unit. An important unit to save the player's progression.
+
+
+# SavePoint
+
+@docs SavePointAppearance, SavePoint
+
+
+# SavePoint Constant
+
+@docs savePointWidth, savePointHeight
+
+
+# init
+
+@docs init, defSavePoint, defSaveBox
+
+
+# view
+
+@docs view, viewOneSavePoint
+
+
+# update
+
+@docs update, updateOneSavePoint
+
+-}
 
 import Array exposing (Array)
 import GlobalBasics
@@ -12,10 +40,18 @@ import Svg exposing (Svg)
 import Svg.Attributes as SvgAttr
 import ViewMove
 
+
+{-| "SavePointAppearance" describes different state of a savepoint, the initial state is unsaved, 
+when a player collide with the savepoint, its state changes to saved and remain unchanged.
+-}
 type SavePointAppearance
     = Saved
     | Unsaved
 
+
+{-| "SavePoint" is a record of the unit. "pos" describes the position of a savepoint, 
+which is also the position when a player rebirth. 
+-}
 type alias SavePoint =
     { pos : GlobalBasics.Pos
     , collisionBox : GlobalBasics.CollisionBox
@@ -41,6 +77,9 @@ defSavePoint : SavePoint
 defSavePoint =
     init ( 0, 0 )
 
+
+{-| Default collisionbox
+-}
 defSaveBox : GlobalBasics.CollisionBox
 defSaveBox =
     GlobalBasics.Polygon
@@ -52,6 +91,8 @@ defSaveBox =
             ]
         )
 
+{-| Init a savePoint, only input its position
+-}
 init: ( Float, Float ) -> SavePoint
 init ( x, y ) =
     { pos = ( x, y )
@@ -96,6 +137,8 @@ view model =
     in
     List.concat svgSavePointListList
 
+{-| update one savePoint, used in update, not exposed.
+-}
 updateOneSavePoint : Int -> { model | player : Player.Player, savePoints : Array SavePoint } -> { model | player : Player.Player, savePoints : Array SavePoint }
 updateOneSavePoint id model =
     let
@@ -114,6 +157,8 @@ updateOneSavePoint id model =
     else
         model
 
+{-| update function of savePoint
+-}
 update : ( { model | player : Player.Player, savePoints : Array SavePoint }, Cmd MainType.Msg ) -> ( { model | player : Player.Player, savePoints : Array SavePoint }, Cmd MainType.Msg )
 update ( model, cmd ) =
     ( List.foldl updateOneSavePoint model (List.range 0 (Array.length model.savePoints - 1)), cmd )

@@ -59,7 +59,8 @@ type PlayerJump
 
 {-| Definition of player, `pos` is current position, `lastPos` store the last position, used in collision test,
 `velocity` is its velocity, divided into x-axis and y-axis. `collisionBox` is its `CollisionBox`, `jumpNum` is how
-many times it can jump.
+many times it can jump, "deadTimes" is how many times the player dead, "saveNumber" describes which savePoint 
+the player last saved, saveNumber = 0 means saved at the first savePoint, 1 means the second, ...
 -}
 type alias Player =
     { pos : GlobalBasics.Pos
