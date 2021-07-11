@@ -102,6 +102,18 @@ updateOneSavePoint id model =
         savePoint = 
             Array.get id model.savePoints
                 |> withDefault defSavePoint
-        
+        newPoint = { savePoint | appearance = Saved }
+        newPoints = Array.set id newPoint model.savePoints
+        oldPlayer = model.player
+        newPlayer = { oldPlayer | saveNumber = oldPlayer.saveNumber + 1 }
+        newModel = { model | savePoints = newPoints , player = newPlayer}
+        status = Player.playerIfCollidePoly model savePoint
     in
-    model
+    if status == GlobalBasics.Collided && savePoint.appearance == Unsaved then
+        newModel
+    else
+        model
+
+update : ( { model | player : Player.Player, savePoints : Array SavePoint }, Cmd MainType.Msg ) -> ( { model | player : Player.Player, savePoints : Array SavePoint }, Cmd MainType.Msg )
+update ( model, cmd ) =
+    ( List.foldl updateOneSavePoint model (List.range 0 (Array.length model.savePoints - 1)), cmd )
