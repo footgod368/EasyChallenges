@@ -202,8 +202,8 @@ init pos =
     , ifChangeBackToLastPosX = False
     , ifChangeBackToLastPosY = False
     , liveState = Live
-    , deadTimes = 0
-    , saveNumber = 0
+    , deadTimes = 1
+    , saveNumber = -1
     }
 
 
@@ -386,7 +386,7 @@ view model =
         , SvgAttr.fill "#000000"
         , SvgAttr.opacity (String.fromInt deadOpacity)
         ]
-        [ Svg.text ("You dead!")
+        [ Svg.text ("You dead! Dead times: " ++ (String.fromInt model.player.deadTimes) )
         ]
     ]
 
