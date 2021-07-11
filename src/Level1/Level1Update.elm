@@ -15,6 +15,7 @@ import Level1Type
 import MainType
 import Player
 import Boundary
+import Level1Init
 
 
 {-| `update` of Level1
@@ -41,7 +42,10 @@ update msg model =
                         |> Boundary.update
                         |> Player.updateJustPlayerPos
             in
-            ( newModel, cmd )
+            if (Player.checkDead newModel.player) && (List.member 82 newModel.keyPressed) then
+                ( Level1Init.init, Cmd.none )
+            else
+                ( newModel, cmd )
 
         _ ->
             ( model, Cmd.none )
