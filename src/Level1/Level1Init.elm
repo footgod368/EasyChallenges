@@ -20,6 +20,7 @@ import MainType
 import Player
 import Task
 import SavePoint
+import EndPoint
 
 
 {-| `init` of Level1 \`Model
@@ -124,6 +125,7 @@ init =
             )
     , savePoints = 
         Array.fromList([SavePoint.init (GlobalBasics.blockPos (2, 14)), SavePoint.init (GlobalBasics.blockPos (13, 13))])
+    , endPoint = EndPoint.init ( GlobalBasics.blockPos( 10, 10 ))
     , keyPressed = []
     },
     Task.perform MainType.GetViewport getViewport)

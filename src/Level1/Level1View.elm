@@ -17,6 +17,7 @@ import Level1Type
 import MainType
 import Player
 import SavePoint
+import EndPoint
 import Svg
 import Svg.Attributes as SvgAttr
 
@@ -37,6 +38,7 @@ view model =
             , SvgAttr.height (String.fromFloat (Tuple.second model.windowBoundary) )
             ]
             (SavePoint.view model
+                ++ EndPoint.view model
                 ++ Player.view model
                 ++ Brick.view model
                 ++ Boundary.view model
