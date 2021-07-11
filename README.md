@@ -1,15 +1,13 @@
 ## Overview
 - Finish MVP, you can play this game by entering "elm make src/Main.elm" in this directory and open index.html, or 
   use makefile directly.
-- In this scene, the **black block** is you, you need to jump to the **right-hand block**. You may be trapped at 
-  most 3 times. Currently, death hasn't been made yet, you need to refresh when you touch the red line at the bottom 
-  (where you can no longer jump).
+- In this scene, the **black block** is you, the **Green block** is savepoint, you need to jump to the **red block**, which is the   endpoint. You may be trapped at most 3 times. If you touch the red line at the buttom, you can press **R** to go back to the last   savepoint.
 - Finish (according to roadmap)
   - core unit: `player`, `event`, `brick`.
   - core function: `structure`, `viewChange`, `collision`.
   - One single level
 - Haven't finish
-  - core unit: `needles`, `start point, respawn point, end point`.
+  - core unit: `needles`.
 
 ### Details
 - The structure of the game is well designed, see details in roadmap
