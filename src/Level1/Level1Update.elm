@@ -16,6 +16,7 @@ import MainType
 import Player
 import Boundary
 import Level1Init
+import SavePoint
 
 
 {-| `update` of Level1
@@ -39,6 +40,7 @@ update msg model =
                         |> Player.update
                         |> Event.update
                         |> Brick.update
+                        |> SavePoint.update
                         |> Boundary.update
                         |> Player.updateJustPlayerPos
             in

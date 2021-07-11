@@ -1,7 +1,9 @@
-module SavePoint exposing (..)
+module SavePoint exposing 
+    ( SavePointAppearance(..), SavePoint
+    , init, view, update, defSaveBox
+    )
 
 import Array exposing (Array)
-import Event
 import GlobalBasics
 import MainType
 import Maybe exposing (withDefault)

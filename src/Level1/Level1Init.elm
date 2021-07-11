@@ -19,6 +19,7 @@ import Level1Type
 import MainType
 import Player
 import Task
+import SavePoint
 
 
 {-| `init` of Level1 \`Model
@@ -121,6 +122,8 @@ init =
                   ]
                 ]
             )
+    , savePoints = 
+        Array.fromList([SavePoint.init (50, 500), SavePoint.init (100, 500)])
     , keyPressed = []
     },
     Task.perform MainType.GetViewport getViewport)
