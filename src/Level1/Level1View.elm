@@ -16,6 +16,7 @@ import Html.Attributes as HtmlAttr
 import Level1Type
 import MainType
 import Player
+import SavePoint
 import Svg
 import Svg.Attributes as SvgAttr
 
@@ -38,6 +39,7 @@ view model =
             (Player.view model
                 ++ Brick.view model
                 ++ Boundary.view model
+                ++ SavePoint.view model
             )
         , Html.audio
             [ HtmlAttr.width 0
