@@ -123,7 +123,7 @@ init =
                 ]
             )
     , savePoints = 
-        Array.fromList([SavePoint.init (50, 500), SavePoint.init (100, 500)])
+        Array.fromList([SavePoint.init (GlobalBasics.blockPos (2, 14)), SavePoint.init (GlobalBasics.blockPos (13, 13))])
     , keyPressed = []
     },
     Task.perform MainType.GetViewport getViewport)

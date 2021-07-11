@@ -1,6 +1,6 @@
 module SavePoint exposing 
     ( SavePointAppearance(..), SavePoint
-    , init, view, update, defSaveBox
+    , init, view, update, defSaveBox, defSavePoint
     )
 
 import Array exposing (Array)
@@ -68,18 +68,16 @@ viewOneSavePoint model savePoint =
             savePoint.pos
         saveOpacity = 
             if savePoint.appearance == Saved then
-                1
+                1.0
             else
-                0.5
+                0.4
     in
     [ Svg.rect
         [ SvgAttr.x (String.fromFloat (ViewMove.deltaX model + savePointX))
         , SvgAttr.y (String.fromFloat (ViewMove.deltaY model + savePointY))
         , SvgAttr.width (String.fromFloat savePointWidth)
         , SvgAttr.height (String.fromFloat savePointHeight)
-        , SvgAttr.strokeWidth "2"
-        , SvgAttr.stroke "#000000"
-        , SvgAttr.fill "#00000050"
+        , SvgAttr.fill "#45ff45"
         , SvgAttr.opacity (String.fromFloat saveOpacity)
         ]
         []

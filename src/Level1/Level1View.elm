@@ -36,10 +36,10 @@ view model =
             [ SvgAttr.width (String.fromFloat (Tuple.first model.windowBoundary) )
             , SvgAttr.height (String.fromFloat (Tuple.second model.windowBoundary) )
             ]
-            (Player.view model
+            (SavePoint.view model
+                ++ Player.view model
                 ++ Brick.view model
                 ++ Boundary.view model
-                ++ SavePoint.view model
             )
         , Html.audio
             [ HtmlAttr.width 0
