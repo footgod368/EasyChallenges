@@ -1,4 +1,6 @@
-module EndPoint exposing (..)
+module EndPoint exposing (EndPoint, init, view, update)
+{-| The EndPoint unit, a small unit that shows the endpoint of a level.
+-}
 
 import Array
 import GlobalBasics
@@ -8,6 +10,8 @@ import Svg exposing (Svg)
 import Svg.Attributes as SvgAttr
 import ViewMove
 
+{-| "EndPoint" is a record of unit, "pos" describes its position and "collisionBox" describes its collisionbox
+-}
 type alias EndPoint =
     { pos : GlobalBasics.Pos
     , collisionBox : GlobalBasics.CollisionBox
@@ -48,6 +52,8 @@ init ( x, y ) =
     , collisionBox = defEndBox
     }
 
+{-| view function of an endPoint
+-}
 view: { model | endPoint : EndPoint, windowBoundary : GlobalBasics.Pos, levelBoundary : GlobalBasics.Pos, player : Player.Player } -> List (Svg MainType.Msg)
 view model =
     let
@@ -63,6 +69,8 @@ view model =
         []
     ]
 
+{-| update function of an endPoint
+-}
 update : ( { model | player : Player.Player, endPoint : EndPoint }, Cmd MainType.Msg ) -> ( { model | player : Player.Player, endPoint : EndPoint }, Cmd MainType.Msg )
 update ( model, cmd ) =
     let
