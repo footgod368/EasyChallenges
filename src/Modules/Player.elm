@@ -73,6 +73,7 @@ type alias Player =
     , ifChangeBackToLastPosY : Bool
     , liveState : LiveState
     , deadTimes: Int
+    , saveNumber: Int
     }
 
 {-| LiveState defines if the player is live, dead, or win this level.
@@ -202,6 +203,7 @@ init pos =
     , ifChangeBackToLastPosY = False
     , liveState = Live
     , deadTimes = 0
+    , saveNumber = 0
     }
 
 
@@ -377,8 +379,8 @@ view model =
         []
       ,
       Svg.text_
-        [ SvgAttr.x "500"
-        , SvgAttr.y "250"
+        [ SvgAttr.x (String.fromFloat (playerX  + playerDeltaX model))
+        , SvgAttr.y (String.fromFloat (playerY + playerDeltaY model))
         , SvgAttr.fontSize "50"
         , SvgAttr.textAnchor "middle"
         , SvgAttr.fill "#000000"

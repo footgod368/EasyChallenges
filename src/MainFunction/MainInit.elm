@@ -20,8 +20,16 @@ import Task
 -}
 init : () -> ( MainModel.Model, Cmd MainType.Msg )
 init a =
-    ( MainModel.Model
-        MainType.Level1
-        Level1Init.init
-    , Task.perform MainType.GetViewport getViewport
-    )
+    let
+        ( level1Model, level1Cmd ) =
+            Level1Init.init
+
+        mainModel =
+            MainModel.Model MainType.Level1 level1Model
+
+        mainCmd =
+            Cmd.batch
+                [ level1Cmd
+                ]
+    in
+    ( mainModel, mainCmd )

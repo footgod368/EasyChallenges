@@ -15,6 +15,7 @@ import Brick
 import Event
 import GlobalBasics
 import Player
+import SavePoint
 
 
 {-| `Model` that used in level1
@@ -27,5 +28,6 @@ type alias Model =
     , boundary : Boundary.Boundary
     , player : Player.Player
     , bricks : Array Brick.Brick
+    , savePoints : Array SavePoint.SavePoint
     , keyPressed : List Int
     }
