@@ -84,14 +84,16 @@ init =
                 [ List.map (\i -> Brick.quickInit (GlobalBasics.blockPos ( i, 15 ))) (List.range 1 5)
                 , List.map (\i -> Brick.quickInit (GlobalBasics.blockPos ( i, 12 ))) (List.range 2 5)
                 , [ Brick.init
-                        (GlobalBasics.blockPos ( 17, 14 ))
+                        (GlobalBasics.blockPos ( 18, 14 ))
                         Brick.defBrickCollisionBox
                         Brick.NoAppearance
                         (Brick.Visible (Brick.InvisibleAfterEvent 3 Brick.NoNextBrickVisibility))
                         (Brick.NoCollide Brick.NoNextBrickCollision)
                         (Brick.NoNextBrickMove)
                   ]
-                , List.map (\i -> Brick.quickInit (GlobalBasics.blockPos ( 18, i ))) (List.range 11 14)
+                , [ Brick.quickInit (GlobalBasics.blockPos ( 14, 14 ))
+                  ]
+                , List.map (\i -> Brick.quickInit (GlobalBasics.blockPos ( 19, i ))) (List.range 11 14)
                 , [ Brick.init
                         (GlobalBasics.blockPos ( 6, 12 ))
                         Brick.defBrickCollisionBox
@@ -124,8 +126,8 @@ init =
                 ]
             )
     , savePoints = 
-        Array.fromList([SavePoint.init (GlobalBasics.blockPos (2, 14)), SavePoint.init (GlobalBasics.blockPos (13, 13))])
-    , endPoint = EndPoint.init ( GlobalBasics.blockPos( 21, 14 ))
+        Array.fromList([SavePoint.init (GlobalBasics.blockPos (2, 14)), SavePoint.init (GlobalBasics.blockPos (14, 13))])
+    , endPoint = EndPoint.init ( GlobalBasics.blockPos( 22, 14 ))
     , keyPressed = []
     },
     Task.perform MainType.GetViewport getViewport)
