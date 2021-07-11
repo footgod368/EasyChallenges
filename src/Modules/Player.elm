@@ -3,7 +3,7 @@ module Player exposing
     , init
     , update, updateJustPlayerPos
     , view
-    , playerRefreshJump, playerIfCollidePoly, playerCollideRigidBody, playerDead
+    , playerRefreshJump, playerIfCollidePoly, playerCollideRigidBody, playerDead, checkDead
     )
 
 {-| The Player unit, the figure that player controls.
@@ -151,6 +151,15 @@ playerDead : Player -> Player
 playerDead player =
     { player | liveState = Dead }
 
+
+{-| Check if the state of player is Dead
+-}
+checkDead : Player -> Bool
+checkDead player =
+    if player.liveState == Dead then
+        True
+    else
+        False
 
 
 {-| When the jumps takes place in fameNum, return the corresponding acceleration.
