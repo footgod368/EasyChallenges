@@ -34,6 +34,9 @@ import GlobalBasics
 import MainType
 import Maybe exposing (withDefault)
 import Player
+import Svg exposing (Svg, text)
+import Svg.Attributes as SvgAttr
+import ViewMove
 
 
 {-| Almost same as NoticeBoard's visibility, except adding new words that can be changed. The words are stored in
@@ -263,3 +266,43 @@ updateOneNoticeBoardMove id model =
         NoNextNoticeBoardMove ->
             model
 
+
+{-| view one noticeBoard, used in view, not exposed.
+-}
+viewOneNoticeBoard : { model | windowBoundary : GlobalBasics.Pos, levelBoundary : GlobalBasics.Pos, player : Player.Player } -> NoticeBoard -> List (Svg MainType.Msg)
+viewOneNoticeBoard model noticeBoard =
+    case noticeBoard.noticeBoardVisibility of
+        Visible info nextVisibility ->
+            let
+                ( noticeBoardX, noticeBoardY ) =
+                    noticeBoard.pos
+            in
+            [ Svg.text_
+                [ SvgAttr.x (String.fromFloat (ViewMove.deltaX model + noticeBoardX))
+                , SvgAttr.y (String.fromFloat (ViewMove.deltaY model + noticeBoardY))
+                , SvgAttr.fontSize (String.fromInt noticeBoard.fontSize ++ "px")
+                , SvgAttr.textAnchor "middle"
+                , SvgAttr.fill "#000000"
+                ]
+                [ text info ]
+            ]
+
+        Invisible _ ->
+            []
+
+        _ ->
+            []
+
+
+{-| view function of noticeBoard
+-}
+view : { model | noticeBoards : Array NoticeBoard, windowBoundary : GlobalBasics.Pos, levelBoundary : GlobalBasics.Pos, player : Player.Player } -> List (Svg MainType.Msg)
+view model =
+    let
+        noticeBoardsList =
+            Array.toList model.noticeBoards
+
+        svgNoticeBoardListList =
+            List.map (\noticeBoard -> viewOneNoticeBoard model noticeBoard) noticeBoardsList
+    in
+    List.concat svgNoticeBoardListList
