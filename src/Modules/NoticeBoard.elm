@@ -1,6 +1,7 @@
 module NoticeBoard exposing
     ( NoticeBoard
     , init, quickInit
+    , update
     )
 
 {-| The notice board only acts as displaying the text, it only has visibility
@@ -30,6 +31,7 @@ module NoticeBoard exposing
 import Array exposing (Array)
 import Event
 import GlobalBasics
+import MainType
 import Maybe exposing (withDefault)
 import Player
 
@@ -102,7 +104,24 @@ quickInit pos info fontSize =
     , fontSize = fontSize
     }
 
-{-|update visibility of notice board, used in update, not exposed.
+
+{-| update function of noticeBoard unit
+-}
+update : ( { model | player : Player.Player, noticeBoards : Array NoticeBoard, actEvent : Array Event.ActEvent }, Cmd MainType.Msg ) -> ( { model | player : Player.Player, noticeBoards : Array NoticeBoard, actEvent : Array Event.ActEvent }, Cmd MainType.Msg )
+update ( model, cmd ) =
+    ( List.foldl updateOneNoticeBoard model (List.range 0 (Array.length model.noticeBoards - 1)), cmd )
+
+
+{-| update one noticeBoard. Used in update. Not exposed.
+-}
+updateOneNoticeBoard : Int -> { model | player : Player.Player, noticeBoards : Array NoticeBoard, actEvent : Array Event.ActEvent } -> { model | player : Player.Player, noticeBoards : Array NoticeBoard, actEvent : Array Event.ActEvent }
+updateOneNoticeBoard id model =
+    model
+        |> updateOneNoticeBoardVisibility id
+        |> updateOneNoticeBoardMove id
+
+
+{-| update visibility of notice board, used in update, not exposed.
 -}
 updateOneNoticeBoardVisibility : Int -> { model | player : Player.Player, noticeBoards : Array NoticeBoard, actEvent : Array Event.ActEvent } -> { model | player : Player.Player, noticeBoards : Array NoticeBoard, actEvent : Array Event.ActEvent }
 updateOneNoticeBoardVisibility id model =
@@ -151,6 +170,7 @@ updateOneNoticeBoardVisibility id model =
             { model | noticeBoards = newNoticeBoards }
     in
     newModel
+
 
 {-| update noticeBoard move event. Used in `updateOneNoticeBoard`. Not exposed
 -}
@@ -242,3 +262,4 @@ updateOneNoticeBoardMove id model =
 
         NoNextNoticeBoardMove ->
             model
+
