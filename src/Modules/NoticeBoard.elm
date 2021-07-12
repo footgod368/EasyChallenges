@@ -151,3 +151,94 @@ updateOneNoticeBoardVisibility id model =
             { model | noticeBoards = newNoticeBoards }
     in
     newModel
+
+{-| update noticeBoard move event. Used in `updateOneNoticeBoard`. Not exposed
+-}
+updateOneNoticeBoardMove : Int -> { model | player : Player.Player, noticeBoards : Array NoticeBoard, actEvent : Array Event.ActEvent } -> { model | player : Player.Player, noticeBoards : Array NoticeBoard, actEvent : Array Event.ActEvent }
+updateOneNoticeBoardMove id model =
+    let
+        noticeBoard =
+            Array.get id model.noticeBoards
+                |> withDefault defNoticeBoard
+    in
+    case noticeBoard.noticeBoardMove of
+        Move posArray speed eventID nextMove ->
+            if Array.isEmpty posArray then
+                if Event.ifActEventById model eventID == Event.ActEventAct then
+                    let
+                        newNoticeBoard =
+                            { noticeBoard | noticeBoardMove = nextMove }
+
+                        newNoticeBoards =
+                            Array.set id newNoticeBoard model.noticeBoards
+                    in
+                    { model | noticeBoards = newNoticeBoards }
+
+                else
+                    model
+
+            else
+                let
+                    destination =
+                        withDefault GlobalBasics.defPos (Array.get 0 posArray)
+                in
+                if GlobalBasics.distPosPos destination noticeBoard.pos <= speed then
+                    let
+                        newPosArray =
+                            Array.slice 1 (Array.length posArray) posArray
+
+                        newNoticeBoard =
+                            { noticeBoard | pos = destination, noticeBoardMove = Move newPosArray speed eventID nextMove }
+
+                        newNoticeBoards =
+                            Array.set id newNoticeBoard model.noticeBoards
+                    in
+                    { model | noticeBoards = newNoticeBoards }
+
+                else
+                    let
+                        ( destinationX, destinationY ) =
+                            destination
+
+                        ( posX, posY ) =
+                            noticeBoard.pos
+
+                        newPos =
+                            if posX == destinationX then
+                                if destinationY > posY then
+                                    ( posX, posY + speed )
+
+                                else
+                                    ( posX, posY - speed )
+
+                            else
+                                let
+                                    degree =
+                                        atan ((destinationY - posY) / (destinationX - posX))
+
+                                    deltaX =
+                                        if destinationX > posX then
+                                            abs (speed * cos degree)
+
+                                        else
+                                            -(abs (speed * cos degree))
+
+                                    deltaY =
+                                        if destinationY > posY then
+                                            abs (speed * sin degree)
+
+                                        else
+                                            -(abs (speed * sin degree))
+                                in
+                                ( posX + deltaX, posY + deltaY )
+
+                        newNoticeBoard =
+                            { noticeBoard | pos = newPos }
+
+                        newNoticeBoards =
+                            Array.set id newNoticeBoard model.noticeBoards
+                    in
+                    { model | noticeBoards = newNoticeBoards }
+
+        NoNextNoticeBoardMove ->
+            model
