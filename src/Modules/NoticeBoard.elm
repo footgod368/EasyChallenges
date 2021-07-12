@@ -1,7 +1,8 @@
 module NoticeBoard exposing
-    ( NoticeBoard
+    ( NoticeBoard, NoticeBoardVisibility(..), NoticeBoardMove(..)
     , init, quickInit
     , update
+    , view
     )
 
 {-| The notice board only acts as displaying the text, it only has visibility
@@ -9,7 +10,7 @@ module NoticeBoard exposing
 
 # NoticeBoard
 
-@docs NoticeBoard
+@docs NoticeBoard, NoticeBoardVisibility, NoticeBoardMove
 
 
 # Init
