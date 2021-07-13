@@ -123,7 +123,7 @@ type BrickMove
 -}
 type BrickAppearance
     = NormalAppearance  --standard brick
-    | Detailed Float Float  --with designable size
+    | Detailed Float Float String --with designable size and color
 
 
 {-| brickWidth Constant
@@ -184,11 +184,11 @@ quickInit ( x, y ) =
     , brickMove = NoNextBrickMove
     }
 
-quickInit_ : ( Float, Float )->(Float,Float) -> Brick
-quickInit_ ( x, y ) (width,height)=
+quickInit_ : ( Float, Float )->(Float,Float) -> String-> Brick
+quickInit_ ( x, y ) (width,height) color=
     { pos = ( x, y )
-    , collisionBox = brickCollisionBox NormalAppearance
-    , appearance = Detailed width height
+    , collisionBox = brickCollisionBox (Detailed width height color)
+    , appearance = Detailed width height color
     , brickVisibility = Visible NoNextBrickVisibility
     , brickCollision = Collide NoNextBrickCollision
     , brickMove = NoNextBrickMove
@@ -259,7 +259,7 @@ brickCollisionBox brickAppearance =
                     ]
                 )
 
-        Detailed width height ->
+        Detailed width height _ ->
             GlobalBasics.Polygon
                 (Array.fromList
                      [ ( ( 0.0, 0.0 ), ( width, 0.0 ) )
@@ -292,7 +292,11 @@ viewOneBrick model brick =
                     , SvgAttr.y (String.fromFloat (ViewMove.deltaY model + brickY))
                     , SvgAttr.strokeWidth "2"
                     , SvgAttr.stroke "#000000"
-                    , SvgAttr.fill "#00000050"
+                    , case brick.appearance of
+                        NormalAppearance ->
+                            SvgAttr.fill "#00000050"
+                        Detailed width height color->
+                            SvgAttr.fill color
                     ]
                     ( case brick.appearance of
                         NormalAppearance ->
@@ -300,7 +304,7 @@ viewOneBrick model brick =
                             , SvgAttr.height (String.fromFloat brickHeight)
                             ]
 
-                        Detailed width height ->
+                        Detailed width height color->
                             [ SvgAttr.width (String.fromFloat width)
                             , SvgAttr.height (String.fromFloat height)
                             ]

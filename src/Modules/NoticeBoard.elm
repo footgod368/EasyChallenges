@@ -114,7 +114,7 @@ boundary : (Float,Float) -> (Float,Float) -> List Brick.Brick
 boundary (x,y) (width,height) =
     let
         (blockX,blockY) = GlobalBasics.blockSize
-        tempBrick = Brick.quickInit_ (GlobalBasics.blockPos_ (x,y)) (width*blockX,height*blockY) 
+        tempBrick = Brick.quickInit_ (GlobalBasics.blockPos_ (x,y)) (width*blockX,height*blockY) "#F5F5F5"
     in
     [{tempBrick | brickCollision = Brick.NoCollide Brick.NoNextBrickCollision}]
                         

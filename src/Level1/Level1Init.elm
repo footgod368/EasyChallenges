@@ -32,7 +32,7 @@ init =
     let
         newModel =
             { windowBoundary = ( 1000.0, 800.0 )
-            , levelBoundary = ( 2000.0, 680.0 )
+            , levelBoundary = ( 3000.0, 680.0 )
             , actEvent = Array.fromList []
             , event =
                 Array.fromList
@@ -102,7 +102,22 @@ init =
                         {id = 9, name = "first hidden needles"}
                         Event.StartActivated
                         (Event.PlayerCollide
-                            ( GlobalBasics.Polygon (Array.fromList [ ( GlobalBasics.blockPos_ (31,9.26),GlobalBasics.blockPos_ (37,9.26) ) ]))
+                            ( GlobalBasics.Polygon (Array.fromList [ ( GlobalBasics.blockPos_ (31,9.26),GlobalBasics.blockPos_ (37,9.26) ),
+                                                                        ( GlobalBasics.blockPos_ (31,8.9),GlobalBasics.blockPos_ (37,8.9) ) ]))
+                        )
+                        (Event.quickDuration 10)
+                    ,Event.init
+                        {id = 10, name = "fifth hidden brick"}
+                        Event.StartActivated
+                        (Event.PlayerCollide
+                            ( Brick.quickCollisionBox (44,12) Brick.NormalAppearance)
+                        )
+                        (Event.quickDuration 10)
+                    ,Event.init
+                        {id = 11, name = "sixth hidden brick"}
+                        Event.StartActivated
+                        (Event.PlayerCollide
+                            ( Brick.quickCollisionBox (45,12) Brick.NormalAppearance)
                         )
                         (Event.quickDuration 10)
                     ]
@@ -129,10 +144,13 @@ init =
                             ,Brick.hidden_ (22,11) 4]
                         ,    [Brick.hidden (4.5,12) 5
                             , Brick.hidden (5.5,12) 6]
-                        ,   Brick.quickBrickRow 15 36 46
+                        ,   Brick.quickBrickRow 15 36 66
                         ,   NoticeBoard.boundary (31,5) (7,4)
                         ,   [Brick.hidden (32.5,12) 7
                             , Brick.hidden (33.5,12) 8]
+                        ,   [Brick.hidden (44,12) 10
+                            , Brick.hidden (45,12) 11]
+                        ,   [Brick.quickInit_ (GlobalBasics.blockPos_ (55,11.5)) (2.0*40.0,3.5*40.0) "#008000"]
                         ]
                         )
             , savePoints =
@@ -150,6 +168,10 @@ init =
                     ,   Needle.fallingRow 13 22 26 3
                     ,   [Needle.quickHidden_ (25,12) 4]
                     ,   Needle.hiddenRow 9 31 37 9
+                    ,   [Needle.quickInit (GlobalBasics.blockPos_ (46.0,14.75))
+                        ,Needle.quickInit (GlobalBasics.blockPos_ (47.0,14.75))
+                        ,Needle.quickInit (GlobalBasics.blockPos_ (48.0,14.75))
+                        ,Needle.quickInit (GlobalBasics.blockPos_ (49.0,14.75))]
                     ])
             , keyPressed = []
             }
