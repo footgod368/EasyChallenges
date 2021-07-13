@@ -1,6 +1,6 @@
 module Needle exposing
     ( NeedleVisibility(..), NeedleCollision(..), NeedleMove(..), NeedleAppearance(..), Needle
-    , init, quickInit
+    , init, quickInit, quickHidden, quickHidden_,fallingRow,hiddenRow
     , view
     , update
     , needleCollisionBox, normalNeedleHeight, normalNeedleWidth
@@ -181,6 +181,46 @@ quickInit ( x, y ) =
     , needleCollision = Collide NoNextNeedleCollision
     , needleMove = NoNextNeedleMove
     }
+
+quickHidden : (Int,Int)-> Int -> Needle
+quickHidden (x,y) id =
+    { pos = (GlobalBasics.blockPos ( x, y ))
+    , collisionBox = needleCollisionBox (NormalNeedle normalNeedleWidth normalNeedleHeight)
+    , appearance = NormalNeedle normalNeedleWidth normalNeedleHeight
+    , needleVisibility = Invisible (VisibleAfterEvent id NoNextNeedleVisibility)
+    , needleCollision = Collide NoNextNeedleCollision
+    , needleMove = NoNextNeedleMove
+    }
+
+hiddenRow: Int-> Int -> Int -> Int -> List Needle
+hiddenRow n n1 n2 id=
+    List.map (\i -> quickHidden ( i, n ) id) (List.range n1 n2)
+
+
+quickHidden_ : (Int,Int)-> Int -> Needle
+quickHidden_ (x,y) id =
+    { pos = (GlobalBasics.blockPos ( x, y ))
+    , collisionBox = needleCollisionBox (NormalNeedle normalNeedleWidth normalNeedleHeight)
+    , appearance = NormalNeedle normalNeedleWidth normalNeedleHeight
+    , needleVisibility = Invisible (VisibleAfterEvent id NoNextNeedleVisibility)
+    , needleCollision = NoCollide (CollideAfterEvent id NoNextNeedleCollision)
+    , needleMove = NoNextNeedleMove
+    }
+
+quickFalling : (Int,Int)-> Int -> Needle
+quickFalling (x,y) id =
+    { pos = (GlobalBasics.blockPos ( x, y ))
+    , collisionBox = needleCollisionBox (NormalNeedle normalNeedleWidth normalNeedleHeight)
+    , appearance = NormalNeedle normalNeedleWidth normalNeedleHeight
+    , needleVisibility = Visible NoNextNeedleVisibility
+    , needleCollision = Collide NoNextNeedleCollision
+    , needleMove = Move (Array.fromList []) 0.0 id 
+                        (Move (Array.fromList [GlobalBasics.blockPos ( x, 20 )]) 5.0 -1 NoNextNeedleMove)
+    }
+
+fallingRow: Int-> Int -> Int -> Int -> List Needle
+fallingRow n n1 n2 id=
+    List.map (\i -> quickFalling ( i, n ) id) (List.range n1 n2)
 
 
 {-| default collisionBox

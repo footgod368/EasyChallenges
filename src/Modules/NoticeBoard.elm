@@ -3,6 +3,7 @@ module NoticeBoard exposing
     , init, quickInit
     , update
     , view
+    , boundary
     )
 
 {-| The notice board only acts as displaying the text, it only has visibility
@@ -38,6 +39,7 @@ import Player
 import Svg exposing (Svg, text)
 import Svg.Attributes as SvgAttr
 import ViewMove
+import Brick
 
 
 {-| Almost same as NoticeBoard's visibility, except adding new words that can be changed. The words are stored in
@@ -108,6 +110,14 @@ quickInit pos info fontSize =
     , fontSize = fontSize
     }
 
+boundary : (Float,Float) -> (Float,Float) -> List Brick.Brick
+boundary (x,y) (width,height) =
+    let
+        (blockX,blockY) = GlobalBasics.blockSize
+        tempBrick = Brick.quickInit_ (GlobalBasics.blockPos_ (x,y)) (width*blockX,height*blockY) 
+    in
+    [{tempBrick | brickCollision = Brick.NoCollide Brick.NoNextBrickCollision}]
+                        
 
 {-| update function of noticeBoard unit
 -}

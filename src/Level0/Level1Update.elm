@@ -51,7 +51,7 @@ update msg model =
                             |> NoticeBoard.update
                             |> Needle.update
                             |> Player.updateJustPlayerPos
-                          
+
                     else
                         ( model, Cmd.none )
                 initModel = Tuple.first Level1Init.init
