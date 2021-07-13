@@ -117,8 +117,7 @@ init =
                         , List.map (\i -> Brick.quickInit (GlobalBasics.blockPos ( i, 12 ))) (List.range 2 5)
                         , [ Brick.init
                                 (GlobalBasics.blockPos ( 18, 14 ))
-                                Brick.defBrickCollisionBox
-                                Brick.NoAppearance
+                                Brick.NormalAppearance
                                 (Brick.Visible (Brick.InvisibleAfterEvent 3 Brick.NoNextBrickVisibility))
                                 (Brick.NoCollide Brick.NoNextBrickCollision)
                                 Brick.NoNextBrickMove
@@ -128,16 +127,14 @@ init =
                         , List.map (\i -> Brick.quickInit (GlobalBasics.blockPos ( 19, i ))) (List.range 11 14)
                         , [ Brick.init
                                 (GlobalBasics.blockPos ( 6, 12 ))
-                                Brick.defBrickCollisionBox
-                                Brick.NoAppearance
+                                Brick.NormalAppearance
                                 (Brick.Invisible (Brick.VisibleAfterEvent 2 Brick.NoNextBrickVisibility))
                                 (Brick.Collide Brick.NoNextBrickCollision)
                                 Brick.NoNextBrickMove
                           ]
                         , [ Brick.init
                                 (GlobalBasics.blockPos ( 10, 14 ))
-                                Brick.defBrickCollisionBox
-                                Brick.NoAppearance
+                                Brick.NormalAppearance
                                 (Brick.Visible Brick.NoNextBrickVisibility)
                                 (Brick.Collide Brick.NoNextBrickCollision)
                                 (Brick.Move
@@ -154,6 +151,13 @@ init =
                                         Brick.NoNextBrickMove
                                     )
                                 )
+                          ]
+                        , [ Brick.init
+                                (GlobalBasics.blockPos ( 5, 9 ))
+                                (Brick.Detailed 100 100)
+                                (Brick.Visible Brick.NoNextBrickVisibility)
+                                (Brick.Collide Brick.NoNextBrickCollision)
+                                (Brick.NoNextBrickMove)
                           ]
                         ]
                     )
