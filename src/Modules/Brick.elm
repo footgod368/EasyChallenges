@@ -1,6 +1,6 @@
 module Brick exposing
     ( BrickVisibility(..), BrickCollision(..), BrickMove(..), BrickAppearance(..), Brick
-    , init, quickInit, defBrickCollisionBox
+    , init, quickInit, brickCollisionBox
     , view
     , update
     )
@@ -120,8 +120,8 @@ type BrickMove
 {-| For future different shapes of blocks.
 -}
 type BrickAppearance
-    = NoAppearance
-    | Grass
+    = NormalAppearance
+    | Detailed Float Float
 
 
 {-| brickWidth Constant
@@ -159,10 +159,10 @@ defBrick =
 
 {-| initiate a brick, with full functions
 -}
-init : ( Float, Float ) -> GlobalBasics.CollisionBox -> BrickAppearance -> BrickVisibility -> BrickCollision -> BrickMove -> Brick
-init ( x, y ) collisionBox brickAppearance brickVisibility brickCollision brickMove =
+init : ( Float, Float ) -> BrickAppearance -> BrickVisibility -> BrickCollision -> BrickMove -> Brick
+init ( x, y ) brickAppearance brickVisibility brickCollision brickMove =
     { pos = ( x, y )
-    , collisionBox = collisionBox
+    , collisionBox = brickCollisionBox brickAppearance
     , appearance = brickAppearance
     , brickVisibility = brickVisibility
     , brickCollision = brickCollision
@@ -175,8 +175,8 @@ init ( x, y ) collisionBox brickAppearance brickVisibility brickCollision brickM
 quickInit : ( Float, Float ) -> Brick
 quickInit ( x, y ) =
     { pos = ( x, y )
-    , collisionBox = defBrickCollisionBox
-    , appearance = NoAppearance
+    , collisionBox = brickCollisionBox NormalAppearance
+    , appearance = NormalAppearance
     , brickVisibility = Visible NoNextBrickVisibility
     , brickCollision = Collide NoNextBrickCollision
     , brickMove = NoNextBrickMove
@@ -185,16 +185,29 @@ quickInit ( x, y ) =
 
 {-| default collisionBox
 -}
-defBrickCollisionBox : GlobalBasics.CollisionBox
-defBrickCollisionBox =
-    GlobalBasics.Polygon
-        (Array.fromList
-            [ ( ( 0.0, 0.0 ), ( brickWidth, 0.0 ) )
-            , ( ( brickWidth, 0.0 ), ( brickWidth, brickHeight ) )
-            , ( ( brickWidth, brickHeight ), ( 0.0, brickHeight ) )
-            , ( ( 0.0, brickHeight ), ( 0.0, 0.0 ) )
-            ]
-        )
+brickCollisionBox :  BrickAppearance -> GlobalBasics.CollisionBox
+brickCollisionBox brickAppearance =
+    case brickAppearance of
+        NormalAppearance ->
+            GlobalBasics.Polygon
+                (Array.fromList
+                    [ ( ( 0.0, 0.0 ), ( brickWidth, 0.0 ) )
+                    , ( ( brickWidth, 0.0 ), ( brickWidth, brickHeight ) )
+                    , ( ( brickWidth, brickHeight ), ( 0.0, brickHeight ) )
+                    , ( ( 0.0, brickHeight ), ( 0.0, 0.0 ) )
+                    ]
+                )
+
+        Detailed width height ->
+            GlobalBasics.Polygon
+                (Array.fromList
+                     [ ( ( 0.0, 0.0 ), ( width, 0.0 ) )
+                     , ( ( width, 0.0 ), ( width, height ) )
+                     , ( ( width, height ), ( 0.0, height ) )
+                     , ( ( 0.0, height ), ( 0.0, 0.0 ) )
+                     ]
+
+                )
 
 
 {-| view one brick, used in view, not exposed.
@@ -208,16 +221,28 @@ viewOneBrick model brick =
                     brick.pos
             in
             [ Svg.rect
-                [ SvgAttr.x (String.fromFloat (ViewMove.deltaX model + brickX))
-                , SvgAttr.y (String.fromFloat (ViewMove.deltaY model + brickY))
-                , SvgAttr.width (String.fromFloat brickWidth)
-                , SvgAttr.height (String.fromFloat brickHeight)
-                , SvgAttr.strokeWidth "2"
-                , SvgAttr.stroke "#000000"
-                , SvgAttr.fill "#00000050"
-                ]
-                []
+                ( List.append
+                    [ SvgAttr.x (String.fromFloat (ViewMove.deltaX model + brickX))
+                    , SvgAttr.y (String.fromFloat (ViewMove.deltaY model + brickY))
+                    , SvgAttr.strokeWidth "2"
+                    , SvgAttr.stroke "#000000"
+                    , SvgAttr.fill "#00000050"
+                    ]
+                    ( case brick.appearance of
+                        NormalAppearance ->
+                            [ SvgAttr.width (String.fromFloat brickWidth)
+                            , SvgAttr.height (String.fromFloat brickHeight)
+                            ]
+
+                        Detailed width height ->
+                            [ SvgAttr.width (String.fromFloat width)
+                            , SvgAttr.height (String.fromFloat height)
+                            ]
+                    )
+                )
+                    []
             ]
+
 
         Invisible _ ->
             []

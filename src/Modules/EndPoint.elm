@@ -1,5 +1,31 @@
-module EndPoint exposing (EndPoint, init, view, update)
+module EndPoint exposing
+    ( EndPoint
+    , init
+    , update, view
+    )
+
 {-| The EndPoint unit, a small unit that shows the endpoint of a level.
+
+
+# EndPoint
+
+@docs EndPoint
+
+
+# Init
+
+@docs endPointWidth, endPointHeight, defEndBox, init
+
+
+# Update
+
+@ update
+
+
+# View
+
+@ view
+
 -}
 
 import Array
@@ -10,12 +36,14 @@ import Svg exposing (Svg)
 import Svg.Attributes as SvgAttr
 import ViewMove
 
+
 {-| "EndPoint" is a record of unit, "pos" describes its position and "collisionBox" describes its collisionbox
 -}
 type alias EndPoint =
     { pos : GlobalBasics.Pos
     , collisionBox : GlobalBasics.CollisionBox
     }
+
 
 {-| endPointWidth Constant
 -}
@@ -44,20 +72,23 @@ defEndBox =
             ]
         )
 
+
 {-| Init an endPoint, only input its position
 -}
-init: ( Float, Float ) -> EndPoint
+init : ( Float, Float ) -> EndPoint
 init ( x, y ) =
     { pos = ( x, y )
     , collisionBox = defEndBox
     }
 
+
 {-| view function of an endPoint
 -}
-view: { model | endPoint : EndPoint, windowBoundary : GlobalBasics.Pos, levelBoundary : GlobalBasics.Pos, player : Player.Player } -> List (Svg MainType.Msg)
+view : { model | endPoint : EndPoint, windowBoundary : GlobalBasics.Pos, levelBoundary : GlobalBasics.Pos, player : Player.Player } -> List (Svg MainType.Msg)
 view model =
     let
-        ( endPointX, endPointY ) = model.endPoint.pos
+        ( endPointX, endPointY ) =
+            model.endPoint.pos
     in
     [ Svg.rect
         [ SvgAttr.x (String.fromFloat (ViewMove.deltaX model + endPointX))
@@ -69,15 +100,18 @@ view model =
         []
     ]
 
+
 {-| update function of an endPoint
 -}
 update : ( { model | player : Player.Player, endPoint : EndPoint }, Cmd MainType.Msg ) -> ( { model | player : Player.Player, endPoint : EndPoint }, Cmd MainType.Msg )
 update ( model, cmd ) =
     let
-        status = Player.playerIfCollidePoly model model.endPoint
-        newplayer = Player.playerWin model.player
+        status =
+            Player.playerIfCollidePoly model model.endPoint
+
     in
     if status == GlobalBasics.Collided then
-        ( { model | player = newplayer} , cmd )
+        ( Player.playerWin model, cmd )
+
     else
         ( model, cmd )
