@@ -1,5 +1,5 @@
 module Player exposing
-    ( Player
+    ( Player, LiveState(..)
     , init
     , update, updateJustPlayerPos
     , view
@@ -65,7 +65,6 @@ the player last saved, saveNumber = 0 means saved at the first savePoint, 1 mean
 type alias Player =
     { pos : GlobalBasics.Pos
     , lastPos : GlobalBasics.Pos
-    , lastOutPos : GlobalBasics.Pos
     , velocity : GlobalBasics.Pos
     , jump : PlayerJump
     , ifThisFrameOnGround : Bool
@@ -149,15 +148,29 @@ gravityAcce =
 
 {-| Change the state of player to Dead
 -}
-playerDead : Player -> Player
-playerDead player =
-    { player | liveState = Dead }
+playerDead : { model | player : Player } -> { model | player : Player }
+playerDead model =
+    let
+        oldPlayer =
+            model.player
+
+        newPlayer =
+            {oldPlayer | liveState = Dead}
+    in
+    { model | player = newPlayer }
 
 {-| Change the state of player to Win
 -}
-playerWin : Player -> Player
-playerWin player =
-    { player | liveState = Win }
+playerWin : { model | player : Player } -> { model | player : Player }
+playerWin model =
+    let
+        oldPlayer =
+            model.player
+
+        newPlayer =
+            {oldPlayer | liveState = Win}
+    in
+    { model | player = newPlayer }
 
 {-| Check if the state of player is Dead
 -}
@@ -192,7 +205,6 @@ init : GlobalBasics.Pos -> Player
 init pos =
     { pos = pos
     , lastPos = pos
-    , lastOutPos = pos
     , velocity = ( 0.0, 0.0 )
     , jump = Jump 2 -1
     , ifThisFrameOnGround = False
@@ -357,7 +369,7 @@ updatePlayerPos ( model, cmd ) =
             model.player
 
         newPlayer =
-            { oldPlayer | pos = ( newX, newY ), lastPos = ( oldX, oldY), lastOutPos = ( newX, newY ), ifChangeBackToLastPosX = False, ifChangeBackToLastPosY = False }
+            { oldPlayer | pos = ( newX, newY ), lastPos = ( oldX, oldY), ifChangeBackToLastPosX = False, ifChangeBackToLastPosY = False }
     in
     ( { model | player = newPlayer }, cmd )
 

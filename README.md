@@ -3,11 +3,11 @@
   use makefile directly.
 - In this scene, the **black block** is you, the **Green block** is savepoint, you need to jump to the **red block**, which is the   endpoint. You may be trapped at most 3 times. If you touch the red line at the buttom, you can press **R** to go back to the last   savepoint.
 - Finish (according to roadmap)
-  - core unit: `player`, `event`, `brick`.
+  - core unit: `player`, `event`, `brick`, `needle`.
   - core function: `structure`, `viewChange`, `collision`.
+  - additional unit: `notice board`.
   - One single level
 - Haven't finish
-  - core unit: `needles`.
 
 ### Details
 - The structure of the game is well designed, see details in roadmap
