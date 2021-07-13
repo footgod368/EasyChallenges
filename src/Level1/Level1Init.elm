@@ -23,7 +23,7 @@ import NoticeBoard
 import Player
 import SavePoint
 import Task
-
+import Monster
 
 {-| `init` of Level1 \`Model
 -}
@@ -32,7 +32,7 @@ init =
     let
         newModel =
             { windowBoundary = ( 1000.0, 800.0 )
-            , levelBoundary = ( 3000.0, 680.0 )
+            , levelBoundary = ( 80 * 40, 680.0 )
             , actEvent = Array.fromList []
             , event =
                 Array.fromList
@@ -128,12 +128,13 @@ init =
                 Array.fromList
                     (List.concat
                         [ 
-                            Brick.quickBrickRow 15 1 4
+                           NoticeBoard.boundary (2,5) (7,4)
+                        ,    Brick.quickBrickRow 15 1 4
                         ,   Brick.fallingRow 15 5 8 1
                         ,   Brick.quickBrickRow 15 9 32
                         ,   Brick.quickBrickRow 12 22 26
-                        ,   [Brick.quickInit (GlobalBasics.blockPos (15,12))]
-                        ,   [Brick.quickInit (GlobalBasics.blockPos (24,9))]
+                        ,   [Brick.quickInit_ (GlobalBasics.blockPos_ (15,12)) (40,40) "#FFFF00"]
+                        ,   [Brick.quickInit_ (GlobalBasics.blockPos_ (24,9)) (40,40) "#FFFF00"]
                         ,   [Brick.hidden_ (25,9) 4
                             ,Brick.hidden_ (26,9) 4
                             ,Brick.hidden_ (26,10) 4
@@ -144,22 +145,27 @@ init =
                             ,Brick.hidden_ (22,11) 4]
                         ,    [Brick.hidden (4.5,12) 5
                             , Brick.hidden (5.5,12) 6]
-                        ,   Brick.quickBrickRow 15 36 66
+                        ,   Brick.quickBrickRow 15 36 80
                         ,   NoticeBoard.boundary (31,5) (7,4)
                         ,   [Brick.hidden (32.5,12) 7
                             , Brick.hidden (33.5,12) 8]
                         ,   [Brick.hidden (44,12) 10
                             , Brick.hidden (45,12) 11]
-                        ,   [Brick.quickInit_ (GlobalBasics.blockPos_ (55,11.5)) (2.0*40.0,3.5*40.0) "#008000"]
+                        ,   [Brick.quickInit_ (GlobalBasics.blockPos_ (55,11.5)) (2.0*40.0,3.5*40.0) "#008000"
+                            ,Brick.quickInit_ (GlobalBasics.blockPos_ (67,11.5)) (2.0*40.0,3.5*40.0) "#008000"]
                         ]
                         )
             , savePoints =
                 Array.fromList [ SavePoint.init (GlobalBasics.blockPos ( 2, 14 ))
                                 ,SavePoint.init (GlobalBasics.blockPos ( 41, 14 )) ]
-            , endPoint = EndPoint.init (GlobalBasics.blockPos ( 22, 1 ))
+            , endPoint = EndPoint.init (GlobalBasics.blockPos ( 76, 14 ))
             , noticeBoards =
                 Array.fromList
-                    [                     ]
+                    [
+                        NoticeBoard.quickInit (GlobalBasics.blockPos_ (5.5,7.5)) "Welcome!" 40
+                    ,    NoticeBoard.quickInit (GlobalBasics.blockPos_ (34.5,7.5)) "Caution!" 40
+                    ,   NoticeBoard.quickInit (GlobalBasics.blockPos_ (15.5,12.85)) "?" 40
+                    ,   NoticeBoard.quickInit (GlobalBasics.blockPos_ (24.5,9.85)) "?" 40         ]
             , needles =
                 Array.fromList
                     (List.concat
@@ -173,6 +179,8 @@ init =
                         ,Needle.quickInit (GlobalBasics.blockPos_ (48.0,14.75))
                         ,Needle.quickInit (GlobalBasics.blockPos_ (49.0,14.75))]
                     ])
+            , monsters = Array.fromList [ Monster.init (GlobalBasics.blockPos_ (66,14)) (Monster.MonsterA 40 40) 
+                                          (Monster.ListenX 100) (Monster.ListenY 100) 1 ( 56*40,65*40)]
             , keyPressed = []
             }
     in

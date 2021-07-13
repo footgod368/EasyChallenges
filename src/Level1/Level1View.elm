@@ -22,7 +22,7 @@ import SavePoint
 import EndPoint
 import Svg
 import Svg.Attributes as SvgAttr
-
+import Monster
 
 {-| `view` of level1.
 -}
@@ -45,6 +45,7 @@ view model =
                 ++ Boundary.view model
                 ++ NoticeBoard.view model
                 ++ Needle.view model
+                ++ Monster.view model
                 ++ Player.view model
             )
         , Html.audio
