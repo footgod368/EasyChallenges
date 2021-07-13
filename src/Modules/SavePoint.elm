@@ -1,7 +1,10 @@
-module SavePoint exposing 
+module SavePoint exposing
     ( SavePointAppearance(..), SavePoint
-    , init, view, update, defSaveBox, defSavePoint
+    , init, defSavePoint, defSaveBox
+    , view
+    , update
     )
+
 {-| The SavePoint unit. An important unit to save the player's progression.
 
 
@@ -41,7 +44,7 @@ import Svg.Attributes as SvgAttr
 import ViewMove
 
 
-{-| "SavePointAppearance" describes different state of a savepoint, the initial state is unsaved, 
+{-| "SavePointAppearance" describes different state of a savepoint, the initial state is unsaved,
 when a player collide with the savepoint, its state changes to saved and remain unchanged.
 -}
 type SavePointAppearance
@@ -49,14 +52,15 @@ type SavePointAppearance
     | Unsaved
 
 
-{-| "SavePoint" is a record of the unit. "pos" describes the position of a savepoint, 
-which is also the position when a player rebirth. 
+{-| "SavePoint" is a record of the unit. "pos" describes the position of a savepoint,
+which is also the position when a player rebirth.
 -}
 type alias SavePoint =
     { pos : GlobalBasics.Pos
     , collisionBox : GlobalBasics.CollisionBox
     , appearance : SavePointAppearance
     }
+
 
 {-| savePointWidth Constant
 -}
@@ -70,6 +74,7 @@ savePointWidth =
 savePointHeight : Float
 savePointHeight =
     Tuple.second GlobalBasics.blockSize
+
 
 {-| DefaultSavePoint used with withDefault
 -}
@@ -91,14 +96,16 @@ defSaveBox =
             ]
         )
 
+
 {-| Init a savePoint, only input its position
 -}
-init: ( Float, Float ) -> SavePoint
+init : ( Float, Float ) -> SavePoint
 init ( x, y ) =
     { pos = ( x, y )
     , collisionBox = defSaveBox
     , appearance = Unsaved
     }
+
 
 {-| view one savePoint, used in view, not exposed.
 -}
@@ -107,9 +114,11 @@ viewOneSavePoint model savePoint =
     let
         ( savePointX, savePointY ) =
             savePoint.pos
-        saveOpacity = 
+
+        saveOpacity =
             if savePoint.appearance == Saved then
                 1.0
+
             else
                 0.4
     in
@@ -124,9 +133,10 @@ viewOneSavePoint model savePoint =
         []
     ]
 
+
 {-| view function of savePoint
 -}
-view : { model | savePoints: Array SavePoint, windowBoundary : GlobalBasics.Pos, levelBoundary : GlobalBasics.Pos, player : Player.Player } -> List (Svg MainType.Msg)
+view : { model | savePoints : Array SavePoint, windowBoundary : GlobalBasics.Pos, levelBoundary : GlobalBasics.Pos, player : Player.Player } -> List (Svg MainType.Msg)
 view model =
     let
         savePointsList =
@@ -137,25 +147,40 @@ view model =
     in
     List.concat svgSavePointListList
 
+
 {-| update one savePoint, used in update, not exposed.
 -}
 updateOneSavePoint : Int -> { model | player : Player.Player, savePoints : Array SavePoint } -> { model | player : Player.Player, savePoints : Array SavePoint }
 updateOneSavePoint id model =
     let
-        savePoint = 
+        savePoint =
             Array.get id model.savePoints
                 |> withDefault defSavePoint
-        newPoint = { savePoint | appearance = Saved }
-        newPoints = Array.set id newPoint model.savePoints
-        oldPlayer = model.player
-        newPlayer = { oldPlayer | saveNumber = oldPlayer.saveNumber + 1 }
-        newModel = { model | savePoints = newPoints , player = newPlayer}
-        status = Player.playerIfCollidePoly model savePoint
+
+        newPoint =
+            { savePoint | appearance = Saved }
+
+        newPoints =
+            Array.set id newPoint model.savePoints
+
+        oldPlayer =
+            model.player
+
+        newPlayer =
+            { oldPlayer | saveNumber = oldPlayer.saveNumber + 1 }
+
+        newModel =
+            { model | savePoints = newPoints, player = newPlayer }
+
+        status =
+            Player.playerIfCollidePoly model savePoint
     in
     if status == GlobalBasics.Collided && savePoint.appearance == Unsaved then
         newModel
+
     else
         model
+
 
 {-| update function of savePoint
 -}
