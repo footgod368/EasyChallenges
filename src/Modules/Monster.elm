@@ -18,6 +18,8 @@ type alias Monster =
     , yMode: MonsterYMode
     , xSpeed: Float
     , ySpeed: Float
+    , range: ( Float, Float )
+    , fixY : Float
     }
 
 type MonsterAppearance 
@@ -33,9 +35,12 @@ type MonsterYMode
     | Listen Float
     | Follow
 
+type Direction
+    = Left
+    | Right
 
-init : ( Float, Float ) -> MonsterAppearance -> MonsterXMode -> MonsterYMode ->  Float -> Monster
-init ( x, y ) monsterAppearance monsterX monsterY xSpeed =
+init : ( Float, Float ) -> MonsterAppearance -> MonsterXMode -> MonsterYMode ->  Float -> ( Float, Float) -> Monster
+init ( x, y ) monsterAppearance monsterX monsterY xSpeed ( x1, x2 )=
     { pos = ( x, y )
     , collisionBox = monsterCollisionBox monsterAppearance
     , appearance = monsterAppearance
@@ -43,6 +48,8 @@ init ( x, y ) monsterAppearance monsterX monsterY xSpeed =
     , yMode = monsterY
     , xSpeed = xSpeed
     , ySpeed = 0
+    , range = ( x1, x2 )
+    , fixY = y
     }
 
 {-| default collisionBox
@@ -61,23 +68,24 @@ monsterCollisionBox monsterAppearance =
                 )
 
 defMonster : Monster
-defMonster = init ( 0, 0 ) ( MonsterA 20 20 ) Stop Stop 1
+defMonster = init ( 0, 0 ) ( MonsterA 20 20 ) Stop Stop 1 ( 0, 0 )
 
-update : ( { model | player : Player.Player, monsters : Array Monster, actEvent : Array Event.ActEvent }, Cmd MainType.Msg ) -> ( { model | player : Player.Player, monsters : Array Monster, actEvent : Array Event.ActEvent }, Cmd MainType.Msg )
+update : ( { model | player : Player.Player, monsters : Array Monster }, Cmd MainType.Msg ) -> ( { model | player : Player.Player, monsters : Array Monster }, Cmd MainType.Msg )
 update ( model, cmd ) =
     ( List.foldl updateOneMonster model (List.range 0 (Array.length model.monsters - 1)), cmd )
 
 
 {-| update one monster. Used in update. Not exposed.
 -}
-updateOneMonster : Int -> { model | player : Player.Player, monsters : Array Monster, actEvent : Array Event.ActEvent } -> { model | player : Player.Player, monsters : Array Monster, actEvent : Array Event.ActEvent }
+updateOneMonster : Int -> { model | player : Player.Player, monsters : Array Monster } -> { model | player : Player.Player, monsters : Array Monster }
 updateOneMonster id model =
     model
         |> updateOneMonsterMode id
-        |> updateOneMonsterMove id
+        |> updateOneMonsterMoveX id
+        |> updateOneMonsterMoveY id
         |> updateOneMonsterCollision id
 
-updateOneMonsterMode : Int -> { model | player : Player.Player, monsters : Array Monster, actEvent : Array Event.ActEvent } -> { model | player : Player.Player, monsters : Array Monster, actEvent : Array Event.ActEvent }
+updateOneMonsterMode : Int -> { model | player : Player.Player, monsters : Array Monster } -> { model | player : Player.Player, monsters : Array Monster }
 updateOneMonsterMode id model =
     let
         monster =
@@ -93,8 +101,10 @@ updateOneMonsterMode id model =
                         Move
                     else
                         Listen
-                Stop -> Stop
-                Move -> Move
+                Stop -> 
+                    Stop
+                Move -> 
+                    Move
         
         newYMode =
             case monster.yMode of 
@@ -103,8 +113,10 @@ updateOneMonsterMode id model =
                         Follow
                     else
                         Listen
-                Stop -> Stop
-                Follow -> Follow
+                Stop -> 
+                    Stop
+                Follow -> 
+                    Follow
         
         newMonster = { monster | xMode = newXMode, yMode = newYMode }
 
@@ -114,3 +126,95 @@ updateOneMonsterMode id model =
     in
     newModel
 
+updateOneMonsterMoveX : Int -> { model | player : Player.Player, monsters : Array Monster } -> { model | player : Player.Player, monsters : Array Monster }
+updateOneMonsterMoveX id model =
+    let
+        monster =
+            Array.get id model.monsters
+                |> withDefault defMonster
+        
+        oldX = Tuple.first monster.pos
+
+        newX = 
+            case monster.xMode of
+                Stop -> 
+                    oldX
+                Listen ->
+                    oldX
+                Move ->
+                    oldX + monster.xSpeed
+        
+        newSpeed =
+            if newX < Tuple.first monster.range && monster.xSpeed < 0 then
+                -monster.xSpeed
+            else if newX > Tuple.second monster.range && monster.xSpeed > 0 then
+                -monster.xSpeed
+            else
+                monster.xSpeed
+        
+        newMonster = { monster | pos = ( newX, Tuple.second (monster.pos)), xSpeed = newSpeed }
+
+        newMonsters = Array.set id newMonster model.monsters
+
+        newModel = { model | monsters = newMonsters }                          
+    in
+    newModel
+
+
+updateOneMonsterMoveY : Int -> { model | player : Player.Player, monsters : Array Monster } -> { model | player : Player.Player, monsters : Array Monster }
+updateOneMonsterMoveY id model =
+    let
+        monster =
+            Array.get id model.monsters
+                |> withDefault defMonster
+        
+        oldY = Tuple.second monster.pos
+
+        playerspeed = Tuple.second model.player.velocity
+
+        newYSpeed =
+            case monster.yMode of
+                Stop ->
+                    0
+                Listen ->
+                    0
+                Follow ->
+                    if playerspeed > 0 then
+                        playerspeed
+                    else
+                        monster.ySpeed - 0.1
+        
+        newY = 
+            if oldY + newYSpeed < monster.fixY then
+                fixY
+            else
+                oldY + newYSpeed
+        
+        newnewYSpeed = 
+            if oldY + newYSpeed < monster.fixY then
+                0
+            else
+                newYSpeed
+
+        newMonster = { monster | pos = ( Tuple.first monster.pos, newY), ySpeed = newnewYSpeed }   
+
+        newMonsters = Array.set id newMonster model.monsters
+
+        newModel = { model | monsters = newMonsters }                          
+    in
+    newModel
+
+updateOneMonsterCollision : Int -> { model | player : Player.Player, monsters : Array Monster } -> { model | player : Player.Player, monsters : Array Monster }
+updateOneMonsterCollision id model =
+    let
+        monster =
+            Array.get id model.monsters
+                |> withDefault defMonster 
+
+        newModel =
+            if Player.playerIfCollidePoly model monster == GlobalBasics.NotCollided then
+                model
+            else
+                Player.playerDead model
+    in
+    newModel      
