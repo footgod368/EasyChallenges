@@ -1,11 +1,12 @@
 module Needle exposing
     ( NeedleVisibility(..), NeedleCollision(..), NeedleMove(..), NeedleAppearance(..), Needle
-    , init, quickInit, defNeedleCollisionBox, normalNeedleHeight, normalNeedleWidth
+    , init, quickInit
     , view
     , update
+    , needleCollisionBox, normalNeedleHeight, normalNeedleWidth
     )
 
-{-| The  unit. The most common unit in the game
+{-| The unit. The most common unit in the game
 
 
 # Needle
@@ -158,10 +159,10 @@ defNeedle =
 
 {-| initiate a needle, with full functions
 -}
-init : ( Float, Float ) -> GlobalBasics.CollisionBox -> NeedleAppearance -> NeedleVisibility -> NeedleCollision -> NeedleMove -> Needle
-init ( x, y ) collisionBox needleAppearance needleVisibility needleCollision needleMove =
+init : ( Float, Float ) -> NeedleAppearance -> NeedleVisibility -> NeedleCollision -> NeedleMove -> Needle
+init ( x, y ) needleAppearance needleVisibility needleCollision needleMove =
     { pos = ( x, y )
-    , collisionBox = collisionBox
+    , collisionBox = needleCollisionBox needleAppearance
     , appearance = needleAppearance
     , needleVisibility = needleVisibility
     , needleCollision = needleCollision
@@ -174,7 +175,7 @@ init ( x, y ) collisionBox needleAppearance needleVisibility needleCollision nee
 quickInit : ( Float, Float ) -> Needle
 quickInit ( x, y ) =
     { pos = ( x, y )
-    , collisionBox = defNeedleCollisionBox
+    , collisionBox = needleCollisionBox (NormalNeedle normalNeedleWidth normalNeedleHeight)
     , appearance = NormalNeedle normalNeedleWidth normalNeedleHeight
     , needleVisibility = Visible NoNextNeedleVisibility
     , needleCollision = Collide NoNextNeedleCollision
@@ -184,16 +185,18 @@ quickInit ( x, y ) =
 
 {-| default collisionBox
 -}
-defNeedleCollisionBox : GlobalBasics.CollisionBox
-defNeedleCollisionBox =
-    GlobalBasics.Polygon
-        (Array.fromList
-            [ ( ( 0.0, 0.0 ), ( normalNeedleWidth, 0.0 ) )
-            , ( ( normalNeedleWidth, 0.0 ), ( normalNeedleWidth, normalNeedleHeight ) )
-            , ( ( normalNeedleWidth, normalNeedleHeight ), ( 0.0, normalNeedleHeight ) )
-            , ( ( 0.0, normalNeedleHeight ), ( 0.0, 0.0 ) )
-            ]
-        )
+needleCollisionBox : NeedleAppearance -> GlobalBasics.CollisionBox
+needleCollisionBox needleAppearance =
+    case needleAppearance of
+        NormalNeedle width height ->
+            GlobalBasics.Polygon
+                (Array.fromList
+                    [ ( ( 0.0, 0.0 ), ( width, 0.0 ) )
+                    , ( ( width, 0.0 ), ( width, height ) )
+                    , ( ( width, height ), ( 0.0, height ) )
+                    , ( ( 0.0, height ), ( 0.0, 0.0 ) )
+                    ]
+                )
 
 
 {-| view one needle, used in view, not exposed.
@@ -207,14 +210,20 @@ viewOneNeedle model needle =
                     needle.pos
             in
             [ Svg.rect
-                [ SvgAttr.x (String.fromFloat (ViewMove.deltaX model + needleX - 2.0))
-                , SvgAttr.y (String.fromFloat (ViewMove.deltaY model + needleY))
-                , SvgAttr.width (String.fromFloat (normalNeedleWidth + 2.0))
-                , SvgAttr.height (String.fromFloat normalNeedleHeight)
-                , SvgAttr.strokeWidth "2"
-                , SvgAttr.stroke "#00000000"
-                , SvgAttr.fill "#FF0000FF"
-                ]
+                (List.append
+                    [ SvgAttr.x (String.fromFloat (ViewMove.deltaX model + needleX - 2.0))
+                    , SvgAttr.y (String.fromFloat (ViewMove.deltaY model + needleY))
+                    , SvgAttr.strokeWidth "2"
+                    , SvgAttr.stroke "#00000000"
+                    , SvgAttr.fill "#FF0000FF"
+                    ]
+                    (case needle.appearance of
+                        NormalNeedle width height ->
+                            [ SvgAttr.width (String.fromFloat (width + 2.0))
+                            , SvgAttr.height (String.fromFloat height)
+                            ]
+                    )
+                )
                 []
             ]
 
@@ -363,6 +372,7 @@ updateOneNeedleCollision id model =
 
                     else
                         Player.playerDead newNeedlesModel
+
                 _ ->
                     newNeedlesModel
     in
