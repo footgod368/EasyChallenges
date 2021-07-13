@@ -94,7 +94,7 @@ init =
                     (Event.PlayerCollide
                         (GlobalBasics.Polygon
                             (Array.fromList
-                                [ ( ( 125, 440 ), ( 125, 0 ) )
+                                [ ( ( 120, 440 ), ( 120, 0 ) )
                                 ]
                             )
                         )
