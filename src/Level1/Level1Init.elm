@@ -153,7 +153,7 @@ init =
                                 )
                           ]
                         , [ Brick.init
-                                (GlobalBasics.blockPos ( 5, 9 ))
+                                (GlobalBasics.blockPos ( 22, 8 ))
                                 (Brick.Detailed 100 100)
                                 (Brick.Visible Brick.NoNextBrickVisibility)
                                 (Brick.Collide Brick.NoNextBrickCollision)
@@ -205,8 +205,7 @@ init =
                     [ Needle.quickInit (GlobalBasics.addPosPos ( 0.0, 30.0 ) (GlobalBasics.blockPos ( 4, 14 )))
                     , Needle.init
                         (GlobalBasics.addPosPos ( 0.0, 30.0 ) (GlobalBasics.blockPos ( 4, 11 )))
-                        Needle.defNeedleCollisionBox
-                        (Needle.NormalNeedle Needle.normalNeedleWidth Needle.normalNeedleHeight)
+                        (Needle.NormalNeedle 80.0 Needle.normalNeedleHeight)
                         (Needle.Visible Needle.NoNextNeedleVisibility)
                         (Needle.Collide Needle.NoNextNeedleCollision)
                         (Needle.Move
