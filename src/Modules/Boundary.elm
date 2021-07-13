@@ -198,7 +198,7 @@ updateOneBoundary anchor area boundaryType ( model, cmd ) =
 
                 newModel =
                     if ifCollide == GlobalBasics.Collided then
-                        { model | player = Player.playerDead model.player }
+                        Player.playerDead model
 
                     else
                         model

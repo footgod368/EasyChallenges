@@ -14,6 +14,7 @@ import Brick
 import Event
 import Level1Type
 import MainType
+import Needle
 import NoticeBoard
 import Player
 import Boundary
@@ -47,6 +48,7 @@ update msg model =
                         |> EndPoint.update
                         |> Boundary.update
                         |> NoticeBoard.update
+                        |> Needle.update
                         |> Player.updateJustPlayerPos
                 initModel = Tuple.first Level1Init.init
                 oldSavePoints = model.savePoints

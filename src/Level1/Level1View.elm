@@ -15,6 +15,7 @@ import Html exposing (Html, div)
 import Html.Attributes as HtmlAttr
 import Level1Type
 import MainType
+import Needle
 import NoticeBoard
 import Player
 import SavePoint
@@ -44,6 +45,7 @@ view model =
                 ++ Brick.view model
                 ++ Boundary.view model
                 ++ NoticeBoard.view model
+                ++ Needle.view model
             )
         , Html.audio
             [ HtmlAttr.width 0

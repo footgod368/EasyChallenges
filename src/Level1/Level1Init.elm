@@ -18,6 +18,7 @@ import Event
 import GlobalBasics
 import Level1Type
 import MainType
+import Needle
 import NoticeBoard
 import Player
 import SavePoint
@@ -151,6 +152,10 @@ init =
                         )
                     )
                     20
+                ]
+      , needles =
+            Array.fromList
+                [ Needle.quickInit (GlobalBasics.addPosPos ( 0.0, 30.0 ) (GlobalBasics.blockPos ( 4, 14 ) ))
                 ]
       , keyPressed = []
       }

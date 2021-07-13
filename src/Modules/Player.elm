@@ -149,15 +149,29 @@ gravityAcce =
 
 {-| Change the state of player to Dead
 -}
-playerDead : Player -> Player
-playerDead player =
-    { player | liveState = Dead }
+playerDead : { model | player : Player } -> { model | player : Player }
+playerDead model =
+    let
+        oldPlayer =
+            model.player
+
+        newPlayer =
+            {oldPlayer | liveState = Dead}
+    in
+    { model | player = newPlayer }
 
 {-| Change the state of player to Win
 -}
-playerWin : Player -> Player
-playerWin player =
-    { player | liveState = Win }
+playerWin : { model | player : Player } -> { model | player : Player }
+playerWin model =
+    let
+        oldPlayer =
+            model.player
+
+        newPlayer =
+            {oldPlayer | liveState = Win}
+    in
+    { model | player = newPlayer }
 
 {-| Check if the state of player is Dead
 -}

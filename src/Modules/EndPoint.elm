@@ -109,11 +109,9 @@ update ( model, cmd ) =
         status =
             Player.playerIfCollidePoly model model.endPoint
 
-        newplayer =
-            Player.playerWin model.player
     in
     if status == GlobalBasics.Collided then
-        ( { model | player = newplayer }, cmd )
+        ( Player.playerWin model, cmd )
 
     else
         ( model, cmd )

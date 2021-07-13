@@ -14,6 +14,7 @@ import Boundary
 import Brick
 import Event
 import GlobalBasics
+import Needle
 import NoticeBoard
 import Player
 import SavePoint
@@ -33,5 +34,6 @@ type alias Model =
     , savePoints : Array SavePoint.SavePoint
     , endPoint : EndPoint.EndPoint
     , noticeBoards : Array NoticeBoard.NoticeBoard
+    , needles : Array Needle.Needle
     , keyPressed : List Int
     }

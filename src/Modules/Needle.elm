@@ -120,22 +120,21 @@ type NeedleMove
 {-| For future different shapes of blocks.
 -}
 type NeedleAppearance
-    = NoAppearance
-    | Grass
+    = NormalNeedle Float Float
 
 
 {-| needleWidth Constant
 -}
-needleWidth : Float
-needleWidth =
+normalNeedleWidth : Float
+normalNeedleWidth =
     Tuple.first GlobalBasics.blockSize
 
 
 {-| needleHeight Constant
 -}
-needleHeight : Float
-needleHeight =
-    Tuple.second GlobalBasics.blockSize
+normalNeedleHeight : Float
+normalNeedleHeight =
+    Tuple.second GlobalBasics.blockSize / 4.0
 
 
 {-| `Needle` is a record of the block unit. See detail definitions in individual definition.
@@ -176,7 +175,7 @@ quickInit : ( Float, Float ) -> Needle
 quickInit ( x, y ) =
     { pos = ( x, y )
     , collisionBox = defNeedleCollisionBox
-    , appearance = NoAppearance
+    , appearance = NormalNeedle normalNeedleWidth normalNeedleHeight
     , needleVisibility = Visible NoNextNeedleVisibility
     , needleCollision = Collide NoNextNeedleCollision
     , needleMove = NoNextNeedleMove
@@ -189,10 +188,10 @@ defNeedleCollisionBox : GlobalBasics.CollisionBox
 defNeedleCollisionBox =
     GlobalBasics.Polygon
         (Array.fromList
-            [ ( ( 0.0, 0.0 ), ( needleWidth, 0.0 ) )
-            , ( ( needleWidth, 0.0 ), ( needleWidth, needleHeight ) )
-            , ( ( needleWidth, needleHeight ), ( 0.0, needleHeight ) )
-            , ( ( 0.0, needleHeight ), ( 0.0, 0.0 ) )
+            [ ( ( 0.0, 0.0 ), ( normalNeedleWidth, 0.0 ) )
+            , ( ( normalNeedleWidth, 0.0 ), ( normalNeedleWidth, normalNeedleHeight ) )
+            , ( ( normalNeedleWidth, normalNeedleHeight ), ( 0.0, normalNeedleHeight ) )
+            , ( ( 0.0, normalNeedleHeight ), ( 0.0, 0.0 ) )
             ]
         )
 
@@ -208,13 +207,13 @@ viewOneNeedle model needle =
                     needle.pos
             in
             [ Svg.rect
-                [ SvgAttr.x (String.fromFloat (ViewMove.deltaX model + needleX))
+                [ SvgAttr.x (String.fromFloat (ViewMove.deltaX model + needleX - 2.0))
                 , SvgAttr.y (String.fromFloat (ViewMove.deltaY model + needleY))
-                , SvgAttr.width (String.fromFloat needleWidth)
-                , SvgAttr.height (String.fromFloat needleHeight)
+                , SvgAttr.width (String.fromFloat (normalNeedleWidth + 2.0))
+                , SvgAttr.height (String.fromFloat normalNeedleHeight)
                 , SvgAttr.strokeWidth "2"
-                , SvgAttr.stroke "#000000"
-                , SvgAttr.fill "#00000050"
+                , SvgAttr.stroke "#00000000"
+                , SvgAttr.fill "#FF000070"
                 ]
                 []
             ]
@@ -363,42 +362,7 @@ updateOneNeedleCollision id model =
                         newNeedlesModel
 
                     else
-                        case needle.collisionBox of
-                            GlobalBasics.Polygon poly ->
-                                let
-                                    ( ( p1X, p1Y ), ( p2X, p2Y ) ) =
-                                        withDefault GlobalBasics.defLineSeg (Array.get 0 poly)
-
-                                    upLS =
-                                        ( ( p1X, p1Y ), ( p2X, p2Y ) )
-
-                                    ( playerDownX, playerDownY ) =
-                                        GlobalBasics.addPosPos model.player.pos ( 20, 20 )
-
-                                    ( blockUpX, blockUpY ) =
-                                        GlobalBasics.addPosPos needle.pos ( 20, 0 )
-
-                                    refreshJumpModel =
-                                        if
-                                            Player.playerIfCollidePoly
-                                                newNeedlesModel
-                                                { pos = needle.pos
-                                                , collisionBox = GlobalBasics.Polygon (Array.fromList [ upLS ])
-                                                }
-                                                == GlobalBasics.Collided
-                                                && abs (Tuple.second model.player.velocity) <= 0.2
-                                                && abs (playerDownY - blockUpY) <= 0.2
-                                        then
-                                            Player.playerRefreshJump newNeedlesModel
-
-                                        else
-                                            newNeedlesModel
-
-                                    collideModel =
-                                        Player.playerCollideRigidBody refreshJumpModel needle
-                                in
-                                collideModel
-
+                        Player.playerDead newNeedlesModel
                 _ ->
                     newNeedlesModel
     in
