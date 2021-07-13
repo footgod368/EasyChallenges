@@ -3,6 +3,9 @@ module Monster exposing
     , init, update, view, monsterCollisionBox
     )
 
+{-| The monster. A special unit in some levels.
+-}
+
 import Array exposing (Array)
 import Event
 import GlobalBasics
@@ -12,6 +15,15 @@ import Player
 import Svg exposing (Svg)
 import Svg.Attributes as SvgAttr
 import ViewMove
+
+{-| Monster is a record for a special unit.
+    xSpeed is the speed that monster moves along x direction, can be decided in init function.
+    ySpeed is the speed along y direction, it's initial value is 0, it will only works in Follow mode.
+    range is two values that describes the horizontal range for a monster to move back and forward continuously.
+        It can be decided in init function.
+    fixY is a mark of the monster's initial y position, describes the "ground" for monster's jumping.
+        It will automatically reads from initial pos
+-}
 
 type alias Monster =
     { pos: GlobalBasics.Pos
@@ -25,19 +37,37 @@ type alias Monster =
     , fixY : Float
     }
 
+{-| MonsterAppearance currently describes the size of the monster, maybe different styles will be implemented later.
+-}
+
 type MonsterAppearance 
     = MonsterA Float Float
+
+{-| MonsterXMode describes the monster's moving mode in x direction. 
+    StopX means it doesn't move in x direction.
+    ListenX means it stops first, when player is close to the monster, it changes to Move mode. 
+        The Float after it describes the horizontal distance between player and monster needed to "activate" the monster.
+    Move means it move along the x direction with certain speed and range.
+-}
 
 type MonsterXMode
     = StopX
     | ListenX Float
     | Move
 
+{-| MonsterYMode describes the monster's moving in y direction.
+    StopY means it doesn't move in y direction.
+    ListenY is similar to the mode "ListenX". Noting that the Float still represents the horizontal distance.
+    Follow means that it will jump when player jumps, but the monster's y position is always larger or equal than its initial y position.
+-}
+
 type MonsterYMode 
     = StopY
     | ListenY Float
     | Follow
 
+{-| Initiate a monster
+-}
 init : ( Float, Float ) -> MonsterAppearance -> MonsterXMode -> MonsterYMode ->  Float -> ( Float, Float) -> Monster
 init ( x, y ) monsterAppearance monsterX monsterY xSpeed ( x1, x2 )=
     { pos = ( x, y )
@@ -66,9 +96,13 @@ monsterCollisionBox monsterAppearance =
                     ]
                 )
 
+{-| default monster
+-}
 defMonster : Monster
 defMonster = init ( 0, 0 ) ( MonsterA 20 20 ) StopX StopY 1 ( 0, 0 )
 
+{-| update function of monster
+-}
 update : ( { model | player : Player.Player, monsters : Array Monster }, Cmd MainType.Msg ) -> ( { model | player : Player.Player, monsters : Array Monster }, Cmd MainType.Msg )
 update ( model, cmd ) =
     ( List.foldl updateOneMonster model (List.range 0 (Array.length model.monsters - 1)), cmd )
@@ -84,6 +118,8 @@ updateOneMonster id model =
         |> updateOneMonsterMoveY id
         |> updateOneMonsterCollision id
 
+{-| update one monster's mode, not exposed.
+-}
 updateOneMonsterMode : Int -> { model | player : Player.Player, monsters : Array Monster } -> { model | player : Player.Player, monsters : Array Monster }
 updateOneMonsterMode id model =
     let
@@ -125,6 +161,8 @@ updateOneMonsterMode id model =
     in
     newModel
 
+{-| update one monster's move in x direction, not exposed
+-}
 updateOneMonsterMoveX : Int -> { model | player : Player.Player, monsters : Array Monster } -> { model | player : Player.Player, monsters : Array Monster }
 updateOneMonsterMoveX id model =
     let
@@ -159,7 +197,8 @@ updateOneMonsterMoveX id model =
     in
     newModel
 
-
+{-| update one monster's move in y direction, not exposed
+-}
 updateOneMonsterMoveY : Int -> { model | player : Player.Player, monsters : Array Monster } -> { model | player : Player.Player, monsters : Array Monster }
 updateOneMonsterMoveY id model =
     let
@@ -203,6 +242,8 @@ updateOneMonsterMoveY id model =
     in
     newModel
 
+{-| update one monster's collision, not exposed
+-}
 updateOneMonsterCollision : Int -> { model | player : Player.Player, monsters : Array Monster } -> { model | player : Player.Player, monsters : Array Monster }
 updateOneMonsterCollision id model =
     let
@@ -240,6 +281,8 @@ viewOneMonster model monster =
                 []
             ]
 
+{-| view function of monster
+-}
 view : { model | monsters : Array Monster, windowBoundary : GlobalBasics.Pos, levelBoundary : GlobalBasics.Pos, player : Player.Player } -> List (Svg MainType.Msg)
 view model =
     let
