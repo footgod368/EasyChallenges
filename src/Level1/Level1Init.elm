@@ -22,6 +22,7 @@ import Needle
 import NoticeBoard
 import Player
 import SavePoint
+import Monster
 import Task
 
 
@@ -225,6 +226,8 @@ init =
                             )
                         )
                     ]
+            , monsters = Array.fromList [ Monster.init (700,200) (Monster.MonsterA 50 50) 
+                                          (Monster.ListenX 50) (Monster.ListenY 50) 1 ( 500, 900 )]
             , keyPressed = []
             }
     in

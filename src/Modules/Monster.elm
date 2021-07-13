@@ -1,4 +1,7 @@
-module Monster exposing (..)
+module Monster exposing 
+    ( Monster, MonsterAppearance(..), MonsterXMode(..), MonsterYMode(..)
+    , init, update, view, monsterCollisionBox
+    )
 
 import Array exposing (Array)
 import Event
@@ -26,18 +29,14 @@ type MonsterAppearance
     = MonsterA Float Float
 
 type MonsterXMode
-    = Stop
-    | Listen Float
+    = StopX
+    | ListenX Float
     | Move
 
 type MonsterYMode 
-    = Stop
-    | Listen Float
+    = StopY
+    | ListenY Float
     | Follow
-
-type Direction
-    = Left
-    | Right
 
 init : ( Float, Float ) -> MonsterAppearance -> MonsterXMode -> MonsterYMode ->  Float -> ( Float, Float) -> Monster
 init ( x, y ) monsterAppearance monsterX monsterY xSpeed ( x1, x2 )=
@@ -68,7 +67,7 @@ monsterCollisionBox monsterAppearance =
                 )
 
 defMonster : Monster
-defMonster = init ( 0, 0 ) ( MonsterA 20 20 ) Stop Stop 1 ( 0, 0 )
+defMonster = init ( 0, 0 ) ( MonsterA 20 20 ) StopX StopY 1 ( 0, 0 )
 
 update : ( { model | player : Player.Player, monsters : Array Monster }, Cmd MainType.Msg ) -> ( { model | player : Player.Player, monsters : Array Monster }, Cmd MainType.Msg )
 update ( model, cmd ) =
@@ -96,25 +95,25 @@ updateOneMonsterMode id model =
 
         newXMode =
             case monster.xMode of 
-                Listen x ->
+                ListenX x ->
                     if dx < x && dx > (-x) then
                         Move
                     else
-                        Listen
-                Stop -> 
-                    Stop
+                        ListenX x
+                StopX -> 
+                    StopX
                 Move -> 
                     Move
         
         newYMode =
             case monster.yMode of 
-                Listen x ->
+                ListenY x ->
                     if dx < x && dx > (-x) then
                         Follow
                     else
-                        Listen
-                Stop -> 
-                    Stop
+                        ListenY x
+                StopY -> 
+                    StopY
                 Follow -> 
                     Follow
         
@@ -137,9 +136,9 @@ updateOneMonsterMoveX id model =
 
         newX = 
             case monster.xMode of
-                Stop -> 
+                StopX -> 
                     oldX
-                Listen ->
+                ListenX _ ->
                     oldX
                 Move ->
                     oldX + monster.xSpeed
@@ -174,24 +173,24 @@ updateOneMonsterMoveY id model =
 
         newYSpeed =
             case monster.yMode of
-                Stop ->
+                StopY ->
                     0
-                Listen ->
+                ListenY _ ->
                     0
                 Follow ->
-                    if playerspeed > 0 then
+                    if playerspeed < 0 then
                         playerspeed
                     else
-                        monster.ySpeed - 0.1
+                        monster.ySpeed + 0.1
         
         newY = 
-            if oldY + newYSpeed < monster.fixY then
-                fixY
+            if oldY + newYSpeed > monster.fixY then
+                monster.fixY
             else
                 oldY + newYSpeed
         
         newnewYSpeed = 
-            if oldY + newYSpeed < monster.fixY then
+            if oldY + newYSpeed > monster.fixY then
                 0
             else
                 newYSpeed
