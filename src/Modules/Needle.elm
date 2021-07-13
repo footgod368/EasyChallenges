@@ -182,6 +182,8 @@ quickInit ( x, y ) =
     , needleMove = NoNextNeedleMove
     }
 
+{-| quick function to create one hidden needle
+-}
 quickHidden : (Int,Int)-> Int -> Needle
 quickHidden (x,y) id =
     { pos = (GlobalBasics.blockPos ( x, y ))
@@ -192,11 +194,14 @@ quickHidden (x,y) id =
     , needleMove = NoNextNeedleMove
     }
 
+{-| quick function to create a row of hidden needles
+-}
 hiddenRow: Int-> Int -> Int -> Int -> List Needle
 hiddenRow n n1 n2 id=
     List.map (\i -> quickHidden ( i, n ) id) (List.range n1 n2)
 
-
+{-| quick function to create a needle which is only collidable after a given event. 
+-}
 quickHidden_ : (Int,Int)-> Int -> Needle
 quickHidden_ (x,y) id =
     { pos = (GlobalBasics.blockPos ( x, y ))
@@ -206,7 +211,8 @@ quickHidden_ (x,y) id =
     , needleCollision = NoCollide (CollideAfterEvent id NoNextNeedleCollision)
     , needleMove = NoNextNeedleMove
     }
-
+{-| quick function to create one needle which falls after a given event
+-}
 quickFalling : (Int,Int)-> Int -> Needle
 quickFalling (x,y) id =
     { pos = (GlobalBasics.blockPos ( x, y ))
@@ -217,7 +223,8 @@ quickFalling (x,y) id =
     , needleMove = Move (Array.fromList []) 0.0 id 
                         (Move (Array.fromList [GlobalBasics.blockPos ( x, 20 )]) 5.0 -1 NoNextNeedleMove)
     }
-
+{-| quick function to create one row of needles which falls after a given event
+-}
 fallingRow: Int-> Int -> Int -> Int -> List Needle
 fallingRow n n1 n2 id=
     List.map (\i -> quickFalling ( i, n ) id) (List.range n1 n2)

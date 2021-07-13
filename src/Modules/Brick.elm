@@ -184,6 +184,8 @@ quickInit ( x, y ) =
     , brickMove = NoNextBrickMove
     }
 
+{-| another version of 'quickInit'. can be used to create bricks with 'Detailed' appearance type.
+-}
 quickInit_ : ( Float, Float )->(Float,Float) -> String-> Brick
 quickInit_ ( x, y ) (width,height) color=
     { pos = ( x, y )
@@ -194,11 +196,15 @@ quickInit_ ( x, y ) (width,height) color=
     , brickMove = NoNextBrickMove
     }
 
-
+{-| quick function to create a row of bricks by providing 'row index' n, 'starting point' x, 'ending point' y.
+-}
 quickBrickRow: Int-> Int -> Int -> List Brick
 quickBrickRow n x y =
     List.map (\i -> quickInit (GlobalBasics.blockPos ( i, n ))) (List.range x y)
 
+
+{-| quick function to create one 'falling brick' by providing 'positon' of the brick and 'id' of trigger envent.
+-}
 fallingBrick : ( Float, Float ) -> Int -> Brick
 fallingBrick ( x, y ) id =
     { pos = ( x, y )
@@ -220,11 +226,14 @@ fallingBrick ( x, y ) id =
                         NoNextBrickMove
                     )
     }
-
+{-| quick function to create a row of 'falling bricks' by providing 'row index' n, 'starting point' x, 'ending point' y. 
+-}
 fallingRow: Int-> Int -> Int -> Int -> List Brick
 fallingRow n x y id=
     List.map (\i -> fallingBrick (GlobalBasics.blockPos ( i, n )) id) (List.range x y)
 
+{-| quick function to create one 'hidden brick' which is initially invisible but always collidable. 
+-}
 hidden : ( Float, Float ) -> Int -> Brick
 hidden ( x, y ) id =
     { pos = GlobalBasics.blockPos_ ( x, y )
@@ -235,6 +244,8 @@ hidden ( x, y ) id =
     , brickMove = NoNextBrickMove
     }
 
+{-| quick function to create one 'hidden brick' which is initially invisible and initially non-collidable. 
+-}
 hidden_ : ( Int, Int ) -> Int -> Brick
 hidden_ ( x, y ) id =
     { pos = GlobalBasics.blockPos ( x, y )
@@ -270,6 +281,8 @@ brickCollisionBox brickAppearance =
 
                 )
 
+{-| quick function to yield the 'collisionBox' of a brick given the position
+-}
 quickCollisionBox: (Float,Float) -> BrickAppearance -> GlobalBasics.CollisionBox
 quickCollisionBox (x,y) brickAppearance=
     case brickCollisionBox brickAppearance of

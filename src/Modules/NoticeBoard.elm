@@ -110,6 +110,8 @@ quickInit pos info fontSize =
     , fontSize = fontSize
     }
 
+{-| quick function to create a 'brick' with proper 'Detailed' type as the boundary of 'NoticeBoard'
+-}
 boundary : (Float,Float) -> (Float,Float) -> List Brick.Brick
 boundary (x,y) (width,height) =
     let
