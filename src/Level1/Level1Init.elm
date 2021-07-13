@@ -76,6 +76,35 @@ init =
                         )
                     )
                     (Event.quickDuration 10)
+                , Event.init
+                    { id = 4, name = "Event4" }
+                    Event.StartActivated
+                    (Event.PlayerCollide
+                        (GlobalBasics.Polygon
+                            (Array.fromList
+                                [ ( ( 120, 440 ), ( 120, 0 ) )
+                                ]
+                            )
+                        )
+                    )
+                    (Event.quickDuration 10)
+                , Event.init
+                    { id = 5, name = "Event5" }
+                    (Event.AfterActEvent 6)
+                    (Event.PlayerCollide
+                        (GlobalBasics.Polygon
+                            (Array.fromList
+                                [ ( ( 125, 440 ), ( 125, 0 ) )
+                                ]
+                            )
+                        )
+                    )
+                    (Event.quickDuration 10)
+                , Event.init
+                    { id = 6, name = "Event6" }
+                    ( Event.AfterActEvent 4)
+                    ( Event.TimeAfterStart 20 )
+                    ( Event.quickDuration 10 )
                 ]
       , boundary = Boundary.normalInit
       , player = Player.init ( 50.0, 490.0 )
@@ -134,10 +163,22 @@ init =
                 [ NoticeBoard.init
                     ( 200.0, 200.0 )
                     (NoticeBoard.Visible "Hello!"
-                        (NoticeBoard.VisibleAfterEvent
-                            2
-                            "Wow, a hidden block!"
-                            NoticeBoard.NoNextNoticeBoardVisibility
+                        ( NoticeBoard.VisibleAfterEvent
+                            4
+                            "Wow, a moving Needle!"
+                            ( NoticeBoard.VisibleAfterEvent
+                                2
+                                "Wow, a hidden brick!"
+                                ( NoticeBoard.VisibleAfterEvent
+                                    1
+                                    "Wow, a moving brick!"
+                                    ( NoticeBoard.VisibleAfterEvent
+                                        3
+                                        "Wow, a fake brick!"
+                                        NoticeBoard.NoNextNoticeBoardVisibility
+                                    )
+                                )
+                            )
                         )
                     )
                     (NoticeBoard.Move
@@ -155,7 +196,29 @@ init =
                 ]
       , needles =
             Array.fromList
-                [ Needle.quickInit (GlobalBasics.addPosPos ( 0.0, 30.0 ) (GlobalBasics.blockPos ( 4, 14 ) ))
+                [ Needle.quickInit (GlobalBasics.addPosPos ( 0.0, 30.0 ) (GlobalBasics.blockPos ( 4, 14 )))
+                , Needle.init
+                    (GlobalBasics.addPosPos ( 0.0, 30.0 ) (GlobalBasics.blockPos ( 4, 11 )))
+                    Needle.defNeedleCollisionBox
+                    (Needle.NormalNeedle Needle.normalNeedleWidth Needle.normalNeedleHeight)
+                    (Needle.Visible Needle.NoNextNeedleVisibility)
+                    (Needle.Collide Needle.NoNextNeedleCollision)
+                    (Needle.Move
+                        (Array.fromList [])
+                        0.0
+                        4
+                        (Needle.Move
+                            (Array.fromList [ ( 120.0, 260.0 ) ])
+                            5.0
+                            5
+                            ( Needle.Move
+                                (Array.fromList [ ( 120.0, 430.0 ) ])
+                                10.0
+                                0
+                                Needle.NoNextNeedleMove
+                            )
+                        )
+                    )
                 ]
       , keyPressed = []
       }

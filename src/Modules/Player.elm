@@ -1,5 +1,5 @@
 module Player exposing
-    ( Player
+    ( Player, LiveState(..)
     , init
     , update, updateJustPlayerPos
     , view

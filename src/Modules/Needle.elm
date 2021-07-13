@@ -1,6 +1,6 @@
 module Needle exposing
     ( NeedleVisibility(..), NeedleCollision(..), NeedleMove(..), NeedleAppearance(..), Needle
-    , init, quickInit, defNeedleCollisionBox
+    , init, quickInit, defNeedleCollisionBox, normalNeedleHeight, normalNeedleWidth
     , view
     , update
     )
@@ -213,7 +213,7 @@ viewOneNeedle model needle =
                 , SvgAttr.height (String.fromFloat normalNeedleHeight)
                 , SvgAttr.strokeWidth "2"
                 , SvgAttr.stroke "#00000000"
-                , SvgAttr.fill "#FF000070"
+                , SvgAttr.fill "#FF0000FF"
                 ]
                 []
             ]

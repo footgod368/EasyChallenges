@@ -40,16 +40,20 @@ update msg model =
         MainType.Tick timePassed ->
             let
                 ( newModel, cmd ) =
-                    ( model, Cmd.none )
-                        |> Player.update
-                        |> Event.update
-                        |> Brick.update
-                        |> SavePoint.update
-                        |> EndPoint.update
-                        |> Boundary.update
-                        |> NoticeBoard.update
-                        |> Needle.update
-                        |> Player.updateJustPlayerPos
+                    if ( model.player.liveState /= Player.Dead) then
+                        ( model, Cmd.none )
+                            |> Player.update
+                            |> Event.update
+                            |> Brick.update
+                            |> SavePoint.update
+                            |> EndPoint.update
+                            |> Boundary.update
+                            |> NoticeBoard.update
+                            |> Needle.update
+                            |> Player.updateJustPlayerPos
+
+                    else
+                        ( model, Cmd.none )
                 initModel = Tuple.first Level1Init.init
                 oldSavePoints = model.savePoints
                 oldSaveNumber = model.player.saveNumber

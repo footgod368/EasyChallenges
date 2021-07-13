@@ -357,7 +357,7 @@ type alias EventInfo =
 
 
 type EventIfStartAct
-    = AfterActEvent EventInfo
+    = AfterActEvent Int
     | StartActivated
 
 
@@ -474,8 +474,8 @@ updateOneEvent model index =
 updateOneEventIfStartAct : ( { model | actEvent : Array ActEvent, player : Player.Player }, Event ) -> ( { model | actEvent : Array ActEvent, player : Player.Player }, Event )
 updateOneEventIfStartAct ( model, event ) =
     case event.ifStartAct of
-        AfterActEvent eventInfo ->
-            if ifActEvent model eventInfo == ActEventAct then
+        AfterActEvent eventId ->
+            if ifActEventById model eventId == ActEventAct then
                 let
                     newEvent =
                         { event | ifStartAct = StartActivated }
