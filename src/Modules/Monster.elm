@@ -217,4 +217,37 @@ updateOneMonsterCollision id model =
             else
                 Player.playerDead model
     in
-    newModel      
+    newModel
+
+{-| view one monster, used in view, not exposed.
+-}
+viewOneMonster : { model | windowBoundary : GlobalBasics.Pos, levelBoundary : GlobalBasics.Pos, player : Player.Player } -> Monster -> List (Svg MainType.Msg)
+viewOneMonster model monster =
+    let
+        ( monsterX, monsterY ) =
+            monster.pos
+    in
+    case monster.appearance of
+        MonsterA width height ->
+            [ Svg.rect
+                [ SvgAttr.x (String.fromFloat (ViewMove.deltaX model + monsterX - 2.0))
+                , SvgAttr.y (String.fromFloat (ViewMove.deltaY model + monsterY))
+                , SvgAttr.strokeWidth "2"
+                , SvgAttr.stroke "#00000000"
+                , SvgAttr.fill "#FF0000FF"
+                , SvgAttr.width (String.fromFloat (width + 2.0))
+                , SvgAttr.height (String.fromFloat height)
+                ]
+                []
+            ]
+
+view : { model | monsters : Array Monster, windowBoundary : GlobalBasics.Pos, levelBoundary : GlobalBasics.Pos, player : Player.Player } -> List (Svg MainType.Msg)
+view model =
+    let
+        monstersList =
+            Array.toList model.monsters
+
+        svgMonsterList =
+            List.map (\monster -> viewOneMonster model monster) monstersList
+    in
+    List.concat svgMonsterList  
