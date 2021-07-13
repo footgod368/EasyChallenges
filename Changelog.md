@@ -7,4 +7,4 @@
     - Colliding the wall while jumping will make the jumping speed only half
     - Cannot jump at the edge of the brick
     - Can climb wall by pressing jump button a lot
-    - High frequency of pressing jump button leads to error
+    - High frequency of essing jump button leads to error
