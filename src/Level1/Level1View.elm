@@ -20,6 +20,7 @@ import NoticeBoard
 import Player
 import SavePoint
 import EndPoint
+import Monster
 import Svg
 import Svg.Attributes as SvgAttr
 
@@ -46,6 +47,7 @@ view model =
                 ++ Boundary.view model
                 ++ NoticeBoard.view model
                 ++ Needle.view model
+                ++ Monster.view model
             )
         , Html.audio
             [ HtmlAttr.width 0

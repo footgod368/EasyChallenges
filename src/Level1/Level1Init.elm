@@ -22,6 +22,7 @@ import Needle
 import NoticeBoard
 import Player
 import SavePoint
+import Monster
 import Task
 
 
@@ -32,7 +33,7 @@ init =
     let
         newModel =
             { windowBoundary = ( 1000.0, 800.0 )
-            , levelBoundary = ( 1000.0, 680.0 )
+            , levelBoundary = ( 1500.0, 680.0 )
             , actEvent = Array.fromList []
             , event =
                 Array.fromList
@@ -115,6 +116,7 @@ init =
                     (List.concat
                         [ List.map (\i -> Brick.quickInit (GlobalBasics.blockPos ( i, 15 ))) (List.range 1 5)
                         , List.map (\i -> Brick.quickInit (GlobalBasics.blockPos ( i, 12 ))) (List.range 2 5)
+                        , List.map (\i -> Brick.quickInit (GlobalBasics.blockPos ( i, 10 ))) (List.range 26 32)
                         , [ Brick.init
                                 (GlobalBasics.blockPos ( 18, 14 ))
                                 Brick.NormalAppearance
@@ -163,7 +165,7 @@ init =
                     )
             , savePoints =
                 Array.fromList [ SavePoint.init (GlobalBasics.blockPos ( 2, 14 )), SavePoint.init (GlobalBasics.blockPos ( 14, 13 )) ]
-            , endPoint = EndPoint.init (GlobalBasics.blockPos ( 22, 14 ))
+            , endPoint = EndPoint.init (GlobalBasics.blockPos ( 33, 10 ))
             , noticeBoards =
                 Array.fromList
                     [ NoticeBoard.init
@@ -225,6 +227,8 @@ init =
                             )
                         )
                     ]
+            , monsters = Array.fromList [ Monster.init (GlobalBasics.blockPos ( 28, 9 )) (Monster.MonsterA 40 40) 
+                                          (Monster.ListenX 80) (Monster.ListenY 80) 1 ( 1000, 1200 )]
             , keyPressed = []
             }
     in

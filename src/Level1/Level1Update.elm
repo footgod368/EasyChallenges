@@ -21,6 +21,7 @@ import Boundary
 import Level1Init
 import SavePoint
 import EndPoint
+import Monster
 
 
 {-| `update` of Level1
@@ -50,6 +51,7 @@ update msg model =
                             |> Boundary.update
                             |> NoticeBoard.update
                             |> Needle.update
+                            |> Monster.update
                             |> Player.updateJustPlayerPos
 
                     else
