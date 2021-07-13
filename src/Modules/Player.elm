@@ -65,7 +65,6 @@ the player last saved, saveNumber = 0 means saved at the first savePoint, 1 mean
 type alias Player =
     { pos : GlobalBasics.Pos
     , lastPos : GlobalBasics.Pos
-    , lastOutPos : GlobalBasics.Pos
     , velocity : GlobalBasics.Pos
     , jump : PlayerJump
     , ifThisFrameOnGround : Bool
@@ -206,7 +205,6 @@ init : GlobalBasics.Pos -> Player
 init pos =
     { pos = pos
     , lastPos = pos
-    , lastOutPos = pos
     , velocity = ( 0.0, 0.0 )
     , jump = Jump 2 -1
     , ifThisFrameOnGround = False
@@ -371,7 +369,7 @@ updatePlayerPos ( model, cmd ) =
             model.player
 
         newPlayer =
-            { oldPlayer | pos = ( newX, newY ), lastPos = ( oldX, oldY), lastOutPos = ( newX, newY ), ifChangeBackToLastPosX = False, ifChangeBackToLastPosY = False }
+            { oldPlayer | pos = ( newX, newY ), lastPos = ( oldX, oldY), ifChangeBackToLastPosX = False, ifChangeBackToLastPosY = False }
     in
     ( { model | player = newPlayer }, cmd )
 
