@@ -28,8 +28,8 @@ import Task
 
 {-| `init` of Level1 \`Model
 -}
-init : ( Level1Type.Model, Cmd MainType.Msg )
-init =
+init : () -> ( Level1Type.Model, Cmd MainType.Msg )
+init a =
     let
         newModel =
             { windowBoundary = ( 1000.0, 800.0 )
