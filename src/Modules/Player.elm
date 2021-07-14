@@ -1,9 +1,10 @@
 module Player exposing
-    ( Player, LiveState(..)
+    ( Player
     , init
     , update, updateJustPlayerPos
     , view
-    , playerRefreshJump, playerIfCollidePoly, playerCollideRigidBody, playerDead, checkDead, playerWin
+    , playerRefreshJump, playerIfCollidePoly, playerCollideRigidBody
+    , LiveState(..), checkDead, playerDead, playerWin
     )
 
 {-| The Player unit, the figure that player controls.
@@ -59,7 +60,7 @@ type PlayerJump
 
 {-| Definition of player, `pos` is current position, `lastPos` store the last position, used in collision test,
 `velocity` is its velocity, divided into x-axis and y-axis. `collisionBox` is its `CollisionBox`, `jumpNum` is how
-many times it can jump, "deadTimes" is how many times the player dead, "saveNumber" describes which savePoint 
+many times it can jump, "deadTimes" is how many times the player dead, "saveNumber" describes which savePoint
 the player last saved, saveNumber = 0 means saved at the first savePoint, 1 means the second, ...
 -}
 type alias Player =
@@ -72,9 +73,10 @@ type alias Player =
     , ifChangeBackToLastPosX : Bool
     , ifChangeBackToLastPosY : Bool
     , liveState : LiveState
-    , deadTimes: Int
-    , saveNumber: Int
+    , deadTimes : Int
+    , saveNumber : Int
     }
+
 
 {-| LiveState defines if the player is live, dead, or win this level.
 -}
@@ -105,7 +107,7 @@ playerJumpNum =
     2
 
 
-{-| If only one-time on-ground jump is allowed 
+{-| If only one-time on-ground jump is allowed
 -}
 ifOneJumpAndOnTheGround : Bool
 ifOneJumpAndOnTheGround =
@@ -146,6 +148,7 @@ gravityAcce : Float
 gravityAcce =
     0.1
 
+
 {-| Change the state of player to Dead
 -}
 playerDead : { model | player : Player } -> { model | player : Player }
@@ -155,9 +158,10 @@ playerDead model =
             model.player
 
         newPlayer =
-            {oldPlayer | liveState = Dead}
+            { oldPlayer | liveState = Dead }
     in
     { model | player = newPlayer }
+
 
 {-| Change the state of player to Win
 -}
@@ -168,9 +172,10 @@ playerWin model =
             model.player
 
         newPlayer =
-            {oldPlayer | liveState = Win}
+            { oldPlayer | liveState = Win }
     in
     { model | player = newPlayer }
+
 
 {-| Check if the state of player is Dead
 -}
@@ -178,6 +183,7 @@ checkDead : Player -> Bool
 checkDead player =
     if player.liveState == Dead then
         True
+
     else
         False
 
@@ -232,10 +238,12 @@ update ( model, cmd ) =
     case model.player.liveState of
         Live ->
             ( model, cmd )
-            |> updatePlayerPos
-            |> updatePlayerVelocity
+                |> updatePlayerPos
+                |> updatePlayerVelocity
+
         Dead ->
             ( model, cmd )
+
         Win ->
             ( model, cmd )
 
@@ -252,19 +260,18 @@ updatePlayerVelocity ( model, cmd ) =
             if List.member 37 model.keyPressed || List.member 65 model.keyPressed then
                 if List.member 68 model.keyPressed || List.member 39 model.keyPressed then
                     0.0
+                    --else if abs oldVelocityY <= 0.1 then
+                    --    -playerHorizontalSpeed * 2
+                    --
 
-                --else if abs oldVelocityY <= 0.1 then
-                --    -playerHorizontalSpeed * 2
-                --
                 else
                     -playerHorizontalSpeed
 
             else if List.member 68 model.keyPressed || List.member 39 model.keyPressed then
                 --if abs oldVelocityY <= 0.1 then
                 --    playerHorizontalSpeed * 2
-
                 --else
-                    playerHorizontalSpeed
+                playerHorizontalSpeed
 
             else
                 0.0
@@ -309,6 +316,7 @@ updatePlayerVelocity ( model, cmd ) =
     in
     ( { model | player = newPlayer }, cmd )
 
+
 updateJustPlayerPos : ( { model | player : Player, keyPressed : List Int }, Cmd MainType.Msg ) -> ( { model | player : Player, keyPressed : List Int }, Cmd MainType.Msg )
 updateJustPlayerPos ( model, cmd ) =
     let
@@ -320,12 +328,11 @@ updateJustPlayerPos ( model, cmd ) =
                 else
                     ( Tuple.first model.player.lastPos, Tuple.second model.player.pos )
 
-            else
-                if model.player.ifChangeBackToLastPosY then
-                    ( Tuple.first model.player.pos, Tuple.second model.player.lastPos )
+            else if model.player.ifChangeBackToLastPosY then
+                ( Tuple.first model.player.pos, Tuple.second model.player.lastPos )
 
-                else
-                    model.player.pos
+            else
+                model.player.pos
 
         oldPlayer =
             model.player
@@ -355,12 +362,11 @@ updatePlayerPos ( model, cmd ) =
                 else
                     ( Tuple.first model.player.lastPos, Tuple.second model.player.pos )
 
-            else
-                if model.player.ifChangeBackToLastPosY then
-                    ( Tuple.first model.player.pos, Tuple.second model.player.lastPos )
+            else if model.player.ifChangeBackToLastPosY then
+                ( Tuple.first model.player.pos, Tuple.second model.player.lastPos )
 
-                else
-                    model.player.pos
+            else
+                model.player.pos
 
         ( newX, newY ) =
             ( oldX + velocityX, oldY + velocityY )
@@ -369,7 +375,7 @@ updatePlayerPos ( model, cmd ) =
             model.player
 
         newPlayer =
-            { oldPlayer | pos = ( newX, newY ), lastPos = ( oldX, oldY), ifChangeBackToLastPosX = False, ifChangeBackToLastPosY = False }
+            { oldPlayer | pos = ( newX, newY ), lastPos = ( oldX, oldY ), ifChangeBackToLastPosX = False, ifChangeBackToLastPosY = False }
     in
     ( { model | player = newPlayer }, cmd )
 
@@ -381,14 +387,18 @@ view model =
     let
         ( playerX, playerY ) =
             model.player.pos
-        deadOpacity = 
+
+        deadOpacity =
             if model.player.liveState == Dead then
                 1
+
             else
                 0
+
         winOpacity =
             if model.player.liveState == Win then
                 1
+
             else
                 0
     in
@@ -400,27 +410,25 @@ view model =
         , SvgAttr.fill "#000000"
         ]
         []
-      ,
-      Svg.text_
-        [ SvgAttr.x (String.fromFloat (playerX  + playerDeltaX model))
+    , Svg.text_
+        [ SvgAttr.x (String.fromFloat (playerX + playerDeltaX model))
         , SvgAttr.y (String.fromFloat (playerY + playerDeltaY model))
         , SvgAttr.fontSize "50"
         , SvgAttr.textAnchor "middle"
         , SvgAttr.fill "#000000"
         , SvgAttr.opacity (String.fromInt deadOpacity)
         ]
-        [ Svg.text ("You dead! Dead times: " ++ (String.fromInt model.player.deadTimes)  )
+        [ Svg.text ("You dead! Dead times: " ++ String.fromInt model.player.deadTimes)
         ]
-      ,
-      Svg.text_
-        [ SvgAttr.x (String.fromFloat (playerX  + playerDeltaX model))
+    , Svg.text_
+        [ SvgAttr.x (String.fromFloat (playerX + playerDeltaX model))
         , SvgAttr.y (String.fromFloat (playerY + playerDeltaY model))
         , SvgAttr.fontSize "50"
         , SvgAttr.textAnchor "middle"
         , SvgAttr.fill "#ff3366"
         , SvgAttr.opacity (String.fromInt winOpacity)
         ]
-        [ Svg.text ("You Win!")
+        [ Svg.text "You Win!"
         ]
     ]
 

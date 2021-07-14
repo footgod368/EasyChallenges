@@ -1,6 +1,12 @@
-module Monster exposing 
-    ( Monster, MonsterAppearance(..), MonsterXMode(..), MonsterYMode(..)
-    , init, update, view, monsterCollisionBox
+module Monster exposing
+    ( Monster
+    , MonsterAppearance(..)
+    , MonsterXMode(..)
+    , MonsterYMode(..)
+    , init
+    , monsterCollisionBox
+    , update
+    , view
     )
 
 {-| The monster. A special unit in some levels.
@@ -16,60 +22,61 @@ import Svg exposing (Svg)
 import Svg.Attributes as SvgAttr
 import ViewMove
 
-{-| Monster is a record for a special unit.
-    xSpeed is the speed that monster moves along x direction, can be decided in init function.
-    ySpeed is the speed along y direction, it's initial value is 0, it will only works in Follow mode.
-    range is two values that describes the horizontal range for a monster to move back and forward continuously.
-        It can be decided in init function.
-    fixY is a mark of the monster's initial y position, describes the "ground" for monster's jumping.
-        It will automatically reads from initial pos
--}
 
+{-| Monster is a record for a special unit.
+xSpeed is the speed that monster moves along x direction, can be decided in init function.
+ySpeed is the speed along y direction, it's initial value is 0, it will only works in Follow mode.
+range is two values that describes the horizontal range for a monster to move back and forward continuously.
+It can be decided in init function.
+fixY is a mark of the monster's initial y position, describes the "ground" for monster's jumping.
+It will automatically reads from initial pos
+-}
 type alias Monster =
-    { pos: GlobalBasics.Pos
+    { pos : GlobalBasics.Pos
     , collisionBox : GlobalBasics.CollisionBox
     , appearance : MonsterAppearance
-    , xMode: MonsterXMode
-    , yMode: MonsterYMode
-    , xSpeed: Float
-    , ySpeed: Float
-    , range: ( Float, Float )
+    , xMode : MonsterXMode
+    , yMode : MonsterYMode
+    , xSpeed : Float
+    , ySpeed : Float
+    , range : ( Float, Float )
     , fixY : Float
     }
 
+
 {-| MonsterAppearance currently describes the size of the monster, maybe different styles will be implemented later.
 -}
-
-type MonsterAppearance 
+type MonsterAppearance
     = MonsterA Float Float
 
-{-| MonsterXMode describes the monster's moving mode in x direction. 
-    StopX means it doesn't move in x direction.
-    ListenX means it stops first, when player is close to the monster, it changes to Move mode. 
-        The Float after it describes the horizontal distance between player and monster needed to "activate" the monster.
-    Move means it move along the x direction with certain speed and range.
--}
 
+{-| MonsterXMode describes the monster's moving mode in x direction.
+StopX means it doesn't move in x direction.
+ListenX means it stops first, when player is close to the monster, it changes to Move mode.
+The Float after it describes the horizontal distance between player and monster needed to "activate" the monster.
+Move means it move along the x direction with certain speed and range.
+-}
 type MonsterXMode
     = StopX
     | ListenX Float
     | Move
 
-{-| MonsterYMode describes the monster's moving in y direction.
-    StopY means it doesn't move in y direction.
-    ListenY is similar to the mode "ListenX". Noting that the Float still represents the horizontal distance.
-    Follow means that it will jump when player jumps, but the monster's y position is always larger or equal than its initial y position.
--}
 
-type MonsterYMode 
+{-| MonsterYMode describes the monster's moving in y direction.
+StopY means it doesn't move in y direction.
+ListenY is similar to the mode "ListenX". Noting that the Float still represents the horizontal distance.
+Follow means that it will jump when player jumps, but the monster's y position is always larger or equal than its initial y position.
+-}
+type MonsterYMode
     = StopY
     | ListenY Float
     | Follow
 
+
 {-| Initiate a monster
 -}
-init : ( Float, Float ) -> MonsterAppearance -> MonsterXMode -> MonsterYMode ->  Float -> ( Float, Float) -> Monster
-init ( x, y ) monsterAppearance monsterX monsterY xSpeed ( x1, x2 )=
+init : ( Float, Float ) -> MonsterAppearance -> MonsterXMode -> MonsterYMode -> Float -> ( Float, Float ) -> Monster
+init ( x, y ) monsterAppearance monsterX monsterY xSpeed ( x1, x2 ) =
     { pos = ( x, y )
     , collisionBox = monsterCollisionBox monsterAppearance
     , appearance = monsterAppearance
@@ -80,6 +87,7 @@ init ( x, y ) monsterAppearance monsterX monsterY xSpeed ( x1, x2 )=
     , range = ( x1, x2 )
     , fixY = y
     }
+
 
 {-| default collisionBox
 -}
@@ -96,10 +104,13 @@ monsterCollisionBox monsterAppearance =
                     ]
                 )
 
+
 {-| default monster
 -}
 defMonster : Monster
-defMonster = init ( 0, 0 ) ( MonsterA 20 20 ) StopX StopY 1 ( 0, 0 )
+defMonster =
+    init ( 0, 0 ) (MonsterA 20 20) StopX StopY 1 ( 0, 0 )
+
 
 {-| update function of monster
 -}
@@ -118,6 +129,7 @@ updateOneMonster id model =
         |> updateOneMonsterMoveY id
         |> updateOneMonsterCollision id
 
+
 {-| update one monster's mode, not exposed.
 -}
 updateOneMonsterMode : Int -> { model | player : Player.Player, monsters : Array Monster } -> { model | player : Player.Player, monsters : Array Monster }
@@ -126,40 +138,51 @@ updateOneMonsterMode id model =
         monster =
             Array.get id model.monsters
                 |> withDefault defMonster
-        
-        dx = (Tuple.first model.player.pos) - (Tuple.first monster.pos)
+
+        dx =
+            Tuple.first model.player.pos - Tuple.first monster.pos
 
         newXMode =
-            case monster.xMode of 
+            case monster.xMode of
                 ListenX x ->
-                    if dx < x && dx > (-x) then
+                    if dx < x && dx > -x then
                         Move
+
                     else
                         ListenX x
-                StopX -> 
+
+                StopX ->
                     StopX
-                Move -> 
+
+                Move ->
                     Move
-        
+
         newYMode =
-            case monster.yMode of 
+            case monster.yMode of
                 ListenY x ->
-                    if dx < x && dx > (-x) then
+                    if dx < x && dx > -x then
                         Follow
+
                     else
                         ListenY x
-                StopY -> 
+
+                StopY ->
                     StopY
-                Follow -> 
+
+                Follow ->
                     Follow
-        
-        newMonster = { monster | xMode = newXMode, yMode = newYMode }
 
-        newMonsters = Array.set id newMonster model.monsters
+        newMonster =
+            { monster | xMode = newXMode, yMode = newYMode }
 
-        newModel = { model | monsters = newMonsters }
+        newMonsters =
+            Array.set id newMonster model.monsters
+
+        newModel =
+            { model | monsters = newMonsters }
     in
     newModel
+
 
 {-| update one monster's move in x direction, not exposed
 -}
@@ -169,33 +192,42 @@ updateOneMonsterMoveX id model =
         monster =
             Array.get id model.monsters
                 |> withDefault defMonster
-        
-        oldX = Tuple.first monster.pos
 
-        newX = 
+        oldX =
+            Tuple.first monster.pos
+
+        newX =
             case monster.xMode of
-                StopX -> 
+                StopX ->
                     oldX
+
                 ListenX _ ->
                     oldX
+
                 Move ->
                     oldX + monster.xSpeed
-        
+
         newSpeed =
             if newX < Tuple.first monster.range && monster.xSpeed < 0 then
                 -monster.xSpeed
+
             else if newX > Tuple.second monster.range && monster.xSpeed > 0 then
                 -monster.xSpeed
+
             else
                 monster.xSpeed
-        
-        newMonster = { monster | pos = ( newX, Tuple.second (monster.pos)), xSpeed = newSpeed }
 
-        newMonsters = Array.set id newMonster model.monsters
+        newMonster =
+            { monster | pos = ( newX, Tuple.second monster.pos ), xSpeed = newSpeed }
 
-        newModel = { model | monsters = newMonsters }                          
+        newMonsters =
+            Array.set id newMonster model.monsters
+
+        newModel =
+            { model | monsters = newMonsters }
     in
     newModel
+
 
 {-| update one monster's move in y direction, not exposed
 -}
@@ -205,42 +237,53 @@ updateOneMonsterMoveY id model =
         monster =
             Array.get id model.monsters
                 |> withDefault defMonster
-        
-        oldY = Tuple.second monster.pos
 
-        playerspeed = Tuple.second model.player.velocity
+        oldY =
+            Tuple.second monster.pos
+
+        playerspeed =
+            Tuple.second model.player.velocity
 
         newYSpeed =
             case monster.yMode of
                 StopY ->
                     0
+
                 ListenY _ ->
                     0
+
                 Follow ->
                     if playerspeed < 0 then
                         playerspeed
+
                     else
                         monster.ySpeed + 0.1
-        
-        newY = 
+
+        newY =
             if oldY + newYSpeed > monster.fixY then
                 monster.fixY
+
             else
                 oldY + newYSpeed
-        
-        newnewYSpeed = 
+
+        newnewYSpeed =
             if oldY + newYSpeed > monster.fixY then
                 0
+
             else
                 newYSpeed
 
-        newMonster = { monster | pos = ( Tuple.first monster.pos, newY), ySpeed = newnewYSpeed }   
+        newMonster =
+            { monster | pos = ( Tuple.first monster.pos, newY ), ySpeed = newnewYSpeed }
 
-        newMonsters = Array.set id newMonster model.monsters
+        newMonsters =
+            Array.set id newMonster model.monsters
 
-        newModel = { model | monsters = newMonsters }                          
+        newModel =
+            { model | monsters = newMonsters }
     in
     newModel
+
 
 {-| update one monster's collision, not exposed
 -}
@@ -249,15 +292,17 @@ updateOneMonsterCollision id model =
     let
         monster =
             Array.get id model.monsters
-                |> withDefault defMonster 
+                |> withDefault defMonster
 
         newModel =
             if Player.playerIfCollidePoly model monster == GlobalBasics.NotCollided then
                 model
+
             else
                 Player.playerDead model
     in
     newModel
+
 
 {-| view one monster, used in view, not exposed.
 -}
@@ -281,6 +326,7 @@ viewOneMonster model monster =
                 []
             ]
 
+
 {-| view function of monster
 -}
 view : { model | monsters : Array Monster, windowBoundary : GlobalBasics.Pos, levelBoundary : GlobalBasics.Pos, player : Player.Player } -> List (Svg MainType.Msg)
@@ -292,4 +338,4 @@ view model =
         svgMonsterList =
             List.map (\monster -> viewOneMonster model monster) monstersList
     in
-    List.concat svgMonsterList  
+    List.concat svgMonsterList

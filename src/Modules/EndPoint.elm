@@ -108,7 +108,6 @@ update ( model, cmd ) =
     let
         status =
             Player.playerIfCollidePoly model model.endPoint
-
     in
     if status == GlobalBasics.Collided then
         ( Player.playerWin model, cmd )

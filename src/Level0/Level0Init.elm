@@ -1,4 +1,4 @@
-module Level1Init exposing (init)
+module Level0Init exposing (init)
 
 {-| Init of Level1 Model.
 
@@ -104,9 +104,9 @@ init =
                         (Event.quickDuration 10)
                     , Event.init
                         { id = 6, name = "Event6" }
-                        ( Event.AfterActEvent 4)
-                        ( Event.TimeAfterStart 20 )
-                        ( Event.quickDuration 10 )
+                        (Event.AfterActEvent 4)
+                        (Event.TimeAfterStart 20)
+                        (Event.quickDuration 10)
                     ]
             , boundary = Boundary.normalInit
             , player = Player.init ( 50.0, 490.0 )
@@ -157,7 +157,7 @@ init =
                                 (Brick.Detailed 100 100)
                                 (Brick.Visible Brick.NoNextBrickVisibility)
                                 (Brick.Collide Brick.NoNextBrickCollision)
-                                (Brick.NoNextBrickMove)
+                                Brick.NoNextBrickMove
                           ]
                         ]
                     )
@@ -169,16 +169,16 @@ init =
                     [ NoticeBoard.init
                         ( 200.0, 200.0 )
                         (NoticeBoard.Visible "Hello!"
-                            ( NoticeBoard.VisibleAfterEvent
+                            (NoticeBoard.VisibleAfterEvent
                                 4
                                 "Wow, a moving Needle!"
-                                ( NoticeBoard.VisibleAfterEvent
+                                (NoticeBoard.VisibleAfterEvent
                                     2
                                     "Wow, a hidden brick!"
-                                    ( NoticeBoard.VisibleAfterEvent
+                                    (NoticeBoard.VisibleAfterEvent
                                         1
                                         "Wow, a moving brick!"
-                                        ( NoticeBoard.VisibleAfterEvent
+                                        (NoticeBoard.VisibleAfterEvent
                                             3
                                             "Wow, a fake brick!"
                                             NoticeBoard.NoNextNoticeBoardVisibility
@@ -216,7 +216,7 @@ init =
                                 (Array.fromList [ ( 120.0, 260.0 ) ])
                                 5.0
                                 5
-                                ( Needle.Move
+                                (Needle.Move
                                     (Array.fromList [ ( 120.0, 430.0 ) ])
                                     10.0
                                     0

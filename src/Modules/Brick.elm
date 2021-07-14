@@ -1,10 +1,9 @@
 module Brick exposing
     ( BrickVisibility(..), BrickCollision(..), BrickMove(..), BrickAppearance(..), Brick
-    , init, quickInit,quickInit_, quickBrickRow,fallingRow,brickCollisionBox
+    , init, quickInit
     , view
     , update
-    , quickCollisionBox
-    , hidden_, hidden
+    , brickCollisionBox, fallingRow, hidden, hidden_, quickBrickRow, quickCollisionBox, quickInit_
     )
 
 {-| The block unit. The most common unit in the game
@@ -122,7 +121,7 @@ type BrickMove
 {-| For future different appearance of blocks.
 -}
 type BrickAppearance
-    = NormalAppearance  --standard brick
+    = NormalAppearance --standard brick
     | Detailed Float Float String --with designable size and color
 
 
@@ -184,10 +183,11 @@ quickInit ( x, y ) =
     , brickMove = NoNextBrickMove
     }
 
+
 {-| another version of 'quickInit'. can be used to create bricks with 'Detailed' appearance type.
 -}
-quickInit_ : ( Float, Float )->(Float,Float) -> String-> Brick
-quickInit_ ( x, y ) (width,height) color=
+quickInit_ : ( Float, Float ) -> ( Float, Float ) -> String -> Brick
+quickInit_ ( x, y ) ( width, height ) color =
     { pos = ( x, y )
     , collisionBox = brickCollisionBox (Detailed width height color)
     , appearance = Detailed width height color
@@ -196,9 +196,10 @@ quickInit_ ( x, y ) (width,height) color=
     , brickMove = NoNextBrickMove
     }
 
+
 {-| quick function to create a row of bricks by providing 'row index' n, 'starting point' x, 'ending point' y.
 -}
-quickBrickRow: Int-> Int -> Int -> List Brick
+quickBrickRow : Int -> Int -> Int -> List Brick
 quickBrickRow n x y =
     List.map (\i -> quickInit (GlobalBasics.blockPos ( i, n ))) (List.range x y)
 
@@ -212,27 +213,31 @@ fallingBrick ( x, y ) id =
     , appearance = NormalAppearance
     , brickVisibility = Visible NoNextBrickVisibility
     , brickCollision = Collide NoNextBrickCollision
-    , brickMove = Move
-                    (Array.fromList [])
-                    0.0
-                    id
-                    (Move
-                        (Array.fromList
-                            [ (x,700.0)
-                            ]
-                        )
-                        5.0
-                        -1
-                        NoNextBrickMove
-                    )
+    , brickMove =
+        Move
+            (Array.fromList [])
+            0.0
+            id
+            (Move
+                (Array.fromList
+                    [ ( x, 700.0 )
+                    ]
+                )
+                5.0
+                -1
+                NoNextBrickMove
+            )
     }
-{-| quick function to create a row of 'falling bricks' by providing 'row index' n, 'starting point' x, 'ending point' y. 
+
+
+{-| quick function to create a row of 'falling bricks' by providing 'row index' n, 'starting point' x, 'ending point' y.
 -}
-fallingRow: Int-> Int -> Int -> Int -> List Brick
-fallingRow n x y id=
+fallingRow : Int -> Int -> Int -> Int -> List Brick
+fallingRow n x y id =
     List.map (\i -> fallingBrick (GlobalBasics.blockPos ( i, n )) id) (List.range x y)
 
-{-| quick function to create one 'hidden brick' which is initially invisible but always collidable. 
+
+{-| quick function to create one 'hidden brick' which is initially invisible but always collidable.
 -}
 hidden : ( Float, Float ) -> Int -> Brick
 hidden ( x, y ) id =
@@ -244,7 +249,8 @@ hidden ( x, y ) id =
     , brickMove = NoNextBrickMove
     }
 
-{-| quick function to create one 'hidden brick' which is initially invisible and initially non-collidable. 
+
+{-| quick function to create one 'hidden brick' which is initially invisible and initially non-collidable.
 -}
 hidden_ : ( Int, Int ) -> Int -> Brick
 hidden_ ( x, y ) id =
@@ -255,9 +261,11 @@ hidden_ ( x, y ) id =
     , brickCollision = NoCollide (CollideAfterEvent id NoNextBrickCollision)
     , brickMove = NoNextBrickMove
     }
+
+
 {-| default collisionBox
 -}
-brickCollisionBox :  BrickAppearance -> GlobalBasics.CollisionBox
+brickCollisionBox : BrickAppearance -> GlobalBasics.CollisionBox
 brickCollisionBox brickAppearance =
     case brickAppearance of
         NormalAppearance ->
@@ -273,21 +281,22 @@ brickCollisionBox brickAppearance =
         Detailed width height _ ->
             GlobalBasics.Polygon
                 (Array.fromList
-                     [ ( ( 0.0, 0.0 ), ( width, 0.0 ) )
-                     , ( ( width, 0.0 ), ( width, height ) )
-                     , ( ( width, height ), ( 0.0, height ) )
-                     , ( ( 0.0, height ), ( 0.0, 0.0 ) )
-                     ]
-
+                    [ ( ( 0.0, 0.0 ), ( width, 0.0 ) )
+                    , ( ( width, 0.0 ), ( width, height ) )
+                    , ( ( width, height ), ( 0.0, height ) )
+                    , ( ( 0.0, height ), ( 0.0, 0.0 ) )
+                    ]
                 )
+
 
 {-| quick function to yield the 'collisionBox' of a brick given the position
 -}
-quickCollisionBox: (Float,Float) -> BrickAppearance -> GlobalBasics.CollisionBox
-quickCollisionBox (x,y) brickAppearance=
+quickCollisionBox : ( Float, Float ) -> BrickAppearance -> GlobalBasics.CollisionBox
+quickCollisionBox ( x, y ) brickAppearance =
     case brickCollisionBox brickAppearance of
         GlobalBasics.Polygon poly ->
-            GlobalBasics.Polygon (GlobalBasics.addPolyPos poly (GlobalBasics.blockPos_ (x,y)) )
+            GlobalBasics.Polygon (GlobalBasics.addPolyPos poly (GlobalBasics.blockPos_ ( x, y )))
+
 
 {-| view one brick, used in view, not exposed.
 -}
@@ -300,7 +309,7 @@ viewOneBrick model brick =
                     brick.pos
             in
             [ Svg.rect
-                ( List.append
+                (List.append
                     [ SvgAttr.x (String.fromFloat (ViewMove.deltaX model + brickX))
                     , SvgAttr.y (String.fromFloat (ViewMove.deltaY model + brickY))
                     , SvgAttr.strokeWidth "2"
@@ -308,24 +317,24 @@ viewOneBrick model brick =
                     , case brick.appearance of
                         NormalAppearance ->
                             SvgAttr.fill "#00000050"
-                        Detailed width height color->
+
+                        Detailed width height color ->
                             SvgAttr.fill color
                     ]
-                    ( case brick.appearance of
+                    (case brick.appearance of
                         NormalAppearance ->
                             [ SvgAttr.width (String.fromFloat brickWidth)
                             , SvgAttr.height (String.fromFloat brickHeight)
                             ]
 
-                        Detailed width height color->
+                        Detailed width height color ->
                             [ SvgAttr.width (String.fromFloat width)
                             , SvgAttr.height (String.fromFloat height)
                             ]
                     )
                 )
-                    []
+                []
             ]
-
 
         Invisible _ ->
             []
@@ -494,8 +503,10 @@ updateOneBrickCollision id model =
                                                 , collisionBox = GlobalBasics.Polygon (Array.fromList [ upLS ])
                                                 }
                                                 == GlobalBasics.Collided
-                                                && abs (Tuple.second model.player.velocity) <= 0.2
-                                                && abs (playerDownY - blockUpY) <= 0.2
+                                                && abs (Tuple.second model.player.velocity)
+                                                <= 0.2
+                                                && abs (playerDownY - blockUpY)
+                                                <= 0.2
                                         then
                                             Player.playerRefreshJump newBricksModel
 
