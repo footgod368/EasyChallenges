@@ -2,7 +2,7 @@ module SavePoint exposing
     ( SavePointAppearance(..), SavePoint
     , init, defSavePoint, defSaveBox
     , view
-    , update
+    , update, updateReset
     )
 
 {-| The SavePoint unit. An important unit to save the player's progression.
@@ -30,7 +30,7 @@ module SavePoint exposing
 
 # update
 
-@docs update, updateOneSavePoint
+@docs update, updateOneSavePoint, updateReset
 
 -}
 
@@ -187,3 +187,33 @@ updateOneSavePoint id model =
 update : ( { model | player : Player.Player, savePoints : Array SavePoint }, Cmd MainType.Msg ) -> ( { model | player : Player.Player, savePoints : Array SavePoint }, Cmd MainType.Msg )
 update ( model, cmd ) =
     ( List.foldl updateOneSavePoint model (List.range 0 (Array.length model.savePoints - 1)), cmd )
+
+
+updateReset : (() -> ({ model | savePoints : Array SavePoint, player: Player.Player}, Cmd MainType.Msg))-> ( { model | player : Player.Player, savePoints : Array SavePoint }, Cmd MainType.Msg )-> ( { model | player : Player.Player, savePoints : Array SavePoint }, Cmd MainType.Msg )
+updateReset levelInit ( model, cmd ) =
+    let
+        ( initModel, initCmd ) =
+            levelInit ()
+
+        oldSavePoints =
+            model.savePoints
+
+        oldSaveNumber =
+            model.player.saveNumber
+
+        oldDeadTimes =
+            model.player.deadTimes
+
+        lastsavePoint =
+            Array.get oldSaveNumber oldSavePoints |> withDefault defSavePoint
+
+        player =
+            Player.init lastsavePoint.pos
+
+        newPlayer =
+            { player | saveNumber = oldSaveNumber, deadTimes = oldDeadTimes + 1 }
+
+        newInitModel =
+            { initModel | savePoints = oldSavePoints, player = newPlayer }
+    in
+    ( newInitModel, initCmd )

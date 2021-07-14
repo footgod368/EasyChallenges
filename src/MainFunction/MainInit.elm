@@ -22,7 +22,7 @@ init : () -> ( MainModel.Model, Cmd MainType.Msg )
 init a =
     let
         ( level1Model, level1Cmd ) =
-            Level1Init.init
+            Level1Init.init ()
 
         mainModel =
             MainModel.Model MainType.Level1 level1Model
