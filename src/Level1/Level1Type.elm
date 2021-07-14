@@ -12,14 +12,15 @@ module Level1Type exposing (Model)
 import Array exposing (Array)
 import Boundary
 import Brick
+import EndPoint
 import Event
 import GlobalBasics
+import Monster
 import Needle
 import NoticeBoard
 import Player
 import SavePoint
-import EndPoint
-import Monster
+
 
 {-| `Model` that used in level1
 -}

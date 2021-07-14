@@ -1,4 +1,4 @@
-module Level1Init exposing (init)
+module Level0Init exposing (init)
 
 {-| Init of Level1 Model.
 
@@ -104,17 +104,17 @@ init =
                         (Event.quickDuration 10)
                     , Event.init
                         { id = 6, name = "Event6" }
-                        ( Event.AfterActEvent 4)
-                        ( Event.TimeAfterStart 20 )
-                        ( Event.quickDuration 10 )
+                        (Event.AfterActEvent 4)
+                        (Event.TimeAfterStart 20)
+                        (Event.quickDuration 10)
                     ]
             , boundary = Boundary.normalInit
             , player = Player.init ( 50.0, 490.0 )
             , bricks =
                 Array.fromList
                     (List.concat
-                        [ List.map (\i -> Brick.quickInit (GlobalBasics.blockPos ( i, 15 ))) (List.range 1 5)
-                        , List.map (\i -> Brick.quickInit (GlobalBasics.blockPos ( i, 12 ))) (List.range 2 5)
+                        [ List.map (\i -> Brick.initPos (GlobalBasics.blockPos ( i, 15 ))) (List.range 1 5)
+                        , List.map (\i -> Brick.initPos (GlobalBasics.blockPos ( i, 12 ))) (List.range 2 5)
                         , [ Brick.init
                                 (GlobalBasics.blockPos ( 18, 14 ))
                                 Brick.NormalAppearance
@@ -122,9 +122,9 @@ init =
                                 (Brick.NoCollide Brick.NoNextBrickCollision)
                                 Brick.NoNextBrickMove
                           ]
-                        , [ Brick.quickInit (GlobalBasics.blockPos ( 14, 14 ))
+                        , [ Brick.initPos (GlobalBasics.blockPos ( 14, 14 ))
                           ]
-                        , List.map (\i -> Brick.quickInit (GlobalBasics.blockPos ( 19, i ))) (List.range 11 14)
+                        , List.map (\i -> Brick.initPos (GlobalBasics.blockPos ( 19, i ))) (List.range 11 14)
                         , [ Brick.init
                                 (GlobalBasics.blockPos ( 6, 12 ))
                                 Brick.NormalAppearance
@@ -157,7 +157,7 @@ init =
                                 (Brick.Detailed 100 100)
                                 (Brick.Visible Brick.NoNextBrickVisibility)
                                 (Brick.Collide Brick.NoNextBrickCollision)
-                                (Brick.NoNextBrickMove)
+                                Brick.NoNextBrickMove
                           ]
                         ]
                     )
@@ -169,16 +169,16 @@ init =
                     [ NoticeBoard.init
                         ( 200.0, 200.0 )
                         (NoticeBoard.Visible "Hello!"
-                            ( NoticeBoard.VisibleAfterEvent
+                            (NoticeBoard.VisibleAfterEvent
                                 4
                                 "Wow, a moving Needle!"
-                                ( NoticeBoard.VisibleAfterEvent
+                                (NoticeBoard.VisibleAfterEvent
                                     2
                                     "Wow, a hidden brick!"
-                                    ( NoticeBoard.VisibleAfterEvent
+                                    (NoticeBoard.VisibleAfterEvent
                                         1
                                         "Wow, a moving brick!"
-                                        ( NoticeBoard.VisibleAfterEvent
+                                        (NoticeBoard.VisibleAfterEvent
                                             3
                                             "Wow, a fake brick!"
                                             NoticeBoard.NoNextNoticeBoardVisibility
@@ -202,7 +202,7 @@ init =
                     ]
             , needles =
                 Array.fromList
-                    [ Needle.quickInit (GlobalBasics.addPosPos ( 0.0, 30.0 ) (GlobalBasics.blockPos ( 4, 14 )))
+                    [ Needle.initPos (GlobalBasics.addPosPos ( 0.0, 30.0 ) (GlobalBasics.blockPos ( 4, 14 )))
                     , Needle.init
                         (GlobalBasics.addPosPos ( 0.0, 30.0 ) (GlobalBasics.blockPos ( 4, 11 )))
                         (Needle.NormalNeedle 80.0 Needle.normalNeedleHeight)
@@ -216,7 +216,7 @@ init =
                                 (Array.fromList [ ( 120.0, 260.0 ) ])
                                 5.0
                                 5
-                                ( Needle.Move
+                                (Needle.Move
                                     (Array.fromList [ ( 120.0, 430.0 ) ])
                                     10.0
                                     0

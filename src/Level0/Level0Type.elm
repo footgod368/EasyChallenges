@@ -1,4 +1,4 @@
-module Level1Type exposing (Model)
+module Level0Type exposing (Model)
 
 {-| stores level1 Model
 
@@ -12,13 +12,13 @@ module Level1Type exposing (Model)
 import Array exposing (Array)
 import Boundary
 import Brick
+import EndPoint
 import Event
 import GlobalBasics
 import Needle
 import NoticeBoard
 import Player
 import SavePoint
-import EndPoint
 
 
 {-| `Model` that used in level1

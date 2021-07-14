@@ -1,4 +1,4 @@
-module Level1Update exposing (testUpdate, update)
+module Level0Update exposing (testUpdate, update)
 
 {-| update Level1
 
@@ -8,19 +8,20 @@ module Level1Update exposing (testUpdate, update)
 update
 
 -}
+
 import Array exposing (Array)
-import Maybe exposing (withDefault)
+import Boundary
 import Brick
+import EndPoint
 import Event
+import Level1Init
 import Level1Type
 import MainType
+import Maybe exposing (withDefault)
 import Needle
 import NoticeBoard
 import Player
-import Boundary
-import Level1Init
 import SavePoint
-import EndPoint
 
 
 {-| `update` of Level1
@@ -40,7 +41,7 @@ update msg model =
         MainType.Tick timePassed ->
             let
                 ( newModel, cmd ) =
-                    if ( model.player.liveState /= Player.Dead) then
+                    if model.player.liveState /= Player.Dead then
                         ( model, Cmd.none )
                             |> Player.update
                             |> Event.update
@@ -54,18 +55,34 @@ update msg model =
 
                     else
                         ( model, Cmd.none )
-                initModel = Tuple.first Level1Init.init
-                oldSavePoints = model.savePoints
-                oldSaveNumber = model.player.saveNumber
-                oldDeadTimes = model.player.deadTimes
-                lastsavePoint = Array.get oldSaveNumber oldSavePoints |> withDefault SavePoint.defSavePoint
-                player = Player.init lastsavePoint.pos
-                newPlayer = { player | saveNumber = oldSaveNumber, deadTimes = oldDeadTimes + 1 }
 
-                newInitModel = { initModel | savePoints = oldSavePoints, player = newPlayer }
+                initModel =
+                    Tuple.first Level1Init.init
+
+                oldSavePoints =
+                    model.savePoints
+
+                oldSaveNumber =
+                    model.player.saveNumber
+
+                oldDeadTimes =
+                    model.player.deadTimes
+
+                lastsavePoint =
+                    Array.get oldSaveNumber oldSavePoints |> withDefault SavePoint.defSavePoint
+
+                player =
+                    Player.init lastsavePoint.pos
+
+                newPlayer =
+                    { player | saveNumber = oldSaveNumber, deadTimes = oldDeadTimes + 1 }
+
+                newInitModel =
+                    { initModel | savePoints = oldSavePoints, player = newPlayer }
             in
-            if (Player.checkDead newModel.player) && (List.member 82 newModel.keyPressed) then
+            if Player.checkDead newModel.player && List.member 82 newModel.keyPressed then
                 ( newInitModel, Tuple.second Level1Init.init )
+
             else
                 ( newModel, cmd )
 
@@ -83,7 +100,8 @@ testUpdate times model =
                         |> Player.update
                         |> Event.update
                         |> Brick.update
-                        --|> Player.updateJustPlayerPos
+
+                --|> Player.updateJustPlayerPos
             in
             newTempModel
         )

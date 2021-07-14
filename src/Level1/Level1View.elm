@@ -11,19 +11,19 @@ module Level1View exposing (view)
 
 import Boundary
 import Brick
+import EndPoint
 import Html exposing (Html, div)
 import Html.Attributes as HtmlAttr
 import Level1Type
 import MainType
+import Monster
 import Needle
 import NoticeBoard
 import Player
 import SavePoint
-import EndPoint
-import Monster
 import Svg
 import Svg.Attributes as SvgAttr
-import Monster
+
 
 {-| `view` of level1.
 -}
@@ -37,8 +37,8 @@ view model =
         , HtmlAttr.style "top" "5px"
         ]
         [ Svg.svg
-            [ SvgAttr.width (String.fromFloat (Tuple.first model.windowBoundary) )
-            , SvgAttr.height (String.fromFloat (Tuple.second model.windowBoundary) )
+            [ SvgAttr.width (String.fromFloat (Tuple.first model.windowBoundary))
+            , SvgAttr.height (String.fromFloat (Tuple.second model.windowBoundary))
             ]
             (SavePoint.view model
                 ++ Brick.view model

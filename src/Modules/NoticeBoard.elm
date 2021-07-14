@@ -31,6 +31,7 @@ module NoticeBoard exposing
 -}
 
 import Array exposing (Array)
+import Brick
 import Event
 import GlobalBasics
 import MainType
@@ -39,7 +40,6 @@ import Player
 import Svg exposing (Svg, text)
 import Svg.Attributes as SvgAttr
 import ViewMove
-import Brick
 
 
 {-| Almost same as NoticeBoard's visibility, except adding new words that can be changed. The words are stored in
@@ -110,16 +110,20 @@ quickInit pos info fontSize =
     , fontSize = fontSize
     }
 
+
 {-| quick function to create a 'brick' with proper 'Detailed' type as the boundary of 'NoticeBoard'
 -}
-boundary : (Float,Float) -> (Float,Float) -> List Brick.Brick
-boundary (x,y) (width,height) =
+boundary : ( Float, Float ) -> ( Float, Float ) -> List Brick.Brick
+boundary ( x, y ) ( width, height ) =
     let
-        (blockX,blockY) = GlobalBasics.blockSize
-        tempBrick = Brick.quickInit_ (GlobalBasics.blockPos_ (x,y)) (width*blockX,height*blockY) "#F5F5F5"
+        ( blockX, blockY ) =
+            GlobalBasics.blockSize
+
+        tempBrick =
+            Brick.initPosVolumeColor (GlobalBasics.blockPosFloat ( x, y )) ( width * blockX, height * blockY ) "#F5F5F5"
     in
-    [{tempBrick | brickCollision = Brick.NoCollide Brick.NoNextBrickCollision}]
-                        
+    [ { tempBrick | brickCollision = Brick.NoCollide Brick.NoNextBrickCollision } ]
+
 
 {-| update function of noticeBoard unit
 -}
