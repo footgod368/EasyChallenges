@@ -3,7 +3,7 @@ module GlobalBasics exposing
     , LineSeg, addLSPos, minusLSPos, addPolyPos
     , defPos, defLineSeg, defPoly
     , CollisionStatus(..), CollisionBox(..), ifCollideLSPoly, ifCollidePolyPoly
-    , blockPos, blockSize
+    , blockPos, blockSize,blockPos_
     )
 
 {-| The global types that are used in all game.
@@ -437,5 +437,19 @@ blockPos ( x, y ) =
 
         posY =
             (toFloat y - 1.0) * blockY
+    in
+    ( posX, posY )
+
+blockPos_ : ( Float, Float ) -> ( Float, Float )
+blockPos_ ( x, y ) =
+    let
+        ( blockX, blockY ) =
+            blockSize
+
+        posX =
+            (x - 1.0) * blockX
+
+        posY =
+            (y - 1.0) * blockY
     in
     ( posX, posY )

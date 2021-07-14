@@ -19,7 +19,7 @@ import NoticeBoard
 import Player
 import SavePoint
 import EndPoint
-import Monster
+
 
 {-| `Model` that used in level1
 -}
@@ -35,6 +35,5 @@ type alias Model =
     , endPoint : EndPoint.EndPoint
     , noticeBoards : Array NoticeBoard.NoticeBoard
     , needles : Array Needle.Needle
-    , monsters : Array Monster.Monster
     , keyPressed : List Int
     }

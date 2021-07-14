@@ -67,7 +67,7 @@ type IfActEventAct
     | ActEventNotAct
 
 
-{-| `sumActEventById` is a function that helps `ifActEventById`. Tasks `Event` id and a `ActEvent`, returns sum + 1 if
+{-| `sumActEventById` is a function that helps `ifActEventById`. Takes `Event` id and a `ActEvent`, returns sum + 1 if
 `id` of `Event` matched `ActEvent`
 -}
 sumActEventById : Int -> ActEvent -> Int -> Int
@@ -197,7 +197,7 @@ ifActEvent model eventInfo =
 
 
 {-| `activateEvent` activates a event. Normally, in all levels, there should be a `Array ActEvent` value `actEvent` in
-`Model`. `activeEvent` takes the `Model`, `Event` and returns `Model` with this `Event` activated. You can use it this
+`Model`. `activateEvent` takes the `Model`, `Event` and returns `Model` with this `Event` activated. You can use it this
 way:
 
     type alias EgModel =
@@ -424,7 +424,7 @@ quickDuration duration =
     EventDuration 1 0 duration 0
 
 
-{-| `nulEvent` is used in maybe's withDefault function. Use it directly, noe exposed.
+{-| `defEvent` is used in maybe's withDefault function. Use it directly, noe exposed.
 -}
 defEvent : Event
 defEvent =

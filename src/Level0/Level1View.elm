@@ -22,7 +22,7 @@ import SavePoint
 import EndPoint
 import Svg
 import Svg.Attributes as SvgAttr
-import Monster
+
 
 {-| `view` of level1.
 -}
@@ -40,13 +40,12 @@ view model =
             , SvgAttr.height (String.fromFloat (Tuple.second model.windowBoundary) )
             ]
             (SavePoint.view model
-                ++ Brick.view model
                 ++ EndPoint.view model
+                ++ Player.view model
+                ++ Brick.view model
                 ++ Boundary.view model
                 ++ NoticeBoard.view model
                 ++ Needle.view model
-                ++ Monster.view model
-                ++ Player.view model
             )
         , Html.audio
             [ HtmlAttr.width 0
