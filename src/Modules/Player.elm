@@ -48,7 +48,6 @@ import Maybe exposing (withDefault)
 import Svg exposing (Svg)
 import Svg.Attributes as SvgAttr
 
-
 {-| `PlayerJump` defines the statuses of the jump. PLayerJump (jumpNum : Int) (jumpFrame : Int). jumpNum : how many
 times left can the player jump. jumpFrame : what frame is this jump if it's happening, -1 represents not jumping now
 and last jump has keyUp, -2 represents jump has keyDown but last jump hasn't release.
@@ -409,7 +408,7 @@ view model =
         , SvgAttr.fill "#000000"
         , SvgAttr.opacity (String.fromInt deadOpacity)
         ]
-        [ Svg.text ("You dead! Dead times: " ++ (String.fromInt model.player.deadTimes) )
+        [ Svg.text ("You dead! Dead times: " ++ (String.fromInt model.player.deadTimes)  )
         ]
       ,
       Svg.text_
