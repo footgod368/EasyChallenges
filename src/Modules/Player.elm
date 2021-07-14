@@ -714,17 +714,23 @@ playerCollideRigidBody model unit =
                                             else
                                                 collideXModel
 
-                                        --newModel =
-                                        --    let
-                                        --        oldPlayer =
-                                        --            collideYModel.player
-                                        --
-                                        --        newPlayer =
-                                        --                { oldPlayer | pos = oldPlayer.lastPos }
-                                        --    in
-                                        --    { collideYModel | player = newPlayer }
                                     in
-                                    collideYModel
+                                    if (collideYModel.player.ifChangeBackToLastPosX == False
+                                        && collideYModel.player.ifChangeBackToLastPosX == False) then
+                                        let
+                                            oldPlayer =
+                                                collideYModel.player
+
+                                            newPlayer =
+                                                { oldPlayer | ifChangeBackToLastPosX = True}
+
+                                            newCollideYModel =
+                                                { collideYModel | player = newPlayer}
+                                        in
+                                        newCollideYModel
+
+                                    else
+                                        collideYModel
 
                             3 ->
                                 if
