@@ -24,6 +24,7 @@ import NoticeBoard
 import Player
 import SavePoint
 import Task
+import Event exposing (Event)
 
 
 {-| `init` of Level1 \`Model
@@ -37,94 +38,18 @@ init a =
             , actEvent = Array.fromList []
             , event =
                 Array.fromList
-                    [ Event.init
-                        { id = 1, name = "first falling ground" }
-                        Event.StartActivated
-                        (Event.PlayerCollide
-                            (GlobalBasics.Polygon
-                                (Array.fromList
-                                    [ ( GlobalBasics.blockPos ( 6, 1 ), GlobalBasics.blockPos ( 6, 15 ) )
-                                    ]
-                                )
-                            )
-                        )
-                        (Event.quickDuration 10)
-                    , Event.init
-                        { id = 2, name = "first ?" }
-                        Event.StartActivated
-                        (Event.PlayerCollide
-                            (GlobalBasics.Polygon (Array.fromList [ ( ( 560, 490 ), ( 600, 490 ) ) ]))
-                        )
-                        (Event.quickDuration 10)
-                    , Event.init
-                        { id = 3, name = "first falling needles" }
-                        Event.StartActivated
-                        (Event.PlayerCollide
-                            (GlobalBasics.Polygon (Array.fromList [ ( GlobalBasics.blockPos ( 23, 13 ), GlobalBasics.blockPos ( 23, 20 ) ) ]))
-                        )
-                        (Event.quickDuration 10)
-                    , Event.init
-                        { id = 4, name = "second ?" }
-                        Event.StartActivated
-                        (Event.PlayerCollide
-                            (GlobalBasics.Polygon (Array.fromList [ ( GlobalBasics.blockPos ( 24, 10 ), GlobalBasics.blockPos ( 25, 10 ) ) ]))
-                        )
-                        (Event.quickDuration 10)
-                    , Event.init
-                        { id = 5, name = "fisrt hidden brick" }
-                        Event.StartActivated
-                        (Event.PlayerCollide
-                            (Brick.quickCollisionBox ( 4.5, 12 ) Brick.NormalAppearance)
-                        )
-                        (Event.quickDuration 10)
-                    , Event.init
-                        { id = 6, name = "second hidden brick" }
-                        Event.StartActivated
-                        (Event.PlayerCollide
-                            (Brick.quickCollisionBox ( 5.5, 12 ) Brick.NormalAppearance)
-                        )
-                        (Event.quickDuration 10)
-                    , Event.init
-                        { id = 7, name = "third hidden brick" }
-                        Event.StartActivated
-                        (Event.PlayerCollide
-                            (Brick.quickCollisionBox ( 32.5, 12 ) Brick.NormalAppearance)
-                        )
-                        (Event.quickDuration 10)
-                    , Event.init
-                        { id = 8, name = "fourth hidden brick" }
-                        Event.StartActivated
-                        (Event.PlayerCollide
-                            (Brick.quickCollisionBox ( 33.5, 12 ) Brick.NormalAppearance)
-                        )
-                        (Event.quickDuration 10)
-                    , Event.init
-                        { id = 9, name = "first hidden needles" }
-                        Event.StartActivated
-                        (Event.PlayerCollide
-                            (GlobalBasics.Polygon
-                                (Array.fromList
-                                    [ ( GlobalBasics.blockPosFloat ( 31, 9.26 ), GlobalBasics.blockPosFloat ( 37, 9.26 ) )
-                                    , ( GlobalBasics.blockPosFloat ( 31, 8.9 ), GlobalBasics.blockPosFloat ( 37, 8.9 ) )
-                                    ]
-                                )
-                            )
-                        )
-                        (Event.quickDuration 10)
-                    , Event.init
-                        { id = 10, name = "fifth hidden brick" }
-                        Event.StartActivated
-                        (Event.PlayerCollide
-                            (Brick.quickCollisionBox ( 44, 12 ) Brick.NormalAppearance)
-                        )
-                        (Event.quickDuration 10)
-                    , Event.init
-                        { id = 11, name = "sixth hidden brick" }
-                        Event.StartActivated
-                        (Event.PlayerCollide
-                            (Brick.quickCollisionBox ( 45, 12 ) Brick.NormalAppearance)
-                        )
-                        (Event.quickDuration 10)
+                    [ Event.hitLineSeg 1 "first falling ground" (GlobalBasics.blockPosFloat (6,12.5)) (GlobalBasics.blockPosFloat (6,15))
+                    , Event.hitLineSeg 2 "first ?" (564,491) (604,491)
+                    , Event.hitLineSeg 3 "first falling needles" (GlobalBasics.blockPosFloat (23,13)) (GlobalBasics.blockPosFloat (23,20))
+                    , Event.hitLineSeg 4 "second ?"  (GlobalBasics.blockPosFloat ( 24.1, 10 ))  (GlobalBasics.blockPosFloat ( 24.9, 10 ))
+                    , Event.hitBlock 5 "first hidden brick" (4.5,12) (1,1)
+                    , Event.hitBlock 6 "second hidden brick" (5.5,12) (1,1)
+                    , Event.hitBlock 7 "third hidden brick" (32.5,12) (1,1)
+                    , Event.hitBlock 8 "fourth hidden brick" (33.5,12) (1,1)
+                    , Event.hitLineSeg 9 "first hidden needles" (GlobalBasics.blockPosFloat ( 31, 9.26 )) (GlobalBasics.blockPosFloat ( 37, 9.26 ))
+                    ,Event.hitLineSeg 9 "first hidden needles" (GlobalBasics.blockPosFloat ( 31, 8.99 )) (GlobalBasics.blockPosFloat ( 37, 8.99 ))
+                    , Event.hitBlock 10 "fifth hidden brick" (44,12) (1,1)
+                    , Event.hitBlock 11 "sixth hidden brick" (45,12) (1,1)
                     ]
             , boundary = Boundary.normalInit
             , player = Player.init ( 50.0, 490.0 )

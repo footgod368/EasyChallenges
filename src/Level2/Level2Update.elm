@@ -57,33 +57,9 @@ update msg model =
 
                     else
                         ( model, Cmd.none )
-
-                initModel =
-                    Tuple.first Level2Init.init
-
-                oldSavePoints =
-                    model.savePoints
-
-                oldSaveNumber =
-                    model.player.saveNumber
-
-                oldDeadTimes =
-                    model.player.deadTimes
-
-                lastsavePoint =
-                    Array.get oldSaveNumber oldSavePoints |> withDefault SavePoint.defSavePoint
-
-                player =
-                    Player.init lastsavePoint.pos
-
-                newPlayer =
-                    { player | saveNumber = oldSaveNumber, deadTimes = oldDeadTimes + 1 }
-
-                newInitModel =
-                    { initModel | savePoints = oldSavePoints, player = newPlayer }
             in
             if List.member 82 newModel.keyPressed then
-                ( newInitModel, Tuple.second Level2Init.init )
+                SavePoint.updateReset Level2Init.init ( model, Cmd.none )
 
             else
                 ( newModel, cmd )

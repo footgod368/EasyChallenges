@@ -135,7 +135,7 @@ normalNeedleWidth =
 -}
 normalNeedleHeight : Float
 normalNeedleHeight =
-    Tuple.second GlobalBasics.blockSize / 4.0
+    Tuple.second GlobalBasics.blockSize / 20.0
 
 
 {-| `Needle` is a record of the block unit. See detail definitions in individual definition.
@@ -277,7 +277,7 @@ viewOneNeedle model needle =
                     (case needle.appearance of
                         NormalNeedle width height ->
                             [ SvgAttr.width (String.fromFloat (width + 2.0))
-                            , SvgAttr.height (String.fromFloat height)
+                            , SvgAttr.height (String.fromFloat 10.0)
                             ]
                     )
                 )
