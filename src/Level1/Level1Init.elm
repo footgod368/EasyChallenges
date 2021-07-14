@@ -104,8 +104,8 @@ init =
                         (Event.PlayerCollide
                             (GlobalBasics.Polygon
                                 (Array.fromList
-                                    [ ( GlobalBasics.blockPos_ ( 31, 9.26 ), GlobalBasics.blockPos_ ( 37, 9.26 ) )
-                                    , ( GlobalBasics.blockPos_ ( 31, 8.9 ), GlobalBasics.blockPos_ ( 37, 8.9 ) )
+                                    [ ( GlobalBasics.blockPosFloat ( 31, 9.26 ), GlobalBasics.blockPosFloat ( 37, 9.26 ) )
+                                    , ( GlobalBasics.blockPosFloat ( 31, 8.9 ), GlobalBasics.blockPosFloat ( 37, 8.9 ) )
                                     ]
                                 )
                             )
@@ -136,14 +136,17 @@ init =
                         , Brick.initFallingRow 15 5 8 1
                         , Brick.initRow 15 9 32
                         , Brick.initRow 12 22 26
-                        , [ Brick.initPosVolumeColor (GlobalBasics.blockPos_ ( 15, 12 )) ( 40, 40 ) "#FFFF00" ]
-                        , [ Brick.initPosVolumeColor (GlobalBasics.blockPos_ ( 24, 9 )) ( 40, 40 ) "#FFFF00" ]
-                        , [ Brick.initCollideHidden ( 25, 9 ) 4
+                        , [ Brick.initPosVolumeColor (GlobalBasics.blockPosFloat ( 15, 12 )) ( 40, 40 ) "#FFFF00" ]
+                        , [ Brick.initPosVolumeColor (GlobalBasics.blockPosFloat ( 24, 9 )) ( 40, 40 ) "#FFFF00" ]
+                        , [ Brick.initCollideHidden ( 22, 8 ) 4
+                          , Brick.initCollideHidden ( 23, 8 ) 4
+                          , Brick.initCollideHidden ( 24, 8 ) 4
+                          , Brick.initCollideHidden ( 25, 8 ) 4
+                          , Brick.initCollideHidden ( 26, 8 ) 4
+                          , Brick.initCollideHidden ( 22, 9 ) 4
                           , Brick.initCollideHidden ( 26, 9 ) 4
                           , Brick.initCollideHidden ( 26, 10 ) 4
                           , Brick.initCollideHidden ( 26, 11 ) 4
-                          , Brick.initCollideHidden ( 23, 9 ) 4
-                          , Brick.initCollideHidden ( 22, 9 ) 4
                           , Brick.initCollideHidden ( 22, 10 ) 4
                           , Brick.initCollideHidden ( 22, 11 ) 4
                           ]
@@ -158,8 +161,8 @@ init =
                         , [ Brick.initNoCollideHidden ( 44, 12 ) 10
                           , Brick.initNoCollideHidden ( 45, 12 ) 11
                           ]
-                        , [ Brick.initPosVolumeColor (GlobalBasics.blockPos_ ( 55, 11.5 )) ( 2.0 * 40.0, 3.5 * 40.0 ) "#008000"
-                          , Brick.initPosVolumeColor (GlobalBasics.blockPos_ ( 67, 11.5 )) ( 2.0 * 40.0, 3.5 * 40.0 ) "#008000"
+                        , [ Brick.initPosVolumeColor (GlobalBasics.blockPosFloat ( 55, 11.5 )) ( 2.0 * 40.0, 3.5 * 40.0 ) "#008000"
+                          , Brick.initPosVolumeColor (GlobalBasics.blockPosFloat ( 67, 11.5 )) ( 2.0 * 40.0, 3.5 * 40.0 ) "#008000"
                           ]
                         ]
                     )
@@ -171,10 +174,11 @@ init =
             , endPoint = EndPoint.init (GlobalBasics.blockPos ( 76, 14 ))
             , noticeBoards =
                 Array.fromList
-                    [ NoticeBoard.quickInit (GlobalBasics.blockPos_ ( 5.5, 7.5 )) "Welcome!" 40
-                    , NoticeBoard.quickInit (GlobalBasics.blockPos_ ( 34.5, 7.5 )) "Caution!" 40
-                    , NoticeBoard.quickInit (GlobalBasics.blockPos_ ( 15.5, 12.85 )) "?" 40
-                    , NoticeBoard.quickInit (GlobalBasics.blockPos_ ( 24.5, 9.85 )) "?" 40
+                    [ NoticeBoard.quickInit (GlobalBasics.blockPosFloat ( 5.5, 7.5 )) "Welcome!" 40
+                    , NoticeBoard.quickInit (GlobalBasics.blockPosFloat ( 34.5, 7.5 )) "Caution!" 40
+                    , NoticeBoard.quickInit (GlobalBasics.blockPosFloat ( 15.5, 12.85 )) "?" 40
+                    , NoticeBoard.quickInit (GlobalBasics.blockPosFloat ( 24.5, 9.85 )) "?" 40
+                    , NoticeBoard.quickInit (GlobalBasics.blockPosFloat (15.0, 7.0)) "Press R to respawn" 40
                     ]
             , needles =
                 Array.fromList
@@ -183,16 +187,16 @@ init =
                         , Needle.initFallingRow 13 22 26 3
                         , [ Needle.initHiddenCollideAfter ( 25, 12 ) 4 ]
                         , Needle.initHiddenRow 9 31 37 9
-                        , [ Needle.initPos (GlobalBasics.blockPos_ ( 46.0, 14.75 ))
-                          , Needle.initPos (GlobalBasics.blockPos_ ( 47.0, 14.75 ))
-                          , Needle.initPos (GlobalBasics.blockPos_ ( 48.0, 14.75 ))
-                          , Needle.initPos (GlobalBasics.blockPos_ ( 49.0, 14.75 ))
+                        , [ Needle.initPos (GlobalBasics.blockPosFloat ( 46.0, 14.75 ))
+                          , Needle.initPos (GlobalBasics.blockPosFloat ( 47.0, 14.75 ))
+                          , Needle.initPos (GlobalBasics.blockPosFloat ( 48.0, 14.75 ))
+                          , Needle.initPos (GlobalBasics.blockPosFloat ( 49.0, 14.75 ))
                           ]
                         ]
                     )
             , monsters =
                 Array.fromList
-                    [ Monster.init (GlobalBasics.blockPos_ ( 66, 14 ))
+                    [ Monster.init (GlobalBasics.blockPosFloat ( 66, 14 ))
                         (Monster.MonsterA 40 40)
                         (Monster.ListenX 100)
                         (Monster.ListenY 100)

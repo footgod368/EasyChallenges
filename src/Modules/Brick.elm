@@ -241,7 +241,7 @@ initFallingRow n x y id =
 -}
 initNoCollideHidden : ( Float, Float ) -> Int -> Brick
 initNoCollideHidden ( x, y ) id =
-    { pos = GlobalBasics.blockPos_ ( x, y )
+    { pos = GlobalBasics.blockPosFloat ( x, y )
     , collisionBox = brickCollisionBox NormalAppearance
     , appearance = NormalAppearance
     , brickVisibility = Invisible (VisibleAfterEvent id NoNextBrickVisibility)
@@ -295,7 +295,7 @@ quickCollisionBox : ( Float, Float ) -> BrickAppearance -> GlobalBasics.Collisio
 quickCollisionBox ( x, y ) brickAppearance =
     case brickCollisionBox brickAppearance of
         GlobalBasics.Polygon poly ->
-            GlobalBasics.Polygon (GlobalBasics.addPolyPos poly (GlobalBasics.blockPos_ ( x, y )))
+            GlobalBasics.Polygon (GlobalBasics.addPolyPos poly (GlobalBasics.blockPosFloat ( x, y )))
 
 
 {-| view one brick, used in view, not exposed.

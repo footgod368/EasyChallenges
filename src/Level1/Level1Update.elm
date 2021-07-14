@@ -82,7 +82,7 @@ update msg model =
                 newInitModel =
                     { initModel | savePoints = oldSavePoints, player = newPlayer }
             in
-            if Player.checkDead newModel.player && List.member 82 newModel.keyPressed then
+            if List.member 82 newModel.keyPressed then
                 ( newInitModel, Tuple.second Level1Init.init )
 
             else
