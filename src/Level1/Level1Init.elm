@@ -43,7 +43,7 @@ init =
                         (Event.PlayerCollide
                             (GlobalBasics.Polygon
                                 (Array.fromList
-                                    [ ( GlobalBasics.blockPos(6,1), GlobalBasics.blockPos(6,15) )
+                                    [ ( GlobalBasics.blockPos_ (6,12.5), GlobalBasics.blockPos_ (6,15) )
                                     ]
                                 )
                             )
@@ -53,7 +53,7 @@ init =
                         { id = 2, name = "first ?" }
                         Event.StartActivated
                         (Event.PlayerCollide
-                            ( GlobalBasics.Polygon (Array.fromList [((560,490),(600,490))]))
+                            ( GlobalBasics.Polygon (Array.fromList [((565,483),(595,483))]))
                         )
                         (Event.quickDuration 10)
                     ,Event.init
@@ -67,7 +67,7 @@ init =
                         {id = 4, name = "second ?"}
                         Event.StartActivated
                         (Event.PlayerCollide
-                            ( GlobalBasics.Polygon (Array.fromList [(GlobalBasics.blockPos (24,10),GlobalBasics.blockPos (25,10))]))
+                            ( GlobalBasics.Polygon (Array.fromList [(GlobalBasics.blockPos_ (24.1,10),GlobalBasics.blockPos_ (24.9,10))]))
                         )
                         (Event.quickDuration 10)
                     ,Event.init
@@ -169,10 +169,12 @@ init =
             , needles =
                 Array.fromList
                     (List.concat
-                    [         
-                        [Needle.quickHidden (15,13) 2]
+                    [   let
+                            tempNeedle = Needle.quickHidden_ (15,13) 2
+                        in
+                        [{tempNeedle | appearance = Needle.NormalNeedle Needle.normalNeedleWidth Needle.normalNeedleHeight}]
                     ,   Needle.fallingRow 13 22 26 3
-                    ,   [Needle.quickHidden_ (25,12) 4]
+                    ,   [Needle.quickHidden_ (25,11.75) 4]
                     ,   Needle.hiddenRow 9 31 37 9
                     ,   [Needle.quickInit (GlobalBasics.blockPos_ (46.0,14.75))
                         ,Needle.quickInit (GlobalBasics.blockPos_ (47.0,14.75))
@@ -180,7 +182,7 @@ init =
                         ,Needle.quickInit (GlobalBasics.blockPos_ (49.0,14.75))]
                     ])
             , monsters = Array.fromList [ Monster.init (GlobalBasics.blockPos_ (66,14)) (Monster.MonsterA 40 40) 
-                                          (Monster.ListenX 100) (Monster.ListenY 100) 1 ( 56*40,65*40)]
+                                          (Monster.ListenX 300) (Monster.ListenY 300) 1 ( 56*40,65*40)]
             , keyPressed = []
             }
     in

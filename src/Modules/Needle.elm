@@ -135,7 +135,7 @@ normalNeedleWidth =
 -}
 normalNeedleHeight : Float
 normalNeedleHeight =
-    Tuple.second GlobalBasics.blockSize / 4.0
+    Tuple.second GlobalBasics.blockSize / 20.0
 
 
 {-| `Needle` is a record of the block unit. See detail definitions in individual definition.
@@ -202,9 +202,9 @@ hiddenRow n n1 n2 id=
 
 {-| quick function to create a needle which is only collidable after a given event. 
 -}
-quickHidden_ : (Int,Int)-> Int -> Needle
+quickHidden_ : (Float,Float)-> Int -> Needle
 quickHidden_ (x,y) id =
-    { pos = (GlobalBasics.blockPos ( x, y ))
+    { pos = (GlobalBasics.blockPos_ ( x, y ))
     , collisionBox = needleCollisionBox (NormalNeedle normalNeedleWidth normalNeedleHeight)
     , appearance = NormalNeedle normalNeedleWidth normalNeedleHeight
     , needleVisibility = Invisible (VisibleAfterEvent id NoNextNeedleVisibility)
@@ -267,7 +267,7 @@ viewOneNeedle model needle =
                     (case needle.appearance of
                         NormalNeedle width height ->
                             [ SvgAttr.width (String.fromFloat (width + 2.0))
-                            , SvgAttr.height (String.fromFloat height)
+                            , SvgAttr.height (String.fromFloat (5*height))
                             ]
                     )
                 )
