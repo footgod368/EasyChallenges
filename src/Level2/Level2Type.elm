@@ -36,6 +36,5 @@ type alias Model =
     , endPoint : EndPoint.EndPoint
     , noticeBoards : Array NoticeBoard.NoticeBoard
     , needles : Array Needle.Needle
-    , monsters : Array Monster.Monster
     , keyPressed : List Int
     }

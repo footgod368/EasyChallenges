@@ -18,7 +18,6 @@ import Level2Init
 import Level2Type
 import MainType
 import Maybe exposing (withDefault)
-import Monster
 import Needle
 import NoticeBoard
 import Player
@@ -52,7 +51,6 @@ update msg model =
                             |> Boundary.update
                             |> NoticeBoard.update
                             |> Needle.update
-                            |> Monster.update
                             |> Player.updateJustPlayerPos
 
                     else

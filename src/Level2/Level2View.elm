@@ -16,7 +16,6 @@ import Html exposing (Html, div)
 import Html.Attributes as HtmlAttr
 import Level2Type
 import MainType
-import Monster
 import Needle
 import NoticeBoard
 import Player
@@ -46,7 +45,6 @@ view model =
                 ++ Boundary.view model
                 ++ NoticeBoard.view model
                 ++ Needle.view model
-                ++ Monster.view model
                 ++ Player.view model
             )
         , Html.audio

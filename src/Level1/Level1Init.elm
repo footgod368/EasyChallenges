@@ -52,11 +52,11 @@ init a =
                     , Event.hitBlock 11 "sixth hidden brick" (45,12) (1,1)
                     ]
             , boundary = Boundary.normalInit
-            , player = Player.init ( 50.0, 490.0 )
+            , player = Player.init (  50.0, 490.0  )
             , bricks =
                 Array.fromList
                     (List.concat
-                        [ NoticeBoard.boundary ( 2, 5 ) ( 7, 4 )
+                        [ [NoticeBoard.boundary ( 2, 5 ) ( 7, 4 )]
                         , Brick.initRow 15 1 4
                         , Brick.initFallingRow 15 5 8 1
                         , Brick.initRow 15 9 32
@@ -79,7 +79,7 @@ init a =
                           , Brick.initNoCollideHidden ( 5.5, 12 ) 6
                           ]
                         , Brick.initRow 15 36 80
-                        , NoticeBoard.boundary ( 31, 5 ) ( 7, 4 )
+                        , [NoticeBoard.boundary ( 31, 5 ) ( 7, 4 )]
                         , [ Brick.initNoCollideHidden ( 32.5, 12 ) 7
                           , Brick.initNoCollideHidden ( 33.5, 12 ) 8
                           ]
