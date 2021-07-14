@@ -113,8 +113,8 @@ init =
             , bricks =
                 Array.fromList
                     (List.concat
-                        [ List.map (\i -> Brick.quickInit (GlobalBasics.blockPos ( i, 15 ))) (List.range 1 5)
-                        , List.map (\i -> Brick.quickInit (GlobalBasics.blockPos ( i, 12 ))) (List.range 2 5)
+                        [ List.map (\i -> Brick.initPos (GlobalBasics.blockPos ( i, 15 ))) (List.range 1 5)
+                        , List.map (\i -> Brick.initPos (GlobalBasics.blockPos ( i, 12 ))) (List.range 2 5)
                         , [ Brick.init
                                 (GlobalBasics.blockPos ( 18, 14 ))
                                 Brick.NormalAppearance
@@ -122,9 +122,9 @@ init =
                                 (Brick.NoCollide Brick.NoNextBrickCollision)
                                 Brick.NoNextBrickMove
                           ]
-                        , [ Brick.quickInit (GlobalBasics.blockPos ( 14, 14 ))
+                        , [ Brick.initPos (GlobalBasics.blockPos ( 14, 14 ))
                           ]
-                        , List.map (\i -> Brick.quickInit (GlobalBasics.blockPos ( 19, i ))) (List.range 11 14)
+                        , List.map (\i -> Brick.initPos (GlobalBasics.blockPos ( 19, i ))) (List.range 11 14)
                         , [ Brick.init
                                 (GlobalBasics.blockPos ( 6, 12 ))
                                 Brick.NormalAppearance
@@ -202,7 +202,7 @@ init =
                     ]
             , needles =
                 Array.fromList
-                    [ Needle.quickInit (GlobalBasics.addPosPos ( 0.0, 30.0 ) (GlobalBasics.blockPos ( 4, 14 )))
+                    [ Needle.initPos (GlobalBasics.addPosPos ( 0.0, 30.0 ) (GlobalBasics.blockPos ( 4, 14 )))
                     , Needle.init
                         (GlobalBasics.addPosPos ( 0.0, 30.0 ) (GlobalBasics.blockPos ( 4, 11 )))
                         (Needle.NormalNeedle 80.0 Needle.normalNeedleHeight)

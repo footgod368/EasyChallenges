@@ -132,34 +132,34 @@ init =
                 Array.fromList
                     (List.concat
                         [ NoticeBoard.boundary ( 2, 5 ) ( 7, 4 )
-                        , Brick.quickBrickRow 15 1 4
-                        , Brick.fallingRow 15 5 8 1
-                        , Brick.quickBrickRow 15 9 32
-                        , Brick.quickBrickRow 12 22 26
-                        , [ Brick.quickInit_ (GlobalBasics.blockPos_ ( 15, 12 )) ( 40, 40 ) "#FFFF00" ]
-                        , [ Brick.quickInit_ (GlobalBasics.blockPos_ ( 24, 9 )) ( 40, 40 ) "#FFFF00" ]
-                        , [ Brick.hidden_ ( 25, 9 ) 4
-                          , Brick.hidden_ ( 26, 9 ) 4
-                          , Brick.hidden_ ( 26, 10 ) 4
-                          , Brick.hidden_ ( 26, 11 ) 4
-                          , Brick.hidden_ ( 23, 9 ) 4
-                          , Brick.hidden_ ( 22, 9 ) 4
-                          , Brick.hidden_ ( 22, 10 ) 4
-                          , Brick.hidden_ ( 22, 11 ) 4
+                        , Brick.initRow 15 1 4
+                        , Brick.initFallingRow 15 5 8 1
+                        , Brick.initRow 15 9 32
+                        , Brick.initRow 12 22 26
+                        , [ Brick.initPosVolumeColor (GlobalBasics.blockPos_ ( 15, 12 )) ( 40, 40 ) "#FFFF00" ]
+                        , [ Brick.initPosVolumeColor (GlobalBasics.blockPos_ ( 24, 9 )) ( 40, 40 ) "#FFFF00" ]
+                        , [ Brick.initCollideHidden ( 25, 9 ) 4
+                          , Brick.initCollideHidden ( 26, 9 ) 4
+                          , Brick.initCollideHidden ( 26, 10 ) 4
+                          , Brick.initCollideHidden ( 26, 11 ) 4
+                          , Brick.initCollideHidden ( 23, 9 ) 4
+                          , Brick.initCollideHidden ( 22, 9 ) 4
+                          , Brick.initCollideHidden ( 22, 10 ) 4
+                          , Brick.initCollideHidden ( 22, 11 ) 4
                           ]
-                        , [ Brick.hidden ( 4.5, 12 ) 5
-                          , Brick.hidden ( 5.5, 12 ) 6
+                        , [ Brick.initNoCollideHidden ( 4.5, 12 ) 5
+                          , Brick.initNoCollideHidden ( 5.5, 12 ) 6
                           ]
-                        , Brick.quickBrickRow 15 36 80
+                        , Brick.initRow 15 36 80
                         , NoticeBoard.boundary ( 31, 5 ) ( 7, 4 )
-                        , [ Brick.hidden ( 32.5, 12 ) 7
-                          , Brick.hidden ( 33.5, 12 ) 8
+                        , [ Brick.initNoCollideHidden ( 32.5, 12 ) 7
+                          , Brick.initNoCollideHidden ( 33.5, 12 ) 8
                           ]
-                        , [ Brick.hidden ( 44, 12 ) 10
-                          , Brick.hidden ( 45, 12 ) 11
+                        , [ Brick.initNoCollideHidden ( 44, 12 ) 10
+                          , Brick.initNoCollideHidden ( 45, 12 ) 11
                           ]
-                        , [ Brick.quickInit_ (GlobalBasics.blockPos_ ( 55, 11.5 )) ( 2.0 * 40.0, 3.5 * 40.0 ) "#008000"
-                          , Brick.quickInit_ (GlobalBasics.blockPos_ ( 67, 11.5 )) ( 2.0 * 40.0, 3.5 * 40.0 ) "#008000"
+                        , [ Brick.initPosVolumeColor (GlobalBasics.blockPos_ ( 55, 11.5 )) ( 2.0 * 40.0, 3.5 * 40.0 ) "#008000"
+                          , Brick.initPosVolumeColor (GlobalBasics.blockPos_ ( 67, 11.5 )) ( 2.0 * 40.0, 3.5 * 40.0 ) "#008000"
                           ]
                         ]
                     )
@@ -179,14 +179,14 @@ init =
             , needles =
                 Array.fromList
                     (List.concat
-                        [ [ Needle.quickHidden ( 15, 13 ) 2 ]
-                        , Needle.fallingRow 13 22 26 3
-                        , [ Needle.quickHidden_ ( 25, 12 ) 4 ]
-                        , Needle.hiddenRow 9 31 37 9
-                        , [ Needle.quickInit (GlobalBasics.blockPos_ ( 46.0, 14.75 ))
-                          , Needle.quickInit (GlobalBasics.blockPos_ ( 47.0, 14.75 ))
-                          , Needle.quickInit (GlobalBasics.blockPos_ ( 48.0, 14.75 ))
-                          , Needle.quickInit (GlobalBasics.blockPos_ ( 49.0, 14.75 ))
+                        [ [ Needle.initHidden ( 15, 13 ) 2 ]
+                        , Needle.initFallingRow 13 22 26 3
+                        , [ Needle.initHiddenCollideAfter ( 25, 12 ) 4 ]
+                        , Needle.initHiddenRow 9 31 37 9
+                        , [ Needle.initPos (GlobalBasics.blockPos_ ( 46.0, 14.75 ))
+                          , Needle.initPos (GlobalBasics.blockPos_ ( 47.0, 14.75 ))
+                          , Needle.initPos (GlobalBasics.blockPos_ ( 48.0, 14.75 ))
+                          , Needle.initPos (GlobalBasics.blockPos_ ( 49.0, 14.75 ))
                           ]
                         ]
                     )

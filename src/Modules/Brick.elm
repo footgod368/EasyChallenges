@@ -1,9 +1,9 @@
 module Brick exposing
     ( BrickVisibility(..), BrickCollision(..), BrickMove(..), BrickAppearance(..), Brick
-    , init, quickInit
+    , init, initPos, initFallingRow, initNoCollideHidden, initCollideHidden, initRow, quickCollisionBox, initPosVolumeColor
     , view
     , update
-    , brickCollisionBox, fallingRow, hidden, hidden_, quickBrickRow, quickCollisionBox, quickInit_
+    , brickCollisionBox
     )
 
 {-| The block unit. The most common unit in the game
@@ -21,7 +21,7 @@ module Brick exposing
 
 # Init
 
-@docs init, quickInit, defBrick, defBrickCollisionBox
+@docs init, initPos, initFallingRow, initNoCollideHidden, initCollideHidden, initRow, quickCollisionBox, initPosVolumeColor
 
 
 # ViewMove
@@ -155,7 +155,7 @@ type alias Brick =
 -}
 defBrick : Brick
 defBrick =
-    quickInit ( 0, 0 )
+    initPos ( 0, 0 )
 
 
 {-| initiate a brick, with full functions
@@ -173,8 +173,8 @@ init ( x, y ) brickAppearance brickVisibility brickCollision brickMove =
 
 {-| default appearance, always visible, have collision, don't move
 -}
-quickInit : ( Float, Float ) -> Brick
-quickInit ( x, y ) =
+initPos : ( Float, Float ) -> Brick
+initPos ( x, y ) =
     { pos = ( x, y )
     , collisionBox = brickCollisionBox NormalAppearance
     , appearance = NormalAppearance
@@ -186,8 +186,8 @@ quickInit ( x, y ) =
 
 {-| another version of 'quickInit'. can be used to create bricks with 'Detailed' appearance type.
 -}
-quickInit_ : ( Float, Float ) -> ( Float, Float ) -> String -> Brick
-quickInit_ ( x, y ) ( width, height ) color =
+initPosVolumeColor : ( Float, Float ) -> ( Float, Float ) -> String -> Brick
+initPosVolumeColor ( x, y ) ( width, height ) color =
     { pos = ( x, y )
     , collisionBox = brickCollisionBox (Detailed width height color)
     , appearance = Detailed width height color
@@ -199,15 +199,15 @@ quickInit_ ( x, y ) ( width, height ) color =
 
 {-| quick function to create a row of bricks by providing 'row index' n, 'starting point' x, 'ending point' y.
 -}
-quickBrickRow : Int -> Int -> Int -> List Brick
-quickBrickRow n x y =
-    List.map (\i -> quickInit (GlobalBasics.blockPos ( i, n ))) (List.range x y)
+initRow : Int -> Int -> Int -> List Brick
+initRow n x y =
+    List.map (\i -> initPos (GlobalBasics.blockPos ( i, n ))) (List.range x y)
 
 
 {-| quick function to create one 'falling brick' by providing 'positon' of the brick and 'id' of trigger envent.
 -}
-fallingBrick : ( Float, Float ) -> Int -> Brick
-fallingBrick ( x, y ) id =
+initFallingBrick : ( Float, Float ) -> Int -> Brick
+initFallingBrick ( x, y ) id =
     { pos = ( x, y )
     , collisionBox = brickCollisionBox NormalAppearance
     , appearance = NormalAppearance
@@ -232,15 +232,15 @@ fallingBrick ( x, y ) id =
 
 {-| quick function to create a row of 'falling bricks' by providing 'row index' n, 'starting point' x, 'ending point' y.
 -}
-fallingRow : Int -> Int -> Int -> Int -> List Brick
-fallingRow n x y id =
-    List.map (\i -> fallingBrick (GlobalBasics.blockPos ( i, n )) id) (List.range x y)
+initFallingRow : Int -> Int -> Int -> Int -> List Brick
+initFallingRow n x y id =
+    List.map (\i -> initFallingBrick (GlobalBasics.blockPos ( i, n )) id) (List.range x y)
 
 
 {-| quick function to create one 'hidden brick' which is initially invisible but always collidable.
 -}
-hidden : ( Float, Float ) -> Int -> Brick
-hidden ( x, y ) id =
+initNoCollideHidden : ( Float, Float ) -> Int -> Brick
+initNoCollideHidden ( x, y ) id =
     { pos = GlobalBasics.blockPos_ ( x, y )
     , collisionBox = brickCollisionBox NormalAppearance
     , appearance = NormalAppearance
@@ -252,8 +252,8 @@ hidden ( x, y ) id =
 
 {-| quick function to create one 'hidden brick' which is initially invisible and initially non-collidable.
 -}
-hidden_ : ( Int, Int ) -> Int -> Brick
-hidden_ ( x, y ) id =
+initCollideHidden : ( Int, Int ) -> Int -> Brick
+initCollideHidden ( x, y ) id =
     { pos = GlobalBasics.blockPos ( x, y )
     , collisionBox = brickCollisionBox NormalAppearance
     , appearance = NormalAppearance

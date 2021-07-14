@@ -120,7 +120,7 @@ boundary ( x, y ) ( width, height ) =
             GlobalBasics.blockSize
 
         tempBrick =
-            Brick.quickInit_ (GlobalBasics.blockPos_ ( x, y )) ( width * blockX, height * blockY ) "#F5F5F5"
+            Brick.initPosVolumeColor (GlobalBasics.blockPos_ ( x, y )) ( width * blockX, height * blockY ) "#F5F5F5"
     in
     [ { tempBrick | brickCollision = Brick.NoCollide Brick.NoNextBrickCollision } ]
 

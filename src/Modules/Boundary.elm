@@ -6,7 +6,12 @@
 --    )
 
 
-module Boundary exposing (..)
+module Boundary exposing
+    ( BoundaryType(..), Boundary
+    , init, normalInit
+    , view
+    , update
+    )
 
 {-| The boundaries in each level
 

@@ -1,9 +1,9 @@
 module Needle exposing
     ( NeedleVisibility(..), NeedleCollision(..), NeedleMove(..), NeedleAppearance(..), Needle
-    , init, quickInit
+    , init, initFallingRow, initHiddenRow, normalNeedleWidth, initHidden
     , view
     , update
-    , fallingRow, hiddenRow, needleCollisionBox, normalNeedleHeight, normalNeedleWidth, quickHidden, quickHidden_
+    , initHiddenCollideAfter, initPos, needleCollisionBox, normalNeedleHeight
     )
 
 {-| The unit. The most common unit in the game
@@ -21,7 +21,7 @@ module Needle exposing
 
 # Init
 
-@docs init, quickInit, defNeedle, defNeedleCollisionBox
+@docs init, initFallingRow, initHiddenRow, normalNeedleWidth, initHidden, initHiddenCollideAfter defNeedle, defNeedleCollisionBox
 
 
 # ViewMove
@@ -154,7 +154,7 @@ type alias Needle =
 -}
 defNeedle : Needle
 defNeedle =
-    quickInit ( 0, 0 )
+    initPos ( 0, 0 )
 
 
 {-| initiate a needle, with full functions
@@ -172,8 +172,8 @@ init ( x, y ) needleAppearance needleVisibility needleCollision needleMove =
 
 {-| default appearance, always visible, have collision, don't move
 -}
-quickInit : ( Float, Float ) -> Needle
-quickInit ( x, y ) =
+initPos : ( Float, Float ) -> Needle
+initPos ( x, y ) =
     { pos = ( x, y )
     , collisionBox = needleCollisionBox (NormalNeedle normalNeedleWidth normalNeedleHeight)
     , appearance = NormalNeedle normalNeedleWidth normalNeedleHeight
@@ -185,8 +185,8 @@ quickInit ( x, y ) =
 
 {-| quick function to create one hidden needle
 -}
-quickHidden : ( Int, Int ) -> Int -> Needle
-quickHidden ( x, y ) id =
+initHidden : ( Int, Int ) -> Int -> Needle
+initHidden ( x, y ) id =
     { pos = GlobalBasics.blockPos ( x, y )
     , collisionBox = needleCollisionBox (NormalNeedle normalNeedleWidth normalNeedleHeight)
     , appearance = NormalNeedle normalNeedleWidth normalNeedleHeight
@@ -198,15 +198,15 @@ quickHidden ( x, y ) id =
 
 {-| quick function to create a row of hidden needles
 -}
-hiddenRow : Int -> Int -> Int -> Int -> List Needle
-hiddenRow n n1 n2 id =
-    List.map (\i -> quickHidden ( i, n ) id) (List.range n1 n2)
+initHiddenRow : Int -> Int -> Int -> Int -> List Needle
+initHiddenRow n n1 n2 id =
+    List.map (\i -> initHidden ( i, n ) id) (List.range n1 n2)
 
 
 {-| quick function to create a needle which is only collidable after a given event.
 -}
-quickHidden_ : ( Int, Int ) -> Int -> Needle
-quickHidden_ ( x, y ) id =
+initHiddenCollideAfter : ( Int, Int ) -> Int -> Needle
+initHiddenCollideAfter ( x, y ) id =
     { pos = GlobalBasics.blockPos ( x, y )
     , collisionBox = needleCollisionBox (NormalNeedle normalNeedleWidth normalNeedleHeight)
     , appearance = NormalNeedle normalNeedleWidth normalNeedleHeight
@@ -218,8 +218,8 @@ quickHidden_ ( x, y ) id =
 
 {-| quick function to create one needle which falls after a given event
 -}
-quickFalling : ( Int, Int ) -> Int -> Needle
-quickFalling ( x, y ) id =
+initFalling : ( Int, Int ) -> Int -> Needle
+initFalling ( x, y ) id =
     { pos = GlobalBasics.blockPos ( x, y )
     , collisionBox = needleCollisionBox (NormalNeedle normalNeedleWidth normalNeedleHeight)
     , appearance = NormalNeedle normalNeedleWidth normalNeedleHeight
@@ -235,9 +235,9 @@ quickFalling ( x, y ) id =
 
 {-| quick function to create one row of needles which falls after a given event
 -}
-fallingRow : Int -> Int -> Int -> Int -> List Needle
-fallingRow n n1 n2 id =
-    List.map (\i -> quickFalling ( i, n ) id) (List.range n1 n2)
+initFallingRow : Int -> Int -> Int -> Int -> List Needle
+initFallingRow n n1 n2 id =
+    List.map (\i -> initFalling ( i, n ) id) (List.range n1 n2)
 
 
 {-| default collisionBox
