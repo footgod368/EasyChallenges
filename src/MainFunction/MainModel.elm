@@ -11,6 +11,7 @@ module MainModel exposing (Model)
 
 import Level1Type
 import MainType
+import Level2Type
 
 
 {-| This main model stores level1 Model
@@ -18,4 +19,5 @@ import MainType
 type alias Model =
     { scene : MainType.MainScene
     , level1Model : Level1Type.Model
+    , level2Model : Level2Type.Model
     }

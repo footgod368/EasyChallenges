@@ -1,6 +1,6 @@
-module Level0Update exposing (testUpdate, update)
+module Level2Update exposing (testUpdate, update)
 
-{-| update Level1
+{-| update Level2
 
 
 # update
@@ -14,19 +14,20 @@ import Boundary
 import Brick
 import EndPoint
 import Event
-import Level1Init
-import Level1Type
+import Level2Init
+import Level2Type
 import MainType
 import Maybe exposing (withDefault)
+import Monster
 import Needle
 import NoticeBoard
 import Player
 import SavePoint
 
 
-{-| `update` of Level1
+{-| `update` of Level2
 -}
-update : MainType.Msg -> Level1Type.Model -> ( Level1Type.Model, Cmd MainType.Msg )
+update : MainType.Msg -> Level2Type.Model -> ( Level2Type.Model, Cmd MainType.Msg )
 update msg model =
     case msg of
         MainType.GetViewport viewport ->
@@ -51,13 +52,14 @@ update msg model =
                             |> Boundary.update
                             |> NoticeBoard.update
                             |> Needle.update
+                            |> Monster.update
                             |> Player.updateJustPlayerPos
 
                     else
                         ( model, Cmd.none )
 
                 initModel =
-                    Tuple.first Level1Init.init
+                    Tuple.first Level2Init.init
 
                 oldSavePoints =
                     model.savePoints
@@ -80,8 +82,8 @@ update msg model =
                 newInitModel =
                     { initModel | savePoints = oldSavePoints, player = newPlayer }
             in
-            if Player.checkDead newModel.player && List.member 82 newModel.keyPressed then
-                ( newInitModel, Tuple.second Level1Init.init )
+            if List.member 82 newModel.keyPressed then
+                ( newInitModel, Tuple.second Level2Init.init )
 
             else
                 ( newModel, cmd )
@@ -90,7 +92,7 @@ update msg model =
             ( model, Cmd.none )
 
 
-testUpdate : Int -> Level1Type.Model -> Level1Type.Model
+testUpdate : Int -> Level2Type.Model -> Level2Type.Model
 testUpdate times model =
     List.foldl
         (\i tempModel ->

@@ -5,6 +5,7 @@
         "src/GlobalFunction",
         "src/MainFunction",
         "src/Level1",
+        "src/Level2",
         "src/Modules"
     ],
     "elm-version": "0.19.1",

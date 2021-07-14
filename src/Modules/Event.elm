@@ -576,3 +576,8 @@ updateOneEventActCounter ( model, event ) =
 
             else
                 ( model, { event | actCounter = EventActTill (timeLeft - 1) } )
+
+{-| quick functions to create 'Event'
+-}
+
+
