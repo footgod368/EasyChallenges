@@ -20,6 +20,7 @@ import NoticeBoard
 import Player
 import SavePoint
 import EndPoint
+import Monster
 import Svg
 import Svg.Attributes as SvgAttr
 import Monster

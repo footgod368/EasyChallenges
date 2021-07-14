@@ -22,6 +22,7 @@ import Needle
 import NoticeBoard
 import Player
 import SavePoint
+import Monster
 import Task
 import Monster
 
