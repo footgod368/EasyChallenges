@@ -722,7 +722,7 @@ playerCollideRigidBody model unit =
                                                 collideYModel.player
 
                                             newPlayer =
-                                                { oldPlayer | ifChangeBackToLastPosX = True}
+                                                { oldPlayer | ifChangeBackToLastPosY = True}
 
                                             newCollideYModel =
                                                 { collideYModel | player = newPlayer}
