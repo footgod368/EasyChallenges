@@ -4,6 +4,7 @@ module NoticeBoard exposing
     , update
     , view
     , boundary
+    ,boundaryCollide
     )
 
 {-| The notice board only acts as displaying the text, it only has visibility
@@ -40,6 +41,8 @@ import Player
 import Svg exposing (Svg, text)
 import Svg.Attributes as SvgAttr
 import ViewMove
+import Html.Attributes exposing (width)
+import Html.Attributes exposing (height)
 
 
 {-| Almost same as NoticeBoard's visibility, except adding new words that can be changed. The words are stored in
@@ -113,7 +116,7 @@ quickInit pos info fontSize =
 
 {-| quick function to create a 'brick' with proper 'Detailed' type as the boundary of 'NoticeBoard'
 -}
-boundary : ( Float, Float ) -> ( Float, Float ) -> List Brick.Brick
+boundary : ( Float, Float ) -> ( Float, Float ) -> Brick.Brick
 boundary ( x, y ) ( width, height ) =
     let
         ( blockX, blockY ) =
@@ -122,7 +125,18 @@ boundary ( x, y ) ( width, height ) =
         tempBrick =
             Brick.initPosVolumeColor (GlobalBasics.blockPosFloat ( x, y )) ( width * blockX, height * blockY ) "#F5F5F5"
     in
-    [ { tempBrick | brickCollision = Brick.NoCollide Brick.NoNextBrickCollision } ]
+    { tempBrick | brickCollision = Brick.NoCollide Brick.NoNextBrickCollision }
+
+boundaryCollide : ( Float, Float ) -> ( Float, Float ) -> Brick.Brick
+boundaryCollide ( x, y ) ( width, height ) =
+    let
+        ( blockX, blockY ) =
+            GlobalBasics.blockSize
+
+        tempBrick =
+            Brick.initPosVolumeColor (GlobalBasics.blockPosFloat ( x, y )) ( width * blockX, height * blockY ) "#F5F5F5"
+    in
+     { tempBrick | brickCollision = Brick.Collide Brick.NoNextBrickCollision }
 
 
 {-| update function of noticeBoard unit

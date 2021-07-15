@@ -11,6 +11,7 @@ module MainInit exposing (init)
 
 import Browser.Dom exposing (Viewport, getViewport)
 import Level1Init
+import Level2Init
 import MainModel
 import MainType
 import Task
@@ -20,16 +21,21 @@ import Task
 -}
 init : () -> ( MainModel.Model, Cmd MainType.Msg )
 init a =
+
     let
         ( level1Model, level1Cmd ) =
-            Level1Init.init ()
+            Level1Init.init()
+
+        ( level2Model, level2Cmd ) =
+            Level2Init.init()
 
         mainModel =
-            MainModel.Model MainType.Level1 level1Model
+            MainModel.Model MainType.Level2 level1Model level2Model
 
         mainCmd =
             Cmd.batch
                 [ level1Cmd
+                , level2Cmd
                 ]
     in
     ( mainModel, mainCmd )

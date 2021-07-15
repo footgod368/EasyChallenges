@@ -20,6 +20,7 @@ import Time exposing (Posix)
 -}
 type MainScene
     = Level1
+    | Level2
 
 
 {-| `Msg` stores the callbacks of subscriptions
