@@ -39,11 +39,11 @@ view model =
             [ SvgAttr.width "1200"
             , SvgAttr.height "850"
             ]
-            (drawBackground model)
+            (drawBackground model
             --    ++ drawBall model
-            --    ++ drawButtons model
+                ++ drawButtons model
             --    ++ drawCrown model
-            --)
+            )
         ]
 
 
@@ -97,7 +97,7 @@ drawButtons model =
         , SvgAttr.textAnchor "middle"
         , SvgAttr.fill "#e85239"
         ]
-        [ Svg.text "start adventure" ]
+        [ Svg.text "Level 0" ]
     , Svg.rect
         [ SvgAttr.x "420"
         , SvgAttr.y "450"
@@ -108,6 +108,34 @@ drawButtons model =
         , SvgEvent.onMouseOut (MainType.OnMouseOut MainConstant.menuButtonLevel0)
         , SvgEvent.onMouseDown (MainType.OnMouseDown MainConstant.menuButtonLevel0)
         , SvgEvent.onMouseUp (MainType.OnMouseUp MainConstant.menuButtonLevel0)
+        ]
+        []
+    , Svg.rect
+        [ SvgAttr.x "420"
+        , SvgAttr.y "550"
+        , SvgAttr.width "250"
+        , SvgAttr.height "80"
+        , SvgAttr.fill (withDefault "White" (Array.get MainConstant.menuButtonLevel1 model.buttonState))
+        ]
+        []
+    , Svg.text_
+        [ SvgAttr.x "545"
+        , SvgAttr.y "595"
+        , SvgAttr.fontSize "30"
+        , SvgAttr.textAnchor "middle"
+        , SvgAttr.fill "#e85239"
+        ]
+        [ Svg.text "Level 1" ]
+    , Svg.rect
+        [ SvgAttr.x "420"
+        , SvgAttr.y "550"
+        , SvgAttr.width "250"
+        , SvgAttr.height "80"
+        , SvgAttr.fill "#00000000"
+        , SvgEvent.onMouseOver (MainType.OnMouseOver MainConstant.menuButtonLevel1)
+        , SvgEvent.onMouseOut (MainType.OnMouseOut MainConstant.menuButtonLevel1)
+        , SvgEvent.onMouseDown (MainType.OnMouseDown MainConstant.menuButtonLevel1)
+        , SvgEvent.onMouseUp (MainType.OnMouseUp MainConstant.menuButtonLevel1)
         ]
         []
     ]
