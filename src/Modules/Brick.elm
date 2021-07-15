@@ -200,7 +200,7 @@ initPosVolumeColor ( x, y ) ( width, height ) color =
 
 quickTunnel : (Float,Float) -> Brick
 quickTunnel pos =
-    initPosVolumeColor (GlobalBasics.blockPosFloat pos) (2*40,3.5*40) "#008000" 
+    initPosVolumeColor (GlobalBasics.blockPosFloat pos) (2*40,3.5*40) "#008000"
 
 {-| quick function to create a row of bricks by providing 'row index' n, 'starting point' x, 'ending point' y.
 -}

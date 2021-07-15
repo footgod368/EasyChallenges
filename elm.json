@@ -4,8 +4,10 @@
         "src",
         "src/GlobalFunction",
         "src/MainFunction",
+        "src/Level0",
         "src/Level1",
         "src/Level2",
+        "src/Menu",
         "src/Modules"
     ],
     "elm-version": "0.19.1",
