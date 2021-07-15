@@ -123,8 +123,8 @@ init a =
                 Array.fromList
                     [ Monster.init (GlobalBasics.blockPosFloat ( 66, 14 ))
                         (Monster.MonsterA 40 40)
-                        (Monster.ListenX 100)
-                        (Monster.ListenY 100)
+                        (Monster.ListenX 300)
+                        (Monster.ListenY 300)
                         1
                         ( 56 * 40, 65 * 40 )
                     ]
