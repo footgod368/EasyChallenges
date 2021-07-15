@@ -4,7 +4,6 @@ module Needle exposing
     , view
     , update
     , initHiddenCollideAfter, initPos, needleCollisionBox, normalNeedleHeight
-    , initHiddenFalling , initHiddenFallingRow
     )
 
 {-| The unit. The most common unit in the game
@@ -136,7 +135,7 @@ normalNeedleWidth =
 -}
 normalNeedleHeight : Float
 normalNeedleHeight =
-    Tuple.second GlobalBasics.blockSize / 20.0
+    Tuple.second GlobalBasics.blockSize / 4.0
 
 
 {-| `Needle` is a record of the block unit. See detail definitions in individual definition.
@@ -233,19 +232,6 @@ initFalling ( x, y ) id =
             (Move (Array.fromList [ GlobalBasics.blockPos ( x, 20 ) ]) 5.0 -1 NoNextNeedleMove)
     }
 
-initHiddenFalling : ( Int, Int ) -> Int -> Needle
-initHiddenFalling ( x, y ) id =
-    { pos = GlobalBasics.blockPos ( x, y )
-    , collisionBox = needleCollisionBox (NormalNeedle normalNeedleWidth normalNeedleHeight)
-    , appearance = NormalNeedle normalNeedleWidth normalNeedleHeight
-    , needleVisibility = Invisible NoNextNeedleVisibility
-    , needleCollision = Collide NoNextNeedleCollision
-    , needleMove =
-        Move (Array.fromList [])
-            0.0
-            id
-            (Move (Array.fromList [ GlobalBasics.blockPos ( x, 20 ) ]) 5.0 -1 NoNextNeedleMove)
-    }
 
 {-| quick function to create one row of needles which falls after a given event
 -}
@@ -253,9 +239,6 @@ initFallingRow : Int -> Int -> Int -> Int -> List Needle
 initFallingRow n n1 n2 id =
     List.map (\i -> initFalling ( i, n ) id) (List.range n1 n2)
 
-initHiddenFallingRow : Int -> Int -> Int -> Int -> List Needle
-initHiddenFallingRow n n1 n2 id =
-    List.map (\i -> initHiddenFalling ( i, n ) id) (List.range n1 n2)
 
 {-| default collisionBox
 -}
@@ -294,7 +277,7 @@ viewOneNeedle model needle =
                     (case needle.appearance of
                         NormalNeedle width height ->
                             [ SvgAttr.width (String.fromFloat (width + 2.0))
-                            , SvgAttr.height (String.fromFloat 10.0)
+                            , SvgAttr.height (String.fromFloat height)
                             ]
                     )
                 )

@@ -3,7 +3,6 @@ module MainView exposing (..)
 import Html exposing (Html, div)
 import Level0View
 import Level1View
-import Level2View
 import MainModel
 import MainType
 import MenuView
@@ -20,5 +19,3 @@ view model =
 
         MainType.Level1 ->
             Level1View.view model.level1Model
-        MainType.Level2 ->
-            Level2View.view model.level2Model

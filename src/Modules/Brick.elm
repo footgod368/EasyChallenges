@@ -4,8 +4,6 @@ module Brick exposing
     , view
     , update
     , brickCollisionBox
-    ,quickTunnel
-    ,initCollideHiddenRow
     )
 
 {-| The block unit. The most common unit in the game
@@ -198,9 +196,6 @@ initPosVolumeColor ( x, y ) ( width, height ) color =
     , brickMove = NoNextBrickMove
     }
 
-quickTunnel : (Float,Float) -> Brick
-quickTunnel pos =
-    initPosVolumeColor (GlobalBasics.blockPosFloat pos) (2*40,3.5*40) "#008000" 
 
 {-| quick function to create a row of bricks by providing 'row index' n, 'starting point' x, 'ending point' y.
 -}
@@ -257,19 +252,15 @@ initNoCollideHidden ( x, y ) id =
 
 {-| quick function to create one 'hidden brick' which is initially invisible and initially non-collidable.
 -}
-initCollideHidden : ( Float, Float ) -> Int -> Brick
+initCollideHidden : ( Int, Int ) -> Int -> Brick
 initCollideHidden ( x, y ) id =
-    { pos = GlobalBasics.blockPosFloat ( x, y )
+    { pos = GlobalBasics.blockPos ( x, y )
     , collisionBox = brickCollisionBox NormalAppearance
     , appearance = NormalAppearance
     , brickVisibility = Invisible (VisibleAfterEvent id NoNextBrickVisibility)
     , brickCollision = NoCollide (CollideAfterEvent id NoNextBrickCollision)
     , brickMove = NoNextBrickMove
     }
-
-initCollideHiddenRow : Int -> Int -> Int -> Int -> List Brick
-initCollideHiddenRow n x y id =
-    List.map (\i -> initCollideHidden (( toFloat i, toFloat n )) id) (List.range x y)
 
 
 {-| default collisionBox

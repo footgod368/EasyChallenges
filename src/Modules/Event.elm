@@ -3,8 +3,6 @@ module Event exposing
     , EventInfo, EventIfStartAct(..), EventActType(..), EventActCounter(..), EventDuration, Event
     , init, quickDuration
     , update
-    , hitBlock
-    , hitLineSeg
     )
 
 {-| The events that are essential for all other units.
@@ -40,8 +38,7 @@ import GlobalBasics
 import MainType
 import Maybe exposing (withDefault)
 import Player
-import Html.Attributes exposing (width)
-import Html.Attributes exposing (height)
+
 
 {-| `ActEvent` is type used in `Model`, storing all the activated `Events`. For
 example:
@@ -579,39 +576,3 @@ updateOneEventActCounter ( model, event ) =
 
             else
                 ( model, { event | actCounter = EventActTill (timeLeft - 1) } )
-
-{-| quick functions to create 'Event'
--}
-
-hitBlock : Int -> String -> (Float,Float) -> (Float,Float) -> Event
-hitBlock id_ name_ (x_,y_) (width_,height_)=
-    let
-        (x,y) = GlobalBasics.blockPosFloat (x_,y_)
-        (width,height)=(40*width_,40*height_)
-    in
-    init
-        { id = id_, name = name_ }
-        StartActivated
-        (PlayerCollide
-            (
-                GlobalBasics.Polygon
-                (Array.fromList
-                    [ ( ( x, y ), ( x + width, y ) )
-                    , ( ( x + width, y ), (x + width,y + height ) )
-                    , ( ( x + width,y + height ), ( x,y + height ) )
-                    , ( ( x,y + height  ), ( x, y ) )
-                    ]
-                )
-            )
-        )
-        (quickDuration 10)
-
-hitLineSeg : Int -> String -> (Float,Float) -> (Float,Float) -> Event
-hitLineSeg id_ name_ pos1_ pos2_ =
-    init
-        { id = id_, name = name_ }
-        StartActivated
-        (PlayerCollide
-            (GlobalBasics.Polygon (Array.fromList [ (pos1_, pos2_) ]))
-        )
-        (quickDuration 10)
