@@ -22,6 +22,7 @@ type MainScene
     = Menu
     | Level0
     | Level1
+    | Level2
 
 
 {-| `Msg` stores the callbacks of subscriptions

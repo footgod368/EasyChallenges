@@ -13,6 +13,7 @@ import Level0Update
 import Level0Init
 import Level1Update
 import Level1Init
+import Level2Update
 import MainModel
 import MainType
 import MenuUpdate
@@ -65,3 +66,10 @@ update msg model =
                     Level1Update.update msg model.level1Model
             in
             ( { model | level1Model = newLevel1Model }, cmd )
+
+        MainType.Level2 ->
+            let
+                ( newLevel2Model, cmd ) =
+                    Level2Update.update msg model.level2Model
+            in
+            ( { model | level2Model = newLevel2Model }, cmd )

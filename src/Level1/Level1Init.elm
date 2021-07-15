@@ -131,8 +131,7 @@ init a =
             , bricks =
                 Array.fromList
                     (List.concat
-                        [ NoticeBoard.boundary ( 2, 5 ) ( 7, 4 )
-                        , Brick.initRow 15 1 4
+                        [ Brick.initRow 15 1 4
                         , Brick.initFallingRow 15 5 8 1
                         , Brick.initRow 15 9 32
                         , Brick.initRow 12 22 26
@@ -154,7 +153,6 @@ init a =
                           , Brick.initNoCollideHidden ( 5.5, 12 ) 6
                           ]
                         , Brick.initRow 15 36 80
-                        , NoticeBoard.boundary ( 31, 5 ) ( 7, 4 )
                         , [ Brick.initNoCollideHidden ( 32.5, 12 ) 7
                           , Brick.initNoCollideHidden ( 33.5, 12 ) 8
                           ]
@@ -178,7 +176,7 @@ init a =
                     , NoticeBoard.quickInit (GlobalBasics.blockPosFloat ( 34.5, 7.5 )) "Caution!" 40
                     , NoticeBoard.quickInit (GlobalBasics.blockPosFloat ( 15.5, 12.85 )) "?" 40
                     , NoticeBoard.quickInit (GlobalBasics.blockPosFloat ( 24.5, 9.85 )) "?" 40
-                    , NoticeBoard.quickInit (GlobalBasics.blockPosFloat (15.0, 7.0)) "Press R to respawn" 40
+                    , NoticeBoard.quickInit (GlobalBasics.blockPosFloat ( 15.0, 7.0 )) "Press R to respawn" 40
                     ]
             , needles =
                 Array.fromList

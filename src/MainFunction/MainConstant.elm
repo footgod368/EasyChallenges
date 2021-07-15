@@ -13,6 +13,10 @@ menuButtonLevel1 : Int
 menuButtonLevel1 =
     1
 
+menuButtonLevel2 : Int
+menuButtonLevel2 =
+    2
+
 {-| Normal color of button
 -}
 buttonNormalColor =

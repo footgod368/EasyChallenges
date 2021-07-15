@@ -12,6 +12,7 @@ module MainInit exposing (init)
 import Browser.Dom exposing (Viewport, getViewport)
 import Level0Init
 import Level1Init
+import Level2Init
 import MainModel
 import MainType
 import MenuInit
@@ -27,6 +28,7 @@ init a =
             { scene = MainType.Menu
             , level0Model = (Level0Init.init () |> Tuple.first)
             , level1Model = (Level1Init.init () |> Tuple.first)
+            , level2Model = (Level2Init.init () |> Tuple.first)
             , menuModel = (MenuInit.init () |> Tuple.first)
             }
 
