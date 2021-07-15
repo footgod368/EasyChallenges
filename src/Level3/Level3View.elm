@@ -41,7 +41,6 @@ view model =
             ]
             (SavePoint.view model
                 ++ Brick.view model
-                ++ EndPoint.view model
                 ++ Boundary.view model
                 ++ NoticeBoard.view model
                 ++ Needle.view model

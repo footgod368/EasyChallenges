@@ -34,7 +34,7 @@ init a =
             Level3Init.init()
 
         mainModel =
-            MainModel.Model MainType.Level2 level1Model level2Model level3Model
+            MainModel.Model MainType.Level3 level1Model level2Model level3Model
 
         mainCmd =
             Cmd.batch
