@@ -71,8 +71,7 @@ init a =
                              (Event.quickDuration 10)
                     ]
             , boundary = Boundary.normalInit
-            , player = Player.init --(  50.0, 490.0  )
-                                (68*40,200)
+            , player = Player.init (  50.0, 490.0  )
             , bricks =
                 Array.fromList
                     (List.concat
