@@ -1,6 +1,6 @@
-module Level0View exposing (view)
+module Level2View exposing (view)
 
-{-| Level1 view
+{-| Level2 view
 
 
 # view
@@ -14,7 +14,7 @@ import Brick
 import EndPoint
 import Html exposing (Html, div)
 import Html.Attributes as HtmlAttr
-import Level0Type
+import Level2Type
 import MainType
 import Needle
 import NoticeBoard
@@ -24,9 +24,9 @@ import Svg
 import Svg.Attributes as SvgAttr
 
 
-{-| `view` of level1.
+{-| `view` of level2.
 -}
-view : Level0Type.Model -> Html MainType.Msg
+view : Level2Type.Model -> Html MainType.Msg
 view model =
     div
         [ HtmlAttr.style "position" "relative"
@@ -40,12 +40,12 @@ view model =
             , SvgAttr.height (String.fromFloat (Tuple.second model.windowBoundary))
             ]
             (SavePoint.view model
-                ++ EndPoint.view model
-                ++ Player.view model
                 ++ Brick.view model
+                ++ EndPoint.view model
                 ++ Boundary.view model
                 ++ NoticeBoard.view model
                 ++ Needle.view model
+                ++ Player.view model
             )
         , Html.audio
             [ HtmlAttr.width 0

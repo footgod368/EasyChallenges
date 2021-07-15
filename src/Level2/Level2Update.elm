@@ -1,6 +1,6 @@
-module Level0Update exposing (testUpdate, update)
+module Level2Update exposing (testUpdate, update)
 
-{-| update Level1
+{-| update Level2
 
 
 # update
@@ -14,19 +14,19 @@ import Boundary
 import Brick
 import EndPoint
 import Event
-import Level0Init
-import Level0Type
-import Level1Type
+import Level2Init
+import Level2Type
 import MainType
+import Maybe exposing (withDefault)
 import Needle
 import NoticeBoard
 import Player
 import SavePoint
 
 
-{-| `update` of Level1
+{-| `update` of Level2
 -}
-update : MainType.Msg -> Level0Type.Model -> ( Level0Type.Model, Cmd MainType.Msg )
+update : MainType.Msg -> Level2Type.Model -> ( Level2Type.Model, Cmd MainType.Msg )
 update msg model =
     case msg of
         MainType.GetViewport viewport ->
@@ -57,7 +57,7 @@ update msg model =
                         ( model, Cmd.none )
             in
             if List.member 82 newModel.keyPressed then
-                SavePoint.updateReset Level0Init.init ( model, Cmd.none )
+                SavePoint.updateReset Level2Init.init ( model, Cmd.none )
 
             else
                 ( newModel, cmd )
@@ -66,7 +66,7 @@ update msg model =
             ( model, Cmd.none )
 
 
-testUpdate : Int -> Level1Type.Model -> Level1Type.Model
+testUpdate : Int -> Level2Type.Model -> Level2Type.Model
 testUpdate times model =
     List.foldl
         (\i tempModel ->
