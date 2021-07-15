@@ -35,7 +35,7 @@ init : () -> ( Level3Type.Model, Cmd MainType.Msg )
 init a =
     let
         newModel =
-            { windowBoundary = ( 200, 800.0 )
+            { windowBoundary = ( 1000.0, 800.0 )
             , levelBoundary = ( 44*40, 680.0 )
             , actEvent = Array.fromList []
             , event =

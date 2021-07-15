@@ -76,7 +76,7 @@ drawBackground model =
         , SvgAttr.textAnchor "left"
         , SvgAttr.fill "#A0E6E8"
         ]
-        [ Svg.text "Intergalactic Betrayal" ]
+        [ Svg.text "Easy Challenges" ]
     ]
 
 
@@ -119,4 +119,5 @@ drawButtons model =
         [ drawLevelButton model MainConstant.menuButtonLevel0 ( 300.0, 300.0 )
         , drawLevelButton model MainConstant.menuButtonLevel1 ( 300.0, 400.0 )
         , drawLevelButton model MainConstant.menuButtonLevel2 ( 300.0, 500.0 )
+        , drawLevelButton model MainConstant.menuButtonLevel3 ( 300.0, 600.0 )
         ]

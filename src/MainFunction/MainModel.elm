@@ -12,6 +12,7 @@ module MainModel exposing (Model)
 import Level0Type
 import Level1Type
 import Level2Type
+import Level3Type
 import MainType
 import MenuType
 
