@@ -11,6 +11,7 @@ module MainUpdate exposing (update)
 
 import Level1Update
 import Level2Update
+import Level3Update
 import MainModel
 import MainType
 
@@ -32,4 +33,10 @@ update msg model =
                     Level2Update.update msg model.level2Model
             in
             ( { model | level2Model = newLevel2Model }, cmd )
+        MainType.Level3 ->
+            let
+                ( newLevel3Model, cmd ) =
+                    Level3Update.update msg model.level3Model
+            in
+            ( { model | level3Model = newLevel3Model }, cmd )
         
