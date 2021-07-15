@@ -63,15 +63,16 @@ init a =
                             (Event.quickDuration 10)
                     , Event.init
                              {id=14, name= "hidden bricks between tunnels"}
-                            (Event.StartActivated)
+                            (Event.AfterActEvent 12)
                             (Event.PlayerCollide 
                                      (GlobalBasics.Polygon (Array.fromList [
-                                             (GlobalBasics.blockPosFloat (72,13), GlobalBasics.blockPosFloat (78,13))
+                                             (GlobalBasics.blockPosFloat (72,13.1), GlobalBasics.blockPosFloat (78,13.1))
                                          ])))
                              (Event.quickDuration 10)
                     ]
             , boundary = Boundary.normalInit
-            , player = Player.init (  50.0, 490.0  )
+            , player = Player.init --(  50.0, 490.0  )
+                                (68*40,200)
             , bricks =
                 Array.fromList
                     (List.concat
@@ -122,10 +123,11 @@ init a =
                         , [NoticeBoard.boundary (57,6) (3,2)]
                         , [Brick.quickTunnel (70,11.5)
                         ,  Brick.quickTunnel (78,11.5)]
-                        , [Brick.initCollideHidden (71.5,8.5) 10
-                        ,  Brick.initCollideHidden (72.5,8.5) 11]
                         , Brick.initFallingRow 15 72 77 13
                         , Brick.initCollideHiddenRow 12 72 77 14
+                        , [NoticeBoard.boundary (72,6.5) (6,3.5)]
+                        , [Brick.initCollideHidden (71.5,8.5) 10
+                        ,  Brick.initCollideHidden (72.5,8.5) 11]
                         ]
                     )
             , savePoints =
@@ -150,6 +152,9 @@ init a =
                                                                 (Array.fromList []) 0.0 6 
                                                                 (NoticeBoard.Move (Array.fromList[GlobalBasics.blockPosFloat (54.5,10)]) 2.0 -1 NoticeBoard.NoNextNoticeBoardMove)}
             ,  NoticeBoard.quickInit (GlobalBasics.blockPosFloat (58.5,7.2)) ":)" 40
+            ,  NoticeBoard.quickInit (GlobalBasics.blockPosFloat (75,8)) "Danger!" 40
+            ,  NoticeBoard.quickInit (GlobalBasics.blockPosFloat (75,9.2)) "↓" 40
+
                     ]
             , needles =
                 Array.fromList

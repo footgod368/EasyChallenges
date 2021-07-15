@@ -269,7 +269,7 @@ initCollideHidden ( x, y ) id =
 
 initCollideHiddenRow : Int -> Int -> Int -> Int -> List Brick
 initCollideHiddenRow n x y id =
-    List.map (\i -> initCollideHidden (GlobalBasics.blockPos ( i, n )) id) (List.range x y)
+    List.map (\i -> initCollideHidden (( toFloat i, toFloat n )) id) (List.range x y)
 
 
 {-| default collisionBox
