@@ -4,6 +4,7 @@ import Html exposing (Html, div)
 import Level0View
 import Level1View
 import Level2View
+import Level3View
 import MainModel
 import MainType
 import MenuView
@@ -23,3 +24,5 @@ view model =
 
         MainType.Level2 ->
             Level2View.view model.level2Model
+        MainType.Level3 ->
+            Level3View.view model.level3Model

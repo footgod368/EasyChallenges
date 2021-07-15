@@ -12,6 +12,7 @@ module MainModel exposing (Model)
 import Level0Type
 import Level1Type
 import Level2Type
+import Level3Type
 import MainType
 import MenuType
 
@@ -24,4 +25,5 @@ type alias Model =
     , level0Model : Level0Type.Model
     , level1Model : Level1Type.Model
     , level2Model : Level2Type.Model
+    , level3Model : Level3Type.Model
     }

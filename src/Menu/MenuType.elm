@@ -1,6 +1,7 @@
 module MenuType exposing (MenuStatus(..), Model)
 
 import Array exposing (Array)
+import GlobalBasics
 import MainType
 
 type MenuStatus
@@ -12,4 +13,5 @@ type alias Model =
     , menuStatus : MenuStatus
     , keyPressed : List Int
     , buttonState : Array String
+    , windowBoundary : GlobalBasics.Pos
     }

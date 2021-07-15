@@ -1,9 +1,11 @@
 module MenuInit exposing (init)
 
 import Array
+import Browser.Dom exposing (getViewport)
 import MainConstant
 import MainType
 import MenuType
+import Task
 
 
 init : () -> ( MenuType.Model, Cmd MainType.Msg )
@@ -13,6 +15,7 @@ init a =
       , keyPressed = []
       , buttonState =
             Array.fromList (List.map (\i -> MainConstant.buttonNormalColor) (List.range 0 10))
+      , windowBoundary = ( 1000.0, 800.0 )
       }
-    , Cmd.none
+    , Task.perform MainType.GetViewport getViewport
     )

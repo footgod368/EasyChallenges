@@ -5,6 +5,7 @@ module Needle exposing
     , update
     , initHiddenCollideAfter, initPos, needleCollisionBox, normalNeedleHeight
     , initHiddenFalling , initHiddenFallingRow
+    , sword
     )
 
 {-| The unit. The most common unit in the game
@@ -45,6 +46,9 @@ import Player
 import Svg exposing (Svg)
 import Svg.Attributes as SvgAttr
 import ViewMove
+import Html.Attributes exposing (width)
+import Html.Attributes exposing (height)
+import NoticeBoard exposing (NoticeBoardVisibility(..))
 
 
 {-| `NeedleVisibility` describes the visibility of the block. `Visible/Invisible (nextVisibility: NeedleVisibility)`:
@@ -257,6 +261,21 @@ initHiddenFallingRow : Int -> Int -> Int -> Int -> List Needle
 initHiddenFallingRow n n1 n2 id =
     List.map (\i -> initHiddenFalling ( i, n ) id) (List.range n1 n2)
 
+
+{-| quickfunction to create a sword that will charge for a given position after a given event
+-}
+sword : (Float,Float) -> (Float,Float) -> (Float,Float) -> Float -> Int -> Needle
+sword startPos chargePos (width,height) speed id =
+    init 
+        (GlobalBasics.blockPosFloat startPos)
+        (NormalNeedle (width*40) (height*40))
+        (Invisible (VisibleAfterEvent id NoNextNeedleVisibility))
+        (NoCollide (CollideAfterEvent id NoNextNeedleCollision))
+        (Move (Array.fromList []) 0.0 id
+                (Move (Array.fromList [GlobalBasics.blockPosFloat chargePos]) speed -1 NoNextNeedleMove))
+
+
+
 {-| default collisionBox
 -}
 needleCollisionBox : NeedleAppearance -> GlobalBasics.CollisionBox
@@ -294,7 +313,7 @@ viewOneNeedle model needle =
                     (case needle.appearance of
                         NormalNeedle width height ->
                             [ SvgAttr.width (String.fromFloat (width + 2.0))
-                            , SvgAttr.height (String.fromFloat 10.0)
+                            , SvgAttr.height (String.fromFloat height)
                             ]
                     )
                 )

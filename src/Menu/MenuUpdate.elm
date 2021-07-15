@@ -9,10 +9,15 @@ import MenuType
 update : MainType.Msg -> ( MenuType.Model, Cmd MainType.Msg ) -> ( MenuType.Model, Cmd MainType.Msg )
 update msg ( model, cmd ) =
     --( model, Cmd.batch[consoleLog ("update " ++ if (model.menuStatus == Hall) then "Hall" else "Room")] )
-    ( model, cmd )
-        --|> updateServerMainType.Msg msg
-        |> updateButton msg
-        |> updateControl msg
+    case msg of
+        MainType.GetViewport viewport ->
+            ( { model | windowBoundary = ( viewport.viewport.width * 0.95, viewport.viewport.height * 0.95 ) }, Cmd.none )
+
+        _ ->
+            ( model, cmd )
+                --|> updateServerMainType.Msg msg
+                |> updateButton msg
+                |> updateControl msg
 
 {-| handles player control(keyboard) input
 -}
@@ -88,8 +93,12 @@ updateButton msg ( model, cmd ) =
                             ( { model | mainStatus = MainType.Level1 }, Cmd.batch [ cmd ] )
 
                         2 ->
-                            --menuButtonLevel1
+                            --menuButtonLevel2
                             ( { model | mainStatus = MainType.Level2 }, Cmd.batch [ cmd ] )
+                        
+                        3 ->
+                            --menuButtonLevel3
+                            ( { model | mainStatus = MainType.Level3 }, Cmd.batch [ cmd ] )
 
                         _ ->
                             ( model, Cmd.batch [ cmd ] )
