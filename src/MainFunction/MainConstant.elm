@@ -1,0 +1,25 @@
+module MainConstant exposing (..)
+{-| Constants used in all places.
+-}
+
+
+{-| Id of button
+-}
+menuButtonLevel0 : Int
+menuButtonLevel0 =
+    0
+
+{-| Normal color of button
+-}
+buttonNormalColor =
+    "#FFE6E8FF"
+
+{-| Color of button when the mouse is on it
+-}
+buttonOverColor =
+    "#FFE6E8CF"
+
+{-| Color of button when it's pressed
+-}
+buttonDownColor =
+    "#FFE6E89F"

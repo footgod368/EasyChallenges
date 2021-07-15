@@ -9,5 +9,7 @@ import MainType
 view : MainModel.Model -> Html MainType.Msg
 view model =
     case model.scene of
+        MainType.Level0 ->
+
         MainType.Level1 ->
             Level1View.view model.level1Model

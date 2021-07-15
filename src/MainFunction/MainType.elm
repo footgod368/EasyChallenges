@@ -19,7 +19,9 @@ import Time exposing (Posix)
 {-| `MainScene` stores the game stage.
 -}
 type MainScene
-    = Level1
+    = Menu
+    | Level0
+    | Level1
 
 
 {-| `Msg` stores the callbacks of subscriptions

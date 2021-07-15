@@ -9,6 +9,7 @@ module MainUpdate exposing (update)
 
 -}
 
+import Level0Update
 import Level1Update
 import MainModel
 import MainType
