@@ -9,10 +9,15 @@ import MenuType
 update : MainType.Msg -> ( MenuType.Model, Cmd MainType.Msg ) -> ( MenuType.Model, Cmd MainType.Msg )
 update msg ( model, cmd ) =
     --( model, Cmd.batch[consoleLog ("update " ++ if (model.menuStatus == Hall) then "Hall" else "Room")] )
-    ( model, cmd )
-        --|> updateServerMainType.Msg msg
-        |> updateButton msg
-        |> updateControl msg
+    case msg of
+        MainType.GetViewport viewport ->
+            ( { model | windowBoundary = ( viewport.viewport.width * 0.95, viewport.viewport.height * 0.95 ) }, Cmd.none )
+
+        _ ->
+            ( model, cmd )
+                --|> updateServerMainType.Msg msg
+                |> updateButton msg
+                |> updateControl msg
 
 {-| handles player control(keyboard) input
 -}

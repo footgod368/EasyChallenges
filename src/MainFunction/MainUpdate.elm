@@ -9,6 +9,7 @@ module MainUpdate exposing (update)
 
 -}
 
+import Browser.Dom exposing (getViewport)
 import Level0Update
 import Level0Init
 import Level1Update
@@ -20,6 +21,7 @@ import Level3Init
 import MainModel
 import MainType
 import MenuUpdate
+import Task
 
 
 
@@ -56,7 +58,7 @@ update msg model =
                     MenuUpdate.update msg ( model.menuModel, Cmd.none )
             in
             if newMenuModel.mainStatus /= MainType.Menu then
-                changeToLevel newMenuModel.mainStatus ( { model | menuModel = newMenuModel }, cmd )
+                changeToLevel newMenuModel.mainStatus ( { model | menuModel = newMenuModel }, Task.perform MainType.GetViewport getViewport )
 
             else
                 ( { model | menuModel = newMenuModel }, cmd )
