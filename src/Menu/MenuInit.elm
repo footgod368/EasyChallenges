@@ -1,13 +1,16 @@
 module MenuInit exposing (init)
 
 import Array
+import MainType
+import MenuType
 
-init : Model
-init =
-    Model
-        Menu
-        MainMenu
-        []
-        (Array.fromList (List.map (\e -> buttonNormalColor) (List.range 0 buttonNum)))
-        (Ball (degrees -135) ( 460, 500 ) Circle)
-        0
+
+init : () -> ( MenuType.Model, Cmd MainType.Msg )
+init a =
+    ( { mainStatus = MainType.Menu
+      , menuStatus = MenuType.MainMenu
+      , keyPressed = []
+      , buttonState = Array.fromList []
+      }
+    , Cmd.none
+    )

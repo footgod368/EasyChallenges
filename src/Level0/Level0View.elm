@@ -14,7 +14,7 @@ import Brick
 import EndPoint
 import Html exposing (Html, div)
 import Html.Attributes as HtmlAttr
-import Level1Type
+import Level0Type
 import MainType
 import Needle
 import NoticeBoard
@@ -26,7 +26,7 @@ import Svg.Attributes as SvgAttr
 
 {-| `view` of level1.
 -}
-view : Level1Type.Model -> Html MainType.Msg
+view : Level0Type.Model -> Html MainType.Msg
 view model =
     div
         [ HtmlAttr.style "position" "relative"

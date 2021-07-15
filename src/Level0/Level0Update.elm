@@ -14,10 +14,10 @@ import Boundary
 import Brick
 import EndPoint
 import Event
-import Level1Init
+import Level0Init
+import Level0Type
 import Level1Type
 import MainType
-import Maybe exposing (withDefault)
 import Needle
 import NoticeBoard
 import Player
@@ -26,7 +26,7 @@ import SavePoint
 
 {-| `update` of Level1
 -}
-update : MainType.Msg -> Level1Type.Model -> ( Level1Type.Model, Cmd MainType.Msg )
+update : MainType.Msg -> Level0Type.Model -> ( Level0Type.Model, Cmd MainType.Msg )
 update msg model =
     case msg of
         MainType.GetViewport viewport ->
@@ -55,33 +55,9 @@ update msg model =
 
                     else
                         ( model, Cmd.none )
-
-                initModel =
-                    Tuple.first Level1Init.init
-
-                oldSavePoints =
-                    model.savePoints
-
-                oldSaveNumber =
-                    model.player.saveNumber
-
-                oldDeadTimes =
-                    model.player.deadTimes
-
-                lastsavePoint =
-                    Array.get oldSaveNumber oldSavePoints |> withDefault SavePoint.defSavePoint
-
-                player =
-                    Player.init lastsavePoint.pos
-
-                newPlayer =
-                    { player | saveNumber = oldSaveNumber, deadTimes = oldDeadTimes + 1 }
-
-                newInitModel =
-                    { initModel | savePoints = oldSavePoints, player = newPlayer }
             in
-            if Player.checkDead newModel.player && List.member 82 newModel.keyPressed then
-                ( newInitModel, Tuple.second Level1Init.init )
+            if List.member 82 newModel.keyPressed then
+                SavePoint.updateReset Level0Init.init ( model, Cmd.none )
 
             else
                 ( newModel, cmd )

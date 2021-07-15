@@ -1,4 +1,4 @@
-module MenuType exposing (..)
+module MenuType exposing (MenuStatus(..), Model)
 
 import Array exposing (Array)
 import MainType

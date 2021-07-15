@@ -16,7 +16,7 @@ import Browser.Dom exposing (getViewport)
 import EndPoint
 import Event
 import GlobalBasics
-import Level1Type
+import Level0Type
 import MainType
 import Needle
 import NoticeBoard
@@ -27,8 +27,8 @@ import Task
 
 {-| `init` of Level1 \`Model
 -}
-init : ( Level1Type.Model, Cmd MainType.Msg )
-init =
+init : () -> ( Level0Type.Model, Cmd MainType.Msg )
+init a =
     let
         newModel =
             { windowBoundary = ( 1000.0, 800.0 )
@@ -154,7 +154,7 @@ init =
                           ]
                         , [ Brick.init
                                 (GlobalBasics.blockPos ( 22, 8 ))
-                                (Brick.Detailed 100 100)
+                                (Brick.Detailed 100 100 "#000000")
                                 (Brick.Visible Brick.NoNextBrickVisibility)
                                 (Brick.Collide Brick.NoNextBrickCollision)
                                 Brick.NoNextBrickMove

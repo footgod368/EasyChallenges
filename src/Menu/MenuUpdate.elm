@@ -6,10 +6,10 @@ import MainType exposing (Msg(..))
 import MenuType
 
 
-update : MainType.Msg -> MenuType.Model -> ( MenuType.Model, Cmd MainType.Msg )
-update msg model =
+update : MainType.Msg -> ( MenuType.Model, Cmd MainType.Msg ) -> ( MenuType.Model, Cmd MainType.Msg )
+update msg ( model, cmd ) =
     --( model, Cmd.batch[consoleLog ("update " ++ if (model.menuStatus == Hall) then "Hall" else "Room")] )
-    ( model, Cmd.none )
+    ( model, cmd )
         --|> updateServerMainType.Msg msg
         |> updateButton msg
         |> updateControl msg

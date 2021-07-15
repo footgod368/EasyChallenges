@@ -6,15 +6,16 @@ module MenuView exposing (view)
 import Array
 import Html exposing (Html, div)
 import Html.Attributes as HtmlAttr
+import MainConstant
 import Maybe exposing (withDefault)
 import MainType
-import MenuType exposing (MenuStatus(..), Model)
+import MenuType
 import Svg exposing (Svg)
 import Svg.Attributes as SvgAttr
 import Svg.Events as SvgEvent
 
 
-view : Model -> Html MainType.Msg
+view : MenuType.Model -> Html MainType.Msg
 view model =
         div
             [ HtmlAttr.style "width" "100%"
@@ -46,7 +47,7 @@ view model =
         ]
 
 
-drawBackground : Model -> List (Svg MainType.Msg)
+drawBackground : MenuType.Model -> List (Svg MainType.Msg)
 drawBackground model =
     ----background
     --  [ Svg.rect
@@ -72,13 +73,13 @@ drawBackground model =
         , SvgAttr.y "150"
         , SvgAttr.fontSize "60"
         , SvgAttr.textAnchor "left"
-        , SvgAttr.fill "#FFE6E8"
+        , SvgAttr.fill "#A0E6E8"
         ]
         [ Svg.text "Intergalactic Betrayal" ]
     ]
 
 
-drawButtons : Model -> List (Svg MainType.Msg)
+drawButtons : MenuType.Model -> List (Svg MainType.Msg)
 drawButtons model =
     [ --start button
       Svg.rect
@@ -86,7 +87,7 @@ drawButtons model =
         , SvgAttr.y "450"
         , SvgAttr.width "250"
         , SvgAttr.height "80"
-        , SvgAttr.fill (withDefault "White" (Array.get startGameButtonId model.buttonState))
+        , SvgAttr.fill (withDefault "White" (Array.get MainConstant.menuButtonLevel0 model.buttonState))
         ]
         []
     , Svg.text_
@@ -103,84 +104,10 @@ drawButtons model =
         , SvgAttr.width "250"
         , SvgAttr.height "80"
         , SvgAttr.fill "#00000000"
-        , SvgEvent.onMouseOver (OnMouseOver startGameButtonId)
-        , SvgEvent.onMouseOut (OnMouseOut startGameButtonId)
-        , SvgEvent.onMouseDown (OnMouseDown startGameButtonId)
-        , SvgEvent.onMouseUp (OnMouseUp startGameButtonId)
+        , SvgEvent.onMouseOver (MainType.OnMouseOver MainConstant.menuButtonLevel0)
+        , SvgEvent.onMouseOut (MainType.OnMouseOut MainConstant.menuButtonLevel0)
+        , SvgEvent.onMouseDown (MainType.OnMouseDown MainConstant.menuButtonLevel0)
+        , SvgEvent.onMouseUp (MainType.OnMouseUp MainConstant.menuButtonLevel0)
         ]
         []
     ]
-
-
-drawBall : Model -> List (Svg MainType.Msg)
-drawBall model =
-    [ Svg.circle
-        [ SvgAttr.cx
-            (model.ball.pos
-                |> Tuple.first
-                |> String.fromFloat
-            )
-        , SvgAttr.cy
-            (model.ball.pos
-                |> Tuple.second
-                |> String.fromFloat
-            )
-        , SvgAttr.r
-            (ballRadius
-                |> String.fromFloat
-            )
-        , SvgAttr.fill "#FFE6E8"
-        ]
-        []
-    ]
-
-
-drawCrown : Model -> List (Svg MainType.Msg)
-drawCrown model =
-    case model.winner of
-        0 ->
-            []
-
-        2 ->
-            [ Svg.image
-                [ SvgAttr.x "920"
-                , SvgAttr.y "210"
-                , SvgAttr.width "100"
-                , SvgAttr.height "100"
-                , SvgAttr.xlinkHref "assets/crown.svg"
-                ]
-                []
-            ]
-
-        1 ->
-            [ Svg.image
-                [ SvgAttr.x "1073"
-                , SvgAttr.y "210"
-                , SvgAttr.width "100"
-                , SvgAttr.height "100"
-                , SvgAttr.xlinkHref "assets/crown.svg"
-                ]
-                []
-            ]
-
-        3 ->
-            [ Svg.image
-                [ SvgAttr.x "920"
-                , SvgAttr.y "210"
-                , SvgAttr.width "100"
-                , SvgAttr.height "100"
-                , SvgAttr.xlinkHref "assets/crown.svg"
-                ]
-                []
-            , Svg.image
-                [ SvgAttr.x "1073"
-                , SvgAttr.y "210"
-                , SvgAttr.width "100"
-                , SvgAttr.height "100"
-                , SvgAttr.xlinkHref "assets/crown.svg"
-                ]
-                []
-            ]
-
-        _ ->
-            []

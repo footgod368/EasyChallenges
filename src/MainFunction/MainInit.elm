@@ -10,9 +10,11 @@ module MainInit exposing (init)
 -}
 
 import Browser.Dom exposing (Viewport, getViewport)
+import Level0Init
 import Level1Init
 import MainModel
 import MainType
+import MenuInit
 import Task
 
 
@@ -21,15 +23,12 @@ import Task
 init : () -> ( MainModel.Model, Cmd MainType.Msg )
 init a =
     let
-        ( level1Model, level1Cmd ) =
-            Level1Init.init ()
-
         mainModel =
-            MainModel.Model MainType.Level1 level1Model
+            { scene = MainType.Menu
+            , level0Model = (Level0Init.init () |> Tuple.first)
+            , level1Model = (Level1Init.init () |> Tuple.first)
+            , menuModel = (MenuInit.init () |> Tuple.first)
+            }
 
-        mainCmd =
-            Cmd.batch
-                [ level1Cmd
-                ]
     in
-    ( mainModel, mainCmd )
+    ( mainModel, Cmd.none )
