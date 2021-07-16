@@ -49,7 +49,7 @@ init a =
                     ,   Event.hitLineSeg 6 "first sword" (GlobalBasics.blockPosFloat (14,1)) (GlobalBasics.blockPosFloat (14,14))
                     ]
             , boundary = Boundary.normalInit
-            , player = Player.init (  50.0, 490.0  )
+            , player = Player.init (  50.0, 490.0  ) Player.defPlayerProperty
             , bricks =
                 Array.fromList
                     (List.concat

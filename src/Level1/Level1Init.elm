@@ -52,7 +52,7 @@ init a =
                     , Event.hitBlock 11 "sixth hidden brick" (45,12) (1,1)
                     ]
             , boundary = Boundary.normalInit
-            , player = Player.init (  50.0, 490.0  )
+            , player = Player.init (  50.0, 490.0  ) Player.defPlayerProperty
             , bricks =
                 Array.fromList
                     (List.concat

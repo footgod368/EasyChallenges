@@ -1,5 +1,5 @@
 module Player exposing
-    ( Player, PlayerProperty
+    ( Player, PlayerProperty, defPlayerProperty
     , init
     , update, updateJustPlayerPos
     , view
@@ -98,6 +98,69 @@ type alias Player =
     }
 
 
+
+{-| Constant width of player object
+-}
+--playerWidth : Float
+--playerWidth =
+--    20.0
+
+
+{-| Constant height of player object
+-}
+--playerHeight : Float
+--playerHeight =
+--    20.0
+
+
+{-| Constant of how many times player can jump
+-}
+playerJumpNum : Int
+playerJumpNum =
+    2
+
+
+{-| If only one-time on-ground jump is allowed
+-}
+ifOneJumpAndOnTheGround : Bool
+ifOneJumpAndOnTheGround =
+    True
+
+
+{-| Constant of how many frames can one jump lasts
+-}
+playerJumpFrames : Int
+playerJumpFrames =
+    20
+
+
+{-| Constant of how many will the player accelerate after the first time the jump is pressed.
+-}
+playerJumpInitialAcce : Float
+playerJumpInitialAcce =
+    0.6
+
+
+{-| Constant of how fast will the player object move when left or right is pressed.
+-}
+playerHorizontalSpeed : Float
+playerHorizontalSpeed =
+    1.93
+
+
+{-| Constant of initial speed of jump.
+-}
+playerInitialJumpSpeed : Float
+playerInitialJumpSpeed =
+    -1.0
+
+
+{-| Constant of the gravity.
+-}
+gravityAcce : Float
+gravityAcce =
+    0.1
+
 {-| LiveState defines if the player is live, dead, or win this level.
 -}
 type LiveState
@@ -163,9 +226,9 @@ playerJumpAcce frameNum =
 
 {-| Initiate the player with its initial position.
 -}
-init : GlobalBasics.Pos -> Player
-init pos =
-    { property = defPlayerProperty
+init : GlobalBasics.Pos -> PlayerProperty -> Player
+init pos property =
+    { property = property
     , pos = pos
     , lastPos = pos
     , velocity = ( 0.0, 0.0 )
@@ -174,10 +237,10 @@ init pos =
     , collisionBox =
         GlobalBasics.Polygon
             (Array.fromList
-                [ ( ( 0.0, 0.0 ), ( playerWidth, 0.0 ) )
-                , ( ( playerWidth, 0.0 ), ( playerWidth, playerHeight ) )
-                , ( ( playerWidth, playerHeight ), ( 0.0, playerHeight ) )
-                , ( ( 0.0, playerHeight ), ( 0.0, 0.0 ) )
+                [ ( ( 0.0, 0.0 ), ( property.playerWidth, 0.0 ) )
+                , ( ( property.playerWidth, 0.0 ), ( property.playerWidth, property.playerHeight ) )
+                , ( ( property.playerWidth, property.playerHeight ), ( 0.0, property.playerHeight ) )
+                , ( ( 0.0, property.playerHeight ), ( 0.0, 0.0 ) )
                 ]
             )
     , ifChangeBackToLastPosX = False
@@ -362,8 +425,8 @@ view model =
     [ Svg.rect
         [ SvgAttr.x (String.fromFloat (playerX - 1.0 + playerDeltaX model))
         , SvgAttr.y (String.fromFloat (playerY + playerDeltaY model))
-        , SvgAttr.width (String.fromFloat (playerWidth + 1.0))
-        , SvgAttr.height (String.fromFloat playerHeight)
+        , SvgAttr.width (String.fromFloat (model.player.property.playerWidth + 1.0))
+        , SvgAttr.height (String.fromFloat model.player.property.playerHeight)
         , SvgAttr.fill "#000000"
         ]
         []
