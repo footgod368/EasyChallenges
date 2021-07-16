@@ -1,10 +1,10 @@
 module Player exposing
-    ( Player, PlayerProperty, defPlayerProperty
+    ( Player, PlayerProperty
     , init
     , update, updateJustPlayerPos
     , view
     , playerRefreshJump, playerIfCollidePoly, playerCollideRigidBody
-    , LiveState(..), checkDead, playerDead, playerWin
+    , LiveState(..), checkDead, defPlayerProperty, playerDead, playerWin
     )
 
 {-| The Player unit, the figure that player controls.
@@ -13,6 +13,7 @@ module Player exposing
 # Player
 
 @docs Player, PlayerJump, PlayerProperty
+
 
 # init
 
@@ -42,6 +43,7 @@ import Maybe exposing (withDefault)
 import Svg exposing (Svg)
 import Svg.Attributes as SvgAttr
 
+
 {-| `PlayerJump` defines the statuses of the jump. PLayerJump (jumpNum : Int) (jumpFrame : Int). jumpNum : how many
 times left can the player jump. jumpFrame : what frame is this jump if it's happening, -1 represents not jumping now
 and last jump has keyUp, -2 represents jump has keyDown but last jump hasn't release.
@@ -64,6 +66,7 @@ type alias PlayerProperty =
     , gravityAcce : Float
     }
 
+
 defPlayerProperty : PlayerProperty
 defPlayerProperty =
     { playerWidth = 20.0
@@ -76,6 +79,7 @@ defPlayerProperty =
     , playerHorizontalSpeed = 1.93
     , gravityAcce = 0.1
     }
+
 
 {-| Definition of player, `pos` is current position, `lastPos` store the last position, used in collision test,
 `velocity` is its velocity, divided into x-axis and y-axis. `collisionBox` is its `CollisionBox`, `jumpNum` is how
@@ -97,12 +101,14 @@ type alias Player =
     , saveNumber : Int
     }
 
+
 {-| LiveState defines if the player is live, dead, or win this level.
 -}
 type LiveState
     = Live
     | Dead
     | Win
+
 
 {-| Change the state of player to Dead
 -}
@@ -239,8 +245,7 @@ updatePlayerVelocity ( model, cmd ) =
                         ( model.player.jump, oldVelocityY + model.player.property.gravityAcce )
 
                     else if List.member 38 model.keyPressed || List.member 87 model.keyPressed then
-                        if jumpFrame == -1 && (not model.player.property.ifPlayerJumpOnTheGround || model.player.ifThisFrameOnGround)
-                        then
+                        if jumpFrame == -1 && (not model.player.property.ifPlayerJumpOnTheGround || model.player.ifThisFrameOnGround) then
                             ( Jump jumpNum (model.player.property.playerJumpFrames - 1)
                             , model.player.property.playerJumpInitialSpeed
                                 + playerJumpAcce
@@ -249,8 +254,11 @@ updatePlayerVelocity ( model, cmd ) =
                             )
 
                         else if jumpFrame > 0 then
-                            ( Jump jumpNum (jumpFrame - 1), oldVelocityY + model.player.property.gravityAcce -
-                            playerJumpAcce model jumpFrame )
+                            ( Jump jumpNum (jumpFrame - 1)
+                            , oldVelocityY
+                                + model.player.property.gravityAcce
+                                - playerJumpAcce model jumpFrame
+                            )
 
                         else if jumpFrame == 0 then
                             ( Jump (jumpNum - 1) -2, oldVelocityY + model.player.property.gravityAcce )
@@ -468,7 +476,7 @@ playerRefreshJump model =
             model.player
 
         newPlayer =
-            { oldPlayer | jump = Jump (model.player.property.playerJumpNum) -1, ifThisFrameOnGround = True }
+            { oldPlayer | jump = Jump model.player.property.playerJumpNum -1, ifThisFrameOnGround = True }
     in
     { model | player = newPlayer }
 
@@ -673,19 +681,22 @@ playerCollideRigidBody model unit =
 
                                             else
                                                 collideXModel
-
                                     in
-                                    if (collideYModel.player.ifChangeBackToLastPosX == False
-                                        && collideYModel.player.ifChangeBackToLastPosX == False) then
+                                    if
+                                        collideYModel.player.ifChangeBackToLastPosX
+                                            == False
+                                            && collideYModel.player.ifChangeBackToLastPosX
+                                            == False
+                                    then
                                         let
                                             oldPlayer =
                                                 collideYModel.player
 
                                             newPlayer =
-                                                { oldPlayer | ifChangeBackToLastPosY = True}
+                                                { oldPlayer | ifChangeBackToLastPosY = True }
 
                                             newCollideYModel =
-                                                { collideYModel | player = newPlayer}
+                                                { collideYModel | player = newPlayer }
                                         in
                                         newCollideYModel
 
