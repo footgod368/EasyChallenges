@@ -69,9 +69,18 @@ init a =
                             )
                         )
                         (Event.quickDuration 10)
+                    , Event.hitLineSeg 15 "Reverse direction" (GlobalBasics.blockPosFloat ( 78, 1 )) (GlobalBasics.blockPosFloat ( 78, 30 ))
                     ]
             , boundary = Boundary.normalInit
-            , player = Player.init ( 50.0, 490.0 ) Player.defPlayerProperty
+            , player =
+            (
+            let
+                defPlayerProperty =
+                    Player.defPlayerProperty
+            in
+            Player.init ( 50.0, 490.0 ) Player.defPlayerProperty
+                ( Player.ChangeTo { defPlayerProperty | playerHorizontalSpeed = -1.93 } 15 Player.NoNextPropertyChange )
+            )
             , bricks =
                 Array.fromList
                     (List.concat

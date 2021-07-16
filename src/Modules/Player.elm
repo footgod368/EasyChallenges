@@ -1,10 +1,10 @@
 module Player exposing
-    ( Player, PlayerProperty
+    ( Player, PlayerProperty, defPlayerProperty, PropertyChange(..)
     , init
     , update, updateJustPlayerPos
     , view
     , playerRefreshJump, playerIfCollidePoly, playerCollideRigidBody
-    , LiveState(..), checkDead, defPlayerProperty, playerDead, playerWin
+    , LiveState(..), checkDead, playerDead, playerWin
     )
 
 {-| The Player unit, the figure that player controls.
@@ -12,7 +12,7 @@ module Player exposing
 
 # Player
 
-@docs Player, PlayerJump, PlayerProperty
+@docs Player, PlayerJump, PlayerProperty, defPlayerProperty, PropertyChange
 
 
 # init
@@ -81,6 +81,11 @@ defPlayerProperty =
     }
 
 
+type PropertyChange
+    = ChangeTo PlayerProperty Int PropertyChange
+    | NoNextPropertyChange
+
+
 {-| Definition of player, `pos` is current position, `lastPos` store the last position, used in collision test,
 `velocity` is its velocity, divided into x-axis and y-axis. `collisionBox` is its `CollisionBox`, `jumpNum` is how
 many times it can jump, "deadTimes" is how many times the player dead, "saveNumber" describes which savePoint
@@ -88,6 +93,7 @@ the player last saved, saveNumber = 0 means saved at the first savePoint, 1 mean
 -}
 type alias Player =
     { property : PlayerProperty
+    , propertyChange : PropertyChange
     , pos : GlobalBasics.Pos
     , lastPos : GlobalBasics.Pos
     , velocity : GlobalBasics.Pos
@@ -168,9 +174,10 @@ playerJumpAcce model frameNum =
 
 {-| Initiate the player with its initial position.
 -}
-init : GlobalBasics.Pos -> PlayerProperty -> Player
-init pos property =
+init : GlobalBasics.Pos -> PlayerProperty -> PropertyChange -> Player
+init pos property propertyChange=
     { property = property
+    , propertyChange = propertyChange
     , pos = pos
     , lastPos = pos
     , velocity = ( 0.0, 0.0 )
@@ -195,11 +202,12 @@ init pos property =
 
 {-| Update of player unit. Calls sub update.
 -}
-update : ( { model | player : Player, keyPressed : List Int }, Cmd MainType.Msg ) -> ( { model | player : Player, keyPressed : List Int }, Cmd MainType.Msg )
+update : ( { model | player : Player, keyPressed : List Int, actEvent : Array { id : Int, name : String} }, Cmd MainType.Msg ) -> ( { model | player : Player, keyPressed : List Int, actEvent : Array { id : Int, name : String} }, Cmd MainType.Msg )
 update ( model, cmd ) =
     case model.player.liveState of
         Live ->
             ( model, cmd )
+                |> updatePlayerProperty
                 |> updatePlayerPos
                 |> updatePlayerVelocity
 
@@ -207,6 +215,32 @@ update ( model, cmd ) =
             ( model, cmd )
 
         Win ->
+            ( model, cmd )
+
+updatePlayerProperty : ( { model | player : Player, actEvent : Array { id : Int, name : String} }, Cmd MainType.Msg ) -> ( { model | player : Player, actEvent : Array { id : Int, name : String} }, Cmd MainType.Msg )
+updatePlayerProperty ( model, cmd ) =
+    case model.player.propertyChange of
+        ChangeTo newProperty eventID nextPropertyChange ->
+             if Array.foldl
+                (\actEvent sum ->
+                    if actEvent.id == eventID then
+                        sum + 1
+                    else
+                        sum) 0 model.actEvent
+                /= 0 then
+                let
+                    oldPlayer =
+                        model.player
+
+                    newPlayer =
+                        { oldPlayer | property = newProperty, propertyChange = nextPropertyChange}
+                in
+                ( { model | player = newPlayer }, cmd )
+
+            else
+                ( model, cmd )
+
+        NoNextPropertyChange ->
             ( model, cmd )
 
 
