@@ -10,19 +10,18 @@ module MainUpdate exposing (update)
 -}
 
 import Browser.Dom exposing (getViewport)
-import Level0Update
 import Level0Init
-import Level1Update
+import Level0Update
 import Level1Init
-import Level2Update
+import Level1Update
 import Level2Init
-import Level3Update
+import Level2Update
 import Level3Init
+import Level3Update
 import MainModel
 import MainType
 import MenuUpdate
 import Task
-
 
 
 changeToLevel : MainType.MainScene -> ( MainModel.Model, Cmd MainType.Msg ) -> ( MainModel.Model, Cmd MainType.Msg )
@@ -33,16 +32,17 @@ changeToLevel newScene ( model, cmd ) =
     in
     case newScene of
         MainType.Level0 ->
-            ( { newModel | level0Model = Level0Init.init () |> Tuple.first } , cmd )
+            ( { newModel | level0Model = Level0Init.init () |> Tuple.first }, cmd )
 
         MainType.Level1 ->
-            ( { newModel | level1Model = Level1Init.init () |> Tuple.first } , cmd )
+            ( { newModel | level1Model = Level1Init.init () |> Tuple.first }, cmd )
 
         MainType.Level2 ->
-            ( { newModel | level2Model = Level2Init.init () |> Tuple.first } , cmd )
+            ( { newModel | level2Model = Level2Init.init () |> Tuple.first }, cmd )
 
         MainType.Level3 ->
-            ( { newModel | level3Model = Level3Init.init () |> Tuple.first } , cmd )
+            ( { newModel | level3Model = Level3Init.init () |> Tuple.first }, cmd )
+
         _ ->
             ( newModel, cmd )
 
@@ -83,10 +83,10 @@ update msg model =
                     Level2Update.update msg model.level2Model
             in
             ( { model | level2Model = newLevel2Model }, cmd )
+
         MainType.Level3 ->
             let
                 ( newLevel3Model, cmd ) =
                     Level3Update.update msg model.level3Model
             in
             ( { model | level3Model = newLevel3Model }, cmd )
-        

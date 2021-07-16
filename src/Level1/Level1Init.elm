@@ -14,7 +14,7 @@ import Boundary
 import Brick
 import Browser.Dom exposing (getViewport)
 import EndPoint
-import Event
+import Event exposing (Event)
 import GlobalBasics
 import Level1Type
 import MainType
@@ -24,7 +24,6 @@ import NoticeBoard
 import Player
 import SavePoint
 import Task
-import Event exposing (Event)
 
 
 {-| `init` of Level1 \`Model
@@ -38,25 +37,25 @@ init a =
             , actEvent = Array.fromList []
             , event =
                 Array.fromList
-                    [ Event.hitLineSeg 1 "first falling ground" (GlobalBasics.blockPosFloat (6,12.5)) (GlobalBasics.blockPosFloat (6,15))
-                    , Event.hitLineSeg 2 "first ?" (564,491) (604,491)
-                    , Event.hitLineSeg 3 "first falling needles" (GlobalBasics.blockPosFloat (23,13)) (GlobalBasics.blockPosFloat (23,20))
-                    , Event.hitLineSeg 4 "second ?"  (GlobalBasics.blockPosFloat ( 24.1, 10 ))  (GlobalBasics.blockPosFloat ( 24.9, 10 ))
-                    , Event.hitBlock 5 "first hidden brick" (4.5,12) (1,1)
-                    , Event.hitBlock 6 "second hidden brick" (5.5,12) (1,1)
-                    , Event.hitBlock 7 "third hidden brick" (32.5,12) (1,1)
-                    , Event.hitBlock 8 "fourth hidden brick" (33.5,12) (1,1)
+                    [ Event.hitLineSeg 1 "first falling ground" (GlobalBasics.blockPosFloat ( 6, 12.5 )) (GlobalBasics.blockPosFloat ( 6, 15 ))
+                    , Event.hitLineSeg 2 "first ?" ( 564, 491 ) ( 604, 491 )
+                    , Event.hitLineSeg 3 "first falling needles" (GlobalBasics.blockPosFloat ( 23, 13 )) (GlobalBasics.blockPosFloat ( 23, 20 ))
+                    , Event.hitLineSeg 4 "second ?" (GlobalBasics.blockPosFloat ( 24.1, 10 )) (GlobalBasics.blockPosFloat ( 24.9, 10 ))
+                    , Event.hitBlock 5 "first hidden brick" ( 4.5, 12 ) ( 1, 1 )
+                    , Event.hitBlock 6 "second hidden brick" ( 5.5, 12 ) ( 1, 1 )
+                    , Event.hitBlock 7 "third hidden brick" ( 32.5, 12 ) ( 1, 1 )
+                    , Event.hitBlock 8 "fourth hidden brick" ( 33.5, 12 ) ( 1, 1 )
                     , Event.hitLineSeg 9 "first hidden needles" (GlobalBasics.blockPosFloat ( 31, 9.26 )) (GlobalBasics.blockPosFloat ( 37, 9.26 ))
-                    ,Event.hitLineSeg 9 "first hidden needles" (GlobalBasics.blockPosFloat ( 31, 8.99 )) (GlobalBasics.blockPosFloat ( 37, 8.99 ))
-                    , Event.hitBlock 10 "fifth hidden brick" (44,12) (1,1)
-                    , Event.hitBlock 11 "sixth hidden brick" (45,12) (1,1)
+                    , Event.hitLineSeg 9 "first hidden needles" (GlobalBasics.blockPosFloat ( 31, 8.99 )) (GlobalBasics.blockPosFloat ( 37, 8.99 ))
+                    , Event.hitBlock 10 "fifth hidden brick" ( 44, 12 ) ( 1, 1 )
+                    , Event.hitBlock 11 "sixth hidden brick" ( 45, 12 ) ( 1, 1 )
                     ]
             , boundary = Boundary.normalInit
-            , player = Player.init (  50.0, 490.0  ) Player.defPlayerProperty
+            , player = Player.init ( 50.0, 490.0 ) Player.defPlayerProperty
             , bricks =
                 Array.fromList
                     (List.concat
-                        [ [NoticeBoard.boundary ( 2, 5 ) ( 7, 4 )]
+                        [ [ NoticeBoard.boundary ( 2, 5 ) ( 7, 4 ) ]
                         , Brick.initRow 15 1 4
                         , Brick.initFallingRow 15 5 8 1
                         , Brick.initRow 15 9 32
@@ -79,7 +78,7 @@ init a =
                           , Brick.initNoCollideHidden ( 5.5, 12 ) 6
                           ]
                         , Brick.initRow 15 36 80
-                        , [NoticeBoard.boundary ( 31, 5 ) ( 7, 4 )]
+                        , [ NoticeBoard.boundary ( 31, 5 ) ( 7, 4 ) ]
                         , [ Brick.initNoCollideHidden ( 32.5, 12 ) 7
                           , Brick.initNoCollideHidden ( 33.5, 12 ) 8
                           ]
@@ -103,7 +102,7 @@ init a =
                     , NoticeBoard.quickInit (GlobalBasics.blockPosFloat ( 34.5, 7.5 )) "Caution!" 40
                     , NoticeBoard.quickInit (GlobalBasics.blockPosFloat ( 15.5, 12.85 )) "?" 40
                     , NoticeBoard.quickInit (GlobalBasics.blockPosFloat ( 24.5, 9.85 )) "?" 40
-                    , NoticeBoard.quickInit (GlobalBasics.blockPosFloat (15.0, 7.0)) "Press R to respawn" 40
+                    , NoticeBoard.quickInit (GlobalBasics.blockPosFloat ( 15.0, 7.0 )) "Press R to respawn" 40
                     ]
             , needles =
                 Array.fromList

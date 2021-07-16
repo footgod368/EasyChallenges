@@ -189,7 +189,7 @@ update ( model, cmd ) =
     ( List.foldl updateOneSavePoint model (List.range 0 (Array.length model.savePoints - 1)), cmd )
 
 
-updateReset : (() -> ({ model | savePoints : Array SavePoint, player: Player.Player}, Cmd MainType.Msg))-> ( { model | player : Player.Player, savePoints : Array SavePoint }, Cmd MainType.Msg )-> ( { model | player : Player.Player, savePoints : Array SavePoint }, Cmd MainType.Msg )
+updateReset : (() -> ( { model | savePoints : Array SavePoint, player : Player.Player }, Cmd MainType.Msg )) -> ( { model | player : Player.Player, savePoints : Array SavePoint }, Cmd MainType.Msg ) -> ( { model | player : Player.Player, savePoints : Array SavePoint }, Cmd MainType.Msg )
 updateReset levelInit ( model, cmd ) =
     let
         ( initModel, initCmd ) =

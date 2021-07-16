@@ -1,4 +1,5 @@
 module MainConstant exposing (..)
+
 {-| Constants used in all places.
 -}
 
@@ -9,25 +10,33 @@ menuButtonLevel0 : Int
 menuButtonLevel0 =
     0
 
+
 menuButtonLevel1 : Int
 menuButtonLevel1 =
     1
 
+
 menuButtonLevel2 : Int
 menuButtonLevel2 =
     2
+
+
 menuButtonLevel3 : Int
 menuButtonLevel3 =
     3
+
+
 {-| Normal color of button
 -}
 buttonNormalColor =
     "#FFE6E8FF"
 
+
 {-| Color of button when the mouse is on it
 -}
 buttonOverColor =
     "#FFE6E8CF"
+
 
 {-| Color of button when it's pressed
 -}
