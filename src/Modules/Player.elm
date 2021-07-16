@@ -72,8 +72,8 @@ defPlayerProperty =
     , ifPlayerJumpOnTheGround = True
     , playerJumpFrames = 20
     , playerJumpInitialAcce = 0.6
-    , playerJumpInitialSpeed = 1.93
-    , playerHorizontalSpeed = -1.0
+    , playerJumpInitialSpeed = -1.0
+    , playerHorizontalSpeed = 1.93
     , gravityAcce = 0.3
     }
 
@@ -115,14 +115,6 @@ playerJumpFrames =
 playerJumpInitialAcce : Float
 playerJumpInitialAcce =
     0.6
-
-
-{-| Constant of how fast will the player object move when left or right is pressed.
--}
-playerHorizontalSpeed : Float
-playerHorizontalSpeed =
-    1.93
-
 
 {-| Constant of initial speed of jump.
 -}
@@ -261,13 +253,13 @@ updatePlayerVelocity ( model, cmd ) =
                     --
 
                 else
-                    -playerHorizontalSpeed
+                    -model.player.property.playerHorizontalSpeed
 
             else if List.member 68 model.keyPressed || List.member 39 model.keyPressed then
                 --if abs oldVelocityY <= 0.1 then
                 --    playerHorizontalSpeed * 2
                 --else
-                playerHorizontalSpeed
+                model.player.property.playerHorizontalSpeed
 
             else
                 0.0
