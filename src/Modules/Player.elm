@@ -1,5 +1,5 @@
 module Player exposing
-    ( Player
+    ( Player, PlayerProperty
     , init
     , update, updateJustPlayerPos
     , view
@@ -12,14 +12,7 @@ module Player exposing
 
 # Player
 
-@docs Player, PlayerJump
-
-
-# Player Constant
-
-@docs playerWidth, playerHeight, playerJumpNum, playerJumpFrames, playerJumpInitialAcce, playerHorizontalSpeed
-@docs playerInitialJumpSpeed, gravityAcce, playerJumpAcce
-
+@docs Player, PlayerJump, PlayerProperty
 
 # init
 
@@ -57,13 +50,41 @@ type PlayerJump
     = Jump Int Int
 
 
+{-| Properties that can change during the game
+-}
+type alias PlayerProperty =
+    { playerWidth : Float
+    , playerHeight : Float
+    , playerJumpNum : Int
+    , ifPlayerJumpOnTheGround : Bool
+    , playerJumpFrames : Int
+    , playerJumpInitialAcce : Float
+    , playerJumpInitialSpeed : Float
+    , playerHorizontalSpeed : Float
+    , gravityAcce : Float
+    }
+
+defPlayerProperty : PlayerProperty
+defPlayerProperty =
+    { playerWidth = 20.0
+    , playerHeight = 20.0
+    , playerJumpNum = 1
+    , ifPlayerJumpOnTheGround = True
+    , playerJumpFrames = 20
+    , playerJumpInitialAcce = 0.6
+    , playerJumpInitialSpeed = 1.93
+    , playerHorizontalSpeed = -1.0
+    , gravityAcce = 0.3
+    }
+
 {-| Definition of player, `pos` is current position, `lastPos` store the last position, used in collision test,
 `velocity` is its velocity, divided into x-axis and y-axis. `collisionBox` is its `CollisionBox`, `jumpNum` is how
 many times it can jump, "deadTimes" is how many times the player dead, "saveNumber" describes which savePoint
 the player last saved, saveNumber = 0 means saved at the first savePoint, 1 means the second, ...
 -}
 type alias Player =
-    { pos : GlobalBasics.Pos
+    { property : PlayerProperty
+    , pos : GlobalBasics.Pos
     , lastPos : GlobalBasics.Pos
     , velocity : GlobalBasics.Pos
     , jump : PlayerJump
@@ -83,70 +104,6 @@ type LiveState
     = Live
     | Dead
     | Win
-
-
-{-| Constant width of player object
--}
-playerWidth : Float
-playerWidth =
-    20.0
-
-
-{-| Constant height of player object
--}
-playerHeight : Float
-playerHeight =
-    20.0
-
-
-{-| Constant of how many times player can jump
--}
-playerJumpNum : Int
-playerJumpNum =
-    2
-
-
-{-| If only one-time on-ground jump is allowed
--}
-ifOneJumpAndOnTheGround : Bool
-ifOneJumpAndOnTheGround =
-    True
-
-
-{-| Constant of how many frames can one jump lasts
--}
-playerJumpFrames : Int
-playerJumpFrames =
-    20
-
-
-{-| Constant of how many will the player accelerate after the first time the jump is pressed.
--}
-playerJumpInitialAcce : Float
-playerJumpInitialAcce =
-    0.6
-
-
-{-| Constant of how fast will the player object move when left or right is pressed.
--}
-playerHorizontalSpeed : Float
-playerHorizontalSpeed =
-    1.93
-
-
-{-| Constant of initial speed of jump.
--}
-playerInitialJumpSpeed : Float
-playerInitialJumpSpeed =
-    -1.0
-
-
-{-| Constant of the gravity.
--}
-gravityAcce : Float
-gravityAcce =
-    0.1
-
 
 {-| Change the state of player to Dead
 -}
@@ -208,7 +165,8 @@ playerJumpAcce frameNum =
 -}
 init : GlobalBasics.Pos -> Player
 init pos =
-    { pos = pos
+    { property = defPlayerProperty
+    , pos = pos
     , lastPos = pos
     , velocity = ( 0.0, 0.0 )
     , jump = Jump 2 -1
