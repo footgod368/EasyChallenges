@@ -97,35 +97,11 @@ type alias Player =
     , saveNumber : Int
     }
 
-
-
-{-| Constant width of player object
--}
---playerWidth : Float
---playerWidth =
---    20.0
-
-
-{-| Constant height of player object
--}
---playerHeight : Float
---playerHeight =
---    20.0
-
-
 {-| Constant of how many times player can jump
 -}
 playerJumpNum : Int
 playerJumpNum =
     2
-
-
-{-| If only one-time on-ground jump is allowed
--}
-ifOneJumpAndOnTheGround : Bool
-ifOneJumpAndOnTheGround =
-    True
-
 
 {-| Constant of how many frames can one jump lasts
 -}
@@ -303,7 +279,8 @@ updatePlayerVelocity ( model, cmd ) =
                         ( model.player.jump, oldVelocityY + gravityAcce )
 
                     else if List.member 38 model.keyPressed || List.member 87 model.keyPressed then
-                        if jumpFrame == -1 && (not ifOneJumpAndOnTheGround || model.player.ifThisFrameOnGround) then
+                        if jumpFrame == -1 && (not model.player.property.ifPlayerJumpOnTheGround || model.player.ifThisFrameOnGround)
+                        then
                             ( Jump jumpNum (playerJumpFrames - 1)
                             , playerInitialJumpSpeed
                                 + playerJumpAcce
