@@ -129,7 +129,7 @@ init a =
                         ( 56 * 40, 65 * 40 )
                     ]
             , keyPressed = []
-            , gameControl = GameControl.init
+            , gameControl = GameControl.init MainType.Level2
             , mainScene = MainType.Level1
             }
     in

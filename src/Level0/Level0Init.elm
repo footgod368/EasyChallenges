@@ -226,7 +226,7 @@ init a =
                             )
                         )
                     ]
-            , gameControl = GameControl.init
+            , gameControl = GameControl.init MainType.Level1
             , mainScene = MainType.Level0
             , keyPressed = []
             }
