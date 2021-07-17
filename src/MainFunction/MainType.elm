@@ -39,3 +39,4 @@ type Msg
     | OnMouseOver Int
     | OnMouseOut Int
     | GetViewport Viewport
+    | Resize Int Int
