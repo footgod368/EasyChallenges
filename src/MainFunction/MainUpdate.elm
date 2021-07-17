@@ -75,18 +75,18 @@ update msg model =
                 ( newLevel1Model, cmd ) =
                     Level1Update.update msg model.level1Model
             in
-            ( { model | level1Model = newLevel1Model }, cmd )
+            ( { model | level1Model = newLevel1Model, mainScene = newLevel1Model.mainScene }, cmd )
 
         MainType.Level2 ->
             let
                 ( newLevel2Model, cmd ) =
                     Level2Update.update msg model.level2Model
             in
-            ( { model | level2Model = newLevel2Model }, cmd )
+            ( { model | level2Model = newLevel2Model, mainScene = newLevel2Model.mainScene }, cmd )
 
         MainType.Level3 ->
             let
                 ( newLevel3Model, cmd ) =
                     Level3Update.update msg model.level3Model
             in
-            ( { model | level3Model = newLevel3Model }, cmd )
+            ( { model | level3Model = newLevel3Model, mainScene = newLevel3Model.mainScene }, cmd )

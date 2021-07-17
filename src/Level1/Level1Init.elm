@@ -15,6 +15,7 @@ import Brick
 import Browser.Dom exposing (getViewport)
 import EndPoint
 import Event exposing (Event)
+import GameControl
 import GlobalBasics
 import Level1Type
 import MainType
@@ -128,6 +129,8 @@ init a =
                         ( 56 * 40, 65 * 40 )
                     ]
             , keyPressed = []
+            , gameControl = GameControl.init
+            , mainScene = MainType.Level1
             }
     in
     ( newModel, Task.perform MainType.GetViewport getViewport )
