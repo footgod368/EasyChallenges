@@ -40,4 +40,5 @@ type alias Model =
     , gameControl : GameControl.GameControl
     , mainScene : MainType.MainScene
     , keyPressed : List Int
+    , number: List Int
     }

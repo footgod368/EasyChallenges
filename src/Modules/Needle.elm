@@ -1,6 +1,6 @@
 module Needle exposing
     ( NeedleVisibility(..), NeedleCollision(..), NeedleMove(..), NeedleAppearance(..), Needle
-    , init, initFallingRow, initHiddenRow, normalNeedleWidth, initHidden
+    , init, initFallingRow, initHiddenRow, normalNeedleWidth, initHidden,initHiddenFloat
     , view
     , update
     , initHiddenCollideAfter, initHiddenFalling, initHiddenFallingRow, initPos, needleCollisionBox, normalNeedleHeight, sword
@@ -197,6 +197,15 @@ initHidden ( x, y ) id =
     , needleMove = NoNextNeedleMove
     }
 
+initHiddenFloat : ( Float, Float ) -> Int -> Needle
+initHiddenFloat ( x, y ) id =
+    { pos = GlobalBasics.blockPosFloat ( x, y )
+    , collisionBox = needleCollisionBox (NormalNeedle normalNeedleWidth normalNeedleHeight)
+    , appearance = NormalNeedle normalNeedleWidth normalNeedleHeight
+    , needleVisibility = Invisible (VisibleAfterEvent id NoNextNeedleVisibility)
+    , needleCollision = Collide NoNextNeedleCollision
+    , needleMove = NoNextNeedleMove
+    }
 
 {-| quick function to create a row of hidden needles
 -}
