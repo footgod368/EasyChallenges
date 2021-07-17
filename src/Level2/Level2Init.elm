@@ -24,6 +24,9 @@ import NoticeBoard
 import Player
 import SavePoint
 import Task
+import NoticeBoard exposing (NoticeBoardVisibility)
+import Brick exposing (BrickVisibility(..))
+import NoticeBoard exposing (NoticeBoard)
 
 
 {-| `init` of Level2 \`Model
@@ -70,7 +73,7 @@ init a =
                             )
                         )
                         (Event.quickDuration 10)
-                    , Event.hitLineSeg 15 "Reverse direction" (GlobalBasics.blockPosFloat ( 78, 1 )) (GlobalBasics.blockPosFloat ( 78, 30 ))
+                    , Event.hitBlock 15 "Reverse direction" ( 78.125 , 11.5 - 1.75 ) (1.75,1.75)
                     ]
             , boundary = Boundary.normalInit
             , player =
@@ -153,6 +156,13 @@ init a =
                         , [ Brick.initCollideHidden ( 71.5, 8.5 ) 10
                           , Brick.initCollideHidden ( 72.5, 8.5 ) 11
                           ]
+                        ,[ Brick.init
+                                (GlobalBasics.blockPosFloat ( 78.125 , 11.5 - 1.75 ))
+                                (Brick.Detailed 70 70 "#FFFF00")
+                                (Brick.Visible (Brick.InvisibleAfterEvent 15 Brick.NoNextBrickVisibility))
+                                (Brick.NoCollide Brick.NoNextBrickCollision)
+                                Brick.NoNextBrickMove
+                          ]
                         ]
                     )
             , savePoints =
@@ -191,6 +201,10 @@ init a =
                     , NoticeBoard.quickInit (GlobalBasics.blockPosFloat ( 58.5, 7.2 )) ":)" 40
                     , NoticeBoard.quickInit (GlobalBasics.blockPosFloat ( 75, 8 )) "Danger!" 40
                     , NoticeBoard.quickInit (GlobalBasics.blockPosFloat ( 75, 9.2 )) "↓" 40
+                    , let
+                        tempBoard3 = NoticeBoard.quickInit (GlobalBasics.blockPosFloat ( 79, 11.2 )) "?" 60
+                      in
+                      {tempBoard3 | noticeBoardVisibility = NoticeBoard.Visible "?" (NoticeBoard.InvisibleAfterEvent 15 NoticeBoard.NoNextNoticeBoardVisibility)}
                     ]
             , needles =
                 Array.fromList
