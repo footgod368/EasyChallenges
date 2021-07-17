@@ -12,7 +12,7 @@ import MenuView
 
 view : MainModel.Model -> Html MainType.Msg
 view model =
-    case model.scene of
+    case model.mainScene of
         MainType.Menu ->
             MenuView.view model.menuModel
 

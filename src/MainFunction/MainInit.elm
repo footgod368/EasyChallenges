@@ -26,7 +26,7 @@ init : () -> ( MainModel.Model, Cmd MainType.Msg )
 init a =
     let
         mainModel =
-            { scene = MainType.Menu
+            { mainScene = MainType.Menu
             , level0Model = Level0Init.init () |> Tuple.first
             , level1Model = Level1Init.init () |> Tuple.first
             , level2Model = Level2Init.init () |> Tuple.first
