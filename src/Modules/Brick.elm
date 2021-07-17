@@ -273,6 +273,8 @@ initCollideHiddenRow n x y id =
     List.map (\i -> initCollideHidden ( toFloat i, toFloat n ) id) (List.range x y)
 
 
+
+
 {-| default collisionBox
 -}
 brickCollisionBox : BrickAppearance -> GlobalBasics.CollisionBox
