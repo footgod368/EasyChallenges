@@ -14,6 +14,7 @@ import Boundary
 import Brick
 import EndPoint
 import Event
+import GameControl
 import Level3Init
 import Level3Type
 import MainType
@@ -62,8 +63,8 @@ update msg model =
             else
                 ( newModel, cmd )
 
-        _ ->
-            ( model, Cmd.none )
+        buttonMsg ->
+            GameControl.update buttonMsg ( model, Cmd.none )
 
 
 testUpdate : Int -> Level3Type.Model -> Level3Type.Model

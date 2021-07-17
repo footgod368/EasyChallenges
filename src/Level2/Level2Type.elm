@@ -14,8 +14,9 @@ import Boundary
 import Brick
 import EndPoint
 import Event
+import GameControl
 import GlobalBasics
-import Monster
+import MainType
 import Needle
 import NoticeBoard
 import Player
@@ -36,5 +37,7 @@ type alias Model =
     , endPoint : EndPoint.EndPoint
     , noticeBoards : Array NoticeBoard.NoticeBoard
     , needles : Array Needle.Needle
+    , gameControl : GameControl.GameControl
+    , mainScene : MainType.MainScene
     , keyPressed : List Int
     }

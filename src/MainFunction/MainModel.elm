@@ -20,7 +20,7 @@ import MenuType
 {-| This main model stores level1 Model
 -}
 type alias Model =
-    { scene : MainType.MainScene
+    { mainScene : MainType.MainScene
     , menuModel : MenuType.Model
     , level0Model : Level0Type.Model
     , level1Model : Level1Type.Model

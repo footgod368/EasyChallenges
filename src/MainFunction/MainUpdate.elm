@@ -28,7 +28,7 @@ changeToLevel : MainType.MainScene -> ( MainModel.Model, Cmd MainType.Msg ) -> (
 changeToLevel newScene ( model, cmd ) =
     let
         newModel =
-            { model | scene = newScene }
+            { model | mainScene = newScene }
     in
     case newScene of
         MainType.Level0 ->
@@ -51,14 +51,14 @@ changeToLevel newScene ( model, cmd ) =
 -}
 update : MainType.Msg -> MainModel.Model -> ( MainModel.Model, Cmd MainType.Msg )
 update msg model =
-    case model.scene of
+    case model.mainScene of
         MainType.Menu ->
             let
                 ( newMenuModel, cmd ) =
                     MenuUpdate.update msg ( model.menuModel, Cmd.none )
             in
             if newMenuModel.mainStatus /= MainType.Menu then
-                changeToLevel newMenuModel.mainStatus ( { model | menuModel = newMenuModel }, Task.perform MainType.GetViewport getViewport )
+                changeToLevel newMenuModel.mainStatus ( model, Task.perform MainType.GetViewport getViewport )
 
             else
                 ( { model | menuModel = newMenuModel }, cmd )
@@ -68,25 +68,25 @@ update msg model =
                 ( newLevel0Model, cmd ) =
                     Level0Update.update msg model.level0Model
             in
-            ( { model | level0Model = newLevel0Model }, cmd )
+            ( { model | level0Model = newLevel0Model, mainScene = newLevel0Model.mainScene }, cmd )
 
         MainType.Level1 ->
             let
                 ( newLevel1Model, cmd ) =
                     Level1Update.update msg model.level1Model
             in
-            ( { model | level1Model = newLevel1Model }, cmd )
+            ( { model | level1Model = newLevel1Model, mainScene = newLevel1Model.mainScene }, cmd )
 
         MainType.Level2 ->
             let
                 ( newLevel2Model, cmd ) =
                     Level2Update.update msg model.level2Model
             in
-            ( { model | level2Model = newLevel2Model }, cmd )
+            ( { model | level2Model = newLevel2Model, mainScene = newLevel2Model.mainScene }, cmd )
 
         MainType.Level3 ->
             let
                 ( newLevel3Model, cmd ) =
                     Level3Update.update msg model.level3Model
             in
-            ( { model | level3Model = newLevel3Model }, cmd )
+            ( { model | level3Model = newLevel3Model, mainScene = newLevel3Model.mainScene }, cmd )

@@ -12,6 +12,7 @@ module Level2View exposing (view)
 import Boundary
 import Brick
 import EndPoint
+import GameControl
 import Html exposing (Html, div)
 import Html.Attributes as HtmlAttr
 import Level2Type
@@ -46,6 +47,7 @@ view model =
                 ++ NoticeBoard.view model
                 ++ Needle.view model
                 ++ Player.view model
+                ++ GameControl.view model
             )
         , Html.audio
             [ HtmlAttr.width 0
