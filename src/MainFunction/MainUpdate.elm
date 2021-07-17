@@ -18,6 +18,8 @@ import Level2Init
 import Level2Update
 import Level3Init
 import Level3Update
+import Level4Init
+import Level4Update
 import MainModel
 import MainType
 import MenuUpdate
@@ -42,7 +44,8 @@ changeToLevel newScene ( model, cmd ) =
 
         MainType.Level3 ->
             ( { newModel | level3Model = Level3Init.init () |> Tuple.first }, cmd )
-
+        MainType.Level4 ->
+            ( { newModel | level4Model = Level4Init.init () |> Tuple.first }, cmd )
         _ ->
             ( newModel, cmd )
 
@@ -90,3 +93,10 @@ update msg model =
                     Level3Update.update msg model.level3Model
             in
             ( { model | level3Model = newLevel3Model, mainScene = newLevel3Model.mainScene }, cmd )
+        MainType.Level4 ->
+            let
+                ( newLevel4Model, cmd ) =
+                    Level4Update.update msg model.level4Model
+            in
+            ( { model | level4Model = newLevel4Model, mainScene = newLevel4Model.mainScene }, cmd )
+

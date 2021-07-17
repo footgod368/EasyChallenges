@@ -101,7 +101,9 @@ updateButton msg ( model, cmd ) =
                         3 ->
                             --menuButtonLevel3
                             ( { model | mainStatus = MainType.Level3 }, Cmd.batch [ cmd ] )
-
+                        4 ->
+                            --menuButtonLevel4
+                            ( { model | mainStatus = MainType.Level4 }, Cmd.batch [ cmd ] )
                         _ ->
                             ( model, Cmd.batch [ cmd ] )
             in

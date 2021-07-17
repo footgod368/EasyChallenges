@@ -116,8 +116,9 @@ drawLevelButton model buttonId ( x, y ) =
 drawButtons : MenuType.Model -> List (Svg MainType.Msg)
 drawButtons model =
     List.concat
-        [ drawLevelButton model MainConstant.menuButtonLevel0 ( 300.0, 300.0 )
-        , drawLevelButton model MainConstant.menuButtonLevel1 ( 300.0, 400.0 )
-        , drawLevelButton model MainConstant.menuButtonLevel2 ( 300.0, 500.0 )
-        , drawLevelButton model MainConstant.menuButtonLevel3 ( 300.0, 600.0 )
+        [ drawLevelButton model MainConstant.menuButtonLevel0 ( 300.0, 200.0 )
+        , drawLevelButton model MainConstant.menuButtonLevel1 ( 300.0, 300.0 )
+        , drawLevelButton model MainConstant.menuButtonLevel2 ( 300.0, 400.0 )
+        , drawLevelButton model MainConstant.menuButtonLevel3 ( 300.0, 500.0 )
+        , drawLevelButton model MainConstant.menuButtonLevel4 ( 300.0, 600.0 )
         ]

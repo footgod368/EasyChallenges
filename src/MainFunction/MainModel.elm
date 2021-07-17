@@ -13,6 +13,7 @@ import Level0Type
 import Level1Type
 import Level2Type
 import Level3Type
+import Level4Type
 import MainType
 import MenuType
 
@@ -26,4 +27,5 @@ type alias Model =
     , level1Model : Level1Type.Model
     , level2Model : Level2Type.Model
     , level3Model : Level3Type.Model
+    , level4Model : Level4Type.Model
     }
