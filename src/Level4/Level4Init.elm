@@ -56,6 +56,7 @@ init a =
                         {tempEvent1 | ifStartAct = Event.AfterActEvent 8}
                     ,   Event.hitLineSeg 10 "needle" (GlobalBasics.blockPosFloat (26.1,12.6)) (GlobalBasics.blockPosFloat (26.9,12.6))
                     ,   Event.hitLineSeg 11 "first sword" (GlobalBasics.blockPosFloat (12,1)) (GlobalBasics.blockPosFloat (12,15))
+                    ,   Event.hitBlock 12 "second sword" (22.5,11.5) (2,2)  
                     ]
             , boundary = Boundary.normalInit
             , player =
@@ -120,6 +121,7 @@ init a =
                                     (Needle.Collide (Needle.NoCollideAfterEvent 9 Needle.NoNextNeedleCollision))
                                     (Needle.NoNextNeedleMove)]
                         ,   [Needle.sword (12,15) (12,-10) (3,5) 7.0 11]
+                        ,   [Needle.sword (28,12) (-10,12) (4,2) 7.0 12]
                         ]
                     )
             , keyPressed = []
