@@ -25,13 +25,16 @@ menuButtonLevel3 : Int
 menuButtonLevel3 =
     3
 
+
 gameBackButton : Int
 gameBackButton =
     0
 
+
 gameNextLevelButton : Int
 gameNextLevelButton =
     1
+
 
 {-| Normal color of button
 -}

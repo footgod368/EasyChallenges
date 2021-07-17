@@ -11,12 +11,13 @@ module Level2Init exposing (init)
 
 import Array
 import Boundary
-import Brick exposing (Brick, BrickAppearance(..))
+import Brick
 import Browser.Dom exposing (getViewport)
 import EndPoint
-import Event exposing (Event, EventIfStartAct(..))
+import Event
 import GameControl
 import GlobalBasics
+import GlobalModule
 import Level2Type
 import MainType
 import Needle
@@ -24,9 +25,6 @@ import NoticeBoard
 import Player
 import SavePoint
 import Task
-import NoticeBoard exposing (NoticeBoardVisibility)
-import Brick exposing (BrickVisibility(..))
-import NoticeBoard exposing (NoticeBoard)
 
 
 {-| `init` of Level2 \`Model
@@ -73,18 +71,17 @@ init a =
                             )
                         )
                         (Event.quickDuration 10)
-                    , Event.hitBlock 15 "Reverse direction" ( 78.125 , 11.5 - 1.75 ) (1.75,1.75)
+                    , Event.hitBlock 15 "Reverse direction" ( 78.125, 11.5 - 1.75 ) ( 1.75, 1.75 )
                     ]
             , boundary = Boundary.normalInit
             , player =
-            (
-            let
-                defPlayerProperty =
+                let
+                    defPlayerProperty =
+                        Player.defPlayerProperty
+                in
+                Player.init ( 50.0, 490.0 )
                     Player.defPlayerProperty
-            in
-            Player.init ( 50.0, 490.0 ) Player.defPlayerProperty
-                ( Player.ChangeTo { defPlayerProperty | playerHorizontalSpeed = -1.93 } 15 Player.NoNextPropertyChange )
-            )
+                    (Player.ChangeTo { defPlayerProperty | playerHorizontalSpeed = -1.93 } 15 Player.NoNextPropertyChange)
             , bricks =
                 Array.fromList
                     (List.concat
@@ -92,32 +89,32 @@ init a =
                         , [ Brick.init
                                 (GlobalBasics.blockPosFloat ( 8, 14 ))
                                 (Brick.Detailed 40 40 "#1E90FF")
-                                (Brick.Visible (Brick.InvisibleAfterEvent 1 Brick.NoNextBrickVisibility))
-                                (Brick.NoCollide Brick.NoNextBrickCollision)
-                                Brick.NoNextBrickMove
+                                (GlobalModule.Visible (GlobalModule.InvisibleAfterEvent 1 GlobalModule.NoNextVisibility))
+                                (GlobalModule.NoCollide GlobalModule.NoNextCollision)
+                                GlobalModule.NoNextMove
                           ]
                         , [ Brick.init
                                 (GlobalBasics.blockPosFloat ( 8, 14 ))
                                 (Brick.Detailed 40 40 "#FFD700")
-                                (Brick.Invisible (Brick.VisibleAfterEvent 1 Brick.NoNextBrickVisibility))
-                                (Brick.NoCollide Brick.NoNextBrickCollision)
-                                Brick.NoNextBrickMove
+                                (GlobalModule.Invisible (GlobalModule.VisibleAfterEvent 1 GlobalModule.NoNextVisibility))
+                                (GlobalModule.NoCollide GlobalModule.NoNextCollision)
+                                GlobalModule.NoNextMove
                           ]
                         , let
                             tempBoard1 =
                                 NoticeBoard.boundaryCollide ( 7, 5 ) ( 8, 3 )
                           in
                           [ { tempBoard1
-                                | brickMove =
-                                    Brick.Move
+                                | move =
+                                    GlobalModule.Move
                                         (Array.fromList [])
                                         0.0
                                         1
-                                        (Brick.Move
+                                        (GlobalModule.Move
                                             (Array.fromList [ GlobalBasics.blockPosFloat ( 7, 12 ) ])
                                             5.0
                                             -1
-                                            Brick.NoNextBrickMove
+                                            GlobalModule.NoNextMove
                                         )
                             }
                           ]
@@ -131,16 +128,16 @@ init a =
                                 NoticeBoard.boundaryCollide ( 42, 9 ) ( 4, 1.5 )
                           in
                           [ { tempBoard2
-                                | brickMove =
-                                    Brick.Move
+                                | move =
+                                    GlobalModule.Move
                                         (Array.fromList [])
                                         0.0
                                         6
-                                        (Brick.Move
+                                        (GlobalModule.Move
                                             (Array.fromList [ GlobalBasics.blockPosFloat ( 52.5, 9 ) ])
                                             2.0
                                             -1
-                                            Brick.NoNextBrickMove
+                                            GlobalModule.NoNextMove
                                         )
                             }
                           ]
@@ -156,12 +153,12 @@ init a =
                         , [ Brick.initCollideHidden ( 71.5, 8.5 ) 10
                           , Brick.initCollideHidden ( 72.5, 8.5 ) 11
                           ]
-                        ,[ Brick.init
-                                (GlobalBasics.blockPosFloat ( 78.125 , 11.5 - 1.75 ))
+                        , [ Brick.init
+                                (GlobalBasics.blockPosFloat ( 78.125, 11.5 - 1.75 ))
                                 (Brick.Detailed 70 70 "#FFFF00")
-                                (Brick.Visible (Brick.InvisibleAfterEvent 15 Brick.NoNextBrickVisibility))
-                                (Brick.NoCollide Brick.NoNextBrickCollision)
-                                Brick.NoNextBrickMove
+                                (GlobalModule.Visible (GlobalModule.InvisibleAfterEvent 15 GlobalModule.NoNextVisibility))
+                                (GlobalModule.NoCollide GlobalModule.NoNextCollision)
+                                GlobalModule.NoNextMove
                           ]
                         ]
                     )
@@ -179,32 +176,34 @@ init a =
                             NoticeBoard.quickInit (GlobalBasics.blockPosFloat ( 10.8, 6.8 )) "It's a trap!" 60
                       in
                       { tempBoard1
-                        | noticeBoardMove =
-                            NoticeBoard.Move
+                        | move =
+                            GlobalModule.Move
                                 (Array.fromList [])
                                 0.0
                                 1
-                                (NoticeBoard.Move (Array.fromList [ GlobalBasics.blockPosFloat ( 10.8, 13.8 ) ]) 5.0 -1 NoticeBoard.NoNextNoticeBoardMove)
+                                (GlobalModule.Move (Array.fromList [ GlobalBasics.blockPosFloat ( 10.8, 13.8 ) ]) 5.0 -1
+                                GlobalModule.NoNextMove)
                       }
                     , let
                         tempBoard2 =
                             NoticeBoard.quickInit (GlobalBasics.blockPosFloat ( 44, 10 )) "Let's go!" 40
                       in
                       { tempBoard2
-                        | noticeBoardMove =
-                            NoticeBoard.Move
+                        | move =
+                            GlobalModule.Move
                                 (Array.fromList [])
                                 0.0
                                 6
-                                (NoticeBoard.Move (Array.fromList [ GlobalBasics.blockPosFloat ( 54.5, 10 ) ]) 2.0 -1 NoticeBoard.NoNextNoticeBoardMove)
+                                (GlobalModule.Move (Array.fromList [ GlobalBasics.blockPosFloat ( 54.5, 10 ) ]) 2.0 -1 GlobalModule.NoNextMove)
                       }
                     , NoticeBoard.quickInit (GlobalBasics.blockPosFloat ( 58.5, 7.2 )) ":)" 40
                     , NoticeBoard.quickInit (GlobalBasics.blockPosFloat ( 75, 8 )) "Danger!" 40
                     , NoticeBoard.quickInit (GlobalBasics.blockPosFloat ( 75, 9.2 )) "↓" 40
                     , let
-                        tempBoard3 = NoticeBoard.quickInit (GlobalBasics.blockPosFloat ( 79, 11.2 )) "?" 60
+                        tempBoard3 =
+                            NoticeBoard.quickInit (GlobalBasics.blockPosFloat ( 79, 11.2 )) "?" 60
                       in
-                      {tempBoard3 | noticeBoardVisibility = NoticeBoard.Visible "?" (NoticeBoard.InvisibleAfterEvent 15 NoticeBoard.NoNextNoticeBoardVisibility)}
+                      { tempBoard3 | noticeBoardVisibility = NoticeBoard.Visible "?" (NoticeBoard.InvisibleAfterEvent 15 NoticeBoard.NoNextNoticeBoardVisibility) }
                     ]
             , needles =
                 Array.fromList

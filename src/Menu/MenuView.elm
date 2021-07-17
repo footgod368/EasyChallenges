@@ -23,6 +23,7 @@ view model =
         , HtmlAttr.style "height" "100%"
         , HtmlAttr.style "left" "50"
         , HtmlAttr.style "top" "50"
+
         --, HtmlAttr.style "background-image" "url(assets/menuBackground.jpg)"
         --, HtmlAttr.style "background-size" "100% 100%"
         --, HtmlAttr.style "background-position" "0px 0px"
@@ -61,17 +62,21 @@ drawBackground model =
     --    ]
     --    []
     --logo
+    let
+        ( windowBoundaryX, windowBoundaryY ) =
+            model.windowBoundary
+    in
     [ Svg.image
-        [ SvgAttr.x "25"
-        , SvgAttr.y "25"
+        [ SvgAttr.x "0"
+        , SvgAttr.y "0"
         , SvgAttr.width "100"
         , SvgAttr.height "100"
         , SvgAttr.xlinkHref "assets/silverDogLogo.svg"
         ]
         []
     , Svg.text_
-        [ SvgAttr.x "300"
-        , SvgAttr.y "150"
+        [ SvgAttr.x (String.fromFloat (windowBoundaryX / 2 - 200.0))
+        , SvgAttr.y "100"
         , SvgAttr.fontSize "60"
         , SvgAttr.textAnchor "left"
         , SvgAttr.fill "#A0E6E8"
@@ -115,9 +120,13 @@ drawLevelButton model buttonId ( x, y ) =
 
 drawButtons : MenuType.Model -> List (Svg MainType.Msg)
 drawButtons model =
+    let
+        ( windowBoundaryX, windowBoundaryY ) =
+            model.windowBoundary
+    in
     List.concat
-        [ drawLevelButton model MainConstant.menuButtonLevel0 ( 300.0, 300.0 )
-        , drawLevelButton model MainConstant.menuButtonLevel1 ( 300.0, 400.0 )
-        , drawLevelButton model MainConstant.menuButtonLevel2 ( 300.0, 500.0 )
-        , drawLevelButton model MainConstant.menuButtonLevel3 ( 300.0, 600.0 )
+        [ drawLevelButton model MainConstant.menuButtonLevel0 ( windowBoundaryX / 2 - 100.0, 200.0 )
+        , drawLevelButton model MainConstant.menuButtonLevel1 ( windowBoundaryX / 2 - 100.0, 300.0 )
+        , drawLevelButton model MainConstant.menuButtonLevel2 ( windowBoundaryX / 2 - 100.0, 400.0 )
+        , drawLevelButton model MainConstant.menuButtonLevel3 ( windowBoundaryX / 2 - 100.0, 500.0 )
         ]

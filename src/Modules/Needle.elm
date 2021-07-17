@@ -1,5 +1,5 @@
 module Needle exposing
-    ( NeedleVisibility(..), NeedleCollision(..), NeedleMove(..), NeedleAppearance(..), Needle
+    ( NeedleAppearance(..), Needle
     , init, initFallingRow, initHiddenRow, normalNeedleWidth, initHidden
     , view
     , update
@@ -11,7 +11,7 @@ module Needle exposing
 
 # Needle
 
-@docs NeedleVisibility, NeedleCollision, NeedleMove, NeedleAppearance, Needle
+@docs NeedleAppearance, Needle
 
 
 # Needle Constant
@@ -38,6 +38,7 @@ module Needle exposing
 import Array exposing (Array)
 import Event
 import GlobalBasics
+import GlobalModule
 import Html.Attributes exposing (height, width)
 import MainType
 import Maybe exposing (withDefault)
@@ -46,79 +47,6 @@ import Player
 import Svg exposing (Svg)
 import Svg.Attributes as SvgAttr
 import ViewMove
-
-
-{-| `NeedleVisibility` describes the visibility of the block. `Visible/Invisible (nextVisibility: NeedleVisibility)`:
-nextVisibility means what will happen after this visibility. `NoNextNeedleVisibility` means no further visibility
-change (Caution! Don't put it the first place). `VisibleAfterEvent/InvisibleAfterEvent (eventID: Int) (nextVisibility:
-NeedleVisibility)`: eventId means in the last visibility, if eventID is activated, the `NeedleVisibility` will change
-to this current `Visible/Invisible`. Don't put `Visible NeedleVisibility` or `Invisible NeedleVisibility` in the
-following chain, this can only be put at the head. If you want it to be simply be visible, write:
-
-    needleVisibility : NeedleVisibility
-    needleVisibility =
-        Visible NoNextNeedleVisibility
-
-For complex things, for example, you want it to be invisible at first, then when `Event` whose id = 1 activates, it
-become visible, then finally, when `Event` whose id = 2 activates, it becomes invisible, write:
-
-    needleVisibility : NeedleVisibility
-    needleVisibility =
-        Invisible
-            (VisibleAfterEvent 1
-                (InvisibleAfterEvent 2 NoNextNeedleVisibility)
-            )
-
-This is designed delicately and may be quite hard to understand, ask YichenWei if you cannot understand.
-
--}
-type NeedleVisibility
-    = Visible NeedleVisibility
-    | Invisible NeedleVisibility
-    | VisibleAfterEvent Int NeedleVisibility
-    | InvisibleAfterEvent Int NeedleVisibility
-    | NoNextNeedleVisibility
-
-
-{-| `NeedleCollision` describes if the collision of the block is considered. This is almost the same as
-`NeedleVisibility`, see details in `NeedleVisibility`. Here is just a example. You want it to have no collision at
-first, then when `Event` whose id = 1 activates, it has collision, then finally, when `Event` whose id = 2 activates,
-it has no collision, write:
-
-    blockCollision : NeedleCollision
-    blockCollision =
-        NoCollide
-            (CollideAfterEvent 1
-                (NoCollideAfterEvent 2 NoNextNeedleCollision)
-            )
-
--}
-type NeedleCollision
-    = Collide NeedleCollision
-    | NoCollide NeedleCollision
-    | CollideAfterEvent Int NeedleCollision
-    | NoCollideAfterEvent Int NeedleCollision
-    | NoNextNeedleCollision
-
-
-{-| `NeedleMove` describes whether and how the needle will move in the game. `Move (arrayPos : Array Pos) (speed :
-Float) (nextMoveEventID : Int) (nextNeedleMove : NeedleMove)`: arrayPos means the way the block moves, speed is how fast
-the block moves each frame, nextMoveEventID is when this stage of movement is finished, what movement happens next,
-nextNeedleMove is next move, with None indicating no further movements take place. Note, if the first stage is no
-movement, then it will move when `Event` whose id = 1 move, write like this, a null array will not make the block move:
-
-    blockMove : NeedleMove
-    blockMove =
-        Move (Array.fromList [])
-            0.0
-            1
-            (Move (Array.fromList [ ( 0.0, 100.0 ), ( 100.0, 100.0 ) ]) 10.0 -1 None)
-
--}
-type NeedleMove
-    = Move (Array GlobalBasics.Pos) Float Int NeedleMove
-    | NoNextNeedleMove
-
 
 {-| For future different shapes of blocks.
 -}
@@ -146,9 +74,9 @@ type alias Needle =
     { pos : GlobalBasics.Pos
     , collisionBox : GlobalBasics.CollisionBox
     , appearance : NeedleAppearance
-    , needleVisibility : NeedleVisibility
-    , needleCollision : NeedleCollision
-    , needleMove : NeedleMove
+    , visibility : GlobalModule.Visibility
+    , collision : GlobalModule.Collision
+    , move : GlobalModule.Move
     }
 
 
@@ -161,14 +89,14 @@ defNeedle =
 
 {-| initiate a needle, with full functions
 -}
-init : ( Float, Float ) -> NeedleAppearance -> NeedleVisibility -> NeedleCollision -> NeedleMove -> Needle
-init ( x, y ) needleAppearance needleVisibility needleCollision needleMove =
+init : ( Float, Float ) -> NeedleAppearance -> GlobalModule.Visibility -> GlobalModule.Collision -> GlobalModule.Move -> Needle
+init ( x, y ) needleAppearance visibility collision move =
     { pos = ( x, y )
     , collisionBox = needleCollisionBox needleAppearance
     , appearance = needleAppearance
-    , needleVisibility = needleVisibility
-    , needleCollision = needleCollision
-    , needleMove = needleMove
+    , visibility = visibility
+    , collision = collision
+    , move = move
     }
 
 
@@ -179,9 +107,9 @@ initPos ( x, y ) =
     { pos = ( x, y )
     , collisionBox = needleCollisionBox (NormalNeedle normalNeedleWidth normalNeedleHeight)
     , appearance = NormalNeedle normalNeedleWidth normalNeedleHeight
-    , needleVisibility = Visible NoNextNeedleVisibility
-    , needleCollision = Collide NoNextNeedleCollision
-    , needleMove = NoNextNeedleMove
+    , visibility = GlobalModule.Visible GlobalModule.NoNextVisibility
+    , collision = GlobalModule.Collide GlobalModule.NoNextCollision
+    , move = GlobalModule.NoNextMove
     }
 
 
@@ -192,9 +120,9 @@ initHidden ( x, y ) id =
     { pos = GlobalBasics.blockPos ( x, y )
     , collisionBox = needleCollisionBox (NormalNeedle normalNeedleWidth normalNeedleHeight)
     , appearance = NormalNeedle normalNeedleWidth normalNeedleHeight
-    , needleVisibility = Invisible (VisibleAfterEvent id NoNextNeedleVisibility)
-    , needleCollision = Collide NoNextNeedleCollision
-    , needleMove = NoNextNeedleMove
+    , visibility = GlobalModule.Invisible (GlobalModule.VisibleAfterEvent id GlobalModule.NoNextVisibility)
+    , collision = GlobalModule.Collide GlobalModule.NoNextCollision
+    , move = GlobalModule.NoNextMove
     }
 
 
@@ -212,9 +140,9 @@ initHiddenCollideAfter ( x, y ) id =
     { pos = GlobalBasics.blockPos ( x, y )
     , collisionBox = needleCollisionBox (NormalNeedle normalNeedleWidth normalNeedleHeight)
     , appearance = NormalNeedle normalNeedleWidth normalNeedleHeight
-    , needleVisibility = Invisible (VisibleAfterEvent id NoNextNeedleVisibility)
-    , needleCollision = NoCollide (CollideAfterEvent id NoNextNeedleCollision)
-    , needleMove = NoNextNeedleMove
+    , visibility = GlobalModule.Invisible (GlobalModule.VisibleAfterEvent id GlobalModule.NoNextVisibility)
+    , collision = GlobalModule.NoCollide (GlobalModule.CollideAfterEvent id GlobalModule.NoNextCollision)
+    , move = GlobalModule.NoNextMove
     }
 
 
@@ -225,13 +153,13 @@ initFalling ( x, y ) id =
     { pos = GlobalBasics.blockPos ( x, y )
     , collisionBox = needleCollisionBox (NormalNeedle normalNeedleWidth normalNeedleHeight)
     , appearance = NormalNeedle normalNeedleWidth normalNeedleHeight
-    , needleVisibility = Visible NoNextNeedleVisibility
-    , needleCollision = Collide NoNextNeedleCollision
-    , needleMove =
-        Move (Array.fromList [])
+    , visibility = GlobalModule.Visible GlobalModule.NoNextVisibility
+    , collision = GlobalModule.Collide GlobalModule.NoNextCollision
+    , move =
+        GlobalModule.Move (Array.fromList [])
             0.0
             id
-            (Move (Array.fromList [ GlobalBasics.blockPos ( x, 20 ) ]) 5.0 -1 NoNextNeedleMove)
+            (GlobalModule.Move (Array.fromList [ GlobalBasics.blockPos ( x, 20 ) ]) 5.0 -1 GlobalModule.NoNextMove)
     }
 
 
@@ -240,13 +168,13 @@ initHiddenFalling ( x, y ) id =
     { pos = GlobalBasics.blockPos ( x, y )
     , collisionBox = needleCollisionBox (NormalNeedle normalNeedleWidth normalNeedleHeight)
     , appearance = NormalNeedle normalNeedleWidth normalNeedleHeight
-    , needleVisibility = Invisible NoNextNeedleVisibility
-    , needleCollision = Collide NoNextNeedleCollision
-    , needleMove =
-        Move (Array.fromList [])
+    , visibility = GlobalModule.Invisible GlobalModule.NoNextVisibility
+    , collision = GlobalModule.Collide GlobalModule.NoNextCollision
+    , move =
+        GlobalModule.Move (Array.fromList [])
             0.0
             id
-            (Move (Array.fromList [ GlobalBasics.blockPos ( x, 20 ) ]) 5.0 -1 NoNextNeedleMove)
+            (GlobalModule.Move (Array.fromList [ GlobalBasics.blockPos ( x, 20 ) ]) 5.0 -1 GlobalModule.NoNextMove)
     }
 
 
@@ -269,12 +197,12 @@ sword startPos chargePos ( width, height ) speed id =
     init
         (GlobalBasics.blockPosFloat startPos)
         (NormalNeedle (width * 40) (height * 40))
-        (Invisible (VisibleAfterEvent id NoNextNeedleVisibility))
-        (NoCollide (CollideAfterEvent id NoNextNeedleCollision))
-        (Move (Array.fromList [])
+        (GlobalModule.Invisible (GlobalModule.VisibleAfterEvent id GlobalModule.NoNextVisibility))
+        (GlobalModule.NoCollide (GlobalModule.CollideAfterEvent id GlobalModule.NoNextCollision))
+        (GlobalModule.Move (Array.fromList [])
             0.0
             id
-            (Move (Array.fromList [ GlobalBasics.blockPosFloat chargePos ]) speed -1 NoNextNeedleMove)
+            (GlobalModule.Move (Array.fromList [ GlobalBasics.blockPosFloat chargePos ]) speed -1 GlobalModule.NoNextMove)
         )
 
 
@@ -298,8 +226,8 @@ needleCollisionBox needleAppearance =
 -}
 viewOneNeedle : { model | windowBoundary : GlobalBasics.Pos, levelBoundary : GlobalBasics.Pos, player : Player.Player } -> Needle -> List (Svg MainType.Msg)
 viewOneNeedle model needle =
-    case needle.needleVisibility of
-        Visible _ ->
+    case needle.visibility of
+        GlobalModule.Visible _ ->
             let
                 ( needleX, needleY ) =
                     needle.pos
@@ -322,7 +250,7 @@ viewOneNeedle model needle =
                 []
             ]
 
-        Invisible _ ->
+        GlobalModule.Invisible _ ->
             []
 
         _ ->
@@ -354,62 +282,21 @@ update ( model, cmd ) =
 -}
 updateOneNeedle : Int -> { model | player : Player.Player, needles : Array Needle, actEvent : Array Event.ActEvent } -> { model | player : Player.Player, needles : Array Needle, actEvent : Array Event.ActEvent }
 updateOneNeedle id model =
-    model
-        |> updateOneNeedleVisibility id
-        |> updateOneNeedleCollision id
-        |> updateOneNeedleMove id
-
-
-{-| update needle visibility. Used in update. Not exposed.
--}
-updateOneNeedleVisibility : Int -> { model | player : Player.Player, needles : Array Needle, actEvent : Array Event.ActEvent } -> { model | player : Player.Player, needles : Array Needle, actEvent : Array Event.ActEvent }
-updateOneNeedleVisibility id model =
     let
         needle =
             Array.get id model.needles
                 |> withDefault defNeedle
 
-        nextVisibility =
-            case needle.needleVisibility of
-                Visible tempNextVisibility ->
-                    tempNextVisibility
-
-                Invisible tempNextVisibility ->
-                    tempNextVisibility
-
-                _ ->
-                    NoNextNeedleVisibility
-
-        newNeedleVisibility =
-            case nextVisibility of
-                VisibleAfterEvent eventID nextNextVisibility ->
-                    if Event.ifActEventById model eventID == Event.ActEventAct then
-                        Visible nextNextVisibility
-
-                    else
-                        needle.needleVisibility
-
-                InvisibleAfterEvent eventID nextNextVisibility ->
-                    if Event.ifActEventById model eventID == Event.ActEventAct then
-                        Invisible nextNextVisibility
-
-                    else
-                        needle.needleVisibility
-
-                _ ->
-                    needle.needleVisibility
-
         newNeedle =
-            { needle | needleVisibility = newNeedleVisibility }
+            needle
+                |> GlobalModule.updateOneVisibility model
+                |> GlobalModule.updateOneMove model
 
         newNeedles =
             Array.set id newNeedle model.needles
-
-        newModel =
-            { model | needles = newNeedles }
     in
-    newModel
-
+    { model | needles = newNeedles }
+        |> updateOneNeedleCollision id
 
 {-| update needle collision. Used in update. Not exposed.
 -}
@@ -421,37 +308,37 @@ updateOneNeedleCollision id model =
                 |> withDefault defNeedle
 
         nextCollision =
-            case needle.needleCollision of
-                Collide tempNextCollision ->
+            case needle.collision of
+                GlobalModule.Collide tempNextCollision ->
                     tempNextCollision
 
-                NoCollide tempNextCollision ->
+                GlobalModule.NoCollide tempNextCollision ->
                     tempNextCollision
 
                 _ ->
-                    NoNextNeedleCollision
+                    GlobalModule.NoNextCollision
 
         newNeedleCollision =
             case nextCollision of
-                CollideAfterEvent eventID nextNextCollision ->
+                GlobalModule.CollideAfterEvent eventID nextNextCollision ->
                     if Event.ifActEventById model eventID == Event.ActEventAct then
-                        Collide nextNextCollision
+                        GlobalModule.Collide nextNextCollision
 
                     else
-                        needle.needleCollision
+                        needle.collision
 
-                NoCollideAfterEvent eventID nextNextCollision ->
+                GlobalModule.NoCollideAfterEvent eventID nextNextCollision ->
                     if Event.ifActEventById model eventID == Event.ActEventAct then
-                        NoCollide nextNextCollision
+                        GlobalModule.NoCollide nextNextCollision
 
                     else
-                        needle.needleCollision
+                        needle.collision
 
                 _ ->
-                    needle.needleCollision
+                    needle.collision
 
         newNeedle =
-            { needle | needleCollision = newNeedleCollision }
+            { needle | collision = newNeedleCollision }
 
         newNeedles =
             Array.set id newNeedle model.needles
@@ -461,7 +348,7 @@ updateOneNeedleCollision id model =
 
         newPlayerModel =
             case newNeedleCollision of
-                Collide tempNextCollision ->
+                GlobalModule.Collide tempNextCollision ->
                     if Player.playerIfCollidePoly newNeedlesModel needle == GlobalBasics.NotCollided then
                         newNeedlesModel
 
@@ -472,95 +359,3 @@ updateOneNeedleCollision id model =
                     newNeedlesModel
     in
     newPlayerModel
-
-
-{-| update needle move event. Used in `updateOneNeedle`. Not exposed
--}
-updateOneNeedleMove : Int -> { model | player : Player.Player, needles : Array Needle, actEvent : Array Event.ActEvent } -> { model | player : Player.Player, needles : Array Needle, actEvent : Array Event.ActEvent }
-updateOneNeedleMove id model =
-    let
-        needle =
-            Array.get id model.needles
-                |> withDefault defNeedle
-    in
-    case needle.needleMove of
-        Move posArray speed eventID nextMove ->
-            if Array.isEmpty posArray then
-                if Event.ifActEventById model eventID == Event.ActEventAct then
-                    let
-                        newNeedle =
-                            { needle | needleMove = nextMove }
-
-                        newNeedles =
-                            Array.set id newNeedle model.needles
-                    in
-                    { model | needles = newNeedles }
-
-                else
-                    model
-
-            else
-                let
-                    destination =
-                        withDefault GlobalBasics.defPos (Array.get 0 posArray)
-                in
-                if GlobalBasics.distPosPos destination needle.pos <= speed then
-                    let
-                        newPosArray =
-                            Array.slice 1 (Array.length posArray) posArray
-
-                        newNeedle =
-                            { needle | pos = destination, needleMove = Move newPosArray speed eventID nextMove }
-
-                        newNeedles =
-                            Array.set id newNeedle model.needles
-                    in
-                    { model | needles = newNeedles }
-
-                else
-                    let
-                        ( destinationX, destinationY ) =
-                            destination
-
-                        ( posX, posY ) =
-                            needle.pos
-
-                        newPos =
-                            if posX == destinationX then
-                                if destinationY > posY then
-                                    ( posX, posY + speed )
-
-                                else
-                                    ( posX, posY - speed )
-
-                            else
-                                let
-                                    degree =
-                                        atan ((destinationY - posY) / (destinationX - posX))
-
-                                    deltaX =
-                                        if destinationX > posX then
-                                            abs (speed * cos degree)
-
-                                        else
-                                            -(abs (speed * cos degree))
-
-                                    deltaY =
-                                        if destinationY > posY then
-                                            abs (speed * sin degree)
-
-                                        else
-                                            -(abs (speed * sin degree))
-                                in
-                                ( posX + deltaX, posY + deltaY )
-
-                        newNeedle =
-                            { needle | pos = newPos }
-
-                        newNeedles =
-                            Array.set id newNeedle model.needles
-                    in
-                    { model | needles = newNeedles }
-
-        NoNextNeedleMove ->
-            model

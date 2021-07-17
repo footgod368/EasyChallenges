@@ -175,7 +175,7 @@ playerJumpAcce model frameNum =
 {-| Initiate the player with its initial position.
 -}
 init : GlobalBasics.Pos -> PlayerProperty -> PropertyChange -> Player
-init pos property propertyChange=
+init pos property propertyChange =
     { property = property
     , propertyChange = propertyChange
     , pos = pos
@@ -202,7 +202,7 @@ init pos property propertyChange=
 
 {-| Update of player unit. Calls sub update.
 -}
-update : ( { model | player : Player, keyPressed : List Int, actEvent : Array { id : Int, name : String} }, Cmd MainType.Msg ) -> ( { model | player : Player, keyPressed : List Int, actEvent : Array { id : Int, name : String} }, Cmd MainType.Msg )
+update : ( { model | player : Player, keyPressed : List Int, actEvent : Array { id : Int, name : String } }, Cmd MainType.Msg ) -> ( { model | player : Player, keyPressed : List Int, actEvent : Array { id : Int, name : String } }, Cmd MainType.Msg )
 update ( model, cmd ) =
     case model.player.liveState of
         Live ->
@@ -217,23 +217,30 @@ update ( model, cmd ) =
         Win ->
             ( model, cmd )
 
-updatePlayerProperty : ( { model | player : Player, actEvent : Array { id : Int, name : String} }, Cmd MainType.Msg ) -> ( { model | player : Player, actEvent : Array { id : Int, name : String} }, Cmd MainType.Msg )
+
+updatePlayerProperty : ( { model | player : Player, actEvent : Array { id : Int, name : String } }, Cmd MainType.Msg ) -> ( { model | player : Player, actEvent : Array { id : Int, name : String } }, Cmd MainType.Msg )
 updatePlayerProperty ( model, cmd ) =
     case model.player.propertyChange of
         ChangeTo newProperty eventID nextPropertyChange ->
-             if Array.foldl
-                (\actEvent sum ->
-                    if actEvent.id == eventID then
-                        sum + 1
-                    else
-                        sum) 0 model.actEvent
-                /= 0 then
+            if
+                Array.foldl
+                    (\actEvent sum ->
+                        if actEvent.id == eventID then
+                            sum + 1
+
+                        else
+                            sum
+                    )
+                    0
+                    model.actEvent
+                    /= 0
+            then
                 let
                     oldPlayer =
                         model.player
 
                     newPlayer =
-                        { oldPlayer | property = newProperty, propertyChange = nextPropertyChange}
+                        { oldPlayer | property = newProperty, propertyChange = nextPropertyChange }
                 in
                 ( { model | player = newPlayer }, cmd )
 

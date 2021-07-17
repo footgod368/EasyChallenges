@@ -1,5 +1,5 @@
 module Brick exposing
-    ( BrickVisibility(..), BrickCollision(..), BrickMove(..), BrickAppearance(..), Brick
+    ( BrickAppearance(..), Brick
     , init, initPos, initFallingRow, initNoCollideHidden, initCollideHidden, initRow, quickCollisionBox, initPosVolumeColor
     , view
     , update
@@ -11,7 +11,7 @@ module Brick exposing
 
 # Brick
 
-@docs BrickVisibility, BrickCollision, BrickMove, BrickAppearance, Brick
+@docs BrickAppearance, Brick
 
 
 # Brick Constant
@@ -31,92 +31,20 @@ module Brick exposing
 
 # Update
 
-@docs update, updateOneBrick, updateOneBrickVisibility, updateOneBrickCollision, updateOneBrickMove
+@docs update, updateOneBrick, updateOneGlobalModule.Visibility, updateOneBrickCollision, updateOneBrickMove
 
 -}
 
 import Array exposing (Array)
 import Event
 import GlobalBasics
+import GlobalModule
 import MainType
 import Maybe exposing (withDefault)
 import Player
 import Svg exposing (Svg)
 import Svg.Attributes as SvgAttr
 import ViewMove
-
-
-{-| `BrickVisibility` describes the visibility of the block. `Visible/Invisible (nextVisibility: BrickVisibility)`:
-nextVisibility means what will happen after this visibility. `NoNextBrickVisibility` means no further visibility
-change (Caution! Don't put it the first place). `VisibleAfterEvent/InvisibleAfterEvent (eventID: Int) (nextVisibility:
-BrickVisibility)`: eventId means in the last visibility, if eventID is activated, the `BrickVisibility` will change
-to this current `Visible/Invisible`. Don't put `Visible BrickVisibility` or `Invisible BrickVisibility` in the
-following chain, this can only be put at the head. If you want it to be simply be visible, write:
-
-    blockVisibility : BrickVisibility
-    blockVisibility =
-        Visible NoNextBrickVisibility
-
-For complex things, for example, you want it to be invisible at first, then when `Event` whose id = 1 activates, it
-become visible, then finally, when `Event` whose id = 2 activates, it becomes invisible, write:
-
-    blockVisibility : BrickVisibility
-    blockVisibility =
-        Invisible
-            (VisibleAfterEvent 1
-                (InvisibleAfterEvent 2 NoNextBrickVisibility)
-            )
-
-This is designed delicately and may be quite hard to understand, ask YichenWei if you cannot understand.
-
--}
-type BrickVisibility
-    = Visible BrickVisibility
-    | Invisible BrickVisibility
-    | VisibleAfterEvent Int BrickVisibility
-    | InvisibleAfterEvent Int BrickVisibility
-    | NoNextBrickVisibility
-
-
-{-| `BrickCollision` describes if the collision of the block is considered. This is almost the same as
-`BrickVisibility`, see details in `BrickVisibility`. Here is just a example. You want it to have no collision at
-first, then when `Event` whose id = 1 activates, it has collision, then finally, when `Event` whose id = 2 activates,
-it has no collision, write:
-
-    blockCollision : BrickCollision
-    blockCollision =
-        NoCollide
-            (CollideAfterEvent 1
-                (NoCollideAfterEvent 2 NoNextBrickCollision)
-            )
-
--}
-type BrickCollision
-    = Collide BrickCollision
-    | NoCollide BrickCollision
-    | CollideAfterEvent Int BrickCollision
-    | NoCollideAfterEvent Int BrickCollision
-    | NoNextBrickCollision
-
-
-{-| `BrickMove` describes whether and how the brick will move in the game. `Move (arrayPos : Array Pos) (speed :
-Float) (nextMoveEventID : Int) (nextBrickMove : BrickMove)`: arrayPos means the way the block moves, speed is how fast
-the block moves each frame, nextMoveEventID is when this stage of movement is finished, what movement happens next,
-nextBrickMove is next move, with None indicating no further movements take place. Note, if the first stage is no
-movement, then it will move when `Event` whose id = 1 move, write like this, a null array will not make the block move:
-
-    blockMove : BrickMove
-    blockMove =
-        Move (Array.fromList [])
-            0.0
-            1
-            (Move (Array.fromList [ ( 0.0, 100.0 ), ( 100.0, 100.0 ) ]) 10.0 -1 None)
-
--}
-type BrickMove
-    = Move (Array GlobalBasics.Pos) Float Int BrickMove
-    | NoNextBrickMove
-
 
 {-| For future different appearance of blocks.
 -}
@@ -145,9 +73,9 @@ type alias Brick =
     { pos : GlobalBasics.Pos
     , collisionBox : GlobalBasics.CollisionBox
     , appearance : BrickAppearance
-    , brickVisibility : BrickVisibility
-    , brickCollision : BrickCollision
-    , brickMove : BrickMove
+    , visibility : GlobalModule.Visibility
+    , collision : GlobalModule.Collision
+    , move : GlobalModule.Move
     }
 
 
@@ -160,14 +88,14 @@ defBrick =
 
 {-| initiate a brick, with full functions
 -}
-init : ( Float, Float ) -> BrickAppearance -> BrickVisibility -> BrickCollision -> BrickMove -> Brick
-init ( x, y ) brickAppearance brickVisibility brickCollision brickMove =
+init : ( Float, Float ) -> BrickAppearance -> GlobalModule.Visibility -> GlobalModule.Collision -> GlobalModule.Move -> Brick
+init ( x, y ) brickAppearance visibility brickCollision brickMove =
     { pos = ( x, y )
     , collisionBox = brickCollisionBox brickAppearance
     , appearance = brickAppearance
-    , brickVisibility = brickVisibility
-    , brickCollision = brickCollision
-    , brickMove = brickMove
+    , visibility = visibility
+    , collision = brickCollision
+    , move = brickMove
     }
 
 
@@ -178,9 +106,9 @@ initPos ( x, y ) =
     { pos = ( x, y )
     , collisionBox = brickCollisionBox NormalAppearance
     , appearance = NormalAppearance
-    , brickVisibility = Visible NoNextBrickVisibility
-    , brickCollision = Collide NoNextBrickCollision
-    , brickMove = NoNextBrickMove
+    , visibility = GlobalModule.Visible GlobalModule.NoNextVisibility
+    , collision = GlobalModule.Collide GlobalModule.NoNextCollision
+    , move = GlobalModule.NoNextMove
     }
 
 
@@ -191,9 +119,9 @@ initPosVolumeColor ( x, y ) ( width, height ) color =
     { pos = ( x, y )
     , collisionBox = brickCollisionBox (Detailed width height color)
     , appearance = Detailed width height color
-    , brickVisibility = Visible NoNextBrickVisibility
-    , brickCollision = Collide NoNextBrickCollision
-    , brickMove = NoNextBrickMove
+    , visibility = GlobalModule.Visible GlobalModule.NoNextVisibility
+    , collision = GlobalModule.Collide GlobalModule.NoNextCollision
+    , move = GlobalModule.NoNextMove
     }
 
 
@@ -216,21 +144,21 @@ initFallingBrick ( x, y ) id =
     { pos = ( x, y )
     , collisionBox = brickCollisionBox NormalAppearance
     , appearance = NormalAppearance
-    , brickVisibility = Visible NoNextBrickVisibility
-    , brickCollision = Collide NoNextBrickCollision
-    , brickMove =
-        Move
+    , visibility = GlobalModule.Visible GlobalModule.NoNextVisibility
+    , collision = GlobalModule.Collide GlobalModule.NoNextCollision
+    , move =
+        GlobalModule.Move
             (Array.fromList [])
             0.0
             id
-            (Move
+            ( GlobalModule.Move
                 (Array.fromList
                     [ ( x, 700.0 )
                     ]
                 )
                 5.0
                 -1
-                NoNextBrickMove
+                GlobalModule.NoNextMove
             )
     }
 
@@ -249,9 +177,9 @@ initNoCollideHidden ( x, y ) id =
     { pos = GlobalBasics.blockPosFloat ( x, y )
     , collisionBox = brickCollisionBox NormalAppearance
     , appearance = NormalAppearance
-    , brickVisibility = Invisible (VisibleAfterEvent id NoNextBrickVisibility)
-    , brickCollision = Collide NoNextBrickCollision
-    , brickMove = NoNextBrickMove
+    , visibility = GlobalModule.Invisible (GlobalModule.VisibleAfterEvent id GlobalModule.NoNextVisibility)
+    , collision = GlobalModule.Collide GlobalModule.NoNextCollision
+    , move = GlobalModule.NoNextMove
     }
 
 
@@ -262,17 +190,15 @@ initCollideHidden ( x, y ) id =
     { pos = GlobalBasics.blockPosFloat ( x, y )
     , collisionBox = brickCollisionBox NormalAppearance
     , appearance = NormalAppearance
-    , brickVisibility = Invisible (VisibleAfterEvent id NoNextBrickVisibility)
-    , brickCollision = NoCollide (CollideAfterEvent id NoNextBrickCollision)
-    , brickMove = NoNextBrickMove
+    , visibility = GlobalModule.Invisible (GlobalModule.VisibleAfterEvent id GlobalModule.NoNextVisibility)
+    , collision = GlobalModule.NoCollide (GlobalModule.CollideAfterEvent id GlobalModule.NoNextCollision)
+    , move = GlobalModule.NoNextMove
     }
 
 
 initCollideHiddenRow : Int -> Int -> Int -> Int -> List Brick
 initCollideHiddenRow n x y id =
     List.map (\i -> initCollideHidden ( toFloat i, toFloat n ) id) (List.range x y)
-
-
 
 
 {-| default collisionBox
@@ -314,8 +240,8 @@ quickCollisionBox ( x, y ) brickAppearance =
 -}
 viewOneBrick : { model | windowBoundary : GlobalBasics.Pos, levelBoundary : GlobalBasics.Pos, player : Player.Player } -> Brick -> List (Svg MainType.Msg)
 viewOneBrick model brick =
-    case brick.brickVisibility of
-        Visible _ ->
+    case brick.visibility of
+        GlobalModule.Visible _ ->
             let
                 ( brickX, brickY ) =
                     brick.pos
@@ -348,7 +274,7 @@ viewOneBrick model brick =
                 []
             ]
 
-        Invisible _ ->
+        GlobalModule.Invisible _ ->
             []
 
         _ ->
@@ -380,61 +306,22 @@ update ( model, cmd ) =
 -}
 updateOneBrick : Int -> { model | player : Player.Player, bricks : Array Brick, actEvent : Array Event.ActEvent } -> { model | player : Player.Player, bricks : Array Brick, actEvent : Array Event.ActEvent }
 updateOneBrick id model =
-    model
-        |> updateOneBrickVisibility id
-        |> updateOneBrickCollision id
-        |> updateOneBrickMove id
-
-
-{-| update brick visibility. Used in update. Not exposed.
--}
-updateOneBrickVisibility : Int -> { model | player : Player.Player, bricks : Array Brick, actEvent : Array Event.ActEvent } -> { model | player : Player.Player, bricks : Array Brick, actEvent : Array Event.ActEvent }
-updateOneBrickVisibility id model =
     let
-        brick =
-            Array.get id model.bricks
-                |> withDefault defBrick
+        oldBrick =
+            withDefault defBrick ( Array.get id model.bricks )
 
-        nextVisibility =
-            case brick.brickVisibility of
-                Visible tempNextVisibility ->
-                    tempNextVisibility
-
-                Invisible tempNextVisibility ->
-                    tempNextVisibility
-
-                _ ->
-                    NoNextBrickVisibility
-
-        newBrickVisibility =
-            case nextVisibility of
-                VisibleAfterEvent eventID nextNextVisibility ->
-                    if Event.ifActEventById model eventID == Event.ActEventAct then
-                        Visible nextNextVisibility
-
-                    else
-                        brick.brickVisibility
-
-                InvisibleAfterEvent eventID nextNextVisibility ->
-                    if Event.ifActEventById model eventID == Event.ActEventAct then
-                        Invisible nextNextVisibility
-
-                    else
-                        brick.brickVisibility
-
-                _ ->
-                    brick.brickVisibility
-
-        newBrick =
-            { brick | brickVisibility = newBrickVisibility }
+        newBrickVisMove =
+            oldBrick
+            |> GlobalModule.updateOneVisibility model
+            |> GlobalModule.updateOneMove model
 
         newBricks =
-            Array.set id newBrick model.bricks
+            Array.set id newBrickVisMove model.bricks
 
         newModel =
             { model | bricks = newBricks }
     in
-    newModel
+    updateOneBrickCollision id newModel
 
 
 {-| update brick collision. Used in update. Not exposed.
@@ -446,38 +333,8 @@ updateOneBrickCollision id model =
             Array.get id model.bricks
                 |> withDefault defBrick
 
-        nextCollision =
-            case brick.brickCollision of
-                Collide tempNextCollision ->
-                    tempNextCollision
-
-                NoCollide tempNextCollision ->
-                    tempNextCollision
-
-                _ ->
-                    NoNextBrickCollision
-
-        newBrickCollision =
-            case nextCollision of
-                CollideAfterEvent eventID nextNextCollision ->
-                    if Event.ifActEventById model eventID == Event.ActEventAct then
-                        Collide nextNextCollision
-
-                    else
-                        brick.brickCollision
-
-                NoCollideAfterEvent eventID nextNextCollision ->
-                    if Event.ifActEventById model eventID == Event.ActEventAct then
-                        NoCollide nextNextCollision
-
-                    else
-                        brick.brickCollision
-
-                _ ->
-                    brick.brickCollision
-
         newBrick =
-            { brick | brickCollision = newBrickCollision }
+            GlobalModule.updateOneCollision model brick
 
         newBricks =
             Array.set id newBrick model.bricks
@@ -486,8 +343,8 @@ updateOneBrickCollision id model =
             { model | bricks = newBricks }
 
         newPlayerModel =
-            case newBrickCollision of
-                Collide tempNextCollision ->
+            case newBrick.collision of
+                GlobalModule.Collide tempNextCollision ->
                     if Player.playerIfCollidePoly newBricksModel brick == GlobalBasics.NotCollided then
                         newBricksModel
 
@@ -534,95 +391,3 @@ updateOneBrickCollision id model =
                     newBricksModel
     in
     newPlayerModel
-
-
-{-| update brick move event. Used in `updateOneBrick`. Not exposed
--}
-updateOneBrickMove : Int -> { model | player : Player.Player, bricks : Array Brick, actEvent : Array Event.ActEvent } -> { model | player : Player.Player, bricks : Array Brick, actEvent : Array Event.ActEvent }
-updateOneBrickMove id model =
-    let
-        brick =
-            Array.get id model.bricks
-                |> withDefault defBrick
-    in
-    case brick.brickMove of
-        Move posArray speed eventID nextMove ->
-            if Array.isEmpty posArray then
-                if Event.ifActEventById model eventID == Event.ActEventAct then
-                    let
-                        newBrick =
-                            { brick | brickMove = nextMove }
-
-                        newBricks =
-                            Array.set id newBrick model.bricks
-                    in
-                    { model | bricks = newBricks }
-
-                else
-                    model
-
-            else
-                let
-                    destination =
-                        withDefault GlobalBasics.defPos (Array.get 0 posArray)
-                in
-                if GlobalBasics.distPosPos destination brick.pos <= speed then
-                    let
-                        newPosArray =
-                            Array.slice 1 (Array.length posArray) posArray
-
-                        newBrick =
-                            { brick | pos = destination, brickMove = Move newPosArray speed eventID nextMove }
-
-                        newBricks =
-                            Array.set id newBrick model.bricks
-                    in
-                    { model | bricks = newBricks }
-
-                else
-                    let
-                        ( destinationX, destinationY ) =
-                            destination
-
-                        ( posX, posY ) =
-                            brick.pos
-
-                        newPos =
-                            if posX == destinationX then
-                                if destinationY > posY then
-                                    ( posX, posY + speed )
-
-                                else
-                                    ( posX, posY - speed )
-
-                            else
-                                let
-                                    degree =
-                                        atan ((destinationY - posY) / (destinationX - posX))
-
-                                    deltaX =
-                                        if destinationX > posX then
-                                            abs (speed * cos degree)
-
-                                        else
-                                            -(abs (speed * cos degree))
-
-                                    deltaY =
-                                        if destinationY > posY then
-                                            abs (speed * sin degree)
-
-                                        else
-                                            -(abs (speed * sin degree))
-                                in
-                                ( posX + deltaX, posY + deltaY )
-
-                        newBrick =
-                            { brick | pos = newPos }
-
-                        newBricks =
-                            Array.set id newBrick model.bricks
-                    in
-                    { model | bricks = newBricks }
-
-        NoNextBrickMove ->
-            model

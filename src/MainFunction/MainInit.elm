@@ -34,4 +34,4 @@ init a =
             , menuModel = MenuInit.init () |> Tuple.first
             }
     in
-    ( mainModel, Cmd.none )
+    ( mainModel, Task.perform MainType.GetViewport getViewport )

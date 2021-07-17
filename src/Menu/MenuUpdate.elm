@@ -10,6 +10,9 @@ update : MainType.Msg -> ( MenuType.Model, Cmd MainType.Msg ) -> ( MenuType.Mode
 update msg ( model, cmd ) =
     --( model, Cmd.batch[consoleLog ("update " ++ if (model.menuStatus == Hall) then "Hall" else "Room")] )
     case msg of
+        MainType.Resize width height ->
+            ( { model | windowBoundary = ( toFloat width * 0.95, toFloat height * 0.95 ) }, Cmd.none )
+
         MainType.GetViewport viewport ->
             ( { model | windowBoundary = ( viewport.viewport.width * 0.95, viewport.viewport.height * 0.95 ) }, Cmd.none )
 

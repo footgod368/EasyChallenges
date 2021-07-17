@@ -11,10 +11,10 @@ module Level3Init exposing (init)
 
 import Array
 import Boundary
-import Brick exposing (Brick, BrickAppearance(..))
+import Brick
 import Browser.Dom exposing (getViewport)
 import EndPoint
-import Event exposing (Event, EventIfStartAct(..))
+import Event
 import GameControl
 import GlobalBasics
 import Level3Type

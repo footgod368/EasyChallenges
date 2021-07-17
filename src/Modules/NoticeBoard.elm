@@ -1,5 +1,5 @@
 module NoticeBoard exposing
-    ( NoticeBoard, NoticeBoardVisibility(..), NoticeBoardMove(..)
+    ( NoticeBoard, NoticeBoardVisibility(..)
     , init, quickInit
     , update
     , view
@@ -34,6 +34,7 @@ import Array exposing (Array)
 import Brick
 import Event
 import GlobalBasics
+import GlobalModule
 import Html.Attributes exposing (height, width)
 import MainType
 import Maybe exposing (withDefault)
@@ -66,19 +67,12 @@ type NoticeBoardVisibility
     | NoNextNoticeBoardVisibility
 
 
-{-| Same as NoticeBoard move.
--}
-type NoticeBoardMove
-    = Move (Array GlobalBasics.Pos) Float Int NoticeBoardMove
-    | NoNextNoticeBoardMove
-
-
 {-| Definition of noticeBoard, it's information is in String.
 -}
 type alias NoticeBoard =
     { pos : GlobalBasics.Pos
     , noticeBoardVisibility : NoticeBoardVisibility
-    , noticeBoardMove : NoticeBoardMove
+    , move : GlobalModule.Move
     , fontSize : Int
     }
 
@@ -92,11 +86,11 @@ defNoticeBoard =
 
 {-| Full init of the NoticeBoard
 -}
-init : GlobalBasics.Pos -> NoticeBoardVisibility -> NoticeBoardMove -> Int -> NoticeBoard
+init : GlobalBasics.Pos -> NoticeBoardVisibility -> GlobalModule.Move -> Int -> NoticeBoard
 init pos noticeBoardVisibility noticeBoardMove fontSize =
     { pos = pos
     , noticeBoardVisibility = noticeBoardVisibility
-    , noticeBoardMove = noticeBoardMove
+    , move = noticeBoardMove
     , fontSize = fontSize
     }
 
@@ -107,7 +101,7 @@ quickInit : GlobalBasics.Pos -> String -> Int -> NoticeBoard
 quickInit pos info fontSize =
     { pos = pos
     , noticeBoardVisibility = Visible info NoNextNoticeBoardVisibility
-    , noticeBoardMove = NoNextNoticeBoardMove
+    , move = GlobalModule.NoNextMove
     , fontSize = fontSize
     }
 
@@ -123,7 +117,7 @@ boundary ( x, y ) ( width, height ) =
         tempBrick =
             Brick.initPosVolumeColor (GlobalBasics.blockPosFloat ( x, y )) ( width * blockX, height * blockY ) "#F5F5F5"
     in
-    { tempBrick | brickCollision = Brick.NoCollide Brick.NoNextBrickCollision }
+    { tempBrick | collision = GlobalModule.NoCollide GlobalModule.NoNextCollision }
 
 
 boundaryCollide : ( Float, Float ) -> ( Float, Float ) -> Brick.Brick
@@ -135,7 +129,7 @@ boundaryCollide ( x, y ) ( width, height ) =
         tempBrick =
             Brick.initPosVolumeColor (GlobalBasics.blockPosFloat ( x, y )) ( width * blockX, height * blockY ) "#F5F5F5"
     in
-    { tempBrick | brickCollision = Brick.Collide Brick.NoNextBrickCollision }
+    { tempBrick | collision = GlobalModule.Collide GlobalModule.NoNextCollision }
 
 
 {-| update function of noticeBoard unit
@@ -149,9 +143,19 @@ update ( model, cmd ) =
 -}
 updateOneNoticeBoard : Int -> { model | player : Player.Player, noticeBoards : Array NoticeBoard, actEvent : Array Event.ActEvent } -> { model | player : Player.Player, noticeBoards : Array NoticeBoard, actEvent : Array Event.ActEvent }
 updateOneNoticeBoard id model =
-    model
+    let
+        oldNoticeBoard =
+            Array.get id model.noticeBoards
+                |> withDefault defNoticeBoard
+
+        newNoticeBoard =
+             GlobalModule.updateOneMove model oldNoticeBoard
+
+        newNoticeBoards =
+            Array.set id newNoticeBoard model.noticeBoards
+    in
+    { model | noticeBoards = newNoticeBoards}
         |> updateOneNoticeBoardVisibility id
-        |> updateOneNoticeBoardMove id
 
 
 {-| update visibility of notice board, used in update, not exposed.
@@ -203,99 +207,6 @@ updateOneNoticeBoardVisibility id model =
             { model | noticeBoards = newNoticeBoards }
     in
     newModel
-
-
-{-| update noticeBoard move event. Used in `updateOneNoticeBoard`. Not exposed
--}
-updateOneNoticeBoardMove : Int -> { model | player : Player.Player, noticeBoards : Array NoticeBoard, actEvent : Array Event.ActEvent } -> { model | player : Player.Player, noticeBoards : Array NoticeBoard, actEvent : Array Event.ActEvent }
-updateOneNoticeBoardMove id model =
-    let
-        noticeBoard =
-            Array.get id model.noticeBoards
-                |> withDefault defNoticeBoard
-    in
-    case noticeBoard.noticeBoardMove of
-        Move posArray speed eventID nextMove ->
-            if Array.isEmpty posArray then
-                if Event.ifActEventById model eventID == Event.ActEventAct then
-                    let
-                        newNoticeBoard =
-                            { noticeBoard | noticeBoardMove = nextMove }
-
-                        newNoticeBoards =
-                            Array.set id newNoticeBoard model.noticeBoards
-                    in
-                    { model | noticeBoards = newNoticeBoards }
-
-                else
-                    model
-
-            else
-                let
-                    destination =
-                        withDefault GlobalBasics.defPos (Array.get 0 posArray)
-                in
-                if GlobalBasics.distPosPos destination noticeBoard.pos <= speed then
-                    let
-                        newPosArray =
-                            Array.slice 1 (Array.length posArray) posArray
-
-                        newNoticeBoard =
-                            { noticeBoard | pos = destination, noticeBoardMove = Move newPosArray speed eventID nextMove }
-
-                        newNoticeBoards =
-                            Array.set id newNoticeBoard model.noticeBoards
-                    in
-                    { model | noticeBoards = newNoticeBoards }
-
-                else
-                    let
-                        ( destinationX, destinationY ) =
-                            destination
-
-                        ( posX, posY ) =
-                            noticeBoard.pos
-
-                        newPos =
-                            if posX == destinationX then
-                                if destinationY > posY then
-                                    ( posX, posY + speed )
-
-                                else
-                                    ( posX, posY - speed )
-
-                            else
-                                let
-                                    degree =
-                                        atan ((destinationY - posY) / (destinationX - posX))
-
-                                    deltaX =
-                                        if destinationX > posX then
-                                            abs (speed * cos degree)
-
-                                        else
-                                            -(abs (speed * cos degree))
-
-                                    deltaY =
-                                        if destinationY > posY then
-                                            abs (speed * sin degree)
-
-                                        else
-                                            -(abs (speed * sin degree))
-                                in
-                                ( posX + deltaX, posY + deltaY )
-
-                        newNoticeBoard =
-                            { noticeBoard | pos = newPos }
-
-                        newNoticeBoards =
-                            Array.set id newNoticeBoard model.noticeBoards
-                    in
-                    { model | noticeBoards = newNoticeBoards }
-
-        NoNextNoticeBoardMove ->
-            model
-
 
 {-| view one noticeBoard, used in view, not exposed.
 -}
