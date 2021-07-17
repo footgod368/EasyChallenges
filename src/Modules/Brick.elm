@@ -3,9 +3,7 @@ module Brick exposing
     , init, initPos, initFallingRow, initNoCollideHidden, initCollideHidden, initRow, quickCollisionBox, initPosVolumeColor
     , view
     , update
-    , brickCollisionBox
-    ,quickTunnel
-    ,initCollideHiddenRow
+    , brickCollisionBox, initCollideHiddenRow, quickTunnel
     )
 
 {-| The block unit. The most common unit in the game
@@ -198,9 +196,11 @@ initPosVolumeColor ( x, y ) ( width, height ) color =
     , brickMove = NoNextBrickMove
     }
 
-quickTunnel : (Float,Float) -> Brick
+
+quickTunnel : ( Float, Float ) -> Brick
 quickTunnel pos =
-    initPosVolumeColor (GlobalBasics.blockPosFloat pos) (2*40,3.5*40) "#008000"
+    initPosVolumeColor (GlobalBasics.blockPosFloat pos) ( 2 * 40, 3.5 * 40 ) "#008000"
+
 
 {-| quick function to create a row of bricks by providing 'row index' n, 'starting point' x, 'ending point' y.
 -}
@@ -267,9 +267,10 @@ initCollideHidden ( x, y ) id =
     , brickMove = NoNextBrickMove
     }
 
+
 initCollideHiddenRow : Int -> Int -> Int -> Int -> List Brick
 initCollideHiddenRow n x y id =
-    List.map (\i -> initCollideHidden (( toFloat i, toFloat n )) id) (List.range x y)
+    List.map (\i -> initCollideHidden ( toFloat i, toFloat n ) id) (List.range x y)
 
 
 {-| default collisionBox

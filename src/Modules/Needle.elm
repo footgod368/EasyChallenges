@@ -3,9 +3,7 @@ module Needle exposing
     , init, initFallingRow, initHiddenRow, normalNeedleWidth, initHidden
     , view
     , update
-    , initHiddenCollideAfter, initPos, needleCollisionBox, normalNeedleHeight
-    , initHiddenFalling , initHiddenFallingRow
-    , sword
+    , initHiddenCollideAfter, initHiddenFalling, initHiddenFallingRow, initPos, needleCollisionBox, normalNeedleHeight, sword
     )
 
 {-| The unit. The most common unit in the game
@@ -40,15 +38,14 @@ module Needle exposing
 import Array exposing (Array)
 import Event
 import GlobalBasics
+import Html.Attributes exposing (height, width)
 import MainType
 import Maybe exposing (withDefault)
+import NoticeBoard exposing (NoticeBoardVisibility(..))
 import Player
 import Svg exposing (Svg)
 import Svg.Attributes as SvgAttr
 import ViewMove
-import Html.Attributes exposing (width)
-import Html.Attributes exposing (height)
-import NoticeBoard exposing (NoticeBoardVisibility(..))
 
 
 {-| `NeedleVisibility` describes the visibility of the block. `Visible/Invisible (nextVisibility: NeedleVisibility)`:
@@ -237,6 +234,7 @@ initFalling ( x, y ) id =
             (Move (Array.fromList [ GlobalBasics.blockPos ( x, 20 ) ]) 5.0 -1 NoNextNeedleMove)
     }
 
+
 initHiddenFalling : ( Int, Int ) -> Int -> Needle
 initHiddenFalling ( x, y ) id =
     { pos = GlobalBasics.blockPos ( x, y )
@@ -251,11 +249,13 @@ initHiddenFalling ( x, y ) id =
             (Move (Array.fromList [ GlobalBasics.blockPos ( x, 20 ) ]) 5.0 -1 NoNextNeedleMove)
     }
 
+
 {-| quick function to create one row of needles which falls after a given event
 -}
 initFallingRow : Int -> Int -> Int -> Int -> List Needle
 initFallingRow n n1 n2 id =
     List.map (\i -> initFalling ( i, n ) id) (List.range n1 n2)
+
 
 initHiddenFallingRow : Int -> Int -> Int -> Int -> List Needle
 initHiddenFallingRow n n1 n2 id =
@@ -264,16 +264,18 @@ initHiddenFallingRow n n1 n2 id =
 
 {-| quickfunction to create a sword that will charge for a given position after a given event
 -}
-sword : (Float,Float) -> (Float,Float) -> (Float,Float) -> Float -> Int -> Needle
-sword startPos chargePos (width,height) speed id =
-    init 
+sword : ( Float, Float ) -> ( Float, Float ) -> ( Float, Float ) -> Float -> Int -> Needle
+sword startPos chargePos ( width, height ) speed id =
+    init
         (GlobalBasics.blockPosFloat startPos)
-        (NormalNeedle (width*40) (height*40))
+        (NormalNeedle (width * 40) (height * 40))
         (Invisible (VisibleAfterEvent id NoNextNeedleVisibility))
         (NoCollide (CollideAfterEvent id NoNextNeedleCollision))
-        (Move (Array.fromList []) 0.0 id
-                (Move (Array.fromList [GlobalBasics.blockPosFloat chargePos]) speed -1 NoNextNeedleMove))
-
+        (Move (Array.fromList [])
+            0.0
+            id
+            (Move (Array.fromList [ GlobalBasics.blockPosFloat chargePos ]) speed -1 NoNextNeedleMove)
+        )
 
 
 {-| default collisionBox

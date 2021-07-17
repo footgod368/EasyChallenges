@@ -24,5 +24,6 @@ view model =
 
         MainType.Level2 ->
             Level2View.view model.level2Model
+
         MainType.Level3 ->
             Level3View.view model.level3Model

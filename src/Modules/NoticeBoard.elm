@@ -3,8 +3,7 @@ module NoticeBoard exposing
     , init, quickInit
     , update
     , view
-    , boundary
-    ,boundaryCollide
+    , boundary, boundaryCollide
     )
 
 {-| The notice board only acts as displaying the text, it only has visibility
@@ -35,14 +34,13 @@ import Array exposing (Array)
 import Brick
 import Event
 import GlobalBasics
+import Html.Attributes exposing (height, width)
 import MainType
 import Maybe exposing (withDefault)
 import Player
 import Svg exposing (Svg, text)
 import Svg.Attributes as SvgAttr
 import ViewMove
-import Html.Attributes exposing (width)
-import Html.Attributes exposing (height)
 
 
 {-| Almost same as NoticeBoard's visibility, except adding new words that can be changed. The words are stored in
@@ -127,6 +125,7 @@ boundary ( x, y ) ( width, height ) =
     in
     { tempBrick | brickCollision = Brick.NoCollide Brick.NoNextBrickCollision }
 
+
 boundaryCollide : ( Float, Float ) -> ( Float, Float ) -> Brick.Brick
 boundaryCollide ( x, y ) ( width, height ) =
     let
@@ -136,7 +135,7 @@ boundaryCollide ( x, y ) ( width, height ) =
         tempBrick =
             Brick.initPosVolumeColor (GlobalBasics.blockPosFloat ( x, y )) ( width * blockX, height * blockY ) "#F5F5F5"
     in
-     { tempBrick | brickCollision = Brick.Collide Brick.NoNextBrickCollision }
+    { tempBrick | brickCollision = Brick.Collide Brick.NoNextBrickCollision }
 
 
 {-| update function of noticeBoard unit

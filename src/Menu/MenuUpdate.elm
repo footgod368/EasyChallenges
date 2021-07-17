@@ -19,6 +19,7 @@ update msg ( model, cmd ) =
                 |> updateButton msg
                 |> updateControl msg
 
+
 {-| handles player control(keyboard) input
 -}
 updateControl : MainType.Msg -> ( MenuType.Model, Cmd MainType.Msg ) -> ( MenuType.Model, Cmd MainType.Msg )
@@ -30,7 +31,7 @@ updateControl msg ( model, cmd ) =
         newKeyModel =
             case msg of
                 KeyUp keyNum ->
-                    { model | keyPressed = ( List.filter (\i -> i /= keyNum) oldKeyPressed ) }
+                    { model | keyPressed = List.filter (\i -> i /= keyNum) oldKeyPressed }
 
                 KeyDown keyNum ->
                     { model | keyPressed = List.append [ keyNum ] oldKeyPressed }
@@ -49,7 +50,7 @@ updateControl msg ( model, cmd ) =
             --    ( { newKeyMenuType.Model | mainStatus = Level3 }, Cmd.batch [ cmd ] )
             --
             --else
-                ( newKeyModel, Cmd.batch [ cmd ] )
+            ( newKeyModel, Cmd.batch [ cmd ] )
     in
     ( newModel, newCmd )
 
@@ -88,6 +89,7 @@ updateButton msg ( model, cmd ) =
                         0 ->
                             --menuButtonLevel0
                             ( { model | mainStatus = MainType.Level0 }, Cmd.batch [ cmd ] )
+
                         1 ->
                             --menuButtonLevel1
                             ( { model | mainStatus = MainType.Level1 }, Cmd.batch [ cmd ] )
@@ -95,7 +97,7 @@ updateButton msg ( model, cmd ) =
                         2 ->
                             --menuButtonLevel2
                             ( { model | mainStatus = MainType.Level2 }, Cmd.batch [ cmd ] )
-                        
+
                         3 ->
                             --menuButtonLevel3
                             ( { model | mainStatus = MainType.Level3 }, Cmd.batch [ cmd ] )

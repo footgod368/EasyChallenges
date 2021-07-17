@@ -4,6 +4,7 @@ import Array exposing (Array)
 import GlobalBasics
 import MainType
 
+
 type MenuStatus
     = MainMenu
 

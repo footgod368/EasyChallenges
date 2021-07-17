@@ -1,7 +1,7 @@
 module EndPoint exposing
     ( EndPoint
-    , init , initDetailed
-    , update, view
+    , init
+    , initDetailed, update, view
     )
 
 {-| The EndPoint unit, a small unit that shows the endpoint of a level.
@@ -30,13 +30,12 @@ module EndPoint exposing
 
 import Array
 import GlobalBasics
+import Html.Attributes exposing (height, width)
 import MainType
 import Player
 import Svg exposing (Svg)
 import Svg.Attributes as SvgAttr
 import ViewMove
-import Html.Attributes exposing (width)
-import Html.Attributes exposing (height)
 
 
 {-| "EndPoint" is a record of unit, "pos" describes its position and "collisionBox" describes its collisionbox
@@ -83,18 +82,21 @@ init ( x, y ) =
     , collisionBox = defEndBox
     }
 
-initDetailed : (Float,Float) -> (Float,Float) -> EndPoint
-initDetailed (x,y) (width,height) =
-    {
-        pos = (x,y)
-    ,   collisionBox = GlobalBasics.Polygon
-                                    (Array.fromList
-                                        [ ( ( 0.0, 0.0 ), ( width, 0.0 ) )
-                                        , ( ( width, 0.0 ), ( width, height ) )
-                                        , ( ( width, height ), ( 0.0, height ) )
-                                        , ( ( 0.0, height ), ( 0.0, 0.0 ) )
-                                        ])
+
+initDetailed : ( Float, Float ) -> ( Float, Float ) -> EndPoint
+initDetailed ( x, y ) ( width, height ) =
+    { pos = ( x, y )
+    , collisionBox =
+        GlobalBasics.Polygon
+            (Array.fromList
+                [ ( ( 0.0, 0.0 ), ( width, 0.0 ) )
+                , ( ( width, 0.0 ), ( width, height ) )
+                , ( ( width, height ), ( 0.0, height ) )
+                , ( ( 0.0, height ), ( 0.0, 0.0 ) )
+                ]
+            )
     }
+
 
 {-| view function of an endPoint
 -}

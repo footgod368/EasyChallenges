@@ -27,12 +27,11 @@ init a =
     let
         mainModel =
             { scene = MainType.Menu
-            , level0Model = (Level0Init.init () |> Tuple.first)
-            , level1Model = (Level1Init.init () |> Tuple.first)
-            , level2Model = (Level2Init.init () |> Tuple.first)
-            , level3Model = (Level3Init.init () |> Tuple.first)
-            , menuModel = (MenuInit.init () |> Tuple.first)
+            , level0Model = Level0Init.init () |> Tuple.first
+            , level1Model = Level1Init.init () |> Tuple.first
+            , level2Model = Level2Init.init () |> Tuple.first
+            , level3Model = Level3Init.init () |> Tuple.first
+            , menuModel = MenuInit.init () |> Tuple.first
             }
-
     in
     ( mainModel, Cmd.none )

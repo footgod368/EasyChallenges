@@ -1,5 +1,5 @@
 module Player exposing
-    ( Player
+    ( Player, PlayerProperty, defPlayerProperty, PropertyChange(..)
     , init
     , update, updateJustPlayerPos
     , view
@@ -12,13 +12,7 @@ module Player exposing
 
 # Player
 
-@docs Player, PlayerJump
-
-
-# Player Constant
-
-@docs playerWidth, playerHeight, playerJumpNum, playerJumpFrames, playerJumpInitialAcce, playerHorizontalSpeed
-@docs playerInitialJumpSpeed, gravityAcce, playerJumpAcce
+@docs Player, PlayerJump, PlayerProperty, defPlayerProperty, PropertyChange
 
 
 # init
@@ -49,6 +43,7 @@ import Maybe exposing (withDefault)
 import Svg exposing (Svg)
 import Svg.Attributes as SvgAttr
 
+
 {-| `PlayerJump` defines the statuses of the jump. PLayerJump (jumpNum : Int) (jumpFrame : Int). jumpNum : how many
 times left can the player jump. jumpFrame : what frame is this jump if it's happening, -1 represents not jumping now
 and last jump has keyUp, -2 represents jump has keyDown but last jump hasn't release.
@@ -57,13 +52,49 @@ type PlayerJump
     = Jump Int Int
 
 
+{-| Properties that can change during the game
+-}
+type alias PlayerProperty =
+    { playerWidth : Float
+    , playerHeight : Float
+    , playerJumpNum : Int
+    , ifPlayerJumpOnTheGround : Bool
+    , playerJumpFrames : Int
+    , playerJumpInitialAcce : Float
+    , playerJumpInitialSpeed : Float
+    , playerHorizontalSpeed : Float
+    , gravityAcce : Float
+    }
+
+
+defPlayerProperty : PlayerProperty
+defPlayerProperty =
+    { playerWidth = 20.0
+    , playerHeight = 20.0
+    , playerJumpNum = 1
+    , ifPlayerJumpOnTheGround = True
+    , playerJumpFrames = 20
+    , playerJumpInitialAcce = 0.6
+    , playerJumpInitialSpeed = -1.0
+    , playerHorizontalSpeed = 1.93
+    , gravityAcce = 0.1
+    }
+
+
+type PropertyChange
+    = ChangeTo PlayerProperty Int PropertyChange
+    | NoNextPropertyChange
+
+
 {-| Definition of player, `pos` is current position, `lastPos` store the last position, used in collision test,
 `velocity` is its velocity, divided into x-axis and y-axis. `collisionBox` is its `CollisionBox`, `jumpNum` is how
 many times it can jump, "deadTimes" is how many times the player dead, "saveNumber" describes which savePoint
 the player last saved, saveNumber = 0 means saved at the first savePoint, 1 means the second, ...
 -}
 type alias Player =
-    { pos : GlobalBasics.Pos
+    { property : PlayerProperty
+    , propertyChange : PropertyChange
+    , pos : GlobalBasics.Pos
     , lastPos : GlobalBasics.Pos
     , velocity : GlobalBasics.Pos
     , jump : PlayerJump
@@ -83,69 +114,6 @@ type LiveState
     = Live
     | Dead
     | Win
-
-
-{-| Constant width of player object
--}
-playerWidth : Float
-playerWidth =
-    20.0
-
-
-{-| Constant height of player object
--}
-playerHeight : Float
-playerHeight =
-    20.0
-
-
-{-| Constant of how many times player can jump
--}
-playerJumpNum : Int
-playerJumpNum =
-    2
-
-
-{-| If only one-time on-ground jump is allowed
--}
-ifOneJumpAndOnTheGround : Bool
-ifOneJumpAndOnTheGround =
-    True
-
-
-{-| Constant of how many frames can one jump lasts
--}
-playerJumpFrames : Int
-playerJumpFrames =
-    20
-
-
-{-| Constant of how many will the player accelerate after the first time the jump is pressed.
--}
-playerJumpInitialAcce : Float
-playerJumpInitialAcce =
-    0.6
-
-
-{-| Constant of how fast will the player object move when left or right is pressed.
--}
-playerHorizontalSpeed : Float
-playerHorizontalSpeed =
-    1.93
-
-
-{-| Constant of initial speed of jump.
--}
-playerInitialJumpSpeed : Float
-playerInitialJumpSpeed =
-    -1.0
-
-
-{-| Constant of the gravity.
--}
-gravityAcce : Float
-gravityAcce =
-    0.1
 
 
 {-| Change the state of player to Dead
@@ -189,26 +157,28 @@ checkDead player =
 
 {-| When the jumps takes place in fameNum, return the corresponding acceleration.
 -}
-playerJumpAcce : Int -> Float
-playerJumpAcce frameNum =
+playerJumpAcce : { model | player : Player } -> Int -> Float
+playerJumpAcce model frameNum =
     let
         totalFrame =
-            toFloat playerJumpFrames
+            toFloat model.player.property.playerJumpFrames
 
         nowFrame =
             toFloat frameNum
 
         acce =
-            nowFrame / totalFrame * playerJumpInitialAcce
+            nowFrame / totalFrame * model.player.property.playerJumpInitialAcce
     in
     acce
 
 
 {-| Initiate the player with its initial position.
 -}
-init : GlobalBasics.Pos -> Player
-init pos =
-    { pos = pos
+init : GlobalBasics.Pos -> PlayerProperty -> PropertyChange -> Player
+init pos property propertyChange=
+    { property = property
+    , propertyChange = propertyChange
+    , pos = pos
     , lastPos = pos
     , velocity = ( 0.0, 0.0 )
     , jump = Jump 2 -1
@@ -216,10 +186,10 @@ init pos =
     , collisionBox =
         GlobalBasics.Polygon
             (Array.fromList
-                [ ( ( 0.0, 0.0 ), ( playerWidth, 0.0 ) )
-                , ( ( playerWidth, 0.0 ), ( playerWidth, playerHeight ) )
-                , ( ( playerWidth, playerHeight ), ( 0.0, playerHeight ) )
-                , ( ( 0.0, playerHeight ), ( 0.0, 0.0 ) )
+                [ ( ( 0.0, 0.0 ), ( property.playerWidth, 0.0 ) )
+                , ( ( property.playerWidth, 0.0 ), ( property.playerWidth, property.playerHeight ) )
+                , ( ( property.playerWidth, property.playerHeight ), ( 0.0, property.playerHeight ) )
+                , ( ( 0.0, property.playerHeight ), ( 0.0, 0.0 ) )
                 ]
             )
     , ifChangeBackToLastPosX = False
@@ -232,11 +202,12 @@ init pos =
 
 {-| Update of player unit. Calls sub update.
 -}
-update : ( { model | player : Player, keyPressed : List Int }, Cmd MainType.Msg ) -> ( { model | player : Player, keyPressed : List Int }, Cmd MainType.Msg )
+update : ( { model | player : Player, keyPressed : List Int, actEvent : Array { id : Int, name : String} }, Cmd MainType.Msg ) -> ( { model | player : Player, keyPressed : List Int, actEvent : Array { id : Int, name : String} }, Cmd MainType.Msg )
 update ( model, cmd ) =
     case model.player.liveState of
         Live ->
             ( model, cmd )
+                |> updatePlayerProperty
                 |> updatePlayerPos
                 |> updatePlayerVelocity
 
@@ -244,6 +215,32 @@ update ( model, cmd ) =
             ( model, cmd )
 
         Win ->
+            ( model, cmd )
+
+updatePlayerProperty : ( { model | player : Player, actEvent : Array { id : Int, name : String} }, Cmd MainType.Msg ) -> ( { model | player : Player, actEvent : Array { id : Int, name : String} }, Cmd MainType.Msg )
+updatePlayerProperty ( model, cmd ) =
+    case model.player.propertyChange of
+        ChangeTo newProperty eventID nextPropertyChange ->
+             if Array.foldl
+                (\actEvent sum ->
+                    if actEvent.id == eventID then
+                        sum + 1
+                    else
+                        sum) 0 model.actEvent
+                /= 0 then
+                let
+                    oldPlayer =
+                        model.player
+
+                    newPlayer =
+                        { oldPlayer | property = newProperty, propertyChange = nextPropertyChange}
+                in
+                ( { model | player = newPlayer }, cmd )
+
+            else
+                ( model, cmd )
+
+        NoNextPropertyChange ->
             ( model, cmd )
 
 
@@ -264,13 +261,13 @@ updatePlayerVelocity ( model, cmd ) =
                     --
 
                 else
-                    -playerHorizontalSpeed
+                    -model.player.property.playerHorizontalSpeed
 
             else if List.member 68 model.keyPressed || List.member 39 model.keyPressed then
                 --if abs oldVelocityY <= 0.1 then
                 --    playerHorizontalSpeed * 2
                 --else
-                playerHorizontalSpeed
+                model.player.property.playerHorizontalSpeed
 
             else
                 0.0
@@ -279,33 +276,38 @@ updatePlayerVelocity ( model, cmd ) =
             case model.player.jump of
                 Jump jumpNum jumpFrame ->
                     if jumpNum <= 0 then
-                        ( model.player.jump, oldVelocityY + gravityAcce )
+                        ( model.player.jump, oldVelocityY + model.player.property.gravityAcce )
 
                     else if List.member 38 model.keyPressed || List.member 87 model.keyPressed then
-                        if jumpFrame == -1 && (not ifOneJumpAndOnTheGround || model.player.ifThisFrameOnGround) then
-                            ( Jump jumpNum (playerJumpFrames - 1)
-                            , playerInitialJumpSpeed
+                        if jumpFrame == -1 && (not model.player.property.ifPlayerJumpOnTheGround || model.player.ifThisFrameOnGround) then
+                            ( Jump jumpNum (model.player.property.playerJumpFrames - 1)
+                            , model.player.property.playerJumpInitialSpeed
                                 + playerJumpAcce
-                                    playerJumpFrames
+                                    model
+                                    model.player.property.playerJumpFrames
                             )
 
                         else if jumpFrame > 0 then
-                            ( Jump jumpNum (jumpFrame - 1), oldVelocityY + gravityAcce - playerJumpAcce jumpFrame )
+                            ( Jump jumpNum (jumpFrame - 1)
+                            , oldVelocityY
+                                + model.player.property.gravityAcce
+                                - playerJumpAcce model jumpFrame
+                            )
 
                         else if jumpFrame == 0 then
-                            ( Jump (jumpNum - 1) -2, oldVelocityY + gravityAcce )
+                            ( Jump (jumpNum - 1) -2, oldVelocityY + model.player.property.gravityAcce )
 
                         else
-                            ( Jump jumpNum jumpFrame, oldVelocityY + gravityAcce )
+                            ( Jump jumpNum jumpFrame, oldVelocityY + model.player.property.gravityAcce )
 
                     else if jumpFrame == -2 then
-                        ( Jump jumpNum -1, oldVelocityY + gravityAcce )
+                        ( Jump jumpNum -1, oldVelocityY + model.player.property.gravityAcce )
 
                     else if jumpFrame > 0 then
-                        ( Jump (jumpNum - 1) -1, oldVelocityY + gravityAcce )
+                        ( Jump (jumpNum - 1) -1, oldVelocityY + model.player.property.gravityAcce )
 
                     else
-                        ( Jump jumpNum jumpFrame, oldVelocityY + gravityAcce )
+                        ( Jump jumpNum jumpFrame, oldVelocityY + model.player.property.gravityAcce )
 
         oldPlayer =
             model.player
@@ -404,8 +406,8 @@ view model =
     [ Svg.rect
         [ SvgAttr.x (String.fromFloat (playerX - 1.0 + playerDeltaX model))
         , SvgAttr.y (String.fromFloat (playerY + playerDeltaY model))
-        , SvgAttr.width (String.fromFloat (playerWidth + 1.0))
-        , SvgAttr.height (String.fromFloat playerHeight)
+        , SvgAttr.width (String.fromFloat (model.player.property.playerWidth + 1.0))
+        , SvgAttr.height (String.fromFloat model.player.property.playerHeight)
         , SvgAttr.fill "#000000"
         ]
         []
@@ -508,7 +510,7 @@ playerRefreshJump model =
             model.player
 
         newPlayer =
-            { oldPlayer | jump = Jump playerJumpNum -1, ifThisFrameOnGround = True }
+            { oldPlayer | jump = Jump model.player.property.playerJumpNum -1, ifThisFrameOnGround = True }
     in
     { model | player = newPlayer }
 
@@ -713,19 +715,22 @@ playerCollideRigidBody model unit =
 
                                             else
                                                 collideXModel
-
                                     in
-                                    if (collideYModel.player.ifChangeBackToLastPosX == False
-                                        && collideYModel.player.ifChangeBackToLastPosX == False) then
+                                    if
+                                        collideYModel.player.ifChangeBackToLastPosX
+                                            == False
+                                            && collideYModel.player.ifChangeBackToLastPosX
+                                            == False
+                                    then
                                         let
                                             oldPlayer =
                                                 collideYModel.player
 
                                             newPlayer =
-                                                { oldPlayer | ifChangeBackToLastPosY = True}
+                                                { oldPlayer | ifChangeBackToLastPosY = True }
 
                                             newCollideYModel =
-                                                { collideYModel | player = newPlayer}
+                                                { collideYModel | player = newPlayer }
                                         in
                                         newCollideYModel
 
