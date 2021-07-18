@@ -1,6 +1,15 @@
-module MainFunction.MainView exposing (..)
+module MainFunction.MainView exposing (view)
 
-import Html exposing (Html, div)
+{-| Main view function
+
+
+# view
+
+@docs view
+
+-}
+
+import Html exposing (Html)
 import Level0.Level0View as Level0View
 import Level1.Level1View as Level1View
 import Level2.Level2View as Level2View
@@ -11,6 +20,8 @@ import MainFunction.MainType as MainType
 import Menu.MenuView as MenuView
 
 
+{-| View according to Model
+-}
 view : MainModel.Model -> Html MainType.Msg
 view model =
     case model.mainScene of

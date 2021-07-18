@@ -1,9 +1,8 @@
 module Modules.NoticeBoard exposing
     ( NoticeBoard, NoticeBoardVisibility(..)
-    , init, quickInit
+    , init, quickInit, boundary, boundaryCollide
     , update
     , view
-    , boundary, boundaryCollide
     )
 
 {-| The notice board only acts as displaying the text, it only has visibility
@@ -11,12 +10,12 @@ module Modules.NoticeBoard exposing
 
 # NoticeBoard
 
-@docs NoticeBoard, NoticeBoardVisibility, NoticeBoardMove
+@docs NoticeBoard, NoticeBoardVisibility
 
 
 # Init
 
-@docs defNoticeBoard, init, quickInit
+@docs init, quickInit, boundary, boundaryCollide
 
 
 # Update
@@ -39,9 +38,9 @@ import Maybe exposing (withDefault)
 import Modules.Brick as Brick
 import Modules.Event as Event
 import Modules.Player as Player
+import Modules.ViewMove as ViewMove
 import Svg exposing (Svg, text)
 import Svg.Attributes as SvgAttr
-import ViewMove
 
 
 {-| Almost same as NoticeBoard's visibility, except adding new words that can be changed. The words are stored in
@@ -120,6 +119,9 @@ boundary ( x, y ) ( width, height ) =
     { tempBrick | collision = GlobalModule.NoCollide GlobalModule.NoNextCollision }
 
 
+{-| quick function to create a 'brick' with proper 'Detailed' type as the boundary of 'NoticeBoard', which has
+collision.
+-}
 boundaryCollide : ( Float, Float ) -> ( Float, Float ) -> Brick.Brick
 boundaryCollide ( x, y ) ( width, height ) =
     let

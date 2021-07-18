@@ -1,9 +1,9 @@
 module Modules.Brick exposing
     ( BrickAppearance(..), Brick
-    , init, initPos, initFallingRow, initNoCollideHidden, initCollideHidden, initRow, quickCollisionBox, initPosVolumeColor
+    , init, brickCollisionBox, initPos, initFallingRow, initNoCollideHidden, initCollideHidden, initRow
+    , quickCollisionBox, initPosVolumeColor, initCollideHiddenRow, quickTunnel
     , view
     , update
-    , brickCollisionBox, initCollideHiddenRow, quickTunnel
     )
 
 {-| The block unit. The most common unit in the game
@@ -14,24 +14,20 @@ module Modules.Brick exposing
 @docs BrickAppearance, Brick
 
 
-# Brick Constant
-
-@docs brickWidth, brickHeight
-
-
 # Init
 
-@docs init, initPos, initFallingRow, initNoCollideHidden, initCollideHidden, initRow, quickCollisionBox, initPosVolumeColor
+@docs init, brickCollisionBox, initPos, initFallingRow, initNoCollideHidden, initCollideHidden, initRow
+@docs quickCollisionBox, initPosVolumeColor, initCollideHiddenRow, quickTunnel
 
 
 # ViewMove
 
-@docs view, viewOneBrick
+@docs view
 
 
 # Update
 
-@docs update, updateOneBrick, updateOneGlobalModule.Visibility, updateOneBrickCollision, updateOneBrickMove
+@docs update
 
 -}
 
@@ -42,9 +38,9 @@ import MainFunction.MainType as MainType
 import Maybe exposing (withDefault)
 import Modules.Event as Event
 import Modules.Player as Player
+import Modules.ViewMove as ViewMove
 import Svg exposing (Svg)
 import Svg.Attributes as SvgAttr
-import ViewMove
 
 
 {-| For future different appearance of blocks.
@@ -126,6 +122,8 @@ initPosVolumeColor ( x, y ) ( width, height ) color =
     }
 
 
+{-| A brick with a tunnel's appearance
+-}
 quickTunnel : ( Float, Float ) -> Brick
 quickTunnel pos =
     initPosVolumeColor (GlobalBasics.blockPosFloat pos) ( 2 * 40, 3.5 * 40 ) "#008000"
@@ -197,6 +195,8 @@ initCollideHidden ( x, y ) id =
     }
 
 
+{-| A row of hidden block, used `initCollideHidden` function.
+-}
 initCollideHiddenRow : Int -> Int -> Int -> Int -> List Brick
 initCollideHiddenRow n x y id =
     List.map (\i -> initCollideHidden ( toFloat i, toFloat n ) id) (List.range x y)

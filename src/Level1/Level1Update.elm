@@ -1,11 +1,11 @@
-module Level1.Level1Update exposing (testUpdate, update)
+module Level1.Level1Update exposing (update)
 
 {-| update Level1
 
 
 # update
 
-update
+@docs update
 
 -}
 
@@ -18,10 +18,10 @@ import Modules.EndPoint as EndPoint
 import Modules.Event as Event
 import Modules.GameControl as GameControl
 import Modules.Monster as Monster
+import Modules.Needle as Needle
 import Modules.NoticeBoard as NoticeBoard
 import Modules.Player as Player
-import Needle
-import SavePoint
+import Modules.SavePoint as SavePoint
 
 
 {-| `update` of Level1
@@ -68,22 +68,3 @@ update msg model =
 
         buttonMsg ->
             GameControl.update buttonMsg ( model, Cmd.none )
-
-
-testUpdate : Int -> Level1Type.Model -> Level1Type.Model
-testUpdate times model =
-    List.foldl
-        (\i tempModel ->
-            let
-                ( newTempModel, cmd ) =
-                    ( tempModel, Cmd.none )
-                        |> Player.update
-                        |> Event.update
-                        |> Brick.update
-
-                --|> Player.updateJustPlayerPos
-            in
-            newTempModel
-        )
-        model
-        (List.range 0 times)

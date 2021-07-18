@@ -1,6 +1,8 @@
 module Modules.GameControl exposing
     ( GameControl
-    , init, update, view
+    , init
+    , update
+    , view
     )
 
 {-| The control box for the game, handles player's action: pause/continue
@@ -8,7 +10,22 @@ module Modules.GameControl exposing
 
 # Control
 
-@docs ControlStatus, GameControl
+@docs GameControl
+
+
+# Init
+
+@docs init
+
+
+# Update
+
+@docs update
+
+
+# View
+
+@docs view
 
 -}
 
@@ -43,6 +60,8 @@ type alias GameControl =
     }
 
 
+{-| Init one Level's gameControl
+-}
 init : MainType.MainScene -> GameControl
 init nextLevel =
     { controlStatus = Normal
@@ -52,6 +71,8 @@ init nextLevel =
     }
 
 
+{-| Update gameControl, handles player's action.
+-}
 update : MainType.Msg -> ( { model | gameControl : GameControl, mainScene : MainType.MainScene }, Cmd MainType.Msg ) -> ( { model | gameControl : GameControl, mainScene : MainType.MainScene }, Cmd MainType.Msg )
 update msg ( model, cmd ) =
     case msg of
@@ -116,6 +137,8 @@ update msg ( model, cmd ) =
             ( model, cmd )
 
 
+{-| View function for gameControl, draw pause, back buttons
+-}
 view : { model | gameControl : GameControl, windowBoundary : GlobalBasics.Pos, player : Player } -> List (Svg MainType.Msg)
 view model =
     let

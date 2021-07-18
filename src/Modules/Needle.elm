@@ -1,9 +1,9 @@
-module Needle exposing
+module Modules.Needle exposing
     ( NeedleAppearance(..), Needle
-    , init, initFallingRow, initHiddenRow, normalNeedleWidth, initHidden
+    , init, initFallingRow, initHiddenRow, normalNeedleWidth, initHidden, initHiddenCollideAfter
+    , initHiddenFalling, initHiddenFallingRow, initHiddenFloat, initPos, needleCollisionBox, normalNeedleHeight, sword
     , view
     , update
-    , initHiddenCollideAfter, initHiddenFalling, initHiddenFallingRow, initHiddenFloat, initPos, needleCollisionBox, normalNeedleHeight, sword
     )
 
 {-| The unit. The most common unit in the game
@@ -14,24 +14,20 @@ module Needle exposing
 @docs NeedleAppearance, Needle
 
 
-# Needle Constant
-
-@docs needleWidth, needleHeight
-
-
 # Init
 
-@docs init, initFallingRow, initHiddenRow, normalNeedleWidth, initHidden, initHiddenCollideAfter defNeedle, defNeedleCollisionBox
+@docs init, initFallingRow, initHiddenRow, normalNeedleWidth, initHidden, initHiddenCollideAfter
+@docs initHiddenFalling, initHiddenFallingRow, initHiddenFloat, initPos, needleCollisionBox, normalNeedleHeight, sword
 
 
 # ViewMove
 
-@docs view, viewOneNeedle
+@docs view
 
 
 # Update
 
-@docs update, updateOneNeedle, updateOneNeedleVisibility, updateOneNeedleCollision, updateOneNeedleMove
+@docs update
 
 -}
 
@@ -42,9 +38,9 @@ import MainFunction.MainType as MainType
 import Maybe exposing (withDefault)
 import Modules.Event as Event
 import Modules.Player as Player
+import Modules.ViewMove as ViewMove
 import Svg exposing (Svg)
 import Svg.Attributes as SvgAttr
-import ViewMove
 
 
 {-| For future different shapes of blocks.
@@ -125,6 +121,8 @@ initHidden ( x, y ) id =
     }
 
 
+{-| quick function to create one hidden needle with float pos
+-}
 initHiddenFloat : ( Float, Float ) -> Int -> Needle
 initHiddenFloat ( x, y ) id =
     { pos = GlobalBasics.blockPosFloat ( x, y )
@@ -173,6 +171,8 @@ initFalling ( x, y ) id =
     }
 
 
+{-| quick function to create one hidden needle which falls after a given event
+-}
 initHiddenFalling : ( Int, Int ) -> Int -> Needle
 initHiddenFalling ( x, y ) id =
     { pos = GlobalBasics.blockPos ( x, y )
@@ -195,6 +195,8 @@ initFallingRow n n1 n2 id =
     List.map (\i -> initFalling ( i, n ) id) (List.range n1 n2)
 
 
+{-| quick function to create one row of hidden needles which falls after a given event
+-}
 initHiddenFallingRow : Int -> Int -> Int -> Int -> List Needle
 initHiddenFallingRow n n1 n2 id =
     List.map (\i -> initHiddenFalling ( i, n ) id) (List.range n1 n2)

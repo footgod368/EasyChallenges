@@ -1,10 +1,9 @@
 module Modules.Player exposing
-    ( Player, PlayerProperty, defPlayerProperty, PropertyChange(..)
+    ( Player, PlayerProperty, defPlayerProperty, PropertyChange(..), LiveState(..)
     , init
     , update, updateJustPlayerPos
     , view
-    , playerRefreshJump, playerIfCollidePoly, playerCollideRigidBody
-    , LiveState(..), checkDead, playerDead, playerWin
+    , playerRefreshJump, playerIfCollidePoly, playerCollideRigidBody, checkDead, playerDead, playerWin
     )
 
 {-| The Player unit, the figure that player controls.
@@ -12,7 +11,7 @@ module Modules.Player exposing
 
 # Player
 
-@docs Player, PlayerJump, PlayerProperty, defPlayerProperty, PropertyChange
+@docs Player, PlayerProperty, defPlayerProperty, PropertyChange, LiveState
 
 
 # init
@@ -22,17 +21,17 @@ module Modules.Player exposing
 
 # update
 
-@docs update, updatePlayerVelocity, updatePlayerPos, updateJustPlayerPos
+@docs update, updateJustPlayerPos
 
 
 # view
 
-@docs view, playerDeltaX, playerDeltaY
+@docs view
 
 
 # api to other units
 
-@docs playerRefreshJump, playerIfCollidePoly, playerVerticalCollide, playerHorizontalCollide, playerCollideRigidBody
+@docs playerRefreshJump, playerIfCollidePoly, playerCollideRigidBody, checkDead, playerDead, playerWin
 
 -}
 
@@ -67,6 +66,8 @@ type alias PlayerProperty =
     }
 
 
+{-| The default player property, can only jump once and on the ground, see details in the definition.
+-}
 defPlayerProperty : PlayerProperty
 defPlayerProperty =
     { playerWidth = 20.0
@@ -81,6 +82,9 @@ defPlayerProperty =
     }
 
 
+{-| Almost the same structure as the Visibility, The Int is a EventID, after this Event is activated, the
+playerProperty will change to `PlayerProperty`
+-}
 type PropertyChange
     = ChangeTo PlayerProperty Int PropertyChange
     | NoNextPropertyChange
@@ -325,6 +329,8 @@ updatePlayerVelocity ( model, cmd ) =
     ( { model | player = newPlayer }, cmd )
 
 
+{-| Used in the end of the Level update, will make the player go back to last pos if collided.
+-}
 updateJustPlayerPos : ( { model | player : Player, keyPressed : List Int }, Cmd MainType.Msg ) -> ( { model | player : Player, keyPressed : List Int }, Cmd MainType.Msg )
 updateJustPlayerPos ( model, cmd ) =
     let

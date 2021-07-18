@@ -1,11 +1,22 @@
 module Menu.MenuUpdate exposing (update)
 
+{-| Update function for the Menu
+
+
+# update
+
+@docs update
+
+-}
+
 import Array
 import MainFunction.MainConstant as MainConstant
 import MainFunction.MainType as MainType exposing (Msg(..))
 import Menu.MenuType as MenuType
 
 
+{-| Handles update `Resize` and `GetViewPort` Message
+-}
 update : MainType.Msg -> ( MenuType.Model, Cmd MainType.Msg ) -> ( MenuType.Model, Cmd MainType.Msg )
 update msg ( model, cmd ) =
     --( model, Cmd.batch[consoleLog ("update " ++ if (model.menuStatus == Hall) then "Hall" else "Room")] )
