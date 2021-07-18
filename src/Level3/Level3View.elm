@@ -16,10 +16,10 @@ import MainFunction.MainType as MainType
 import Modules.Boundary as Boundary
 import Modules.Brick as Brick
 import Modules.GameControl as GameControl
+import Modules.Needle as Needle
 import Modules.NoticeBoard as NoticeBoard
 import Modules.Player as Player
-import Needle
-import SavePoint
+import Modules.SavePoint as SavePoint
 import Svg
 import Svg.Attributes as SvgAttr
 

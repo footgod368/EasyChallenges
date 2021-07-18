@@ -1,6 +1,12 @@
 module Menu.MenuView exposing (view)
 
-{-| functions that names are their meanings
+{-| View function for the Menu
+
+
+# View
+
+@docs view
+
 -}
 
 import Array
@@ -16,6 +22,8 @@ import Svg.Attributes as SvgAttr
 import Svg.Events as SvgEvent
 
 
+{-| View the Menu page
+-}
 view : MenuType.Model -> Html MainType.Msg
 view model =
     div

@@ -1,9 +1,9 @@
-module ViewMove exposing (deltaX, deltaY)
+module Modules.ViewMove exposing (deltaX, deltaY)
 
 {-| This let the camera move with the player
 
 
-# view
+# viewMove
 
 @docs deltaX, deltaY
 

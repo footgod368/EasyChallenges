@@ -20,12 +20,12 @@ module Modules.Boundary exposing
 
 # View
 
-@docs boundaryWidth, viewOneBoundary, view
+@docs view
 
 
 # Update
 
-@docs update, updateOneBoundary
+@docs update
 
 -}
 
@@ -33,9 +33,9 @@ import Array
 import GlobalFunction.GlobalBasics as GlobalBasics
 import MainFunction.MainType as MainType
 import Modules.Player as Player
+import Modules.ViewMove as ViewMove
 import Svg exposing (Svg)
 import Svg.Attributes as SvgAttr
-import ViewMove
 
 
 {-| `BoundaryType` describes what if the player collide with the boundary. `BoundaryNoCollide` will have no effect,

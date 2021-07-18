@@ -1,4 +1,4 @@
-module SavePoint exposing
+module Modules.SavePoint exposing
     ( SavePointAppearance(..), SavePoint
     , init, defSavePoint, defSaveBox
     , view
@@ -13,11 +13,6 @@ module SavePoint exposing
 @docs SavePointAppearance, SavePoint
 
 
-# SavePoint Constant
-
-@docs savePointWidth, savePointHeight
-
-
 # init
 
 @docs init, defSavePoint, defSaveBox
@@ -25,12 +20,12 @@ module SavePoint exposing
 
 # view
 
-@docs view, viewOneSavePoint
+@docs view
 
 
 # update
 
-@docs update, updateOneSavePoint, updateReset
+@docs update, updateReset
 
 -}
 
@@ -39,9 +34,9 @@ import GlobalFunction.GlobalBasics as GlobalBasics
 import MainFunction.MainType as MainType
 import Maybe exposing (withDefault)
 import Modules.Player as Player
+import Modules.ViewMove as ViewMove
 import Svg exposing (Svg)
 import Svg.Attributes as SvgAttr
-import ViewMove
 
 
 {-| "SavePointAppearance" describes different state of a savepoint, the initial state is unsaved,
@@ -189,6 +184,8 @@ update ( model, cmd ) =
     ( List.foldl updateOneSavePoint model (List.range 0 (Array.length model.savePoints - 1)), cmd )
 
 
+{-| Reset the Level with playerPos in the save point
+-}
 updateReset : (() -> ( { model | savePoints : Array SavePoint, player : Player.Player }, Cmd MainType.Msg )) -> ( { model | player : Player.Player, savePoints : Array SavePoint }, Cmd MainType.Msg ) -> ( { model | player : Player.Player, savePoints : Array SavePoint }, Cmd MainType.Msg )
 updateReset levelInit ( model, cmd ) =
     let

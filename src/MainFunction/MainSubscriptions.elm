@@ -6,7 +6,7 @@ like this.
 
 # subscriptions
 
-@docs subscriptions, keyDown, keyUp
+@docs subscriptions
 
 -}
 

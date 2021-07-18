@@ -1,15 +1,32 @@
 module Modules.Monster exposing
-    ( Monster
-    , MonsterAppearance(..)
-    , MonsterXMode(..)
-    , MonsterYMode(..)
-    , init
-    , monsterCollisionBox
+    ( Monster, MonsterAppearance(..), MonsterXMode(..), MonsterYMode(..)
+    , init, monsterCollisionBox
     , update
     , view
     )
 
 {-| The monster. A special unit in some levels.
+
+
+# Monster
+
+@docs Monster, MonsterAppearance, MonsterXMode, MonsterYMode
+
+
+# Init
+
+@docs init, monsterCollisionBox
+
+
+# Update
+
+@docs update
+
+
+# View
+
+@docs view
+
 -}
 
 import Array exposing (Array)
@@ -18,9 +35,9 @@ import MainFunction.MainType as MainType
 import Maybe exposing (withDefault)
 import Modules.Event as Event
 import Modules.Player as Player
+import Modules.ViewMove as ViewMove
 import Svg exposing (Svg)
 import Svg.Attributes as SvgAttr
-import ViewMove
 
 
 {-| Monster is a record for a special unit.

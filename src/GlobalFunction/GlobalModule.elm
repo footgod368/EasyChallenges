@@ -1,6 +1,6 @@
 module GlobalFunction.GlobalModule exposing
     ( Visibility(..), Collision(..), Move(..)
-    , updateOneCollision, updateOneMove, updateOneVisibility
+    , updateOneVisibility, updateOneCollision, updateOneMove
     )
 
 {-| Define the properties of the module and the functions that handle these properties.
@@ -13,7 +13,7 @@ module GlobalFunction.GlobalModule exposing
 
 # Function
 
-@docs updateVisibility, updateCollision, updateMove
+@docs updateOneVisibility, updateOneCollision, updateOneMove
 
 -}
 

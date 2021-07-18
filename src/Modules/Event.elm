@@ -1,9 +1,8 @@
 module Modules.Event exposing
     ( ActEvent, IfActEventAct(..), ifActEventById, ifActEventByName, ifActEvent
     , EventInfo, EventIfStartAct(..), EventActType(..), EventActCounter(..), EventDuration, Event
-    , init, quickDuration
+    , init, quickDuration, hitBlock, hitLineSeg
     , update
-    , hitBlock, hitLineSeg
     )
 
 {-| The events that are essential for all other units.
@@ -11,8 +10,7 @@ module Modules.Event exposing
 
 # ActivatedEvent
 
-@docs ActEvent, IfActEventAct, ifActEventById, sumActEventById, ifActEventByName, sumActEventByName, ifActEvent
-@docs sumActEvent, activateEvent, deactivateEventById, deactivateEventByName, deactivateEvent
+@docs ActEvent, IfActEventAct, ifActEventById, ifActEventByName, ifActEvent
 
 
 # Event
@@ -22,13 +20,12 @@ module Modules.Event exposing
 
 # init
 
-@docs init, quickDuration
+@docs init, quickDuration, hitBlock, hitLineSeg
 
 
 # update
 
-@docs update, updateOneEvent, updateOneEventIfStartAct, eventUpdateActivateEvent, updateOneEventActType
-@docs updateOneEventActCounter, defEvent
+@docs update
 
 -}
 
@@ -358,11 +355,15 @@ type alias EventInfo =
     }
 
 
+{-| Start activation type, it can be another event or already started
+-}
 type EventIfStartAct
     = AfterActEvent Int
     | StartActivated
 
 
+{-| The activation type for the event, After Int frames or player collide with others.
+-}
 type EventActType
     = TimeAfterStart Int
     | PlayerCollide GlobalBasics.CollisionBox
@@ -433,9 +434,9 @@ defEvent =
     init { id = 0, name = "" } StartActivated (TimeAfterStart 0) (quickDuration 0)
 
 
-update :
-    ( { model | actEvent : Array ActEvent, player : Player.Player, event : Array Event }, Cmd MainType.Msg )
-    -> ( { model | actEvent : Array ActEvent, player : Player.Player, event : Array Event }, Cmd MainType.Msg )
+{-| Update all the Events
+-}
+update : ( { model | actEvent : Array ActEvent, player : Player.Player, event : Array Event }, Cmd MainType.Msg ) -> ( { model | actEvent : Array ActEvent, player : Player.Player, event : Array Event }, Cmd MainType.Msg )
 update ( model, cmd ) =
     let
         newModel =
@@ -608,6 +609,8 @@ hitBlock id_ name_ ( x_, y_ ) ( width_, height_ ) =
         (quickDuration 10)
 
 
+{-| The event activated when the player hit a line Segment
+-}
 hitLineSeg : Int -> String -> ( Float, Float ) -> ( Float, Float ) -> Event
 hitLineSeg id_ name_ pos1_ pos2_ =
     init

@@ -21,10 +21,10 @@ import Modules.EndPoint as EndPoint
 import Modules.Event as Event exposing (Event)
 import Modules.GameControl as GameControl
 import Modules.Monster as Monster
+import Modules.Needle as Needle
 import Modules.NoticeBoard as NoticeBoard
 import Modules.Player as Player
-import Needle
-import SavePoint
+import Modules.SavePoint as SavePoint
 import Task
 
 

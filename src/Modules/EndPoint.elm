@@ -1,7 +1,8 @@
 module Modules.EndPoint exposing
     ( EndPoint
-    , init
-    , initDetailed, update, view
+    , init, initDetailed
+    , update
+    , view
     )
 
 {-| The EndPoint unit, a small unit that shows the endpoint of a level.
@@ -14,17 +15,17 @@ module Modules.EndPoint exposing
 
 # Init
 
-@docs endPointWidth, endPointHeight, defEndBox, init
+@docs init, initDetailed
 
 
 # Update
 
-@ update
+@docs update
 
 
 # View
 
-@ view
+@docs view
 
 -}
 
@@ -33,9 +34,9 @@ import GlobalFunction.GlobalBasics as GlobalBasics
 import Html.Attributes exposing (height, width)
 import MainFunction.MainType as MainType
 import Modules.Player as Player
+import Modules.ViewMove as ViewMove
 import Svg exposing (Svg)
 import Svg.Attributes as SvgAttr
-import ViewMove
 
 
 {-| "EndPoint" is a record of unit, "pos" describes its position and "collisionBox" describes its collisionbox
@@ -83,6 +84,8 @@ init ( x, y ) =
     }
 
 
+{-| Full init of endPoint. See definition for more details
+-}
 initDetailed : ( Float, Float ) -> ( Float, Float ) -> EndPoint
 initDetailed ( x, y ) ( width, height ) =
     { pos = ( x, y )

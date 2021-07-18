@@ -18,3 +18,9 @@
   - Cannot jump at the edge of the brick
   - Can climb wall by pressing jump button a lot
   - High frequency of pressing jump button leads to error
+
+#!/bin/bash
+elm-doc . --fake-license "MIT" -o ".elm-doc" --fake-user "SilverFOCS-21" --fake-project "pxteam7" --mount-at "/test"
+
+#!/bin/bash
+sed -i "s/import Needle/import Modules.Needle as Needle/g" `grep . -rl ./src`
