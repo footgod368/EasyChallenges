@@ -11,12 +11,13 @@ module Level4Init exposing (init)
 
 import Array
 import Boundary
-import Brick exposing (Brick, BrickAppearance(..))
+import Brick
 import Browser.Dom exposing (getViewport)
 import EndPoint
-import Event exposing (Event, EventIfStartAct(..))
+import Event
 import GameControl
 import GlobalBasics
+import GlobalModule
 import Level4Type
 import MainType
 import Needle
@@ -24,10 +25,10 @@ import NoticeBoard
 import Player
 import SavePoint
 import Task
-import NoticeBoard exposing (NoticeBoardVisibility)
-import Brick exposing (BrickVisibility(..))
-import NoticeBoard exposing (NoticeBoard)
-import Needle exposing (Needle)
+import NoticeBoard
+import Brick
+import NoticeBoard
+import Needle
 
 
 {-| `init` of Level4 \`Model
@@ -82,9 +83,9 @@ init a =
                             Brick.init
                                     (GlobalBasics.blockPosFloat (20,14))
                                     (Brick.Detailed 40 40 "#FFFF00")
-                                    (Brick.Invisible (Brick.VisibleAfterEvent 8 (Brick.InvisibleAfterEvent 9 Brick.NoNextBrickVisibility)))
-                                    (Brick.NoCollide Brick.NoNextBrickCollision)
-                                    (Brick.NoNextBrickMove)
+                                    (GlobalModule.Invisible (GlobalModule.VisibleAfterEvent 8 (GlobalModule.InvisibleAfterEvent 9 GlobalModule.NoNextVisibility)))
+                                    (GlobalModule.NoCollide GlobalModule.NoNextCollision)
+                                    (GlobalModule.NoNextMove)
                         ]
                         ]
                     )
@@ -107,7 +108,7 @@ init a =
                     ,   NoticeBoard.init
                                         (GlobalBasics.blockPosFloat (20,14))
                                         (NoticeBoard.Invisible (NoticeBoard.VisibleAfterEvent 9 "Your head is full of power!" NoticeBoard.NoNextNoticeBoardVisibility))
-                                        (NoticeBoard.NoNextNoticeBoardMove)
+                                        (GlobalModule.NoNextMove)
                                         30
                     ]
             , needles =
@@ -117,9 +118,9 @@ init a =
                             [Needle.init 
                                     (GlobalBasics.blockPosFloat (26.1,12.5))
                                     (Needle.NormalNeedle 32 4)
-                                    (Needle.Invisible (Needle.VisibleAfterEvent 10 Needle.NoNextNeedleVisibility))
-                                    (Needle.Collide (Needle.NoCollideAfterEvent 9 Needle.NoNextNeedleCollision))
-                                    (Needle.NoNextNeedleMove)]
+                                    (GlobalModule.Invisible (GlobalModule.VisibleAfterEvent 10 GlobalModule.NoNextVisibility))
+                                    (GlobalModule.Collide (GlobalModule.NoCollideAfterEvent 9 GlobalModule.NoNextCollision))
+                                    (GlobalModule.NoNextMove)]
                         ,   [Needle.sword (12,15) (12,-10) (3,5) 7.0 11]
                         ,   [Needle.sword (28,12) (-10,12) (4,2) 7.0 12]
                         ]

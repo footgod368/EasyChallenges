@@ -1,5 +1,5 @@
 module Needle exposing
-    ( NeedleVisibility(..), NeedleCollision(..), NeedleMove(..), NeedleAppearance(..), Needle
+    ( NeedleAppearance(..), Needle
     , init, initFallingRow, initHiddenRow, normalNeedleWidth, initHidden,initHiddenFloat
     , view
     , update
@@ -130,9 +130,9 @@ initHiddenFloat ( x, y ) id =
     { pos = GlobalBasics.blockPosFloat ( x, y )
     , collisionBox = needleCollisionBox (NormalNeedle normalNeedleWidth normalNeedleHeight)
     , appearance = NormalNeedle normalNeedleWidth normalNeedleHeight
-    , needleVisibility = Invisible (VisibleAfterEvent id NoNextNeedleVisibility)
-    , needleCollision = Collide NoNextNeedleCollision
-    , needleMove = NoNextNeedleMove
+    , visibility = GlobalModule.Invisible (GlobalModule.VisibleAfterEvent id GlobalModule.NoNextVisibility)
+    , collision = GlobalModule.Collide GlobalModule.NoNextCollision
+    , move = GlobalModule.NoNextMove
     }
 
 {-| quick function to create a row of hidden needles

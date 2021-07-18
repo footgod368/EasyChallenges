@@ -17,6 +17,7 @@ import EndPoint
 import Event exposing (Event)
 import GameControl
 import GlobalBasics
+import GlobalModule
 import Level1Type
 import MainType
 import Monster
@@ -26,7 +27,7 @@ import Player
 import SavePoint
 import Task
 import Array exposing (Array)
-import Needle exposing (NeedleCollision)
+import Needle
 
 
 {-| `init` of Level1 \`Model
@@ -134,8 +135,8 @@ init a =
                         , let
                               tempSword = Needle.sword (46,14.75) (46,-2) (4,0.25) 6.0 12
                           in
-                        [{tempSword | needleVisibility = Needle.Visible Needle.NoNextNeedleVisibility,
-                                      needleCollision = Needle.Collide Needle.NoNextNeedleCollision}]
+                        [{tempSword | visibility = GlobalModule.Visible GlobalModule.NoNextVisibility,
+                                      collision = GlobalModule.Collide GlobalModule.NoNextCollision}]
                         ]
                     )
             , monsters =
