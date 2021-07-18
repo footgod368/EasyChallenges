@@ -1,9 +1,9 @@
-module MenuUpdate exposing (update)
+module Menu.MenuUpdate exposing (update)
 
 import Array
-import MainConstant
-import MainType exposing (Msg(..))
-import MenuType
+import MainFunction.MainConstant as MainConstant
+import MainFunction.MainType as MainType exposing (Msg(..))
+import Menu.MenuType as MenuType
 
 
 update : MainType.Msg -> ( MenuType.Model, Cmd MainType.Msg ) -> ( MenuType.Model, Cmd MainType.Msg )
@@ -104,9 +104,11 @@ updateButton msg ( model, cmd ) =
                         3 ->
                             --menuButtonLevel3
                             ( { model | mainStatus = MainType.Level3 }, Cmd.batch [ cmd ] )
+
                         4 ->
                             --menuButtonLevel4
                             ( { model | mainStatus = MainType.Level4 }, Cmd.batch [ cmd ] )
+
                         _ ->
                             ( model, Cmd.batch [ cmd ] )
             in

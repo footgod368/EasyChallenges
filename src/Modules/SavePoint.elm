@@ -35,10 +35,10 @@ module SavePoint exposing
 -}
 
 import Array exposing (Array)
-import GlobalBasics
-import MainType
+import GlobalFunction.GlobalBasics as GlobalBasics
+import MainFunction.MainType as MainType
 import Maybe exposing (withDefault)
-import Player
+import Modules.Player as Player
 import Svg exposing (Svg)
 import Svg.Attributes as SvgAttr
 import ViewMove

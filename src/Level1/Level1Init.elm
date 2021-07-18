@@ -1,4 +1,4 @@
-module Level1Init exposing (init)
+module Level1.Level1Init exposing (init)
 
 {-| Init of Level1 Model.
 
@@ -9,25 +9,23 @@ module Level1Init exposing (init)
 
 -}
 
-import Array
-import Boundary
-import Brick
+import Array exposing (Array)
 import Browser.Dom exposing (getViewport)
-import EndPoint
-import Event exposing (Event)
-import GameControl
-import GlobalBasics
-import GlobalModule
-import Level1Type
-import MainType
-import Monster
+import GlobalFunction.GlobalBasics as GlobalBasics
+import GlobalFunction.GlobalModule as GlobalModule
+import Level1.Level1Type as Level1Type
+import MainFunction.MainType as MainType
+import Modules.Boundary as Boundary
+import Modules.Brick as Brick
+import Modules.EndPoint as EndPoint
+import Modules.Event as Event exposing (Event)
+import Modules.GameControl as GameControl
+import Modules.Monster as Monster
+import Modules.NoticeBoard as NoticeBoard
+import Modules.Player as Player
 import Needle
-import NoticeBoard
-import Player
 import SavePoint
 import Task
-import Array exposing (Array)
-import Needle
 
 
 {-| `init` of Level1 \`Model
@@ -54,17 +52,19 @@ init a =
                     , Event.hitBlock 10 "fifth hidden brick" ( 44, 12 ) ( 1, 1 )
                     , Event.hitBlock 11 "sixth hidden brick" ( 45, 12 ) ( 1, 1 )
                     , Event.init
-                              {id=12 , name = "sword"}
-                              (Event.AfterActEvent 10)
-                              (Event.PlayerCollide
-                                          (GlobalBasics.Polygon (Array.fromList [(GlobalBasics.blockPosFloat (46,1),GlobalBasics.blockPosFloat (46,15))])) )
-                              (Event.quickDuration 10)
+                        { id = 12, name = "sword" }
+                        (Event.AfterActEvent 10)
+                        (Event.PlayerCollide
+                            (GlobalBasics.Polygon (Array.fromList [ ( GlobalBasics.blockPosFloat ( 46, 1 ), GlobalBasics.blockPosFloat ( 46, 15 ) ) ]))
+                        )
+                        (Event.quickDuration 10)
                     , Event.init
-                              {id=12 , name = "sword"}
-                              (Event.AfterActEvent 11)
-                              (Event.PlayerCollide
-                                          (GlobalBasics.Polygon (Array.fromList [(GlobalBasics.blockPosFloat (46,1),GlobalBasics.blockPosFloat (46,15))])) )
-                              (Event.quickDuration 10)
+                        { id = 12, name = "sword" }
+                        (Event.AfterActEvent 11)
+                        (Event.PlayerCollide
+                            (GlobalBasics.Polygon (Array.fromList [ ( GlobalBasics.blockPosFloat ( 46, 1 ), GlobalBasics.blockPosFloat ( 46, 15 ) ) ]))
+                        )
+                        (Event.quickDuration 10)
                     ]
             , boundary = Boundary.normalInit
             , player = Player.init ( 50.0, 490.0 ) Player.defPlayerProperty Player.NoNextPropertyChange
@@ -127,16 +127,21 @@ init a =
                         , Needle.initFallingRow 13 22 26 3
                         , [ Needle.initHiddenCollideAfter ( 25, 12 ) 4 ]
                         , Needle.initHiddenRow 9 31 37 9
+
                         -- , [ Needle.initPos (GlobalBasics.blockPosFloat ( 46.0, 14.75 ))
                         --   , Needle.initPos (GlobalBasics.blockPosFloat ( 47.0, 14.75 ))
                         --   , Needle.initPos (GlobalBasics.blockPosFloat ( 48.0, 14.75 ))
                         --   , Needle.initPos (GlobalBasics.blockPosFloat ( 49.0, 14.75 ))
                         --   ]
                         , let
-                              tempSword = Needle.sword (46,14.75) (46,-2) (4,0.25) 6.0 12
+                            tempSword =
+                                Needle.sword ( 46, 14.75 ) ( 46, -2 ) ( 4, 0.25 ) 6.0 12
                           in
-                        [{tempSword | visibility = GlobalModule.Visible GlobalModule.NoNextVisibility,
-                                      collision = GlobalModule.Collide GlobalModule.NoNextCollision}]
+                          [ { tempSword
+                                | visibility = GlobalModule.Visible GlobalModule.NoNextVisibility
+                                , collision = GlobalModule.Collide GlobalModule.NoNextCollision
+                            }
+                          ]
                         ]
                     )
             , monsters =

@@ -1,0 +1,9 @@
+.  build_docs_json:SilverFOCS-21/pxteam7
+TaskFailed - taskid:build_docs_json:SilverFOCS-21/pxteam7
+Command failed: '['/usr/local/bin/elm', 'make', '--docs', '/mnt/c/Users/Administrator/Desktop/VG100/project/p2-tempMaster/p2team7/.elm-doc/packages/SilverFOCS-21/pxteam7/1.0.0/docs.json', '--output', '/dev/null']' returned 1
+
+########################################
+build_docs_json:SilverFOCS-21/pxteam7 <stdout>:
+Verifying dependencies (0/11)Verifying dependencies (1/11)Verifying dependencies (2/11)Verifying dependencies (3/11)Verifying dependencies (4/11)Verifying dependencies (5/11)Verifying dependencies (6/11)Verifying dependencies (7/11)Verifying dependencies (8/11)Verifying dependencies (9/11)Verifying dependencies (10/11)Verifying dependencies (11/11)                              Dependencies ready!
+Compiling ...Detected problems in 47 modules.
+

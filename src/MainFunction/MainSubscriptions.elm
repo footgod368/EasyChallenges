@@ -1,4 +1,4 @@
-module MainSubscriptions exposing (subscriptions)
+module MainFunction.MainSubscriptions exposing (subscriptions)
 
 {-| The main subscriptions. Since most of our game just needs tick, keyDown, keyUp, and MouseEvents, I declare it
 like this.
@@ -13,8 +13,8 @@ like this.
 import Browser.Events exposing (onAnimationFrameDelta, onKeyDown, onKeyUp, onResize)
 import Html.Events exposing (keyCode)
 import Json.Decode as Decode
-import MainModel
-import MainType
+import MainFunction.MainModel as MainModel
+import MainFunction.MainType as MainType
 import Time
 
 

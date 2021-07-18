@@ -1,4 +1,4 @@
-module MainModel exposing (Model)
+module MainFunction.MainModel exposing (Model)
 
 {-| Store MainModel
 
@@ -9,13 +9,13 @@ module MainModel exposing (Model)
 
 -}
 
-import Level0Type
-import Level1Type
-import Level2Type
-import Level3Type
-import Level4Type
-import MainType
-import MenuType
+import Level0.Level0Type as Level0Type
+import Level1.Level1Type as Level1Type
+import Level2.Level2Type as Level2Type
+import Level3.Level3Type as Level3Type
+import Level4.Level4Type as Level4Type
+import MainFunction.MainType as MainType
+import Menu.MenuType as MenuType
 
 
 {-| This main model stores level1 Model

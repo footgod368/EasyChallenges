@@ -1,20 +1,26 @@
-module GlobalModule exposing
-    (Visibility(..), Collision(..), Move(..), updateOneVisibility, updateOneCollision, updateOneMove)
+module GlobalFunction.GlobalModule exposing
+    ( Visibility(..), Collision(..), Move(..)
+    , updateOneCollision, updateOneMove, updateOneVisibility
+    )
 
 {-| Define the properties of the module and the functions that handle these properties.
 
+
 # Properties
+
 @docs Visibility, Collision, Move
 
+
 # Function
+
 @docs updateVisibility, updateCollision, updateMove
 
 -}
 
 import Array exposing (Array)
-import Event
-import GlobalBasics
+import GlobalFunction.GlobalBasics as GlobalBasics
 import Maybe exposing (withDefault)
+import Modules.Event as Event
 
 
 {-| `Visibility` describes the visibility of the block. `Visible/Invisible (nextVisibility: Visibility)`:
@@ -48,6 +54,7 @@ type Visibility
     | InvisibleAfterEvent Int Visibility
     | NoNextVisibility
 
+
 {-| `Collision` describes if the collision of the block is considered. This is almost the same as
 `Visibility`, see details in `Visibility`. Here is just a example. You want it to have no collision at
 first, then when `Event` whose id = 1 activates, it has collision, then finally, when `Event` whose id = 2 activates,
@@ -68,7 +75,8 @@ type Collision
     | NoCollideAfterEvent Int Collision
     | NoNextCollision
 
-{-| `Move` describes whether and how the  will move in the game. `Move (arrayPos : Array Pos) (speed :
+
+{-| `Move` describes whether and how the will move in the game. `Move (arrayPos : Array Pos) (speed :
 Float) (nextMoveEventID : Int) (nextMove : Move)`: arrayPos means the way the block moves, speed is how fast
 the block moves each frame, nextMoveEventID is when this stage of movement is finished, what movement happens next,
 nextMove is next move, with None indicating no further movements take place. Note, if the first stage is no
@@ -86,7 +94,8 @@ type Move
     = Move (Array GlobalBasics.Pos) Float Int Move
     | NoNextMove
 
-{-| update  visibility. Used in update. Not exposed.
+
+{-| update visibility. Used in update. Not exposed.
 -}
 updateOneVisibility : { model | actEvent : Array Event.ActEvent } -> { myModule | visibility : Visibility } -> { myModule | visibility : Visibility }
 updateOneVisibility model myModule =
@@ -123,11 +132,11 @@ updateOneVisibility model myModule =
 
         newModule =
             { myModule | visibility = newVisibility }
-
     in
     newModule
 
-{-| update  collision. Used in update. Not exposed.
+
+{-| update collision. Used in update. Not exposed.
 -}
 updateOneCollision : { model | actEvent : Array Event.ActEvent } -> { myModule | collision : Collision } -> { myModule | collision : Collision }
 updateOneCollision model myModule =
@@ -161,13 +170,14 @@ updateOneCollision model myModule =
 
                 _ ->
                     myModule.collision
-        
+
         newModule =
             { myModule | collision = newCollision }
     in
     newModule
 
-{-| update  move event. Used in `update`. Not exposed
+
+{-| update move event. Used in `update`. Not exposed
 -}
 updateOneMove : { model | actEvent : Array Event.ActEvent } -> { myModule | pos : GlobalBasics.Pos, move : Move } -> { myModule | pos : GlobalBasics.Pos, move : Move }
 updateOneMove model myModule =

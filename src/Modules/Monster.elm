@@ -1,4 +1,4 @@
-module Monster exposing
+module Modules.Monster exposing
     ( Monster
     , MonsterAppearance(..)
     , MonsterXMode(..)
@@ -13,11 +13,11 @@ module Monster exposing
 -}
 
 import Array exposing (Array)
-import Event
-import GlobalBasics
-import MainType
+import GlobalFunction.GlobalBasics as GlobalBasics
+import MainFunction.MainType as MainType
 import Maybe exposing (withDefault)
-import Player
+import Modules.Event as Event
+import Modules.Player as Player
 import Svg exposing (Svg)
 import Svg.Attributes as SvgAttr
 import ViewMove

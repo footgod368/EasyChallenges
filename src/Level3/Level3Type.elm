@@ -1,4 +1,4 @@
-module Level3Type exposing (Model)
+module Level3.Level3Type exposing (Model)
 
 {-| stores level3 Model
 
@@ -10,16 +10,16 @@ module Level3Type exposing (Model)
 -}
 
 import Array exposing (Array)
-import Boundary
-import Brick
-import EndPoint
-import Event
-import GameControl
-import GlobalBasics
-import MainType
+import GlobalFunction.GlobalBasics as GlobalBasics
+import MainFunction.MainType as MainType
+import Modules.Boundary as Boundary
+import Modules.Brick as Brick
+import Modules.EndPoint as EndPoint
+import Modules.Event as Event
+import Modules.GameControl as GameControl
+import Modules.NoticeBoard as NoticeBoard
+import Modules.Player as Player
 import Needle
-import NoticeBoard
-import Player
 import SavePoint
 
 

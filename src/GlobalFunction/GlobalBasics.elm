@@ -1,9 +1,9 @@
-module GlobalBasics exposing
+module GlobalFunction.GlobalBasics exposing
     ( Pos, addPosPos, minusPosPos, distPosPos
     , LineSeg, addLSPos, minusLSPos, addPolyPos
     , defPos, defLineSeg, defPoly
     , CollisionStatus(..), CollisionBox(..), ifCollideLSPoly, ifCollidePolyPoly
-    , blockPos, blockPosFloat, blockSize
+    , blockSize, blockPos, blockPosFloat
     )
 
 {-| The global types that are used in all game.
@@ -26,12 +26,12 @@ module GlobalBasics exposing
 
 # Collide
 
-@docs CollisionStatus, CollisionBox, vecCrossProd, ifPosOneLs, ifCollideLSLS, ifCollideLSPoly, ifCollidePolyPoly
+@docs CollisionStatus, CollisionBox, ifCollideLSPoly, ifCollidePolyPoly
 
 
 # Stage Index
 
-@ docs blockSize, blockPos
+@docs blockSize, blockPos, blockPosFloat
 
 -}
 
@@ -441,6 +441,8 @@ blockPos ( x, y ) =
     ( posX, posY )
 
 
+{-| Along current block size, input the position(can be float) returns the actual position
+-}
 blockPosFloat : ( Float, Float ) -> ( Float, Float )
 blockPosFloat ( x, y ) =
     let

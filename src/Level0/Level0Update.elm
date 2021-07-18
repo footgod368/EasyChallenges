@@ -1,4 +1,4 @@
-module Level0Update exposing (testUpdate, update)
+module Level0.Level0Update exposing (testUpdate, update)
 
 {-| update Level1
 
@@ -10,18 +10,18 @@ update
 -}
 
 import Array exposing (Array)
-import Boundary
-import Brick
-import EndPoint
-import Event
-import GameControl
-import Level0Init
-import Level0Type
-import Level1Type
-import MainType
+import Level0.Level0Init as Level0Init
+import Level0.Level0Type as Level0Type
+import Level1.Level1Type as Level1Type
+import MainFunction.MainType as MainType
+import Modules.Boundary as Boundary
+import Modules.Brick as Brick
+import Modules.EndPoint as EndPoint
+import Modules.Event as Event
+import Modules.GameControl as GameControl
+import Modules.NoticeBoard as NoticeBoard
+import Modules.Player as Player
 import Needle
-import NoticeBoard
-import Player
 import SavePoint
 
 
