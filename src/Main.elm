@@ -10,10 +10,10 @@ module Main exposing (main)
 -}
 
 import Browser
-import MainInit
-import MainSubscriptions
-import MainUpdate
-import MainView
+import MainFunction.MainInit as MainInit
+import MainFunction.MainSubscriptions as MainSubscriptions
+import MainFunction.MainUpdate as MainUpdate
+import MainFunction.MainView as MainView
 
 
 {-| main function. What else can I say

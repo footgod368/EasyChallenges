@@ -1,10 +1,10 @@
-module MenuInit exposing (init)
+module Menu.MenuInit exposing (init)
 
 import Array
 import Browser.Dom exposing (getViewport)
-import MainConstant
-import MainType
-import MenuType
+import MainFunction.MainConstant as MainConstant
+import MainFunction.MainType as MainType
+import Menu.MenuType as MenuType
 import Task
 
 

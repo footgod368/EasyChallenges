@@ -1,4 +1,4 @@
-module Level2View exposing (view)
+module Level2.Level2View exposing (view)
 
 {-| Level2 view
 
@@ -9,17 +9,17 @@ module Level2View exposing (view)
 
 -}
 
-import Boundary
-import Brick
-import EndPoint
-import GameControl
 import Html exposing (Html, div)
 import Html.Attributes as HtmlAttr
-import Level2Type
-import MainType
+import Level2.Level2Type as Level2Type
+import MainFunction.MainType as MainType
+import Modules.Boundary as Boundary
+import Modules.Brick as Brick
+import Modules.EndPoint as EndPoint
+import Modules.GameControl as GameControl
+import Modules.NoticeBoard as NoticeBoard
+import Modules.Player as Player
 import Needle
-import NoticeBoard
-import Player
 import SavePoint
 import Svg
 import Svg.Attributes as SvgAttr

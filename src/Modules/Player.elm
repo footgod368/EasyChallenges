@@ -1,4 +1,4 @@
-module Player exposing
+module Modules.Player exposing
     ( Player, PlayerProperty, defPlayerProperty, PropertyChange(..)
     , init
     , update, updateJustPlayerPos
@@ -37,8 +37,8 @@ module Player exposing
 -}
 
 import Array exposing (Array)
-import GlobalBasics
-import MainType
+import GlobalFunction.GlobalBasics as GlobalBasics
+import MainFunction.MainType as MainType
 import Maybe exposing (withDefault)
 import Svg exposing (Svg)
 import Svg.Attributes as SvgAttr

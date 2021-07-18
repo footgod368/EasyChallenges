@@ -1,4 +1,4 @@
-module NoticeBoard exposing
+module Modules.NoticeBoard exposing
     ( NoticeBoard, NoticeBoardVisibility(..)
     , init, quickInit
     , update
@@ -31,14 +31,14 @@ module NoticeBoard exposing
 -}
 
 import Array exposing (Array)
-import Brick
-import Event
-import GlobalBasics
-import GlobalModule
+import GlobalFunction.GlobalBasics as GlobalBasics
+import GlobalFunction.GlobalModule as GlobalModule
 import Html.Attributes exposing (height, width)
-import MainType
+import MainFunction.MainType as MainType
 import Maybe exposing (withDefault)
-import Player
+import Modules.Brick as Brick
+import Modules.Event as Event
+import Modules.Player as Player
 import Svg exposing (Svg, text)
 import Svg.Attributes as SvgAttr
 import ViewMove
@@ -149,12 +149,12 @@ updateOneNoticeBoard id model =
                 |> withDefault defNoticeBoard
 
         newNoticeBoard =
-             GlobalModule.updateOneMove model oldNoticeBoard
+            GlobalModule.updateOneMove model oldNoticeBoard
 
         newNoticeBoards =
             Array.set id newNoticeBoard model.noticeBoards
     in
-    { model | noticeBoards = newNoticeBoards}
+    { model | noticeBoards = newNoticeBoards }
         |> updateOneNoticeBoardVisibility id
 
 
@@ -207,6 +207,7 @@ updateOneNoticeBoardVisibility id model =
             { model | noticeBoards = newNoticeBoards }
     in
     newModel
+
 
 {-| view one noticeBoard, used in view, not exposed.
 -}

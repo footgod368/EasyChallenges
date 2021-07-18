@@ -1,4 +1,4 @@
-module Level0Init exposing (init)
+module Level0.Level0Init exposing (init)
 
 {-| Init of Level1 Model.
 
@@ -10,21 +10,21 @@ module Level0Init exposing (init)
 -}
 
 import Array
-import Boundary
-import Brick
 import Browser.Dom exposing (getViewport)
-import EndPoint
-import Event
-import GameControl
-import GlobalBasics
-import Level0Type
-import MainType
+import GlobalFunction.GlobalBasics as GlobalBasics
+import GlobalFunction.GlobalModule as GlobalModule
+import Level0.Level0Type as Level0Type
+import MainFunction.MainType as MainType
+import Modules.Boundary as Boundary
+import Modules.Brick as Brick
+import Modules.EndPoint as EndPoint
+import Modules.Event as Event
+import Modules.GameControl as GameControl
+import Modules.NoticeBoard as NoticeBoard
+import Modules.Player as Player
 import Needle
-import NoticeBoard
-import Player
 import SavePoint
 import Task
-import GlobalModule
 
 
 {-| `init` of Level1 \`Model

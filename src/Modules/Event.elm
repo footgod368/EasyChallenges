@@ -1,4 +1,4 @@
-module Event exposing
+module Modules.Event exposing
     ( ActEvent, IfActEventAct(..), ifActEventById, ifActEventByName, ifActEvent
     , EventInfo, EventIfStartAct(..), EventActType(..), EventActCounter(..), EventDuration, Event
     , init, quickDuration
@@ -35,11 +35,11 @@ module Event exposing
 --module Event exposing (..)
 
 import Array exposing (Array)
-import GlobalBasics
+import GlobalFunction.GlobalBasics as GlobalBasics
 import Html.Attributes exposing (height, width)
-import MainType
+import MainFunction.MainType as MainType
 import Maybe exposing (withDefault)
-import Player
+import Modules.Player as Player
 
 
 {-| `ActEvent` is type used in `Model`, storing all the activated `Events`. For

@@ -1,16 +1,16 @@
-module MenuView exposing (view)
+module Menu.MenuView exposing (view)
 
 {-| functions that names are their meanings
 -}
 
 import Array
-import GlobalBasics
+import GlobalFunction.GlobalBasics as GlobalBasics
 import Html exposing (Html, div)
 import Html.Attributes as HtmlAttr
-import MainConstant
-import MainType
+import MainFunction.MainConstant as MainConstant
+import MainFunction.MainType as MainType
 import Maybe exposing (withDefault)
-import MenuType
+import Menu.MenuType as MenuType
 import Svg exposing (Svg)
 import Svg.Attributes as SvgAttr
 import Svg.Events as SvgEvent

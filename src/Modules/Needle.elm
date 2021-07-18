@@ -1,9 +1,9 @@
 module Needle exposing
-    ( NeedleVisibility(..), NeedleCollision(..), NeedleMove(..), NeedleAppearance(..), Needle
-    , init, initFallingRow, initHiddenRow, normalNeedleWidth, initHidden,initHiddenFloat
+    ( NeedleAppearance(..), Needle
+    , init, initFallingRow, initHiddenRow, normalNeedleWidth, initHidden
     , view
     , update
-    , initHiddenCollideAfter, initHiddenFalling, initHiddenFallingRow, initPos, needleCollisionBox, normalNeedleHeight, sword
+    , initHiddenCollideAfter, initHiddenFalling, initHiddenFallingRow, initHiddenFloat, initPos, needleCollisionBox, normalNeedleHeight, sword
     )
 
 {-| The unit. The most common unit in the game
@@ -36,17 +36,16 @@ module Needle exposing
 -}
 
 import Array exposing (Array)
-import Event
-import GlobalBasics
-import GlobalModule
-import Html.Attributes exposing (height, width)
-import MainType
+import GlobalFunction.GlobalBasics as GlobalBasics
+import GlobalFunction.GlobalModule as GlobalModule
+import MainFunction.MainType as MainType
 import Maybe exposing (withDefault)
-import NoticeBoard exposing (NoticeBoardVisibility(..))
-import Player
+import Modules.Event as Event
+import Modules.Player as Player
 import Svg exposing (Svg)
 import Svg.Attributes as SvgAttr
 import ViewMove
+
 
 {-| For future different shapes of blocks.
 -}
@@ -125,15 +124,17 @@ initHidden ( x, y ) id =
     , move = GlobalModule.NoNextMove
     }
 
+
 initHiddenFloat : ( Float, Float ) -> Int -> Needle
 initHiddenFloat ( x, y ) id =
     { pos = GlobalBasics.blockPosFloat ( x, y )
     , collisionBox = needleCollisionBox (NormalNeedle normalNeedleWidth normalNeedleHeight)
     , appearance = NormalNeedle normalNeedleWidth normalNeedleHeight
-    , needleVisibility = Invisible (VisibleAfterEvent id NoNextNeedleVisibility)
-    , needleCollision = Collide NoNextNeedleCollision
-    , needleMove = NoNextNeedleMove
+    , visibility = GlobalModule.Invisible (GlobalModule.VisibleAfterEvent id GlobalModule.NoNextVisibility)
+    , collision = GlobalModule.Collide GlobalModule.NoNextCollision
+    , move = GlobalModule.NoNextMove
     }
+
 
 {-| quick function to create a row of hidden needles
 -}
@@ -306,6 +307,7 @@ updateOneNeedle id model =
     in
     { model | needles = newNeedles }
         |> updateOneNeedleCollision id
+
 
 {-| update needle collision. Used in update. Not exposed.
 -}

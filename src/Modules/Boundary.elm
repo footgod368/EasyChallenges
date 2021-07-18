@@ -1,12 +1,4 @@
---module Boundary exposing
---    ( BoundaryType, Boundary
---    , init, normalInit
---    , view
---    , update
---    )
-
-
-module Boundary exposing
+module Modules.Boundary exposing
     ( BoundaryType(..), Boundary
     , init, normalInit
     , view
@@ -38,9 +30,9 @@ module Boundary exposing
 -}
 
 import Array
-import GlobalBasics
-import MainType
-import Player
+import GlobalFunction.GlobalBasics as GlobalBasics
+import MainFunction.MainType as MainType
+import Modules.Player as Player
 import Svg exposing (Svg)
 import Svg.Attributes as SvgAttr
 import ViewMove

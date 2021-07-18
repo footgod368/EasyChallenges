@@ -1,14 +1,14 @@
-module MainView exposing (..)
+module MainFunction.MainView exposing (..)
 
 import Html exposing (Html, div)
-import Level0View
-import Level1View
-import Level2View
-import Level3View
-import Level4View
-import MainModel
-import MainType
-import MenuView
+import Level0.Level0View as Level0View
+import Level1.Level1View as Level1View
+import Level2.Level2View as Level2View
+import Level3.Level3View as Level3View
+import Level4.Level4View as Level4View
+import MainFunction.MainModel as MainModel
+import MainFunction.MainType as MainType
+import Menu.MenuView as MenuView
 
 
 view : MainModel.Model -> Html MainType.Msg

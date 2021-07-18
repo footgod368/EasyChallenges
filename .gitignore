@@ -1,5 +1,10 @@
 .idea
+.doit.db
+.elm-doc
 elm-stuff
 index.html
+elm-doc.sh
+replace.sh
+output.txt
 dockDockBuildParams.json
 .sh

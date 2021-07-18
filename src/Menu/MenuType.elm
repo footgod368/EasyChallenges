@@ -1,8 +1,8 @@
-module MenuType exposing (MenuStatus(..), Model)
+module Menu.MenuType exposing (MenuStatus(..), Model)
 
 import Array exposing (Array)
-import GlobalBasics
-import MainType
+import GlobalFunction.GlobalBasics as GlobalBasics
+import MainFunction.MainType as MainType
 
 
 type MenuStatus

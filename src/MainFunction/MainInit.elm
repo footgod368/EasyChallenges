@@ -1,4 +1,4 @@
-module MainInit exposing (init)
+module MainFunction.MainInit exposing (init)
 
 {-| The init of MainModel.
 
@@ -10,14 +10,14 @@ module MainInit exposing (init)
 -}
 
 import Browser.Dom exposing (Viewport, getViewport)
-import Level0Init
-import Level1Init
-import Level2Init
-import Level3Init
-import Level4Init
-import MainModel
-import MainType
-import MenuInit
+import Level0.Level0Init as Level0Init
+import Level1.Level1Init as Level1Init
+import Level2.Level2Init as Level2Init
+import Level3.Level3Init as Level3Init
+import Level4.Level4Init as Level4Init
+import MainFunction.MainModel as MainModel
+import MainFunction.MainType as MainType
+import Menu.MenuInit as MenuInit
 import Task
 
 

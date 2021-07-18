@@ -1,4 +1,4 @@
-module Level2Init exposing (init)
+module Level2.Level2Init exposing (init)
 
 {-| Init of Level2 Model.
 
@@ -10,24 +10,24 @@ module Level2Init exposing (init)
 -}
 
 import Array
-import Boundary
-import Brick
 import Browser.Dom exposing (getViewport)
-import EndPoint
-import Event
-import GameControl
-import GlobalBasics
-import GlobalModule
-import Level2Type
-import MainType
+import GlobalFunction.GlobalBasics as GlobalBasics
+import GlobalFunction.GlobalModule as GlobalModule
+import Level2.Level2Type as Level2Type
+import MainFunction.MainType as MainType
+import Modules.Boundary as Boundary
+import Modules.Brick as Brick
+import Modules.EndPoint as EndPoint
+import Modules.Event as Event
+import Modules.GameControl as GameControl
+import Modules.NoticeBoard as NoticeBoard
+import Modules.Player as Player
 import Needle
-import NoticeBoard
-import Player
 import SavePoint
 import Task
 
 
-{-| `init` of Level2 \`Model
+{-| `init` of Level2\`Model
 -}
 init : () -> ( Level2Type.Model, Cmd MainType.Msg )
 init a =
@@ -181,8 +181,11 @@ init a =
                                 (Array.fromList [])
                                 0.0
                                 1
-                                (GlobalModule.Move (Array.fromList [ GlobalBasics.blockPosFloat ( 10.8, 13.8 ) ]) 5.0 -1
-                                GlobalModule.NoNextMove)
+                                (GlobalModule.Move (Array.fromList [ GlobalBasics.blockPosFloat ( 10.8, 13.8 ) ])
+                                    5.0
+                                    -1
+                                    GlobalModule.NoNextMove
+                                )
                       }
                     , let
                         tempBoard2 =

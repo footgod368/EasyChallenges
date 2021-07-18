@@ -1,4 +1,4 @@
-module MainType exposing
+module MainFunction.MainType exposing
     ( Msg(..)
     , MainScene(..)
     )
@@ -9,6 +9,11 @@ module MainType exposing
 # Msg
 
 @docs Msg
+
+
+# MainScene
+
+@docs MainScene
 
 -}
 

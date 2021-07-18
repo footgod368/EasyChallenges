@@ -1,4 +1,4 @@
-module GameControl exposing
+module Modules.GameControl exposing
     ( GameControl
     , init, update, view
     )
@@ -14,11 +14,11 @@ module GameControl exposing
 
 import Array exposing (Array)
 import Browser.Dom exposing (getViewport)
-import GlobalBasics
-import MainConstant
-import MainType exposing (Msg(..))
+import GlobalFunction.GlobalBasics as GlobalBasics
+import MainFunction.MainConstant as MainConstant
+import MainFunction.MainType as MainType exposing (Msg(..))
 import Maybe exposing (withDefault)
-import Player exposing (Player)
+import Modules.Player as Player exposing (Player)
 import Svg exposing (Svg)
 import Svg.Attributes as SvgAttr
 import Svg.Events as SvgEvent

@@ -1,4 +1,4 @@
-module EndPoint exposing
+module Modules.EndPoint exposing
     ( EndPoint
     , init
     , initDetailed, update, view
@@ -29,10 +29,10 @@ module EndPoint exposing
 -}
 
 import Array
-import GlobalBasics
+import GlobalFunction.GlobalBasics as GlobalBasics
 import Html.Attributes exposing (height, width)
-import MainType
-import Player
+import MainFunction.MainType as MainType
+import Modules.Player as Player
 import Svg exposing (Svg)
 import Svg.Attributes as SvgAttr
 import ViewMove

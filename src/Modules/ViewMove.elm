@@ -9,8 +9,8 @@ module ViewMove exposing (deltaX, deltaY)
 
 -}
 
-import GlobalBasics
-import Player
+import GlobalFunction.GlobalBasics as GlobalBasics
+import Modules.Player as Player
 
 
 {-| Units when using their own view, need to add this delta to their unit to make sure the camera moves. You can use

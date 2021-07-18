@@ -1,4 +1,4 @@
-module Brick exposing
+module Modules.Brick exposing
     ( BrickAppearance(..), Brick
     , init, initPos, initFallingRow, initNoCollideHidden, initCollideHidden, initRow, quickCollisionBox, initPosVolumeColor
     , view
@@ -36,15 +36,16 @@ module Brick exposing
 -}
 
 import Array exposing (Array)
-import Event
-import GlobalBasics
-import GlobalModule
-import MainType
+import GlobalFunction.GlobalBasics as GlobalBasics
+import GlobalFunction.GlobalModule as GlobalModule
+import MainFunction.MainType as MainType
 import Maybe exposing (withDefault)
-import Player
+import Modules.Event as Event
+import Modules.Player as Player
 import Svg exposing (Svg)
 import Svg.Attributes as SvgAttr
 import ViewMove
+
 
 {-| For future different appearance of blocks.
 -}
@@ -151,7 +152,7 @@ initFallingBrick ( x, y ) id =
             (Array.fromList [])
             0.0
             id
-            ( GlobalModule.Move
+            (GlobalModule.Move
                 (Array.fromList
                     [ ( x, 700.0 )
                     ]
@@ -308,12 +309,12 @@ updateOneBrick : Int -> { model | player : Player.Player, bricks : Array Brick, 
 updateOneBrick id model =
     let
         oldBrick =
-            withDefault defBrick ( Array.get id model.bricks )
+            withDefault defBrick (Array.get id model.bricks)
 
         newBrickVisMove =
             oldBrick
-            |> GlobalModule.updateOneVisibility model
-            |> GlobalModule.updateOneMove model
+                |> GlobalModule.updateOneVisibility model
+                |> GlobalModule.updateOneMove model
 
         newBricks =
             Array.set id newBrickVisMove model.bricks
