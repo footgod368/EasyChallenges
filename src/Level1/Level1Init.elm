@@ -25,6 +25,8 @@ import NoticeBoard
 import Player
 import SavePoint
 import Task
+import Array exposing (Array)
+import Needle exposing (NeedleCollision)
 
 
 {-| `init` of Level1 \`Model
@@ -50,6 +52,18 @@ init a =
                     , Event.hitLineSeg 9 "first hidden needles" (GlobalBasics.blockPosFloat ( 31, 8.99 )) (GlobalBasics.blockPosFloat ( 37, 8.99 ))
                     , Event.hitBlock 10 "fifth hidden brick" ( 44, 12 ) ( 1, 1 )
                     , Event.hitBlock 11 "sixth hidden brick" ( 45, 12 ) ( 1, 1 )
+                    , Event.init
+                              {id=12 , name = "sword"}
+                              (Event.AfterActEvent 10)
+                              (Event.PlayerCollide
+                                          (GlobalBasics.Polygon (Array.fromList [(GlobalBasics.blockPosFloat (46,1),GlobalBasics.blockPosFloat (46,15))])) )
+                              (Event.quickDuration 10)
+                    , Event.init
+                              {id=12 , name = "sword"}
+                              (Event.AfterActEvent 11)
+                              (Event.PlayerCollide
+                                          (GlobalBasics.Polygon (Array.fromList [(GlobalBasics.blockPosFloat (46,1),GlobalBasics.blockPosFloat (46,15))])) )
+                              (Event.quickDuration 10)
                     ]
             , boundary = Boundary.normalInit
             , player = Player.init ( 50.0, 490.0 ) Player.defPlayerProperty Player.NoNextPropertyChange
@@ -112,11 +126,16 @@ init a =
                         , Needle.initFallingRow 13 22 26 3
                         , [ Needle.initHiddenCollideAfter ( 25, 12 ) 4 ]
                         , Needle.initHiddenRow 9 31 37 9
-                        , [ Needle.initPos (GlobalBasics.blockPosFloat ( 46.0, 14.75 ))
-                          , Needle.initPos (GlobalBasics.blockPosFloat ( 47.0, 14.75 ))
-                          , Needle.initPos (GlobalBasics.blockPosFloat ( 48.0, 14.75 ))
-                          , Needle.initPos (GlobalBasics.blockPosFloat ( 49.0, 14.75 ))
-                          ]
+                        -- , [ Needle.initPos (GlobalBasics.blockPosFloat ( 46.0, 14.75 ))
+                        --   , Needle.initPos (GlobalBasics.blockPosFloat ( 47.0, 14.75 ))
+                        --   , Needle.initPos (GlobalBasics.blockPosFloat ( 48.0, 14.75 ))
+                        --   , Needle.initPos (GlobalBasics.blockPosFloat ( 49.0, 14.75 ))
+                        --   ]
+                        , let
+                              tempSword = Needle.sword (46,14.75) (46,-2) (4,0.25) 6.0 12
+                          in
+                        [{tempSword | needleVisibility = Needle.Visible Needle.NoNextNeedleVisibility,
+                                      needleCollision = Needle.Collide Needle.NoNextNeedleCollision}]
                         ]
                     )
             , monsters =

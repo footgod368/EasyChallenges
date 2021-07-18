@@ -24,6 +24,7 @@ type MainScene
     | Level1
     | Level2
     | Level3
+    | Level4
 
 
 {-| `Msg` stores the callbacks of subscriptions
@@ -38,3 +39,4 @@ type Msg
     | OnMouseOver Int
     | OnMouseOut Int
     | GetViewport Viewport
+    | Resize Int Int

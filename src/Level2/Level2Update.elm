@@ -30,6 +30,9 @@ import SavePoint
 update : MainType.Msg -> Level2Type.Model -> ( Level2Type.Model, Cmd MainType.Msg )
 update msg model =
     case msg of
+        MainType.Resize width height ->
+            ( { model | windowBoundary = ( toFloat width * 0.95, toFloat height * 0.95 ) }, Cmd.none )
+
         MainType.GetViewport viewport ->
             ( { model | windowBoundary = ( viewport.viewport.width * 0.95, viewport.viewport.height * 0.95 ) }, Cmd.none )
 

@@ -10,7 +10,7 @@ like this.
 
 -}
 
-import Browser.Events exposing (onAnimationFrameDelta, onKeyDown, onKeyUp)
+import Browser.Events exposing (onAnimationFrameDelta, onKeyDown, onKeyUp, onResize)
 import Html.Events exposing (keyCode)
 import Json.Decode as Decode
 import MainModel
@@ -26,6 +26,7 @@ subscriptions model =
         [ Time.every 8 MainType.Tick
         , onKeyDown (Decode.map keyDown keyCode)
         , onKeyUp (Decode.map keyUp keyCode)
+        , onResize MainType.Resize
         ]
 
 

@@ -14,6 +14,7 @@ import Level0Init
 import Level1Init
 import Level2Init
 import Level3Init
+import Level4Init
 import MainModel
 import MainType
 import MenuInit
@@ -31,7 +32,8 @@ init a =
             , level1Model = Level1Init.init () |> Tuple.first
             , level2Model = Level2Init.init () |> Tuple.first
             , level3Model = Level3Init.init () |> Tuple.first
+            , level4Model = Level4Init.init () |> Tuple.first
             , menuModel = MenuInit.init () |> Tuple.first
             }
     in
-    ( mainModel, Cmd.none )
+    ( mainModel, Task.perform MainType.GetViewport getViewport )

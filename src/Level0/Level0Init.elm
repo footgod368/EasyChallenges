@@ -24,6 +24,7 @@ import NoticeBoard
 import Player
 import SavePoint
 import Task
+import GlobalModule
 
 
 {-| `init` of Level1 \`Model
@@ -119,9 +120,9 @@ init a =
                         , [ Brick.init
                                 (GlobalBasics.blockPos ( 18, 14 ))
                                 Brick.NormalAppearance
-                                (Brick.Visible (Brick.InvisibleAfterEvent 3 Brick.NoNextBrickVisibility))
-                                (Brick.NoCollide Brick.NoNextBrickCollision)
-                                Brick.NoNextBrickMove
+                                (GlobalModule.Visible (GlobalModule.InvisibleAfterEvent 3 GlobalModule.NoNextVisibility))
+                                (GlobalModule.NoCollide GlobalModule.NoNextCollision)
+                                GlobalModule.NoNextMove
                           ]
                         , [ Brick.initPos (GlobalBasics.blockPos ( 14, 14 ))
                           ]
@@ -129,36 +130,36 @@ init a =
                         , [ Brick.init
                                 (GlobalBasics.blockPos ( 6, 12 ))
                                 Brick.NormalAppearance
-                                (Brick.Invisible (Brick.VisibleAfterEvent 2 Brick.NoNextBrickVisibility))
-                                (Brick.Collide Brick.NoNextBrickCollision)
-                                Brick.NoNextBrickMove
+                                (GlobalModule.Invisible (GlobalModule.VisibleAfterEvent 2 GlobalModule.NoNextVisibility))
+                                (GlobalModule.Collide GlobalModule.NoNextCollision)
+                                GlobalModule.NoNextMove
                           ]
                         , [ Brick.init
                                 (GlobalBasics.blockPos ( 10, 14 ))
                                 Brick.NormalAppearance
-                                (Brick.Visible Brick.NoNextBrickVisibility)
-                                (Brick.Collide Brick.NoNextBrickCollision)
-                                (Brick.Move
+                                (GlobalModule.Visible GlobalModule.NoNextVisibility)
+                                (GlobalModule.Collide GlobalModule.NoNextCollision)
+                                (GlobalModule.Move
                                     (Array.fromList [])
                                     0.0
                                     1
-                                    (Brick.Move
+                                    (GlobalModule.Move
                                         (Array.fromList
                                             [ GlobalBasics.blockPos ( 13, 14 )
                                             ]
                                         )
                                         5.0
                                         -1
-                                        Brick.NoNextBrickMove
+                                        GlobalModule.NoNextMove
                                     )
                                 )
                           ]
                         , [ Brick.init
                                 (GlobalBasics.blockPos ( 22, 8 ))
                                 (Brick.Detailed 100 100 "#000000")
-                                (Brick.Visible Brick.NoNextBrickVisibility)
-                                (Brick.Collide Brick.NoNextBrickCollision)
-                                Brick.NoNextBrickMove
+                                (GlobalModule.Visible GlobalModule.NoNextVisibility)
+                                (GlobalModule.Collide GlobalModule.NoNextCollision)
+                                GlobalModule.NoNextMove
                           ]
                         ]
                     )
@@ -188,15 +189,15 @@ init a =
                                 )
                             )
                         )
-                        (NoticeBoard.Move
+                        (GlobalModule.Move
                             (Array.fromList [ ( 400.0, 400.0 ) ])
                             10.0
                             2
-                            (NoticeBoard.Move
+                            (GlobalModule.Move
                                 (Array.fromList [ ( 300.0, 300.0 ) ])
                                 10.0
                                 0
-                                NoticeBoard.NoNextNoticeBoardMove
+                                GlobalModule.NoNextMove
                             )
                         )
                         20
@@ -207,21 +208,21 @@ init a =
                     , Needle.init
                         (GlobalBasics.addPosPos ( 0.0, 30.0 ) (GlobalBasics.blockPos ( 4, 11 )))
                         (Needle.NormalNeedle 80.0 Needle.normalNeedleHeight)
-                        (Needle.Visible Needle.NoNextNeedleVisibility)
-                        (Needle.Collide Needle.NoNextNeedleCollision)
-                        (Needle.Move
+                        (GlobalModule.Visible GlobalModule.NoNextVisibility)
+                        (GlobalModule.Collide GlobalModule.NoNextCollision)
+                        (GlobalModule.Move
                             (Array.fromList [])
                             0.0
                             4
-                            (Needle.Move
+                            (GlobalModule.Move
                                 (Array.fromList [ ( 120.0, 260.0 ) ])
                                 5.0
                                 5
-                                (Needle.Move
+                                (GlobalModule.Move
                                     (Array.fromList [ ( 120.0, 430.0 ) ])
                                     10.0
                                     0
-                                    Needle.NoNextNeedleMove
+                                    GlobalModule.NoNextMove
                                 )
                             )
                         )

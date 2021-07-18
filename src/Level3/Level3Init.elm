@@ -11,10 +11,10 @@ module Level3Init exposing (init)
 
 import Array
 import Boundary
-import Brick exposing (Brick, BrickAppearance(..))
+import Brick
 import Browser.Dom exposing (getViewport)
 import EndPoint
-import Event exposing (Event, EventIfStartAct(..))
+import Event
 import GameControl
 import GlobalBasics
 import Level3Type
@@ -33,7 +33,7 @@ init a =
     let
         newModel =
             { windowBoundary = ( 1000.0, 800.0 )
-            , levelBoundary = ( 44 * 40, 680.0 )
+            , levelBoundary = ( 54 * 40, 680.0 )
             , actEvent = Array.fromList []
             , event =
                 Array.fromList
@@ -50,7 +50,7 @@ init a =
                 Array.fromList
                     (List.concat
                         [ Brick.initRow 15 1 12
-                        , Brick.initRow 15 17 44
+                        , Brick.initRow 15 17 54
                         , [ NoticeBoard.boundary ( 2, 4.2 ) ( 7, 5.2 ) ]
                         , [ Brick.initPos (GlobalBasics.blockPosFloat ( 2, 11 ))
                           , Brick.initPos (GlobalBasics.blockPosFloat ( 4, 11 ))
@@ -58,14 +58,14 @@ init a =
                           , Brick.initPos (GlobalBasics.blockPosFloat ( 8, 11 ))
                           ]
                         , Brick.initFallingRow 15 13 16 5
-                        , [ NoticeBoard.boundary ( 36, 8 ) ( 6.5, 4 ) ]
+                        , [ NoticeBoard.boundary ( 46, 8 ) ( 6.5, 4 ) ]
                         ]
                     )
             , savePoints =
                 Array.fromList
                     [ SavePoint.init (GlobalBasics.blockPos ( 2, 14 ))
                     ]
-            , endPoint = EndPoint.initDetailed (GlobalBasics.blockPosFloat ( 37, 10.5 )) ( 5 * 40, 1 * 40 )
+            , endPoint = EndPoint.initDetailed (GlobalBasics.blockPosFloat ( 47, 10.5 )) ( 5 * 40, 1 * 40 )
             , noticeBoards =
                 Array.fromList
                     [ NoticeBoard.quickInit (GlobalBasics.blockPosFloat ( 5.5, 5 )) "Which game studio do you" 20
@@ -78,10 +78,10 @@ init a =
                     , NoticeBoard.quickInit (GlobalBasics.blockPosFloat ( 4.5, 11.8 )) "B" 35
                     , NoticeBoard.quickInit (GlobalBasics.blockPosFloat ( 6.5, 11.8 )) "C" 35
                     , NoticeBoard.quickInit (GlobalBasics.blockPosFloat ( 8.5, 11.8 )) "D" 35
-                    , NoticeBoard.quickInit (GlobalBasics.blockPosFloat ( 39.2, 8.6 )) "Thanks for support!" 25
-                    , NoticeBoard.quickInit (GlobalBasics.blockPosFloat ( 39.2, 9.4 )) "\"Easy Challenges\" is" 25
-                    , NoticeBoard.quickInit (GlobalBasics.blockPosFloat ( 38, 10.2 )) "created by:" 25
-                    , NoticeBoard.quickInit (GlobalBasics.blockPosFloat ( 39.2, 11.3 )) "Silver Dog" 30
+                    , NoticeBoard.quickInit (GlobalBasics.blockPosFloat ( 49.2, 8.6 )) "Thanks for support!" 25
+                    , NoticeBoard.quickInit (GlobalBasics.blockPosFloat ( 49.2, 9.4 )) "\"Easy Challenges\" is" 25
+                    , NoticeBoard.quickInit (GlobalBasics.blockPosFloat ( 48, 10.2 )) "created by:" 25
+                    , NoticeBoard.quickInit (GlobalBasics.blockPosFloat ( 49.2, 11.3 )) "Silver Dog" 30
                     ]
             , needles =
                 Array.fromList
