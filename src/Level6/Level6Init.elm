@@ -34,7 +34,7 @@ init a =
     let
         newModel =
             { windowBoundary = ( 1000.0, 800.0 )
-            , levelBoundary = ( 54 * 40, 680.0 )
+            , levelBoundary = ( 75 * 40, 680.0 )
             , actEvent = Array.fromList []
             , event =
                 Array.fromList
@@ -140,7 +140,7 @@ init a =
                             (Event.quickDuration 10)
                     ,   Event.init {id=33, name= "ship5"}
                             (Event.AfterActEvent 32)
-                            (Event.TimeAfterStart 200)
+                            (Event.TimeAfterStart 2)
                             (Event.quickDuration 10)
                     ,   let
                             temp = Event.hitLineSeg 34 "g" (GlobalBasics.blockPosFloat (26,11)) (GlobalBasics.blockPosFloat (27,11))
@@ -148,6 +148,7 @@ init a =
                         { temp | duration = Event.quickDuration 9999 }
                     ,   Event.hitBlock 35 "hidden" (28,9) (2,2)
                     ,   Event.hitBlock 36 "sword" (28.2,11) (1,1)
+                    ,   Event.hitBlock 51 "magicbox" (50, 10.1) (1, 1)
                     ]
             , boundary = Boundary.normalInit
             , player = Player.init (  50.0, 440.0  ) Player.defPlayerProperty Player.NoNextPropertyChange
@@ -174,7 +175,7 @@ init a =
                               }]
                         ,   Brick.initFallingRow 12 28 34 10
                         ,   Brick.initRow 12 35 39
-                        ,   [Brick.initPosVolumeColor (GlobalBasics.blockPosFloat (40 , 10)) ( 160, 320) "#00cdcd"]
+                        ,   [Brick.initPosVolumeColor (GlobalBasics.blockPosFloat (40 , 10)) ( 120, 320) "#00cdcd"]
                         ,   let
                                 base2 = Brick.initPosVolumeColor (GlobalBasics.blockPosFloat(40.1,9.8)) (32,8) "#700000"
                             in
@@ -197,13 +198,18 @@ init a =
                             in
                             [{ hidden | appearance = Brick.Detailed 80 80 "#00000050", 
                                         collisionBox = Brick.brickCollisionBox (Brick.Detailed 80 80 "#00000050")}]
+                        ,   [Brick.initPosVolumeColor (GlobalBasics.blockPosFloat (48 , 13)) ( 320, 200) "#cd00cd"]
+                        ,   [Brick.initPos (GlobalBasics.blockPosFloat (50 , 10))]
+                        ,   [Brick.initPosVolumeColor (GlobalBasics.blockPosFloat(52.1,12.8)) (32,8) "#700000"]
+                        ,   [Brick.initPosVolumeColor (GlobalBasics.blockPosFloat (60 , 13)) ( 400, 200) "#cd00cd"]
                         ]
                     )
             , savePoints =
                 Array.fromList
                     [ SavePoint.init (GlobalBasics.blockPos ( 2, 12 ))
+                    , SavePoint.init (GlobalBasics.blockPos ( 41, 9 ))
                     ]
-            , endPoint = EndPoint.init (GlobalBasics.blockPosFloat (42,9))
+            , endPoint = EndPoint.init (GlobalBasics.blockPosFloat (70,9))
             , noticeBoards =
                 Array.fromList
                     [   NoticeBoard.init (GlobalBasics.blockPosFloat (38.8,11.5))
@@ -234,7 +240,7 @@ init a =
                             (NoticeBoard.Invisible (NoticeBoard.VisibleAfterEvent 32 "Jump"
                             (NoticeBoard.InvisibleAfterEvent 33 NoticeBoard.NoNextNoticeBoardVisibility)))
                         GlobalModule.NoNextMove
-                        24
+                        16
                         ,
                         NoticeBoard.quickInit (GlobalBasics.blockPosFloat (6.5,7.4)) "↓" 40
                         ,
@@ -289,6 +295,7 @@ init a =
                                 (GlobalModule.NoCollide (GlobalModule.CollideAfterEvent 7 (GlobalModule.NoCollideAfterEvent 34 GlobalModule.NoNextCollision)))
                                 (GlobalModule.NoNextMove)]
                         ,   [Needle.sword (55,10.5) (19,10.5) (4,2) 20 36]
+                        ,   [Needle.initHidden (50, 11) 51]
                         ]
                     )
             , keyPressed = []
