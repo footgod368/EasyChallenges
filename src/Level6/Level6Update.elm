@@ -61,10 +61,11 @@ update msg model =
 
             else
                 let 
-                    newnewModel = Event.deleteEventById newModel 34 7
+                    newModel1 = Event.deleteEventById newModel 34 7
+                    newModel2 = Event.deleteEventById newModel1 55 54
                 in
 
-                ( newnewModel, cmd )
+                ( newModel2, cmd )
 
         buttonMsg ->
             GameControl.update buttonMsg ( model, Cmd.none )
