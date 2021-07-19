@@ -28,6 +28,7 @@ import Task
 import Modules.Player exposing (Player)
 import Modules.Brick exposing (Brick)
 import Modules.Event exposing (hitBlock)
+import Modules.Event exposing (Event)
 
 
 {-| `init` of Level5 \`Model
@@ -40,23 +41,41 @@ init a =
                                     , ifPlayerJumpOnTheGround = False}
         newModel =
             { windowBoundary = ( 1000.0, 800.0 )
-            , levelBoundary = ( 60 * 40, 40*40.0 )
+            , levelBoundary = ( 70 * 40, 40*40.0 )
             , actEvent = Array.fromList []
             , event =
                 Array.fromList
                     [ Event.hitBlockAfter 1 "wings" (3,36) (1,1) 3
-                    , Event.hitLineSeg 2 "first needle" (GlobalBasics.blockPosFloat (5,39.9)) (GlobalBasics.blockPosFloat (18,39.9))
+                    , Event.hitLineSeg 2 "first needle" (GlobalBasics.blockPosFloat (5,39.9)) (GlobalBasics.blockPosFloat (47,39.9))
                     , Event.hitLineSeg 3 "first ?" (GlobalBasics.blockPosFloat (3.05,38.01)) (GlobalBasics.blockPosFloat (3.95,38.01))
+                    , Event.hitLineSeg 4 "second ?" (GlobalBasics.blockPosFloat (56.05,38.01)) (GlobalBasics.blockPosFloat (56.95,38.01))
+                    , Event.hitLineSeg 5 "third ?" (GlobalBasics.blockPosFloat (58.05,38.01)) (GlobalBasics.blockPosFloat (58.95,38.01))
+                    , Event.hitBlockAfter 6 "get blue" (56,36) (1,1) 4
+                    , Event.hitBlockAfter 7 "get red" (58,36) (1,1) 5
+                    , Event.hitLineSegAfter 8 "hit red then blue" (GlobalBasics.blockPosFloat (56.05,38.01)) (GlobalBasics.blockPosFloat (56.95,38.01)) 5
+                    , Event.hitLineSegAfter 8 "hit blue then red" (GlobalBasics.blockPosFloat (58.05,38.01)) (GlobalBasics.blockPosFloat (58.95,38.01)) 4
+                    , Event.hitLineSegAfter 9 "hit blue then land" (GlobalBasics.blockPosFloat (1,39.9)) (GlobalBasics.blockPosFloat (70,39.9)) 4
+                    , Event.hitLineSegAfter 10 "hit red then land" (GlobalBasics.blockPosFloat (1,39.9)) (GlobalBasics.blockPosFloat (70,39.9)) 5
+                    , Event.hitLineSegAfter 11 "second ? again" (GlobalBasics.blockPosFloat (56.05,38.01)) (GlobalBasics.blockPosFloat (56.95,38.01)) 9
+                    , Event.hitLineSegAfter 12 "third ? again" (GlobalBasics.blockPosFloat (58.05,38.01)) (GlobalBasics.blockPosFloat (58.95,38.01)) 10
+                    , Event.hitLineSegAfter 13 "hit again red then blue" (GlobalBasics.blockPosFloat (56.05,38.01)) (GlobalBasics.blockPosFloat (56.95,38.01)) 12
+                    , Event.hitLineSegAfter 13 "hit again blue then red" (GlobalBasics.blockPosFloat (58.05,38.01)) (GlobalBasics.blockPosFloat (58.95,38.01)) 11
+                    , Event.init {id = 14, name = "blue-red mix"}
+                                 (Event.AfterActEvent 13)
+                                 (Event.TimeAfterStart 100)
+                                 (Event.quickDuration 10)
+                    , Event.hitBlockAfter 15 "get green" (66,39) (1,1) 14
+                    , Event.hitLineSeg 16 "second needle" (GlobalBasics.blockPosFloat (53,20)) (GlobalBasics.blockPosFloat (64,20)) 
                     ]
             , boundary = Boundary.normalInit
             , player =
-                Player.init ( 50.0, 290.0 ) Player.defPlayerProperty (Player.ChangeTo newProperty 1 Player.NoNextPropertyChange )
+                Player.init ( 20, 290.0 ) Player.defPlayerProperty (Player.ChangeTo newProperty 1 Player.NoNextPropertyChange )
             , bricks =
                 Array.fromList
                     (List.concat
                         [ Brick.initRow 10 1 5
                         , [Brick.initPosVolumeColor  (GlobalBasics.blockPosFloat (13,10)) (40*40,10*40) "#00000050"]
-                        , Brick.initRow 40 1 60
+                        , Brick.initRow 40 1 70
                         , [Brick.initPosVolumeColor (GlobalBasics.blockPosFloat (3,37)) (40,40) "#FFFF00"]
                         , [ Brick.init
                                 (GlobalBasics.blockPosFloat ( 3, 36 ))
@@ -70,30 +89,83 @@ init a =
                                 tempBoard1 = NoticeBoard.boundary (5.8,32) (6.2,2.2)
                           in
                           [{tempBoard1 | visibility = GlobalModule.Invisible (GlobalModule.VisibleAfterEvent 2  GlobalModule.NoNextVisibility)}]
+                        , [Brick.initPosVolumeColor (GlobalBasics.blockPosFloat (56,37)) (40,40) "#FFFF00"]
+                        , [Brick.initPosVolumeColor (GlobalBasics.blockPosFloat (58,37)) (40,40) "#FFFF00"]
+                        ,  [ Brick.init
+                                (GlobalBasics.blockPosFloat ( 56, 36 ))
+                                (Brick.Detailed 40 40 "#1E90FF")
+                                (GlobalModule.Invisible (GlobalModule.VisibleAfterEvent 4 (GlobalModule.InvisibleAfterEvent 6 GlobalModule.NoNextVisibility)))
+                                (GlobalModule.NoCollide GlobalModule.NoNextCollision)
+                                (GlobalModule.Move (Array.fromList []) 5.0 11 (GlobalModule.Move (Array.fromList [GlobalBasics.blockPosFloat (66,39)]) 5.0 -1 GlobalModule.NoNextMove))
+                          ]
+                        ,  [ Brick.init
+                                (GlobalBasics.blockPosFloat ( 58, 36 ))
+                                (Brick.Detailed 40 40 "#FF0000")
+                                (GlobalModule.Invisible (GlobalModule.VisibleAfterEvent 5 (GlobalModule.InvisibleAfterEvent 7 GlobalModule.NoNextVisibility)))
+                                (GlobalModule.NoCollide GlobalModule.NoNextCollision)
+                                (GlobalModule.Move (Array.fromList []) 5.0 12 (GlobalModule.Move (Array.fromList [GlobalBasics.blockPosFloat (66,39)]) 5.0 -1 GlobalModule.NoNextMove))
+                          ]
+                        , [ Brick.init
+                                (GlobalBasics.blockPosFloat ( 66, 39 ))
+                                (Brick.Detailed 40 40 "	#3CB371")
+                                (GlobalModule.Invisible (GlobalModule.VisibleAfterEvent 14  (GlobalModule.InvisibleAfterEvent 15 GlobalModule.NoNextVisibility)))
+                                (GlobalModule.NoCollide GlobalModule.NoNextCollision)
+                                GlobalModule.NoNextMove
+                          ]
+                        , Brick.initRow 10 63 70
                         ]
                     )
             , savePoints =
                 Array.fromList
                     [ SavePoint.init (GlobalBasics.blockPos ( 2, 9 ))
+                    , SavePoint.init (GlobalBasics.blockPos ( 53, 39 ))
                     ]
-            , endPoint = EndPoint.init (GlobalBasics.blockPos ( 89, 14 ))
+            , endPoint = EndPoint.init (GlobalBasics.blockPos ( 69, 9 ))
             , noticeBoards =
                 Array.fromList
                     [ NoticeBoard.quickInit (GlobalBasics.blockPosFloat (3.5,37.8)) "?" 40
                     , NoticeBoard.quickInit (GlobalBasics.blockPosFloat (9,3.8)) "Do not" 40
                     , NoticeBoard.quickInit (GlobalBasics.blockPosFloat (9,4.8)) "jump down" 40
                     , let
-                            tempNotice = NoticeBoard.quickInit (GlobalBasics.blockPosFloat (9,33.2)) "As I said ^_^" 40  
+                            tempNotice1 = NoticeBoard.quickInit (GlobalBasics.blockPosFloat (9,33.2)) "As I said ^_^" 40  
                       in
-                      {tempNotice | noticeBoardVisibility = NoticeBoard.Invisible (NoticeBoard.VisibleAfterEvent 2 "As I said ^_^" NoticeBoard.NoNextNoticeBoardVisibility)}
+                      {tempNotice1 | noticeBoardVisibility = NoticeBoard.Invisible (NoticeBoard.VisibleAfterEvent 2 "As I said ^_^" NoticeBoard.NoNextNoticeBoardVisibility)}
+                    , let
+                            tempNotice2 = NoticeBoard.quickInit (GlobalBasics.blockPosFloat (5,33)) "" 40  
+                      in
+                      {tempNotice2 | noticeBoardVisibility = NoticeBoard.Invisible (NoticeBoard.VisibleAfterEvent 1 "If I were a bird..." NoticeBoard.NoNextNoticeBoardVisibility)}
+                    ,  NoticeBoard.quickInit (GlobalBasics.blockPosFloat (56.5,37.8)) "?" 40
+                    ,  NoticeBoard.quickInit (GlobalBasics.blockPosFloat (58.5,37.8)) "?" 40
+                    , let
+                            tempNotice3 = NoticeBoard.quickInit (GlobalBasics.blockPosFloat (58,33)) "" 40  
+                      in
+                      {tempNotice3 | noticeBoardVisibility = NoticeBoard.Invisible (NoticeBoard.VisibleAfterEvent 8 "Blue Pill or Red Pill?" NoticeBoard.NoNextNoticeBoardVisibility)}
                     ]
             , needles =
                 Array.fromList
                     (
                     List.concat
                     [
-                        Needle.initHiddenRow 39.9 5 17 2
+                        Needle.initHiddenRow 39.9 5 46 2
+                    ,   [Needle.deadlyBlock (20,20) (2,8)
+                    ,    Needle.deadlyBlock (20,32) (2,8)]
+                    ,   [Needle.deadlyBlock (26,20) (2,4)
+                    ,    Needle.deadlyBlock (26,28) (2,12)]
+                    ,   [Needle.deadlyBlock (32,20) (2,6)
+                    ,    Needle.deadlyBlock (32,30) (2,10)]
+                    ,   [Needle.deadlyBlock (38,20) (2,8)
+                    ,    Needle.deadlyBlock (38,32) (2,8)]
+                    ,   [Needle.deadlyBlock (44,20) (2,10)
+                    ,    Needle.deadlyBlock (44,34) (2,6)]
+                    ,   let
+                            tempNeedle = Needle.sword (53,10) (53,50) (10,0.25) 8.0 16
+                        in
+                        [{tempNeedle | visibility = GlobalModule.Visible GlobalModule.NoNextVisibility,
+                                        collision = GlobalModule.Collide GlobalModule.NoNextCollision}
+                                        ,move = ]
+                    
                     ]
+
                     )
             , keyPressed = []
             , gameControl = GameControl.init MainType.Level5

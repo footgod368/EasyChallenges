@@ -52,9 +52,11 @@ update msg model =
                             |> NoticeBoard.update
                             |> Needle.update
                             |> Player.updateJustPlayerPos
-                            -- |> count
-                            -- |> checkHelmet
-                            -- |> checkWin
+                            |> count
+                            |> checkBlueOrRed
+                            |> checkBlue
+                            |> checkRed
+                            |> checkBlueAndRed
 
                     else
                         ( model, Cmd.none )
@@ -69,32 +71,116 @@ update msg model =
             GameControl.update buttonMsg ( model, Cmd.none )
 
 
--- countone : Int -> Level5Type.Model -> Level5Type.Model
--- countone id model =
---     if Event.ifActEventById model id == Event.ActEventAct then
+countone : Int -> Level5Type.Model -> Level5Type.Model
+countone id model =
+    if Event.ifActEventById model id == Event.ActEventAct && (not (List.member id model.number)) then
+        let
+            num =
+                model.number
+        in
+        { model | number = num ++ [ id ] }
+
+    else
+        model
+
+
+count : ( Level5Type.Model, Cmd MainType.Msg ) -> ( Level5Type.Model, Cmd MainType.Msg )
+count ( model, cmd ) =
+    let
+        newmodel =
+            List.foldl countone model (List.range 1 14)
+    in
+    ( newmodel, cmd )
+
+
+checkBlueOrRed: ( Level5Type.Model, Cmd MainType.Msg ) -> ( Level5Type.Model, Cmd MainType.Msg )
+checkBlueOrRed (model,cmd) =
+    if Event.ifActEventById model 6 == Event.ActEventAct || Event.ifActEventById model 7 == Event.ActEventAct then
+        (Player.playerKill model, cmd)
+    else
+        (model,cmd)
+
+
+notId : Int -> Event.Event -> Bool
+notId id event =
+    event.info.id /= id
+
+
+
+checkBlue : ( Level5Type.Model, Cmd MainType.Msg ) -> ( Level5Type.Model, Cmd MainType.Msg )
+checkBlue ( model, cmd ) =
+    if List.member 11 model.number then
+        let
+            oldEvent =
+                model.event
+
+            newEvent =
+                Array.filter (notId 6) oldEvent
+        in
+        ( { model | event = newEvent }, cmd )
+
+    else
+        ( model, cmd )
+
+checkRed : ( Level5Type.Model, Cmd MainType.Msg ) -> ( Level5Type.Model, Cmd MainType.Msg )
+checkRed ( model, cmd ) =
+    if List.member 12 model.number then
+        let
+            oldEvent =
+                model.event
+
+            newEvent =
+                Array.filter (notId 7) oldEvent
+        in
+        ( { model | event = newEvent }, cmd )
+
+    else
+        ( model, cmd )
+
+
+notBlueOrRed: Brick.Brick -> Bool
+notBlueOrRed brick =
+    case brick.appearance of
+        Brick.NormalAppearance ->
+            True
+        Brick.Detailed _ _ color ->
+            color /= "#1E90FF" && color /= "#FF0000"
+
+checkBlueAndRed : ( Level5Type.Model, Cmd MainType.Msg ) -> ( Level5Type.Model, Cmd MainType.Msg )
+checkBlueAndRed ( model, cmd ) =
+    if List.member 14 model.number then
+        let
+            oldBricks =
+                model.bricks
+
+            newBricks =
+                Array.filter notBlueOrRed oldBricks
+        in
+        ( { model | bricks = newBricks }, cmd )
+
+    else
+        ( model, cmd )
+
+
+
+
+
+
+
+-- checkHelmet : ( Level5Type.Model, Cmd MainType.Msg ) -> ( Level5Type.Model, Cmd MainType.Msg )
+-- checkHelmet ( model, cmd ) =
+--     if List.member 9 model.number then
 --         let
---             num =
---                 model.number
+--             oldEvent =
+--                 model.event
+
+--             newEvent =
+--                 Array.filter (notId 10) oldEvent
 --         in
---         { model | number = num ++ [ id ] }
+--         ( { model | event = newEvent }, cmd )
 
 --     else
---         model
-
-
--- count : ( Level5Type.Model, Cmd MainType.Msg ) -> ( Level5Type.Model, Cmd MainType.Msg )
--- count ( model, cmd ) =
---     let
---         newmodel =
---             List.foldl countone model (List.range 1 10)
---     in
---     ( newmodel, cmd )
-
-
--- notId : Int -> Event.Event -> Bool
--- notId id event =
---     event.info.id /= id
-
+--         ( model, cmd )
 
 -- checkHelmet : ( Level5Type.Model, Cmd MainType.Msg ) -> ( Level5Type.Model, Cmd MainType.Msg )
 -- checkHelmet ( model, cmd ) =

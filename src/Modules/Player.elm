@@ -3,7 +3,7 @@ module Modules.Player exposing
     , init
     , update, updateJustPlayerPos
     , view
-    , playerRefreshJump, playerIfCollidePoly, playerCollideRigidBody, checkDead, playerDead, playerWin
+    , playerRefreshJump, playerIfCollidePoly, playerCollideRigidBody, checkDead, playerDead, playerWin, playerKill
     )
 
 {-| The Player unit, the figure that player controls.
@@ -144,6 +144,19 @@ playerWin model =
 
         newPlayer =
             { oldPlayer | liveState = Win }
+    in
+    { model | player = newPlayer }
+
+{-| Change the state of player to Dead
+-}
+playerKill : { model | player : Player } -> { model | player : Player }
+playerKill model =
+    let
+        oldPlayer =
+            model.player
+
+        newPlayer =
+            { oldPlayer | liveState = Dead }
     in
     { model | player = newPlayer }
 
