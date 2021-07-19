@@ -32,6 +32,7 @@ type alias Model =
     , actEvent : Array Event.ActEvent
     , event : Array Event.Event
     , boundary : Boundary.Boundary
+    , playerAtLastSavePoint: Player.Player
     , player : Player.Player
     , bricks : Array Brick.Brick
     , savePoints : Array SavePoint.SavePoint

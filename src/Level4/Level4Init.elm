@@ -56,6 +56,7 @@ init a =
                     , Event.hitBlock 12 "second sword" ( 22.5, 11.5 ) ( 2, 2 )
                     ]
             , boundary = Boundary.normalInit
+            , playerAtLastSavePoint = Player.init ( 50.0, 490.0 ) Player.defPlayerProperty Player.NoNextPropertyChange
             , player =
                 Player.init ( 50.0, 490.0 ) Player.defPlayerProperty Player.NoNextPropertyChange
             , bricks =
