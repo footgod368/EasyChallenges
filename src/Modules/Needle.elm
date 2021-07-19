@@ -1,7 +1,7 @@
 module Modules.Needle exposing
     ( NeedleAppearance(..), Needle
     , init, initFallingRow, initHiddenRow, normalNeedleWidth, initHidden, initHiddenCollideAfter
-    , initHiddenFalling, initHiddenFallingRow, initHiddenFloat, initPos, needleCollisionBox, normalNeedleHeight, sword
+    , initHiddenFalling, initHiddenFallingRow, initHiddenFloat, initPos, needleCollisionBox, normalNeedleHeight, sword, deadlyBlock
     , view
     , update
     )
@@ -136,9 +136,9 @@ initHiddenFloat ( x, y ) id =
 
 {-| quick function to create a row of hidden needles
 -}
-initHiddenRow : Int -> Int -> Int -> Int -> List Needle
+initHiddenRow : Float -> Int -> Int -> Int -> List Needle
 initHiddenRow n n1 n2 id =
-    List.map (\i -> initHidden ( i, n ) id) (List.range n1 n2)
+    List.map (\i -> initHiddenFloat ( toFloat i, n ) id) (List.range n1 n2)
 
 
 {-| quick function to create a needle which is only collidable after a given event.
@@ -200,6 +200,16 @@ initFallingRow n n1 n2 id =
 initHiddenFallingRow : Int -> Int -> Int -> Int -> List Needle
 initHiddenFallingRow n n1 n2 id =
     List.map (\i -> initHiddenFalling ( i, n ) id) (List.range n1 n2)
+
+
+deadlyBlock : ( Float, Float )-> ( Float, Float ) -> Needle
+deadlyBlock pos ( width, height )  =
+    init
+        (GlobalBasics.blockPosFloat pos)
+        (NormalNeedle (width * 40) (height * 40))
+        (GlobalModule.Visible GlobalModule.NoNextVisibility)
+        (GlobalModule.Collide GlobalModule.NoNextCollision)
+        GlobalModule.NoNextMove
 
 
 {-| quickfunction to create a sword that will charge for a given position after a given event
