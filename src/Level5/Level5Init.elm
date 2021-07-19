@@ -142,7 +142,7 @@ init a =
                     , let
                             tempNotice3 = NoticeBoard.quickInit (GlobalBasics.blockPosFloat (58,33)) "" 40  
                       in
-                      {tempNotice3 | noticeBoardVisibility = NoticeBoard.Invisible (NoticeBoard.VisibleAfterEvent 8 "Blue Pill or Red Pill?" NoticeBoard.NoNextNoticeBoardVisibility)}
+                      {tempNotice3 | noticeBoardVisibility = NoticeBoard.Invisible (NoticeBoard.VisibleAfterEvent 8 "Blue Pill or Red Pill?" (NoticeBoard.VisibleAfterEvent 15 "Green protects you" NoticeBoard.NoNextNoticeBoardVisibility))}
                     ]
             , needles =
                 Array.fromList
