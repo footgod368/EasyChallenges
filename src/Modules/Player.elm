@@ -445,7 +445,7 @@ view model =
         , SvgAttr.fill "#000000"
         , SvgAttr.opacity (String.fromInt deadOpacity)
         ]
-        [ Svg.text ("You dead! Dead times: " ++ String.fromInt model.player.deadTimes)
+        [ Svg.text ("You die! Dead times: " ++ String.fromInt model.player.deadTimes)
         ]
     , Svg.text_
         [ SvgAttr.x (String.fromFloat (playerX + playerDeltaX model))

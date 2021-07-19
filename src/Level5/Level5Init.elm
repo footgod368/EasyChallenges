@@ -65,7 +65,8 @@ init a =
                                  (Event.TimeAfterStart 100)
                                  (Event.quickDuration 10)
                     , Event.hitBlockAfter 15 "get green" (66,39) (1,1) 14
-                    , Event.hitLineSeg 16 "second needle" (GlobalBasics.blockPosFloat (53,20)) (GlobalBasics.blockPosFloat (64,20)) 
+                    , Event.hitLineSeg 16 "second needle" (GlobalBasics.blockPosFloat (53,11)) (GlobalBasics.blockPosFloat (64,11)) 
+                    , Event.hitLineSeg 17 "jump down" (GlobalBasics.blockPosFloat (6,11.1)) (GlobalBasics.blockPosFloat (12,11.1))
                     ]
             , boundary = Boundary.normalInit
             , player =
@@ -145,8 +146,8 @@ init a =
                 Array.fromList
                     (
                     List.concat
-                    [
-                        Needle.initHiddenRow 39.9 5 46 2
+                    [   (List.map (\i-> Needle.initHiddenCollideAfter (i,10) 17) (List.range 6 12))
+                    ,    Needle.initHiddenRow 39.9 5 46 2
                     ,   [Needle.deadlyBlock (20,20) (2,8)
                     ,    Needle.deadlyBlock (20,32) (2,8)]
                     ,   [Needle.deadlyBlock (26,20) (2,4)
@@ -158,11 +159,10 @@ init a =
                     ,   [Needle.deadlyBlock (44,20) (2,10)
                     ,    Needle.deadlyBlock (44,34) (2,6)]
                     ,   let
-                            tempNeedle = Needle.sword (53,10) (53,50) (10,0.25) 8.0 16
+                            tempNeedle = Needle.sword (53,1) (53,50) (10,0.25) 10.0 16
                         in
                         [{tempNeedle | visibility = GlobalModule.Visible GlobalModule.NoNextVisibility,
-                                        collision = GlobalModule.Collide GlobalModule.NoNextCollision}
-                                        ,move = ]
+                                        collision = GlobalModule.Collide (GlobalModule.NoCollideAfterEvent 15 GlobalModule.NoNextCollision)}]
                     
                     ]
 
