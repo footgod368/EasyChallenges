@@ -34,7 +34,7 @@ init a =
     let
         newModel =
             { windowBoundary = ( 1000.0, 800.0 )
-            , levelBoundary = ( 50*40, 680.0 )
+            , levelBoundary = ( 54 * 40, 680.0 )
             , actEvent = Array.fromList []
             , event =
                 Array.fromList
@@ -150,7 +150,7 @@ init a =
                     ,   Event.hitBlock 36 "sword" (28.2,11) (1,1)
                     ]
             , boundary = Boundary.normalInit
-            , player = Player.init (  50.0, 440.0  )
+            , player = Player.init (  50.0, 440.0  ) Player.defPlayerProperty Player.NoNextPropertyChange
             , bricks =
                 Array.fromList
                     (List.concat
@@ -178,13 +178,13 @@ init a =
                         ,   let
                                 base2 = Brick.initPosVolumeColor (GlobalBasics.blockPosFloat(40.1,9.8)) (32,8) "#700000"
                             in
-                            [{ base2| brickVisibility = GlobalModule.Invisible (GlobalModule.VisibleAfterEvent 9 (GlobalModule.InvisibleAfterEvent 30 (GlobalModule.NoNextVisibility)))
+                            [{ base2| visibility = GlobalModule.Invisible (GlobalModule.VisibleAfterEvent 9 (GlobalModule.InvisibleAfterEvent 30 (GlobalModule.NoNextVisibility)))
                              , collision = GlobalModule.NoCollide GlobalModule.NoNextCollision
                             }]
                         ,   let
                                 base1 = Brick.initPosVolumeColor (GlobalBasics.blockPosFloat(39.8,11.1)) (8,32) "#700000"
                             in
-                            [{ base1| brickVisibility = GlobalModule.Invisible (GlobalModule.VisibleAfterEvent 9 (GlobalModule.InvisibleAfterEvent 30 (GlobalModule.NoNextVisibility)))
+                            [{ base1| visibility = GlobalModule.Invisible (GlobalModule.VisibleAfterEvent 9 (GlobalModule.InvisibleAfterEvent 30 (GlobalModule.NoNextVisibility)))
                              , collision = GlobalModule.NoCollide GlobalModule.NoNextCollision
                              , move = GlobalModule.Move (Array.fromList[]) 0.0 15
                                      (GlobalModule.Move (Array.fromList[GlobalBasics.blockPosFloat(39.8,11.1), GlobalBasics.blockPosFloat(39.8,10.1)]) 1.5 19 

@@ -12,6 +12,7 @@ module Level3.Level3Init exposing (init)
 import Array
 import Browser.Dom exposing (getViewport)
 import GlobalFunction.GlobalBasics as GlobalBasics
+import GlobalFunction.GlobalModule as GlobalModule
 import Level3.Level3Type as Level3Type
 import MainFunction.MainType as MainType
 import Modules.Boundary as Boundary
