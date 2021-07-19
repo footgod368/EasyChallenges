@@ -42,21 +42,21 @@ init a =
             , actEvent = Array.fromList []
             , event =
                 Array.fromList
-                    [ Event.hitBlock 1 "wings" (1,15) (1,1)
+                    [ Event.hitBlock 1 "wings" (1,1) (1,1)
                     ]
             , boundary = Boundary.normalInit
             , player =
-                Player.init ( 50.0, 490.0 ) Player.defPlayerProperty (Player.ChangeTo newProperty 1 Player.NoNextPropertyChange )
+                Player.init ( 50.0, 290.0 ) Player.defPlayerProperty (Player.ChangeTo newProperty 1 Player.NoNextPropertyChange )
             , bricks =
                 Array.fromList
                     (List.concat
-                        [ Brick.initRow 15 1 10
-                       
+                        [ Brick.initRow 10 1 5
+                        , Brick.initRow 10 13 20
                         ]
                     )
             , savePoints =
                 Array.fromList
-                    [ SavePoint.init (GlobalBasics.blockPos ( 2, 14 ))
+                    [ SavePoint.init (GlobalBasics.blockPos ( 2, 9 ))
                     ]
             , endPoint = EndPoint.init (GlobalBasics.blockPos ( 89, 14 ))
             , noticeBoards =
