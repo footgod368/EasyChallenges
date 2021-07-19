@@ -172,7 +172,7 @@ updateOneSavePoint id model =
             Player.playerIfCollidePoly model savePoint
     in
     if status == GlobalBasics.Collided && savePoint.appearance == Unsaved then
-        newModel
+        {newModel | playerAtLastSavePoint = newPlayer}
 
     else
         model
@@ -206,12 +206,12 @@ updateReset levelInit ( model, cmd ) =
             Array.get oldSaveNumber oldSavePoints |> withDefault defSavePoint
 
         player =
-            initModel.player
+            model.playerAtLastSavePoint
 
         newPlayer =
             { player | saveNumber = oldSaveNumber, deadTimes = oldDeadTimes + 1, pos = lastsavePoint.pos }
 
         newInitModel =
-            { initModel | savePoints = oldSavePoints, player = newPlayer }
+            { initModel | savePoints = oldSavePoints, player = newPlayer , playerAtLastSavePoint = newPlayer}
     in
     ( newInitModel, initCmd )

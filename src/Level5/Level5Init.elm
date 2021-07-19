@@ -65,13 +65,13 @@ init a =
                                  (Event.TimeAfterStart 100)
                                  (Event.quickDuration 10)
                     , Event.hitBlockAfter 15 "get green" (66,39) (1,1) 14
-                    , Event.hitLineSeg 16 "second needle" (GlobalBasics.blockPosFloat (53,11)) (GlobalBasics.blockPosFloat (64,11)) 
+                    , Event.hitLineSeg 16 "second needle" (GlobalBasics.blockPosFloat (53,11)) (GlobalBasics.blockPosFloat (63,11)) 
                     , Event.hitLineSeg 17 "jump down" (GlobalBasics.blockPosFloat (6,11.1)) (GlobalBasics.blockPosFloat (12,11.1))
                     ]
             , boundary = Boundary.normalInit
-            , playerAtLastSavePoint = Player.init ( 20, 290.0 ) Player.defPlayerProperty (Player.ChangeTo newProperty 1 Player.NoNextPropertyChange )
+            , playerAtLastSavePoint = Player.init ( 50, 290.0 ) Player.defPlayerProperty (Player.ChangeTo newProperty 1 Player.NoNextPropertyChange )
             , player =
-                Player.init ( 20, 290.0 ) Player.defPlayerProperty (Player.ChangeTo newProperty 1 Player.NoNextPropertyChange )
+                Player.init ( 50, 290.0 ) Player.defPlayerProperty (Player.ChangeTo newProperty 1 Player.NoNextPropertyChange )
             , bricks =
                 Array.fromList
                     (List.concat
@@ -115,6 +115,7 @@ init a =
                                 GlobalModule.NoNextMove
                           ]
                         , Brick.initRow 10 63 70
+                        , Brick.initRow 11 63 70
                         ]
                     )
             , savePoints =
