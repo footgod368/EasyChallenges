@@ -25,6 +25,7 @@ import Modules.NoticeBoard as NoticeBoard
 import Modules.Player as Player
 import Modules.SavePoint as SavePoint
 import Task
+import Modules.NoticeBoard exposing (NoticeBoardVisibility(..))
 
 
 {-| `init` of Level6 \`Model
@@ -163,7 +164,19 @@ init a =
                             (Event.quickDuration 10)
                     ,   Event.init {id=58, name = "laser2"}
                             (Event.AfterActEvent 57)
-                            (Event.TimeAfterStart 80)
+                            (Event.TimeAfterStart 120)
+                            (Event.quickDuration 10)
+                    ,   Event.init {id=59, name = "change1"}
+                            (Event.AfterActEvent 58)
+                            (Event.TimeAfterStart 188)
+                            (Event.quickDuration 10)
+                    ,   Event.init {id=60, name = "change2"}
+                            (Event.AfterActEvent 59)
+                            (Event.TimeAfterStart 44)
+                            (Event.quickDuration 10)
+                    ,   Event.init {id=61, name = "change3"}
+                            (Event.AfterActEvent 59)
+                            (Event.TimeAfterStart 92)
                             (Event.quickDuration 10)
                     ]
             , boundary = Boundary.normalInit
@@ -230,7 +243,13 @@ init a =
                             [{magic2 | visibility = GlobalModule.Visible (GlobalModule.InvisibleAfterEvent 57 GlobalModule.NoNextVisibility)
                             , collision = GlobalModule.Collide (GlobalModule.NoCollideAfterEvent 57 GlobalModule.NoNextCollision)
                             }]
-                        ,   [Brick.initPosVolumeColor (GlobalBasics.blockPosFloat(66.1, 4.8)) (32,8) "#700000"]
+                        ,   let
+                                laser0 = Brick.initPosVolumeColor (GlobalBasics.blockPosFloat(66.1, 4.8)) (32,8) "#700000"
+                            in
+                            [{laser0 | move = (GlobalModule.Move (Array.fromList []) 0.0 58
+                                (GlobalModule.Move (Array.fromList [GlobalBasics.blockPosFloat ( 20, 4.8 )]) 2 -1 GlobalModule.NoNextMove))
+                                , visibility = GlobalModule.Visible (GlobalModule.InvisibleAfterEvent 61 GlobalModule.NoNextVisibility)
+                                }]
                         ,   let
                                 laser1a = Brick.initPosVolumeColor (GlobalBasics.blockPosFloat(69.1, 7.8)) (32,8) "#700000"
                             in
@@ -351,8 +370,26 @@ init a =
                                 (GlobalModule.Move (Array.fromList [GlobalBasics.blockPos ( 20, 8 )]) 5 -1 GlobalModule.NoNextMove)
                                 )]
                         ,   [Needle.init (GlobalBasics.blockPosFloat ( 66.4, 5 )) (Needle.NormalNeedle 8 320)
-                                (GlobalModule.Invisible (GlobalModule.VisibleAfterEvent 55 GlobalModule.NoNextVisibility))
-                                (GlobalModule.NoCollide (GlobalModule.CollideAfterEvent 55 GlobalModule.NoNextCollision))
+                                (GlobalModule.Invisible (GlobalModule.VisibleAfterEvent 55
+                                (GlobalModule.InvisibleAfterEvent 59 GlobalModule.NoNextVisibility)))
+                                (GlobalModule.NoCollide (GlobalModule.CollideAfterEvent 55 
+                                (GlobalModule.NoCollideAfterEvent 59 GlobalModule.NoNextCollision)))
+                                (GlobalModule.Move (Array.fromList []) 0.0 58
+                                (GlobalModule.Move (Array.fromList [GlobalBasics.blockPos ( 20, 5 )]) 2 -1 GlobalModule.NoNextMove)
+                                )]
+                        ,   [Needle.init (GlobalBasics.blockPosFloat ( 66.4, 5 )) (Needle.NormalNeedle 8 200)
+                                (GlobalModule.Invisible (GlobalModule.VisibleAfterEvent 59 
+                                (GlobalModule.InvisibleAfterEvent 60 GlobalModule.NoNextVisibility)))
+                                (GlobalModule.NoCollide (GlobalModule.CollideAfterEvent 59 
+                                (GlobalModule.NoCollideAfterEvent 60 GlobalModule.NoNextCollision)))
+                                (GlobalModule.Move (Array.fromList []) 0.0 58
+                                (GlobalModule.Move (Array.fromList [GlobalBasics.blockPos ( 20, 5 )]) 2 -1 GlobalModule.NoNextMove)
+                                )]
+                        ,   [Needle.init (GlobalBasics.blockPosFloat ( 66.4, 5 )) (Needle.NormalNeedle 8 320)
+                                (GlobalModule.Invisible (GlobalModule.VisibleAfterEvent 60 
+                                (GlobalModule.InvisibleAfterEvent 61 GlobalModule.NoNextVisibility)))
+                                (GlobalModule.NoCollide (GlobalModule.CollideAfterEvent 60 
+                                (GlobalModule.NoCollideAfterEvent 61 GlobalModule.NoNextCollision)))
                                 (GlobalModule.Move (Array.fromList []) 0.0 58
                                 (GlobalModule.Move (Array.fromList [GlobalBasics.blockPos ( 20, 5 )]) 2 -1 GlobalModule.NoNextMove)
                                 )]
