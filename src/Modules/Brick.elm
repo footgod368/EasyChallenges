@@ -1,6 +1,6 @@
 module Modules.Brick exposing
     ( BrickAppearance(..), Brick
-    , init, brickCollisionBox, initPos, initFallingRow, initNoCollideHidden, initCollideHidden, initRow
+    , init, brickCollisionBox, initPos, initFallingBrick, initFallingRow, initNoCollideHidden, initCollideHidden, initRow
     , quickCollisionBox, initPosVolumeColor, initCollideHiddenRow, quickTunnel
     , view
     , update

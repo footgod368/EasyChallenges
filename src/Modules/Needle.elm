@@ -1,6 +1,6 @@
 module Modules.Needle exposing
     ( NeedleAppearance(..), Needle
-    , init, initFallingRow, initHiddenRow, normalNeedleWidth, initHidden, initHiddenCollideAfter
+    , init, initFalling, initFallingRow, initHiddenRow, normalNeedleWidth, initHidden, initHiddenCollideAfter
     , initHiddenFalling, initHiddenFallingRow, initHiddenFloat, initPos, needleCollisionBox, normalNeedleHeight, sword
     , view
     , update
