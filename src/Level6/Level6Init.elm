@@ -34,7 +34,7 @@ init a =
     let
         newModel =
             { windowBoundary = ( 1000.0, 800.0 )
-            , levelBoundary = ( 75 * 40, 680.0 )
+            , levelBoundary = ( 85 * 40, 680.0 )
             , actEvent = Array.fromList []
             , event =
                 Array.fromList
@@ -148,7 +148,9 @@ init a =
                         { temp | duration = Event.quickDuration 9999 }
                     ,   Event.hitBlock 35 "hidden" (28,9) (2,2)
                     ,   Event.hitBlock 36 "sword" (28.2,11) (1,1)
-                    ,   Event.hitBlock 51 "magicbox" (50, 10.1) (1, 1)
+                    ,   Event.hitBlock 51 "magicbox" (50, 9.9) (1, 1.2)
+                    ,   Event.hitBlock 52 "hidden" (55, 10) (2, 1)
+                    ,   Event.hitBlock 53 "sword" (57, 5) (2, 5)
                     ]
             , boundary = Boundary.normalInit
             , player = Player.init (  50.0, 440.0  ) Player.defPlayerProperty Player.NoNextPropertyChange
@@ -192,7 +194,10 @@ init a =
                                      (GlobalModule.Move (Array.fromList[GlobalBasics.blockPosFloat(39.8,10.1), GlobalBasics.blockPosFloat(39.8,11.1)]) 1.5 -1 GlobalModule.NoNextMove))
                             }]
                         ,   Brick.initRow 10 25 27
-                        ,   [Brick.initPosVolumeColor (GlobalBasics.blockPosFloat(26.1,9.8)) (32,8) "#700000"]
+                        ,   let
+                                base0 = Brick.initPosVolumeColor (GlobalBasics.blockPosFloat(26.1,9.8)) (32,8) "#700000"
+                            in
+
                         ,   let
                                 hidden = Brick.initCollideHidden (28, 9) 35
                             in
@@ -200,8 +205,10 @@ init a =
                                         collisionBox = Brick.brickCollisionBox (Brick.Detailed 80 80 "#00000050")}]
                         ,   [Brick.initPosVolumeColor (GlobalBasics.blockPosFloat (48 , 13)) ( 320, 200) "#cd00cd"]
                         ,   [Brick.initPos (GlobalBasics.blockPosFloat (50 , 10))]
-                        ,   [Brick.initPosVolumeColor (GlobalBasics.blockPosFloat(52.1,12.8)) (32,8) "#700000"]
-                        ,   [Brick.initPosVolumeColor (GlobalBasics.blockPosFloat (60 , 13)) ( 400, 200) "#cd00cd"]
+                        ,   [Brick.initPosVolumeColor (GlobalBasics.blockPosFloat(52.1, 4.8)) (32,8) "#700000"]
+                        ,   [Brick.initPosVolumeColor (GlobalBasics.blockPosFloat (60 , 13)) ( 600, 200) "#cd00cd"]
+                        ,   Brick.initCollideHiddenRow 10 55 56 52
+                        ,   [Brick.initPos (GlobalBasics.blockPosFloat (65 , 10))]
                         ]
                     )
             , savePoints =
@@ -209,7 +216,7 @@ init a =
                     [ SavePoint.init (GlobalBasics.blockPos ( 2, 12 ))
                     , SavePoint.init (GlobalBasics.blockPos ( 41, 9 ))
                     ]
-            , endPoint = EndPoint.init (GlobalBasics.blockPosFloat (70,9))
+            , endPoint = EndPoint.init (GlobalBasics.blockPosFloat (80,13))
             , noticeBoards =
                 Array.fromList
                     [   NoticeBoard.init (GlobalBasics.blockPosFloat (38.8,11.5))
@@ -241,10 +248,10 @@ init a =
                             (NoticeBoard.InvisibleAfterEvent 33 NoticeBoard.NoNextNoticeBoardVisibility)))
                         GlobalModule.NoNextMove
                         16
-                        ,
-                        NoticeBoard.quickInit (GlobalBasics.blockPosFloat (6.5,7.4)) "↓" 40
-                        ,
-                        NoticeBoard.quickInit (GlobalBasics.blockPosFloat (26.5,10.85)) "?" 40
+                        ,   NoticeBoard.quickInit (GlobalBasics.blockPosFloat (6.5,7.4)) "↓" 40
+                        ,   NoticeBoard.quickInit (GlobalBasics.blockPosFloat (26.5,10.85)) "?" 40
+                        ,   NoticeBoard.quickInit (GlobalBasics.blockPosFloat (50.5,10.85)) "?" 40
+                        ,   NoticeBoard.quickInit (GlobalBasics.blockPosFloat (65.5,10.85)) "?" 40
                     ]
             , needles =
                 Array.fromList
@@ -296,6 +303,8 @@ init a =
                                 (GlobalModule.NoNextMove)]
                         ,   [Needle.sword (55,10.5) (19,10.5) (4,2) 20 36]
                         ,   [Needle.initHidden (50, 11) 51]
+                        ,   [Needle.initHidden (50, 10) 51]
+                        ,   [Needle.sword (57,20) (57,-4) (2,3) 10 53]
                         ]
                     )
             , keyPressed = []

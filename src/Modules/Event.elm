@@ -1,7 +1,7 @@
 module Modules.Event exposing
     ( ActEvent, IfActEventAct(..), ifActEventById, ifActEventByName, ifActEvent
     , EventInfo, EventIfStartAct(..), EventActType(..), EventActCounter(..), EventDuration, Event
-    , init, quickDuration, hitBlock, hitLineSeg
+    , init, quickDuration, hitBlock, hitLineSeg, deleteEventById
     , update
     )
 
@@ -620,3 +620,10 @@ hitLineSeg id_ name_ pos1_ pos2_ =
             (GlobalBasics.Polygon (Array.fromList [ ( pos1_, pos2_ ) ]))
         )
         (quickDuration 10)
+
+deleteEventById : { model | event: Array Event , actEvent : Array ActEvent } -> Int -> Int -> { model | event: Array Event, actEvent : Array ActEvent }
+deleteEventById model flagEventId targetEventId =
+        if ifActEventById model flagEventId == ActEventAct then
+            { model | event = (Array.filter (\e -> e.info.id /= targetEventId) model.event)}
+        else
+            model

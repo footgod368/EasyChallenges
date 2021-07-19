@@ -60,7 +60,11 @@ update msg model =
                 SavePoint.updateReset Level6Init.init ( model, Cmd.none )
 
             else
-                ( newModel, cmd )
+                let 
+                    newnewModel = Event.deleteEventById newModel 34 7
+                in
+
+                ( newnewModel, cmd )
 
         buttonMsg ->
             GameControl.update buttonMsg ( model, Cmd.none )
