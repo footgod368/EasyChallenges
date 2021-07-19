@@ -37,6 +37,7 @@ import Modules.Player as Player
 import Modules.ViewMove as ViewMove
 import Svg exposing (Svg)
 import Svg.Attributes as SvgAttr
+import Modules.Player exposing (Player)
 
 
 {-| "SavePointAppearance" describes different state of a savepoint, the initial state is unsaved,
@@ -145,7 +146,7 @@ view model =
 
 {-| update one savePoint, used in update, not exposed.
 -}
-updateOneSavePoint : Int -> { model | player : Player.Player, savePoints : Array SavePoint } -> { model | player : Player.Player, savePoints : Array SavePoint }
+updateOneSavePoint : Int -> { model | player : Player.Player, savePoints : Array SavePoint , playerAtLastSavePoint: Player.Player} -> { model | player : Player.Player, savePoints : Array SavePoint , playerAtLastSavePoint: Player.Player}
 updateOneSavePoint id model =
     let
         savePoint =
@@ -179,14 +180,14 @@ updateOneSavePoint id model =
 
 {-| update function of savePoint
 -}
-update : ( { model | player : Player.Player, savePoints : Array SavePoint }, Cmd MainType.Msg ) -> ( { model | player : Player.Player, savePoints : Array SavePoint }, Cmd MainType.Msg )
+update : ( { model | player : Player.Player, savePoints : Array SavePoint , playerAtLastSavePoint: Player.Player}, Cmd MainType.Msg ) -> ( { model | player : Player.Player, savePoints : Array SavePoint , playerAtLastSavePoint: Player.Player}, Cmd MainType.Msg )
 update ( model, cmd ) =
     ( List.foldl updateOneSavePoint model (List.range 0 (Array.length model.savePoints - 1)), cmd )
 
 
 {-| Reset the Level with playerPos in the save point
 -}
-updateReset : (() -> ( { model | savePoints : Array SavePoint, player : Player.Player }, Cmd MainType.Msg )) -> ( { model | player : Player.Player, savePoints : Array SavePoint }, Cmd MainType.Msg ) -> ( { model | player : Player.Player, savePoints : Array SavePoint }, Cmd MainType.Msg )
+updateReset : (() -> ( { model | savePoints : Array SavePoint, player : Player.Player , playerAtLastSavePoint: Player.Player}, Cmd MainType.Msg)) -> ( { model | player : Player.Player, savePoints : Array SavePoint , playerAtLastSavePoint: Player.Player}, Cmd MainType.Msg ) -> ( { model | player : Player.Player, savePoints : Array SavePoint , playerAtLastSavePoint: Player.Player}, Cmd MainType.Msg )
 updateReset levelInit ( model, cmd ) =
     let
         ( initModel, initCmd ) =
