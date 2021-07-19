@@ -69,6 +69,7 @@ init a =
                     , Event.hitLineSeg 17 "jump down" (GlobalBasics.blockPosFloat (6,11.1)) (GlobalBasics.blockPosFloat (12,11.1))
                     ]
             , boundary = Boundary.normalInit
+            , playerAtLastSavePoint = Player.init ( 20, 290.0 ) Player.defPlayerProperty (Player.ChangeTo newProperty 1 Player.NoNextPropertyChange )
             , player =
                 Player.init ( 20, 290.0 ) Player.defPlayerProperty (Player.ChangeTo newProperty 1 Player.NoNextPropertyChange )
             , bricks =

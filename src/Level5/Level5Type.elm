@@ -21,6 +21,7 @@ import Modules.Needle as Needle
 import Modules.NoticeBoard as NoticeBoard
 import Modules.Player as Player
 import Modules.SavePoint as SavePoint
+import Modules.Player exposing (Player)
 
 
 {-| `Model` that used in level5
@@ -31,6 +32,7 @@ type alias Model =
     , actEvent : Array Event.ActEvent
     , event : Array Event.Event
     , boundary : Boundary.Boundary
+    , playerAtLastSavePoint: Player.Player
     , player : Player.Player
     , bricks : Array Brick.Brick
     , savePoints : Array SavePoint.SavePoint
