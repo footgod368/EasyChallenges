@@ -74,6 +74,7 @@ init a =
                     , Event.hitBlock 15 "Reverse direction" ( 78.125, 11.5 - 1.75 ) ( 1.75, 1.75 )
                     ]
             , boundary = Boundary.normalInit
+            , playerAtLastSavePoint = Player.init ( 50.0, 490.0 ) Player.defPlayerProperty Player.NoNextPropertyChange
             , player =
                 let
                     defPlayerProperty =

@@ -1,7 +1,7 @@
 module Modules.Event exposing
     ( ActEvent, IfActEventAct(..), ifActEventById, ifActEventByName, ifActEvent
     , EventInfo, EventIfStartAct(..), EventActType(..), EventActCounter(..), EventDuration, Event
-    , init, quickDuration, hitBlock, hitLineSeg, deleteEventById
+    , init, quickDuration, hitBlock, hitLineSeg, hitLineSegAfter, hitBlockAfter, deleteEventById
     , update
     )
 
@@ -20,7 +20,7 @@ module Modules.Event exposing
 
 # init
 
-@docs init, quickDuration, hitBlock, hitLineSeg
+@docs init, quickDuration, hitBlock, hitLineSeg, hitLineSegAfter, hitBlockAfter
 
 
 # update
@@ -627,3 +627,41 @@ deleteEventById model flagEventId targetEventId =
             { model | event = (Array.filter (\e -> e.info.id /= targetEventId) model.event)}
         else
             model
+{-| The event activated when the player hit a brick  after a Event is activated
+-}
+hitBlockAfter : Int -> String -> ( Float, Float ) -> ( Float, Float ) -> Int -> Event
+hitBlockAfter id_ name_ ( x_, y_ ) ( width_, height_ ) afterID =
+    let
+        ( x, y ) =
+            GlobalBasics.blockPosFloat ( x_, y_ )
+
+        ( width, height ) =
+            ( 40 * width_, 40 * height_ )
+    in
+    init
+        { id = id_, name = name_ }
+        (AfterActEvent afterID)
+        (PlayerCollide
+            (GlobalBasics.Polygon
+                (Array.fromList
+                    [ ( ( x, y ), ( x + width, y ) )
+                    , ( ( x + width, y ), ( x + width, y + height ) )
+                    , ( ( x + width, y + height ), ( x, y + height ) )
+                    , ( ( x, y + height ), ( x, y ) )
+                    ]
+                )
+            )
+        )
+        (quickDuration 10)
+
+{-| The event activated when the player hit a line Segment after a Event is activated
+-}
+hitLineSegAfter : Int -> String -> ( Float, Float ) -> ( Float, Float ) -> Int -> Event
+hitLineSegAfter id_ name_ pos1_ pos2_ afterID =
+    init
+        { id = id_, name = name_ }
+        (AfterActEvent afterID)
+        (PlayerCollide
+            (GlobalBasics.Polygon (Array.fromList [ ( pos1_, pos2_ ) ]))
+        )
+        (quickDuration 10)

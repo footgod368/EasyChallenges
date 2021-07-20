@@ -16,6 +16,7 @@ import Level2.Level2Init as Level2Init
 import Level3.Level3Init as Level3Init
 import Level4.Level4Init as Level4Init
 import Level6.Level6Init as Level6Init
+import Level5.Level5Init as Level5Init
 import MainFunction.MainModel as MainModel
 import MainFunction.MainType as MainType
 import Menu.MenuInit as MenuInit
@@ -35,6 +36,7 @@ init a =
             , level3Model = Level3Init.init () |> Tuple.first
             , level4Model = Level4Init.init () |> Tuple.first
             , level6Model = Level6Init.init () |> Tuple.first
+            , level5Model = Level5Init.init () |> Tuple.first
             , menuModel = MenuInit.init () |> Tuple.first
             }
     in
