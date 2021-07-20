@@ -20,7 +20,7 @@ module Modules.Event exposing
 
 # init
 
-@docs init, quickDuration, hitBlock, hitLineSeg
+@docs init, quickDuration, hitBlock, hitLineSeg, hitLineSegAfter, hitBlockAfter
 
 
 # update
@@ -621,8 +621,10 @@ hitLineSeg id_ name_ pos1_ pos2_ =
         )
         (quickDuration 10)
 
+{-| The event activated when the player hit a brick  after a Event is activated
+-}
 hitBlockAfter : Int -> String -> ( Float, Float ) -> ( Float, Float ) -> Int -> Event
-hitBlockAfter id_ name_ ( x_, y_ ) ( width_, height_ ) afterID=
+hitBlockAfter id_ name_ ( x_, y_ ) ( width_, height_ ) afterID =
     let
         ( x, y ) =
             GlobalBasics.blockPosFloat ( x_, y_ )
@@ -646,8 +648,10 @@ hitBlockAfter id_ name_ ( x_, y_ ) ( width_, height_ ) afterID=
         )
         (quickDuration 10)
 
+{-| The event activated when the player hit a line Segment after a Event is activated
+-}
 hitLineSegAfter : Int -> String -> ( Float, Float ) -> ( Float, Float ) -> Int -> Event
-hitLineSegAfter id_ name_ pos1_ pos2_ afterID=
+hitLineSegAfter id_ name_ pos1_ pos2_ afterID =
     init
         { id = id_, name = name_ }
         (AfterActEvent afterID)

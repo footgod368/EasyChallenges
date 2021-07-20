@@ -31,7 +31,7 @@ module Modules.Player exposing
 
 # api to other units
 
-@docs playerRefreshJump, playerIfCollidePoly, playerCollideRigidBody, checkDead, playerDead, playerWin
+@docs playerRefreshJump, playerIfCollidePoly, playerCollideRigidBody, checkDead, playerDead, playerWin, playerKill
 
 -}
 
