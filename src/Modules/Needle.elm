@@ -154,7 +154,7 @@ initHiddenCollideAfter ( x, y ) id =
     }
 
 
-{-| quick function to create one needle which falls after a given event
+{-| quick function to create one needle which falls after a given event, give an id of -1 to just create a normal needle row. 
 -}
 initFalling : ( Int, Int ) -> Int -> Needle
 initFalling ( x, y ) id =
@@ -201,7 +201,8 @@ initHiddenFallingRow : Int -> Int -> Int -> Int -> List Needle
 initHiddenFallingRow n n1 n2 id =
     List.map (\i -> initHiddenFalling ( i, n ) id) (List.range n1 n2)
 
-
+{-| a 'needle' that can customize size
+-}
 deadlyBlock : ( Float, Float )-> ( Float, Float ) -> Needle
 deadlyBlock pos ( width, height )  =
     init

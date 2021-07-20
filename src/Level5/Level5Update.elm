@@ -70,7 +70,8 @@ update msg model =
         buttonMsg ->
             GameControl.update buttonMsg ( model, Cmd.none )
 
-
+{-| judge whether one event is active now. used in 'count'
+-}
 countone : Int -> Level5Type.Model -> Level5Type.Model
 countone id model =
     if Event.ifActEventById model id == Event.ActEventAct && (not (List.member id model.number)) then
@@ -83,7 +84,8 @@ countone id model =
     else
         model
 
-
+{-| update the 'number' field in model, to record what events have been activated
+-}
 count : ( Level5Type.Model, Cmd MainType.Msg ) -> ( Level5Type.Model, Cmd MainType.Msg )
 count ( model, cmd ) =
     let
@@ -92,7 +94,8 @@ count ( model, cmd ) =
     in
     ( newmodel, cmd )
 
-
+{-| check whether player gets blue or red pill and kill them if so
+-}
 checkBlueOrRed: ( Level5Type.Model, Cmd MainType.Msg ) -> ( Level5Type.Model, Cmd MainType.Msg )
 checkBlueOrRed (model,cmd) =
     if Event.ifActEventById model 6 == Event.ActEventAct || Event.ifActEventById model 7 == Event.ActEventAct then
@@ -106,7 +109,8 @@ notId id event =
     event.info.id /= id
 
 
-
+{-| if player hits the blue '?' again, he won't die if reach previous blue block
+-}
 checkBlue : ( Level5Type.Model, Cmd MainType.Msg ) -> ( Level5Type.Model, Cmd MainType.Msg )
 checkBlue ( model, cmd ) =
     if List.member 11 model.number then
@@ -122,6 +126,8 @@ checkBlue ( model, cmd ) =
     else
         ( model, cmd )
 
+{-| if player hits the red '?' again, he won't die if reach previous blue block
+-}
 checkRed : ( Level5Type.Model, Cmd MainType.Msg ) -> ( Level5Type.Model, Cmd MainType.Msg )
 checkRed ( model, cmd ) =
     if List.member 12 model.number then
@@ -146,6 +152,8 @@ notBlueOrRed brick =
         Brick.Detailed _ _ color ->
             color /= "#1E90FF" && color /= "#FF0000"
 
+{-| delete the blue and red bricks from model when they have mixed into green
+-}
 checkBlueAndRed : ( Level5Type.Model, Cmd MainType.Msg ) -> ( Level5Type.Model, Cmd MainType.Msg )
 checkBlueAndRed ( model, cmd ) =
     if List.member 14 model.number then
@@ -161,57 +169,3 @@ checkBlueAndRed ( model, cmd ) =
     else
         ( model, cmd )
 
-
-
-
-
-
-
--- checkHelmet : ( Level5Type.Model, Cmd MainType.Msg ) -> ( Level5Type.Model, Cmd MainType.Msg )
--- checkHelmet ( model, cmd ) =
---     if List.member 9 model.number then
---         let
---             oldEvent =
---                 model.event
-
---             newEvent =
---                 Array.filter (notId 10) oldEvent
---         in
---         ( { model | event = newEvent }, cmd )
-
---     else
---         ( model, cmd )
-
--- checkHelmet : ( Level5Type.Model, Cmd MainType.Msg ) -> ( Level5Type.Model, Cmd MainType.Msg )
--- checkHelmet ( model, cmd ) =
---     if List.member 9 model.number then
---         let
---             oldEvent =
---                 model.event
-
---             newEvent =
---                 Array.filter (notId 10) oldEvent
---         in
---         ( { model | event = newEvent }, cmd )
-
---     else
---         ( model, cmd )
-
-
--- checkWin : ( Level5Type.Model, Cmd MainType.Msg ) -> ( Level5Type.Model, Cmd MainType.Msg )
--- checkWin ( model, cmd ) =
---     if
---         List.member 1 model.number
---             && List.member 2 model.number
---             && List.member 3 model.number
---             && List.member 4 model.number
---             && List.member 5 model.number
---             && List.member 6 model.number
---             && List.member 7 model.number
---             && List.member 8 model.number
---             && not (List.member 10 model.number)
---     then
---         ( Player.playerWin model, cmd )
-
---     else
---         ( model, cmd )

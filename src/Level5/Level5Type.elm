@@ -32,7 +32,7 @@ type alias Model =
     , actEvent : Array Event.ActEvent
     , event : Array Event.Event
     , boundary : Boundary.Boundary
-    , playerAtLastSavePoint: Player.Player
+    , playerAtLastSavePoint: Player.Player -- store the state of player at last savePoint
     , player : Player.Player
     , bricks : Array Brick.Brick
     , savePoints : Array SavePoint.SavePoint
@@ -42,5 +42,5 @@ type alias Model =
     , gameControl : GameControl.GameControl
     , mainScene : MainType.MainScene
     , keyPressed : List Int
-    , number : List Int
+    , number : List Int -- record the id's of events that have been activated
     }
