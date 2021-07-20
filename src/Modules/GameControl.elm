@@ -46,9 +46,7 @@ import Task
 -}
 type ControlStatus
     = Normal
-    | Pause
-    | Win
-    | BackToMenu
+    | Hint Int
 
 
 {-| GameStatus records the current game status
@@ -56,17 +54,21 @@ type ControlStatus
 type alias GameControl =
     { controlStatus : ControlStatus
     , buttonState : Array String
+    , hint : Array String
+    , hintLength : Int
     , nextLevel : MainType.MainScene
     }
 
 
 {-| Init one Level's gameControl
 -}
-init : MainType.MainScene -> GameControl
-init nextLevel =
+init : MainType.MainScene -> Array String -> GameControl
+init nextLevel hint =
     { controlStatus = Normal
     , buttonState =
         Array.fromList (List.map (\i -> MainConstant.buttonNormalColor) (List.range 0 2))
+    , hint = hint
+    , hintLength = Array.length hint
     , nextLevel = nextLevel
     }
 
@@ -122,19 +124,69 @@ update msg ( model, cmd ) =
                             --gameNextLevel
                             ( { model | mainScene = model.gameControl.nextLevel }, Task.perform MainType.GetViewport getViewport )
 
+                        2 ->
+                            let
+                                oldOldGameControl =
+                                    model.gameControl
+
+                                oldNewGameControl =
+                                    case oldOldGameControl.controlStatus of
+                                        Normal ->
+                                            { oldOldGameControl | controlStatus = Hint 0 }
+
+                                        Hint n ->
+                                            { oldOldGameControl | controlStatus = Hint (modBy model.gameControl.hintLength (n + 1)) }
+
+                                --gameHint
+                            in
+                            ( { model | gameControl = oldNewGameControl }, Cmd.batch [ cmd ] )
+
                         _ ->
                             ( model, Cmd.batch [ cmd ] )
 
                 oldGameControl =
-                    model.gameControl
+                    newModel.gameControl
 
                 newGameControl =
-                    { oldGameControl | buttonState = Array.set num MainConstant.buttonOverColor model.gameControl.buttonState }
+                    { oldGameControl | buttonState = Array.set num MainConstant.buttonOverColor newModel.gameControl.buttonState }
             in
             ( { newModel | gameControl = newGameControl }, Cmd.batch [ newCmd ] )
 
         _ ->
             ( model, cmd )
+
+
+viewOneButton : { model | gameControl : GameControl, windowBoundary : GlobalBasics.Pos, player : Player } -> ( Float, Float ) -> Int -> String -> List (Svg MainType.Msg)
+viewOneButton model ( x, y ) buttonID text =
+    [ Svg.rect
+        [ SvgAttr.x (String.fromFloat x)
+        , SvgAttr.y (String.fromFloat y)
+        , SvgAttr.width "100"
+        , SvgAttr.height "50"
+        , SvgAttr.fill (withDefault "White" (Array.get buttonID model.gameControl.buttonState))
+        ]
+        []
+    , Svg.text_
+        [ SvgAttr.x (String.fromFloat (x + 50))
+        , SvgAttr.y (String.fromFloat (y + 35.5))
+        , SvgAttr.fontSize "30"
+        , SvgAttr.textAnchor "middle"
+        , SvgAttr.fill "#e85239"
+        ]
+        [ Svg.text "Back" ]
+    , Svg.rect
+        [ SvgAttr.x (String.fromFloat x)
+        , SvgAttr.y (String.fromFloat y)
+        , SvgAttr.width "100"
+        , SvgAttr.height "50"
+        , SvgAttr.fill "#00000000"
+        , SvgEvent.onMouseOver (MainType.OnMouseOver buttonID)
+        , SvgEvent.onMouseOut (MainType.OnMouseOut buttonID)
+        , SvgEvent.onMouseDown (MainType.OnMouseDown buttonID)
+        , SvgEvent.onMouseUp (MainType.OnMouseUp buttonID)
+        ]
+        []
+    ]
 
 
 {-| View function for gameControl, draw pause, back buttons
@@ -146,35 +198,7 @@ view model =
             model.windowBoundary
     in
     List.concat
-        [ [ Svg.rect
-                [ SvgAttr.x (String.fromFloat (windowBoundaryX - 120.0))
-                , SvgAttr.y (String.fromFloat 30.0)
-                , SvgAttr.width "100"
-                , SvgAttr.height "50"
-                , SvgAttr.fill (withDefault "White" (Array.get MainConstant.gameBackButton model.gameControl.buttonState))
-                ]
-                []
-          , Svg.text_
-                [ SvgAttr.x (String.fromFloat (windowBoundaryX - 70.0))
-                , SvgAttr.y (String.fromFloat 65.0)
-                , SvgAttr.fontSize "30"
-                , SvgAttr.textAnchor "middle"
-                , SvgAttr.fill "#e85239"
-                ]
-                [ Svg.text "Back" ]
-          , Svg.rect
-                [ SvgAttr.x (String.fromFloat (windowBoundaryX - 120.0))
-                , SvgAttr.y (String.fromFloat 30.0)
-                , SvgAttr.width "100"
-                , SvgAttr.height "50"
-                , SvgAttr.fill "#00000000"
-                , SvgEvent.onMouseOver (MainType.OnMouseOver MainConstant.gameBackButton)
-                , SvgEvent.onMouseOut (MainType.OnMouseOut MainConstant.gameBackButton)
-                , SvgEvent.onMouseDown (MainType.OnMouseDown MainConstant.gameBackButton)
-                , SvgEvent.onMouseUp (MainType.OnMouseUp MainConstant.gameBackButton)
-                ]
-                []
-          ]
+        [ viewOneButton model ( windowBoundaryX - 120.0, 30.0 ) MainConstant.gameBackButton "Back"
         , if model.player.liveState == Player.Win then
             [ Svg.rect
                 [ SvgAttr.x (String.fromFloat (windowBoundaryX / 2.0))
@@ -216,4 +240,7 @@ view model =
              --    ]
              --    []
             ]
+
+        --, case model.gameControl.controlStatus of
+        --    Normal ->
         ]
