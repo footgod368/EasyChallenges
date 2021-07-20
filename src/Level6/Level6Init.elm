@@ -35,7 +35,7 @@ init a =
     let
         newModel =
             { windowBoundary = ( 1000.0, 800.0 )
-            , levelBoundary = ( 85 * 40, 680.0 )
+            , levelBoundary = ( 90 * 40, 680.0 )
             , actEvent = Array.fromList []
             , event =
                 Array.fromList
@@ -178,6 +178,40 @@ init a =
                             (Event.AfterActEvent 59)
                             (Event.TimeAfterStart 92)
                             (Event.quickDuration 10)
+                    ,   Event.init {id=62, name = "start"}
+                            (Event.AfterActEvent 61)
+                            (Event.TimeAfterStart 120)
+                            (Event.quickDuration 10)
+                    ,   Event.init {id=63, name = "falling"}
+                            (Event.AfterActEvent 61)
+                            (Event.PlayerCollide (GlobalBasics.Polygon (Array.fromList [
+                                             (GlobalBasics.blockPosFloat (61,5), GlobalBasics.blockPosFloat (61,15))
+                                         ])))
+                            (Event.quickDuration 10)
+                    ,   Event.init {id=64, name = "hidden"}
+                            (Event.AfterActEvent 62)
+                            (Event.PlayerCollide (GlobalBasics.Polygon (Array.fromList [
+                                             (GlobalBasics.blockPosFloat (68,7), GlobalBasics.blockPosFloat (68,13))
+                                         ])))
+                            (Event.quickDuration 10)
+                    ,   Event.init {id=65, name = "hint"}
+                            (Event.AfterActEvent 62)
+                            (Event.PlayerCollide (GlobalBasics.Polygon (Array.fromList [
+                                             (GlobalBasics.blockPosFloat (64,7), GlobalBasics.blockPosFloat (64,13))
+                                         ])))
+                            (Event.quickDuration 10)
+                    ,   Event.init {id=66, name = "hint2"}
+                            (Event.AfterActEvent 65)
+                            (Event.TimeAfterStart 50)
+                            (Event.quickDuration 10)
+                    ,   Event.init {id=67, name = "ship2"}
+                            (Event.AfterActEvent 62)
+                            (Event.TimeAfterStart 450)
+                            (Event.quickDuration 10)
+                    ,   Event.init {id=68, name = "ship2move"}
+                            (Event.AfterActEvent 67)
+                            (Event.TimeAfterStart 150)
+                            (Event.quickDuration 10)
                     ]
             , boundary = Boundary.normalInit
             , player = Player.init (  50.0, 440.0  ) Player.defPlayerProperty Player.NoNextPropertyChange
@@ -234,8 +268,13 @@ init a =
                                         collisionBox = Brick.brickCollisionBox (Brick.Detailed 80 80 "#00000050")}]
                         ,   [Brick.initPosVolumeColor (GlobalBasics.blockPosFloat (48 , 13)) ( 320, 200) "#cd00cd"]
                         ,   [Brick.initPos (GlobalBasics.blockPosFloat (50 , 10))]
-                        ,   [Brick.initPosVolumeColor (GlobalBasics.blockPosFloat(52.1, 4.8)) (32,8) "#700000"]
-                        ,   [Brick.initPosVolumeColor (GlobalBasics.blockPosFloat (60 , 13)) ( 600, 200) "#cd00cd"]
+                        ,   let 
+                                laser3 = Brick.initPosVolumeColor (GlobalBasics.blockPosFloat(52.1, 4.8)) (32,8) "#700000"
+                            in
+                            [{laser3 | move = (GlobalModule.Move (Array.fromList []) 0.0 62
+                                (GlobalModule.Move (Array.fromList [GlobalBasics.blockPosFloat ( 72.3, 4.8 )]) 1.5 -1 GlobalModule.NoNextMove)
+                                )}]
+                        ,   [Brick.initPosVolumeColor (GlobalBasics.blockPosFloat (60 , 13)) ( 520, 200) "#cd00cd"]
                         ,   Brick.initCollideHiddenRow 10 55 56 52
                         ,   let
                                 magic2 = Brick.initPos (GlobalBasics.blockPosFloat (63.3 , 10))
@@ -260,6 +299,15 @@ init a =
                             in
                             [{laser2a | move = (GlobalModule.Move (Array.fromList []) 0.0 56 
                                 (GlobalModule.Move (Array.fromList [GlobalBasics.blockPosFloat ( 20, 12.8 )]) 5 -1 GlobalModule.NoNextMove))}]
+                        ,   [Brick.initCollideHidden (68, 12) 64]
+                        ,   [Brick.initCollideHidden (68, 11) 64]
+                        ,   let 
+                                ship2 = Brick.initPosVolumeColor (GlobalBasics.blockPosFloat(73,13)) (120,80) "#EE82EE"
+                            in
+                            [{ ship2| move = GlobalModule.Move (Array.fromList[]) 0 68 
+                                                 (GlobalModule.Move (Array.fromList[GlobalBasics.blockPosFloat (84,13)]) 1.2 -1 GlobalModule.NoNextMove)
+                                , visibility = GlobalModule.Invisible (GlobalModule.VisibleAfterEvent 67 GlobalModule.NoNextVisibility)
+                              }]
                         ]
                     )
             , savePoints =
@@ -267,7 +315,7 @@ init a =
                     [ SavePoint.init (GlobalBasics.blockPos ( 2, 12 ))
                     , SavePoint.init (GlobalBasics.blockPos ( 41, 9 ))
                     ]
-            , endPoint = EndPoint.init (GlobalBasics.blockPosFloat (80,13))
+            , endPoint = EndPoint.init (GlobalBasics.blockPosFloat (85,12))
             , noticeBoards =
                 Array.fromList
                     [   NoticeBoard.init (GlobalBasics.blockPosFloat (38.8,11.75))
@@ -306,6 +354,11 @@ init a =
                         NoticeBoard.init (GlobalBasics.blockPosFloat (63.8,10.85))
                             (NoticeBoard.Visible "?" (NoticeBoard.InvisibleAfterEvent 57 NoticeBoard.NoNextNoticeBoardVisibility))
                             GlobalModule.NoNextMove 40
+                        ,
+                        NoticeBoard.init (GlobalBasics.blockPosFloat (68.5,11.85))
+                            (NoticeBoard.Invisible (NoticeBoard.VisibleAfterEvent 65 "!"
+                            (NoticeBoard.InvisibleAfterEvent 66 NoticeBoard.NoNextNoticeBoardVisibility)))
+                        GlobalModule.NoNextMove 60
                     ]
             , needles =
                 Array.fromList
@@ -393,6 +446,15 @@ init a =
                                 (GlobalModule.Move (Array.fromList []) 0.0 58
                                 (GlobalModule.Move (Array.fromList [GlobalBasics.blockPos ( 20, 5 )]) 2 -1 GlobalModule.NoNextMove)
                                 )]
+                        ,   [Needle.init (GlobalBasics.blockPosFloat ( 52.2, 5.025 )) (Needle.NormalNeedle 24 318)
+                                (GlobalModule.Invisible (GlobalModule.VisibleAfterEvent 55 
+                                 GlobalModule.NoNextVisibility))
+                                (GlobalModule.NoCollide (GlobalModule.CollideAfterEvent 55 
+                                 GlobalModule.NoNextCollision))
+                                (GlobalModule.Move (Array.fromList []) 0.0 62
+                                (GlobalModule.Move (Array.fromList [GlobalBasics.blockPosFloat ( 72.4, 5.025 )]) 1.5 -1 GlobalModule.NoNextMove)
+                                )]
+                        ,    [Needle.initFalling (62, 7) 63]
                         ]
                     )
             , keyPressed = []
