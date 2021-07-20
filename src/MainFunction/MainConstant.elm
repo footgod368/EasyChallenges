@@ -1,6 +1,6 @@
 module MainFunction.MainConstant exposing
     ( menuButtonLevel0, menuButtonLevel1, menuButtonLevel2, menuButtonLevel3, menuButtonLevel4, menuButtonLevel5
-    , gameBackButton, gameNextLevelButton
+    , gameBackButton, gameNextLevelButton, gameHintButton, gameHintCloseButton
     , buttonNormalColor, buttonDownColor, buttonOverColor
     )
 
@@ -14,7 +14,7 @@ module MainFunction.MainConstant exposing
 
 # Game
 
-@docs gameBackButton, gameNextLevelButton
+@docs gameBackButton, gameNextLevelButton, gameHintButton, gameHintCloseButton
 
 
 # Button
@@ -87,22 +87,29 @@ gameHintButton =
     2
 
 
+{-| Id of button
+-}
+gameHintCloseButton : Int
+gameHintCloseButton =
+    3
+
+
 {-| Normal color of button
 -}
 buttonNormalColor : String
 buttonNormalColor =
-    "#FFE6E8FF"
+    "#FFE6E88F"
 
 
 {-| Color of button when the mouse is on it
 -}
 buttonOverColor : String
 buttonOverColor =
-    "#FFE6E8CF"
+    "#FFE6E8BF"
 
 
 {-| Color of button when it's pressed
 -}
 buttonDownColor : String
 buttonDownColor =
-    "#FFE6E89F"
+    "#FFE6E8FF"

@@ -54,7 +54,7 @@ type ControlStatus
 type alias GameControl =
     { controlStatus : ControlStatus
     , buttonState : Array String
-    , hint : Array String
+    , hint : List (List String)
     , hintLength : Int
     , nextLevel : MainType.MainScene
     }
@@ -62,13 +62,13 @@ type alias GameControl =
 
 {-| Init one Level's gameControl
 -}
-init : MainType.MainScene -> Array String -> GameControl
+init : MainType.MainScene -> List (List String) -> GameControl
 init nextLevel hint =
     { controlStatus = Normal
     , buttonState =
-        Array.fromList (List.map (\i -> MainConstant.buttonNormalColor) (List.range 0 2))
+        Array.fromList (List.map (\i -> MainConstant.buttonNormalColor) (List.range 0 3))
     , hint = hint
-    , hintLength = Array.length hint
+    , hintLength = List.length hint
     , nextLevel = nextLevel
     }
 
@@ -141,6 +141,16 @@ update msg ( model, cmd ) =
                             in
                             ( { model | gameControl = oldNewGameControl }, Cmd.batch [ cmd ] )
 
+                        3 ->
+                            let
+                                oldOldGameControl =
+                                    model.gameControl
+
+                                oldNewGameControl =
+                                    { oldOldGameControl | controlStatus = Normal }
+                            in
+                            ( { model | gameControl = oldNewGameControl }, Cmd.batch [ cmd ] )
+
                         _ ->
                             ( model, Cmd.batch [ cmd ] )
 
@@ -156,29 +166,29 @@ update msg ( model, cmd ) =
             ( model, cmd )
 
 
-viewOneButton : { model | gameControl : GameControl, windowBoundary : GlobalBasics.Pos, player : Player } -> ( Float, Float ) -> Int -> String -> List (Svg MainType.Msg)
-viewOneButton model ( x, y ) buttonID text =
+viewOneButton : { model | gameControl : GameControl, windowBoundary : GlobalBasics.Pos, player : Player } -> ( Float, Float ) -> ( Float, Float ) -> Int -> String -> List (Svg MainType.Msg)
+viewOneButton model ( x, y ) ( width, height ) buttonID text =
     [ Svg.rect
         [ SvgAttr.x (String.fromFloat x)
         , SvgAttr.y (String.fromFloat y)
-        , SvgAttr.width "100"
-        , SvgAttr.height "50"
+        , SvgAttr.width (String.fromFloat width)
+        , SvgAttr.height (String.fromFloat height)
         , SvgAttr.fill (withDefault "White" (Array.get buttonID model.gameControl.buttonState))
         ]
         []
     , Svg.text_
-        [ SvgAttr.x (String.fromFloat (x + 50))
-        , SvgAttr.y (String.fromFloat (y + 35.5))
+        [ SvgAttr.x (String.fromFloat (x + width / 2))
+        , SvgAttr.y (String.fromFloat (y + height / 2 + 11.0))
         , SvgAttr.fontSize "30"
         , SvgAttr.textAnchor "middle"
         , SvgAttr.fill "#e85239"
         ]
-        [ Svg.text "Back" ]
+        [ Svg.text text ]
     , Svg.rect
         [ SvgAttr.x (String.fromFloat x)
         , SvgAttr.y (String.fromFloat y)
-        , SvgAttr.width "100"
-        , SvgAttr.height "50"
+        , SvgAttr.width (String.fromFloat width)
+        , SvgAttr.height (String.fromFloat height)
         , SvgAttr.fill "#00000000"
         , SvgEvent.onMouseOver (MainType.OnMouseOver buttonID)
         , SvgEvent.onMouseOut (MainType.OnMouseOut buttonID)
@@ -187,6 +197,35 @@ viewOneButton model ( x, y ) buttonID text =
         ]
         []
     ]
+
+
+viewOneHintLine : ( Float, Float ) -> String -> List (Svg MainType.Msg)
+viewOneHintLine ( x, y ) text =
+    [ Svg.text_
+        [ SvgAttr.x (String.fromFloat x)
+        , SvgAttr.y (String.fromFloat y)
+        , SvgAttr.fontSize "30"
+        , SvgAttr.textAnchor "middle"
+        , SvgAttr.fill "#e85239"
+        ]
+        [ Svg.text text ]
+    ]
+
+
+viewOneHint : ( Float, Float ) -> List String -> List (Svg MainType.Msg)
+viewOneHint ( x, y ) textList =
+    List.foldl
+        (\text ( list, i ) ->
+            let
+                oneText =
+                    viewOneHintLine ( x, y + 50.0 * i ) text
+            in
+            ( oneText :: list, i + 1 )
+        )
+        ( [], 0 )
+        textList
+        |> Tuple.first
+        |> List.concat
 
 
 {-| View function for gameControl, draw pause, back buttons
@@ -198,49 +237,60 @@ view model =
             model.windowBoundary
     in
     List.concat
-        [ viewOneButton model ( windowBoundaryX - 120.0, 30.0 ) MainConstant.gameBackButton "Back"
+        [ viewOneButton
+            model
+            ( windowBoundaryX - 120.0, 30.0 )
+            ( 100.0, 50.0 )
+            MainConstant.gameBackButton
+            "Back"
         , if model.player.liveState == Player.Win then
-            [ Svg.rect
-                [ SvgAttr.x (String.fromFloat (windowBoundaryX / 2.0))
-                , SvgAttr.y (String.fromFloat (windowBoundaryY / 2.0))
-                , SvgAttr.width "200"
-                , SvgAttr.height "100"
-                , SvgAttr.fill (withDefault "White" (Array.get MainConstant.gameNextLevelButton model.gameControl.buttonState))
-                ]
-                []
-            , Svg.text_
-                [ SvgAttr.x (String.fromFloat (windowBoundaryX / 2.0 + 100.0))
-                , SvgAttr.y (String.fromFloat (windowBoundaryY / 2.0 + 50.0))
-                , SvgAttr.fontSize "30"
-                , SvgAttr.textAnchor "middle"
-                , SvgAttr.fill "#e85239"
-                ]
-                [ Svg.text "Next Level" ]
-            , Svg.rect
-                [ SvgAttr.x (String.fromFloat (windowBoundaryX / 2.0))
-                , SvgAttr.y (String.fromFloat (windowBoundaryY / 2.0))
-                , SvgAttr.width "200"
-                , SvgAttr.height "100"
-                , SvgAttr.fill "#00000000"
-                , SvgEvent.onMouseOver (MainType.OnMouseOver MainConstant.gameNextLevelButton)
-                , SvgEvent.onMouseOut (MainType.OnMouseOut MainConstant.gameNextLevelButton)
-                , SvgEvent.onMouseDown (MainType.OnMouseDown MainConstant.gameNextLevelButton)
-                , SvgEvent.onMouseUp (MainType.OnMouseUp MainConstant.gameNextLevelButton)
-                ]
-                []
-            ]
+            viewOneButton
+                model
+                ( windowBoundaryX / 2.0, windowBoundaryY / 2.0 )
+                ( 200.0, 100.0 )
+                MainConstant.gameNextLevelButton
+                "Next Level"
 
           else
-            [--Svg.rect
-             --    [ SvgAttr.x (String.fromFloat (windowBoundaryX / 2.0))
-             --    , SvgAttr.y (String.fromFloat (windowBoundaryY / 2.0))
-             --    , SvgAttr.width "200"
-             --    , SvgAttr.height "100"
-             --    , SvgAttr.fill "#000000"
-             --    ]
-             --    []
-            ]
+            case model.gameControl.controlStatus of
+                Normal ->
+                    viewOneButton
+                        model
+                        ( windowBoundaryX - 300.0, 30.0 )
+                        ( 140.0, 50.0 )
+                        MainConstant.gameHintButton
+                        "Hint"
 
-        --, case model.gameControl.controlStatus of
-        --    Normal ->
+                Hint n ->
+                    List.concat
+                        [ [ Svg.rect
+                                [ SvgAttr.x (String.fromFloat (windowBoundaryX / 2.0 - 300))
+                                , SvgAttr.y (String.fromFloat (windowBoundaryY / 2.0 - 150))
+                                , SvgAttr.width (String.fromFloat 600)
+                                , SvgAttr.height (String.fromFloat 300)
+                                , SvgAttr.fill "#FAFAFA"
+                                ]
+                                []
+                          ]
+                        , let
+                            hintList =
+                                model.gameControl.hint
+                                    |> List.drop n
+                                    |> List.head
+                                    |> withDefault []
+                          in
+                          viewOneHint ( windowBoundaryX / 2.0, windowBoundaryY / 2.0 - 120 ) hintList
+                        , viewOneButton
+                            model
+                            ( windowBoundaryX / 2.0 - 75.0, windowBoundaryY / 2.0 + 80.0 )
+                            ( 150.0, 50.0 )
+                            MainConstant.gameHintButton
+                            "Next Hint"
+                        , viewOneButton
+                            model
+                            ( windowBoundaryX / 2.0 + 170.0, windowBoundaryY / 2.0 + 80.0 )
+                            ( 100.0, 50.0 )
+                            MainConstant.gameHintCloseButton
+                            "Close"
+                        ]
         ]

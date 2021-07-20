@@ -118,7 +118,7 @@ init a =
                         ]
                     )
             , keyPressed = []
-            , gameControl = GameControl.init MainType.Level5 (Array.fromList [])
+            , gameControl = GameControl.init MainType.Level5 []
             , mainScene = MainType.Level4
             , number = []
             }
