@@ -620,7 +620,9 @@ hitLineSeg id_ name_ pos1_ pos2_ =
             (GlobalBasics.Polygon (Array.fromList [ ( pos1_, pos2_ ) ]))
         )
         (quickDuration 10)
-
+        
+{-| Delete an event when another event happens, by ID
+-}
 deleteEventById : { model | event: Array Event , actEvent : Array ActEvent } -> Int -> Int -> { model | event: Array Event, actEvent : Array ActEvent }
 deleteEventById model flagEventId targetEventId =
         if ifActEventById model flagEventId == ActEventAct then
