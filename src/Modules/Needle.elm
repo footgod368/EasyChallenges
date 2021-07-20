@@ -16,7 +16,7 @@ module Modules.Needle exposing
 
 # Init
 
-@docs init, initFallingRow, initHiddenRow, normalNeedleWidth, initHidden, initHiddenCollideAfter
+@docs init, initFalling, initFallingRow, initHiddenRow, normalNeedleWidth, initHidden, initHiddenCollideAfter
 @docs initHiddenFalling, initHiddenFallingRow, initHiddenFloat, initPos, needleCollisionBox, normalNeedleHeight, sword, deadlyBlock
 
 

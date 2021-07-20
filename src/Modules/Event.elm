@@ -20,7 +20,7 @@ module Modules.Event exposing
 
 # init
 
-@docs init, quickDuration, hitBlock, hitLineSeg, hitLineSegAfter, hitBlockAfter
+@docs init, quickDuration, hitBlock, hitLineSeg, hitLineSegAfter, hitBlockAfter, deleteEventById
 
 
 # update
@@ -620,16 +620,20 @@ hitLineSeg id_ name_ pos1_ pos2_ =
             (GlobalBasics.Polygon (Array.fromList [ ( pos1_, pos2_ ) ]))
         )
         (quickDuration 10)
-        
+
+
 {-| Delete an event when another event happens, by ID
 -}
-deleteEventById : { model | event: Array Event , actEvent : Array ActEvent } -> Int -> Int -> { model | event: Array Event, actEvent : Array ActEvent }
+deleteEventById : { model | event : Array Event, actEvent : Array ActEvent } -> Int -> Int -> { model | event : Array Event, actEvent : Array ActEvent }
 deleteEventById model flagEventId targetEventId =
-        if ifActEventById model flagEventId == ActEventAct then
-            { model | event = (Array.filter (\e -> e.info.id /= targetEventId) model.event)}
-        else
-            model
-{-| The event activated when the player hit a brick  after a Event is activated
+    if ifActEventById model flagEventId == ActEventAct then
+        { model | event = Array.filter (\e -> e.info.id /= targetEventId) model.event }
+
+    else
+        model
+
+
+{-| The event activated when the player hit a brick after a Event is activated
 -}
 hitBlockAfter : Int -> String -> ( Float, Float ) -> ( Float, Float ) -> Int -> Event
 hitBlockAfter id_ name_ ( x_, y_ ) ( width_, height_ ) afterID =
@@ -655,6 +659,7 @@ hitBlockAfter id_ name_ ( x_, y_ ) ( width_, height_ ) afterID =
             )
         )
         (quickDuration 10)
+
 
 {-| The event activated when the player hit a line Segment after a Event is activated
 -}

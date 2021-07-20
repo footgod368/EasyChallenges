@@ -1,7 +1,7 @@
 module Modules.Brick exposing
     ( BrickAppearance(..), Brick
-    , init, brickCollisionBox, initPos, initFallingBrick, initFallingRow, initNoCollideHidden, initCollideHidden, initRow
-    , quickCollisionBox, initPosVolumeColor, initCollideHiddenRow, quickTunnel
+    , init, brickCollisionBox, initPos, initFallingBrick, initFallingRow, initNoCollideHidden, initCollideHidden
+    , initRow, quickCollisionBox, initPosVolumeColor, initCollideHiddenRow, quickTunnel
     , view
     , update
     )
@@ -16,8 +16,8 @@ module Modules.Brick exposing
 
 # Init
 
-@docs init, brickCollisionBox, initPos, initFallingRow, initNoCollideHidden, initCollideHidden, initRow
-@docs quickCollisionBox, initPosVolumeColor, initCollideHiddenRow, quickTunnel
+@docs init, brickCollisionBox, initPos, initFallingBrick, initFallingRow, initNoCollideHidden, initCollideHidden
+@docs initRow, quickCollisionBox, initPosVolumeColor, initCollideHiddenRow, quickTunnel
 
 
 # ViewMove

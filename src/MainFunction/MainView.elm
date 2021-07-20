@@ -15,8 +15,8 @@ import Level1.Level1View as Level1View
 import Level2.Level2View as Level2View
 import Level3.Level3View as Level3View
 import Level4.Level4View as Level4View
-import Level6.Level6View as Level6View
 import Level5.Level5View as Level5View
+import Level6.Level6View as Level6View
 import MainFunction.MainModel as MainModel
 import MainFunction.MainType as MainType
 import Menu.MenuView as MenuView
@@ -47,6 +47,6 @@ view model =
 
         MainType.Level6 ->
             Level6View.view model.level6Model
-            
+
         MainType.Level5 ->
             Level5View.view model.level5Model
