@@ -25,7 +25,7 @@ init a =
       , menuStatus = MenuType.MainMenu
       , keyPressed = []
       , buttonState =
-            Array.fromList (List.map (\i -> MainConstant.buttonNormalColor) (List.range 0 10))
+            Array.fromList (List.map (\i -> MainConstant.buttonNormalColor) (List.range 0 100))
       , windowBoundary = ( 1000.0, 800.0 )
       }
     , Task.perform MainType.GetViewport getViewport

@@ -1,5 +1,5 @@
 module MainFunction.MainConstant exposing
-    ( menuButtonLevel0, menuButtonLevel1, menuButtonLevel2, menuButtonLevel3, menuButtonLevel4
+    ( menuButtonLevel0, menuButtonLevel1, menuButtonLevel2, menuButtonLevel3, menuButtonLevel4,menuButtonLevel5
     , gameBackButton, gameNextLevelButton
     , buttonNormalColor, buttonDownColor, buttonOverColor
     )
@@ -9,7 +9,7 @@ module MainFunction.MainConstant exposing
 
 # Menu
 
-@docs menuButtonLevel0, menuButtonLevel1, menuButtonLevel2, menuButtonLevel3, menuButtonLevel4
+@docs menuButtonLevel0, menuButtonLevel1, menuButtonLevel2, menuButtonLevel3, menuButtonLevel4, menuButtonLevel5
 
 
 # Game
@@ -58,6 +58,11 @@ menuButtonLevel4 : Int
 menuButtonLevel4 =
     4
 
+{-| Id of button
+-}
+menuButtonLevel5 : Int
+menuButtonLevel5 =
+    5
 
 {-| Id of button
 -}
