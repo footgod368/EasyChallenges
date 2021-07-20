@@ -214,6 +214,7 @@ init a =
                             (Event.quickDuration 10)
                     ]
             , boundary = Boundary.normalInit
+            , playerAtLastSavePoint = Player.init ( 50.0, 440.0 ) Player.defPlayerProperty Player.NoNextPropertyChange
             , player = Player.init (  50.0, 440.0  ) Player.defPlayerProperty Player.NoNextPropertyChange
             , bricks =
                 Array.fromList
