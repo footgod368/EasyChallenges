@@ -107,15 +107,17 @@ type alias Player =
     , ifChangeBackToLastPosX : Bool
     , ifChangeBackToLastPosY : Bool
     , liveState : LiveState
-    , deadTimes : ( Int, DeadType)
+    , deadTimes : ( Int, DeadType )
     , saveNumber : Int
     }
+
 
 {-| The type of player dead, falling or needle
 -}
 type DeadType
     = FallFromHigh
     | StepOnNeedle
+
 
 {-| LiveState defines if the player is live, dead, or win this level.
 -}
@@ -137,7 +139,7 @@ playerDead model deadType =
             model.player.deadTimes
 
         newPlayer =
-            { oldPlayer | liveState = Dead, deadTimes = ( oldDeadTimes + 1, deadType )  }
+            { oldPlayer | liveState = Dead, deadTimes = ( oldDeadTimes + 1, deadType ) }
     in
     { model | player = newPlayer }
 
@@ -457,7 +459,7 @@ view model =
         , SvgAttr.fill "#000000"
         , SvgAttr.opacity (String.fromInt deadOpacity)
         ]
-        [ Svg.text ("You die! Dead times: " ++ String.fromInt ( Tuple.first model.player.deadTimes) )
+        [ Svg.text ("You die! Dead times: " ++ String.fromInt (Tuple.first model.player.deadTimes))
         ]
     , Svg.text_
         [ SvgAttr.x (String.fromFloat (playerX + playerDeltaX model))
