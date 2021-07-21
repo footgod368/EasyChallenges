@@ -147,6 +147,7 @@ playerWin model =
     in
     { model | player = newPlayer }
 
+
 {-| Change the state of player to Dead
 -}
 playerKill : { model | player : Player } -> { model | player : Player }

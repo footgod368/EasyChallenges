@@ -30,7 +30,9 @@ type MainScene
     | Level2
     | Level3
     | Level4
+    | Level6
     | Level5
+
 
 {-| `Msg` stores the callbacks of subscriptions
 -}
