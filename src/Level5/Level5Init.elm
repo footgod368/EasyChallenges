@@ -182,7 +182,7 @@ init a =
                         ]
                     )
             , keyPressed = []
-            , gameControl = GameControl.init MainType.Level5 []
+            , gameControl = GameControl.init MainType.Level6
             , mainScene = MainType.Level5
             , number = []
             }
