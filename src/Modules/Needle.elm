@@ -378,7 +378,7 @@ updateOneNeedleCollision id model =
                         newNeedlesModel
 
                     else
-                        Player.playerDead newNeedlesModel
+                        Player.playerDead newNeedlesModel Player.StepOnNeedle
 
                 _ ->
                     newNeedlesModel

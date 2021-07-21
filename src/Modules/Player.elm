@@ -1,5 +1,5 @@
 module Modules.Player exposing
-    ( Player, PlayerProperty, defPlayerProperty, PropertyChange(..), LiveState(..)
+    ( Player, PlayerProperty, defPlayerProperty, PropertyChange(..), LiveState(..), DeadType(..)
     , init
     , update, updateJustPlayerPos
     , view
@@ -11,7 +11,7 @@ module Modules.Player exposing
 
 # Player
 
-@docs Player, PlayerProperty, defPlayerProperty, PropertyChange, LiveState
+@docs Player, PlayerProperty, defPlayerProperty, PropertyChange, LiveState, DeadType
 
 
 # init
@@ -107,10 +107,15 @@ type alias Player =
     , ifChangeBackToLastPosX : Bool
     , ifChangeBackToLastPosY : Bool
     , liveState : LiveState
-    , deadTimes : Int
+    , deadTimes : ( Int, DeadType)
     , saveNumber : Int
     }
 
+{-| The type of player dead, falling or needle
+-}
+type DeadType
+    = FallFromHigh
+    | StepOnNeedle
 
 {-| LiveState defines if the player is live, dead, or win this level.
 -}
@@ -122,14 +127,17 @@ type LiveState
 
 {-| Change the state of player to Dead
 -}
-playerDead : { model | player : Player } -> { model | player : Player }
-playerDead model =
+playerDead : { model | player : Player } -> DeadType -> { model | player : Player }
+playerDead model deadType =
     let
         oldPlayer =
             model.player
 
+        ( oldDeadTimes, oldDeadType ) =
+            model.player.deadTimes
+
         newPlayer =
-            { oldPlayer | liveState = Dead }
+            { oldPlayer | liveState = Dead, deadTimes = ( oldDeadTimes + 1, deadType )  }
     in
     { model | player = newPlayer }
 
@@ -150,14 +158,17 @@ playerWin model =
 
 {-| Change the state of player to Dead
 -}
-playerKill : { model | player : Player } -> { model | player : Player }
-playerKill model =
+playerKill : { model | player : Player } -> DeadType -> { model | player : Player }
+playerKill model deadType =
     let
         oldPlayer =
             model.player
 
+        ( oldDeadTimes, oldDeadType ) =
+            model.player.deadTimes
+
         newPlayer =
-            { oldPlayer | liveState = Dead }
+            { oldPlayer | liveState = Dead, deadTimes = ( oldDeadTimes + 1, deadType ) }
     in
     { model | player = newPlayer }
 
@@ -213,7 +224,7 @@ init pos property propertyChange =
     , ifChangeBackToLastPosX = False
     , ifChangeBackToLastPosY = False
     , liveState = Live
-    , deadTimes = 1
+    , deadTimes = ( 1, FallFromHigh )
     , saveNumber = -1
     }
 
@@ -446,7 +457,7 @@ view model =
         , SvgAttr.fill "#000000"
         , SvgAttr.opacity (String.fromInt deadOpacity)
         ]
-        [ Svg.text ("You die! Dead times: " ++ String.fromInt model.player.deadTimes)
+        [ Svg.text ("You die! Dead times: " ++ String.fromInt ( Tuple.first model.player.deadTimes) )
         ]
     , Svg.text_
         [ SvgAttr.x (String.fromFloat (playerX + playerDeltaX model))

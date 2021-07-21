@@ -316,7 +316,7 @@ updateOneMonsterCollision id model =
                 model
 
             else
-                Player.playerDead model
+                Player.playerDead model Player.StepOnNeedle
     in
     newModel
 
