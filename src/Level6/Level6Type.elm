@@ -1,6 +1,6 @@
-module Level1.Level1Type exposing (Model)
+module Level6.Level6Type exposing (Model)
 
-{-| stores level1 Model
+{-| stores level6 Model
 
 
 # Model
@@ -17,14 +17,13 @@ import Modules.Brick as Brick
 import Modules.EndPoint as EndPoint
 import Modules.Event as Event
 import Modules.GameControl as GameControl
-import Modules.Monster as Monster
 import Modules.Needle as Needle
 import Modules.NoticeBoard as NoticeBoard
 import Modules.Player as Player
 import Modules.SavePoint as SavePoint
 
 
-{-| `Model` that used in level1
+{-| `Model` that used in level6
 -}
 type alias Model =
     { windowBoundary : GlobalBasics.Pos
@@ -39,7 +38,6 @@ type alias Model =
     , endPoint : EndPoint.EndPoint
     , noticeBoards : Array NoticeBoard.NoticeBoard
     , needles : Array Needle.Needle
-    , monsters : Array Monster.Monster
     , gameControl : GameControl.GameControl
     , mainScene : MainType.MainScene
     , keyPressed : List Int

@@ -1,6 +1,6 @@
-module Level0.Level0View exposing (view)
+module Level6.Level6View exposing (view)
 
-{-| Level1 view
+{-| Level6 view
 
 
 # view
@@ -11,13 +11,12 @@ module Level0.Level0View exposing (view)
 
 import Html exposing (Html, div)
 import Html.Attributes as HtmlAttr
-import Level0.Level0Type as Level0Type
+import Level6.Level6Type as Level6Type
 import MainFunction.MainType as MainType
 import Modules.Boundary as Boundary
 import Modules.Brick as Brick
 import Modules.EndPoint as EndPoint
 import Modules.GameControl as GameControl
-import Modules.GoldenDog as GoldenDog
 import Modules.Needle as Needle
 import Modules.NoticeBoard as NoticeBoard
 import Modules.Player as Player
@@ -26,9 +25,9 @@ import Svg
 import Svg.Attributes as SvgAttr
 
 
-{-| `view` of level1.
+{-| `view` of level6.
 -}
-view : Level0Type.Model -> Html MainType.Msg
+view : Level6Type.Model -> Html MainType.Msg
 view model =
     div
         [ HtmlAttr.style "position" "relative"
@@ -42,14 +41,13 @@ view model =
             , SvgAttr.height (String.fromFloat (Tuple.second model.windowBoundary))
             ]
             (SavePoint.view model
-                ++ EndPoint.view model
-                ++ Player.view model
                 ++ Brick.view model
+                ++ EndPoint.view model
                 ++ Boundary.view model
                 ++ NoticeBoard.view model
                 ++ Needle.view model
+                ++ Player.view model
                 ++ GameControl.view model
-                ++ GoldenDog.view model
             )
         , Html.audio
             [ HtmlAttr.width 0

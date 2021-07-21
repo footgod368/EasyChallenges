@@ -33,11 +33,10 @@ import Array exposing (Array)
 import GlobalFunction.GlobalBasics as GlobalBasics
 import MainFunction.MainType as MainType
 import Maybe exposing (withDefault)
-import Modules.Player as Player
+import Modules.Player as Player exposing (Player)
 import Modules.ViewMove as ViewMove
 import Svg exposing (Svg)
 import Svg.Attributes as SvgAttr
-import Modules.Player exposing (Player)
 
 
 {-| "SavePointAppearance" describes different state of a savepoint, the initial state is unsaved,
@@ -146,7 +145,7 @@ view model =
 
 {-| update one savePoint, used in update, not exposed.
 -}
-updateOneSavePoint : Int -> { model | player : Player.Player, savePoints : Array SavePoint , playerAtLastSavePoint: Player.Player} -> { model | player : Player.Player, savePoints : Array SavePoint , playerAtLastSavePoint: Player.Player}
+updateOneSavePoint : Int -> { model | player : Player.Player, savePoints : Array SavePoint, playerAtLastSavePoint : Player.Player } -> { model | player : Player.Player, savePoints : Array SavePoint, playerAtLastSavePoint : Player.Player }
 updateOneSavePoint id model =
     let
         savePoint =
@@ -172,7 +171,7 @@ updateOneSavePoint id model =
             Player.playerIfCollidePoly model savePoint
     in
     if status == GlobalBasics.Collided && savePoint.appearance == Unsaved then
-        {newModel | playerAtLastSavePoint = newPlayer}
+        { newModel | playerAtLastSavePoint = newPlayer }
 
     else
         model
@@ -180,14 +179,14 @@ updateOneSavePoint id model =
 
 {-| update function of savePoint
 -}
-update : ( { model | player : Player.Player, savePoints : Array SavePoint , playerAtLastSavePoint: Player.Player}, Cmd MainType.Msg ) -> ( { model | player : Player.Player, savePoints : Array SavePoint , playerAtLastSavePoint: Player.Player}, Cmd MainType.Msg )
+update : ( { model | player : Player.Player, savePoints : Array SavePoint, playerAtLastSavePoint : Player.Player }, Cmd MainType.Msg ) -> ( { model | player : Player.Player, savePoints : Array SavePoint, playerAtLastSavePoint : Player.Player }, Cmd MainType.Msg )
 update ( model, cmd ) =
     ( List.foldl updateOneSavePoint model (List.range 0 (Array.length model.savePoints - 1)), cmd )
 
 
 {-| Reset the Level with playerPos in the save point
 -}
-updateReset : (() -> ( { model | savePoints : Array SavePoint, player : Player.Player , playerAtLastSavePoint: Player.Player}, Cmd MainType.Msg)) -> ( { model | player : Player.Player, savePoints : Array SavePoint , playerAtLastSavePoint: Player.Player}, Cmd MainType.Msg ) -> ( { model | player : Player.Player, savePoints : Array SavePoint , playerAtLastSavePoint: Player.Player}, Cmd MainType.Msg )
+updateReset : (() -> ( { model | savePoints : Array SavePoint, player : Player.Player, playerAtLastSavePoint : Player.Player }, Cmd MainType.Msg )) -> ( { model | player : Player.Player, savePoints : Array SavePoint, playerAtLastSavePoint : Player.Player }, Cmd MainType.Msg ) -> ( { model | player : Player.Player, savePoints : Array SavePoint, playerAtLastSavePoint : Player.Player }, Cmd MainType.Msg )
 updateReset levelInit ( model, cmd ) =
     let
         ( initModel, initCmd ) =
@@ -202,16 +201,16 @@ updateReset levelInit ( model, cmd ) =
         oldDeadTimes =
             model.player.deadTimes
 
-        lastsavePoint =
+        lastSavePoint =
             Array.get oldSaveNumber oldSavePoints |> withDefault defSavePoint
 
         player =
             model.playerAtLastSavePoint
 
         newPlayer =
-            { player | saveNumber = oldSaveNumber, deadTimes = oldDeadTimes + 1, pos = lastsavePoint.pos }
+            { player | saveNumber = oldSaveNumber, pos = lastSavePoint.pos, deadTimes = oldDeadTimes }
 
         newInitModel =
-            { initModel | savePoints = oldSavePoints, player = newPlayer , playerAtLastSavePoint = newPlayer}
+            { initModel | savePoints = oldSavePoints, player = newPlayer, playerAtLastSavePoint = newPlayer }
     in
     ( newInitModel, initCmd )

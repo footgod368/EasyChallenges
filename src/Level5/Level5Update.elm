@@ -70,11 +70,12 @@ update msg model =
         buttonMsg ->
             GameControl.update buttonMsg ( model, Cmd.none )
 
+
 {-| judge whether one event is active now. used in 'count'
 -}
 countone : Int -> Level5Type.Model -> Level5Type.Model
 countone id model =
-    if Event.ifActEventById model id == Event.ActEventAct && (not (List.member id model.number)) then
+    if Event.ifActEventById model id == Event.ActEventAct && not (List.member id model.number) then
         let
             num =
                 model.number
@@ -83,6 +84,7 @@ countone id model =
 
     else
         model
+
 
 {-| update the 'number' field in model, to record what events have been activated
 -}
@@ -94,14 +96,16 @@ count ( model, cmd ) =
     in
     ( newmodel, cmd )
 
+
 {-| check whether player gets blue or red pill and kill them if so
 -}
-checkBlueOrRed: ( Level5Type.Model, Cmd MainType.Msg ) -> ( Level5Type.Model, Cmd MainType.Msg )
-checkBlueOrRed (model,cmd) =
+checkBlueOrRed : ( Level5Type.Model, Cmd MainType.Msg ) -> ( Level5Type.Model, Cmd MainType.Msg )
+checkBlueOrRed ( model, cmd ) =
     if Event.ifActEventById model 6 == Event.ActEventAct || Event.ifActEventById model 7 == Event.ActEventAct then
-        (Player.playerKill model, cmd)
+        ( Player.playerKill model Player.StepOnNeedle, cmd )
+
     else
-        (model,cmd)
+        ( model, cmd )
 
 
 notId : Int -> Event.Event -> Bool
@@ -126,6 +130,7 @@ checkBlue ( model, cmd ) =
     else
         ( model, cmd )
 
+
 {-| if player hits the red '?' again, he won't die if reach previous blue block
 -}
 checkRed : ( Level5Type.Model, Cmd MainType.Msg ) -> ( Level5Type.Model, Cmd MainType.Msg )
@@ -144,13 +149,15 @@ checkRed ( model, cmd ) =
         ( model, cmd )
 
 
-notBlueOrRed: Brick.Brick -> Bool
+notBlueOrRed : Brick.Brick -> Bool
 notBlueOrRed brick =
     case brick.appearance of
         Brick.NormalAppearance ->
             True
+
         Brick.Detailed _ _ color ->
             color /= "#1E90FF" && color /= "#FF0000"
+
 
 {-| delete the blue and red bricks from model when they have mixed into green
 -}
@@ -168,4 +175,3 @@ checkBlueAndRed ( model, cmd ) =
 
     else
         ( model, cmd )
-

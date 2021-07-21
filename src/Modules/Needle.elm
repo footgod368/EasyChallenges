@@ -1,6 +1,6 @@
 module Modules.Needle exposing
     ( NeedleAppearance(..), Needle
-    , init, initFallingRow, initHiddenRow, normalNeedleWidth, initHidden, initHiddenCollideAfter
+    , init, initFalling, initFallingRow, initHiddenRow, normalNeedleWidth, initHidden, initHiddenCollideAfter
     , initHiddenFalling, initHiddenFallingRow, initHiddenFloat, initPos, needleCollisionBox, normalNeedleHeight, sword, deadlyBlock
     , view
     , update
@@ -16,7 +16,7 @@ module Modules.Needle exposing
 
 # Init
 
-@docs init, initFallingRow, initHiddenRow, normalNeedleWidth, initHidden, initHiddenCollideAfter
+@docs init, initFalling, initFallingRow, initHiddenRow, normalNeedleWidth, initHidden, initHiddenCollideAfter
 @docs initHiddenFalling, initHiddenFallingRow, initHiddenFloat, initPos, needleCollisionBox, normalNeedleHeight, sword, deadlyBlock
 
 
@@ -378,7 +378,7 @@ updateOneNeedleCollision id model =
                         newNeedlesModel
 
                     else
-                        Player.playerDead newNeedlesModel
+                        Player.playerDead newNeedlesModel Player.StepOnNeedle
 
                 _ ->
                     newNeedlesModel
