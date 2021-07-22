@@ -443,12 +443,13 @@ view model =
             else
                 0
     in
-    [ Svg.rect
+    [ Svg.image
         [ SvgAttr.x (String.fromFloat (playerX - 1.0 + playerDeltaX model))
         , SvgAttr.y (String.fromFloat (playerY + playerDeltaY model))
-        , SvgAttr.width (String.fromFloat (model.player.property.playerWidth + 1.0))
-        , SvgAttr.height (String.fromFloat model.player.property.playerHeight)
-        , SvgAttr.fill "#000000"
+        , SvgAttr.width (String.fromFloat (model.player.property.playerWidth + 7.0))
+        , SvgAttr.height (String.fromFloat (model.player.property.playerHeight + 2.0))
+        --, SvgAttr.fill "#000000"
+        , SvgAttr.xlinkHref "assets/player.svg"
         ]
         []
     , Svg.text_
