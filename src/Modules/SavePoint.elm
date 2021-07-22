@@ -201,14 +201,14 @@ updateReset levelInit ( model, cmd ) =
         oldDeadTimes =
             model.player.deadTimes
 
-        lastsavePoint =
+        lastSavePoint =
             Array.get oldSaveNumber oldSavePoints |> withDefault defSavePoint
 
         player =
             model.playerAtLastSavePoint
 
         newPlayer =
-            { player | saveNumber = oldSaveNumber, deadTimes = oldDeadTimes + 1, pos = lastsavePoint.pos }
+            { player | saveNumber = oldSaveNumber, pos = lastSavePoint.pos, deadTimes = oldDeadTimes }
 
         newInitModel =
             { initModel | savePoints = oldSavePoints, player = newPlayer, playerAtLastSavePoint = newPlayer }

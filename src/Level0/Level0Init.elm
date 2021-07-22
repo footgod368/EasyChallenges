@@ -228,7 +228,8 @@ init a =
                             )
                         )
                     ]
-            , gameControl = GameControl.init MainType.Level1
+            , gameControl =
+                GameControl.init MainType.Level1 [ [ "!!", "??" ], [ "@@@" ] ]
             , mainScene = MainType.Level0
             , keyPressed = []
             }

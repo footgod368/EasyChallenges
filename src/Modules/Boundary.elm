@@ -195,7 +195,7 @@ updateOneBoundary anchor area boundaryType ( model, cmd ) =
 
                 newModel =
                     if ifCollide == GlobalBasics.Collided then
-                        Player.playerDead model
+                        Player.playerDead model Player.StepOnNeedle
 
                     else
                         model

@@ -1,5 +1,5 @@
 module Modules.Player exposing
-    ( Player, PlayerProperty, defPlayerProperty, PropertyChange(..), LiveState(..)
+    ( Player, PlayerProperty, defPlayerProperty, PropertyChange(..), LiveState(..), DeadType(..)
     , init
     , update, updateJustPlayerPos
     , view
@@ -11,7 +11,7 @@ module Modules.Player exposing
 
 # Player
 
-@docs Player, PlayerProperty, defPlayerProperty, PropertyChange, LiveState
+@docs Player, PlayerProperty, defPlayerProperty, PropertyChange, LiveState, DeadType
 
 
 # init
@@ -107,9 +107,16 @@ type alias Player =
     , ifChangeBackToLastPosX : Bool
     , ifChangeBackToLastPosY : Bool
     , liveState : LiveState
-    , deadTimes : Int
+    , deadTimes : ( Int, DeadType )
     , saveNumber : Int
     }
+
+
+{-| The type of player dead, falling or needle
+-}
+type DeadType
+    = FallFromHigh
+    | StepOnNeedle
 
 
 {-| LiveState defines if the player is live, dead, or win this level.
@@ -122,14 +129,17 @@ type LiveState
 
 {-| Change the state of player to Dead
 -}
-playerDead : { model | player : Player } -> { model | player : Player }
-playerDead model =
+playerDead : { model | player : Player } -> DeadType -> { model | player : Player }
+playerDead model deadType =
     let
         oldPlayer =
             model.player
 
+        ( oldDeadTimes, oldDeadType ) =
+            model.player.deadTimes
+
         newPlayer =
-            { oldPlayer | liveState = Dead }
+            { oldPlayer | liveState = Dead, deadTimes = ( oldDeadTimes + 1, deadType ) }
     in
     { model | player = newPlayer }
 
@@ -150,14 +160,17 @@ playerWin model =
 
 {-| Change the state of player to Dead
 -}
-playerKill : { model | player : Player } -> { model | player : Player }
-playerKill model =
+playerKill : { model | player : Player } -> DeadType -> { model | player : Player }
+playerKill model deadType =
     let
         oldPlayer =
             model.player
 
+        ( oldDeadTimes, oldDeadType ) =
+            model.player.deadTimes
+
         newPlayer =
-            { oldPlayer | liveState = Dead }
+            { oldPlayer | liveState = Dead, deadTimes = ( oldDeadTimes + 1, deadType ) }
     in
     { model | player = newPlayer }
 
@@ -213,7 +226,7 @@ init pos property propertyChange =
     , ifChangeBackToLastPosX = False
     , ifChangeBackToLastPosY = False
     , liveState = Live
-    , deadTimes = 1
+    , deadTimes = ( 1, FallFromHigh )
     , saveNumber = -1
     }
 
@@ -416,6 +429,9 @@ view model =
         ( playerX, playerY ) =
             model.player.pos
 
+        ( windowBoundaryX, windowBoundaryY ) =
+            model.windowBoundary
+
         deadOpacity =
             if model.player.liveState == Dead then
                 1
@@ -430,27 +446,37 @@ view model =
             else
                 0
     in
-    [ Svg.rect
+    [ Svg.image
         [ SvgAttr.x (String.fromFloat (playerX - 1.0 + playerDeltaX model))
         , SvgAttr.y (String.fromFloat (playerY + playerDeltaY model))
-        , SvgAttr.width (String.fromFloat (model.player.property.playerWidth + 1.0))
-        , SvgAttr.height (String.fromFloat model.player.property.playerHeight)
-        , SvgAttr.fill "#000000"
+        , SvgAttr.width (String.fromFloat (model.player.property.playerWidth + 7.0))
+        , SvgAttr.height (String.fromFloat (model.player.property.playerHeight + 2.0))
+        --, SvgAttr.fill "#000000"
+        , SvgAttr.xlinkHref "assets/player.svg"
+        ]
+        []
+    , Svg.rect
+        [ SvgAttr.x (String.fromFloat (windowBoundaryX / 2.0 - 300))
+        , SvgAttr.y (String.fromFloat (windowBoundaryY / 2.0 - 120))
+        , SvgAttr.width (String.fromFloat 600)
+        , SvgAttr.height (String.fromFloat 200)
+        , SvgAttr.opacity (String.fromInt (max deadOpacity winOpacity))
+        , SvgAttr.fill "#EEEEEE"
         ]
         []
     , Svg.text_
-        [ SvgAttr.x (String.fromFloat (playerX + playerDeltaX model))
-        , SvgAttr.y (String.fromFloat (playerY + playerDeltaY model))
+        [ SvgAttr.x (String.fromFloat (windowBoundaryX / 2))
+        , SvgAttr.y (String.fromFloat (windowBoundaryY / 2))
         , SvgAttr.fontSize "50"
         , SvgAttr.textAnchor "middle"
         , SvgAttr.fill "#000000"
         , SvgAttr.opacity (String.fromInt deadOpacity)
         ]
-        [ Svg.text ("You die! Dead times: " ++ String.fromInt model.player.deadTimes)
+        [ Svg.text ("You die! Dead times: " ++ String.fromInt (Tuple.first model.player.deadTimes))
         ]
     , Svg.text_
-        [ SvgAttr.x (String.fromFloat (playerX + playerDeltaX model))
-        , SvgAttr.y (String.fromFloat (playerY + playerDeltaY model))
+        [ SvgAttr.x (String.fromFloat (windowBoundaryX / 2))
+        , SvgAttr.y (String.fromFloat (windowBoundaryY / 2))
         , SvgAttr.fontSize "50"
         , SvgAttr.textAnchor "middle"
         , SvgAttr.fill "#ff3366"

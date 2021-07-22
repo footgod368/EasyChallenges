@@ -102,7 +102,7 @@ count ( model, cmd ) =
 checkBlueOrRed : ( Level5Type.Model, Cmd MainType.Msg ) -> ( Level5Type.Model, Cmd MainType.Msg )
 checkBlueOrRed ( model, cmd ) =
     if Event.ifActEventById model 6 == Event.ActEventAct || Event.ifActEventById model 7 == Event.ActEventAct then
-        ( Player.playerKill model, cmd )
+        ( Player.playerKill model Player.StepOnNeedle, cmd )
 
     else
         ( model, cmd )
