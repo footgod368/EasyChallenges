@@ -43,11 +43,11 @@ view model =
             ]
             (SavePoint.view model
                 ++ EndPoint.view model
-                ++ Player.view model
                 ++ Brick.view model
                 ++ Boundary.view model
                 ++ NoticeBoard.view model
                 ++ Needle.view model
+                ++ Player.view model
                 ++ GameControl.view model
                 ++ GoldenDog.view model
             )

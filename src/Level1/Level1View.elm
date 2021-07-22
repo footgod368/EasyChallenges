@@ -17,6 +17,7 @@ import Modules.Boundary as Boundary
 import Modules.Brick as Brick
 import Modules.EndPoint as EndPoint
 import Modules.GameControl as GameControl
+import Modules.GoldenDog as GoldenDog
 import Modules.Monster as Monster
 import Modules.Needle as Needle
 import Modules.NoticeBoard as NoticeBoard
@@ -50,6 +51,7 @@ view model =
                 ++ Monster.view model
                 ++ Player.view model
                 ++ GameControl.view model
+                ++ GoldenDog.view model
             )
         , Html.audio
             [ HtmlAttr.width 0

@@ -429,6 +429,9 @@ view model =
         ( playerX, playerY ) =
             model.player.pos
 
+        ( windowBoundaryX, windowBoundaryY ) =
+            model.windowBoundary
+
         deadOpacity =
             if model.player.liveState == Dead then
                 1
@@ -452,9 +455,18 @@ view model =
         , SvgAttr.xlinkHref "assets/player.svg"
         ]
         []
+    , Svg.rect
+        [ SvgAttr.x (String.fromFloat (windowBoundaryX / 2.0 - 300))
+        , SvgAttr.y (String.fromFloat (windowBoundaryY / 2.0 - 120))
+        , SvgAttr.width (String.fromFloat 600)
+        , SvgAttr.height (String.fromFloat 200)
+        , SvgAttr.opacity (String.fromInt (max deadOpacity winOpacity))
+        , SvgAttr.fill "#EEEEEE"
+        ]
+        []
     , Svg.text_
-        [ SvgAttr.x (String.fromFloat (playerX + playerDeltaX model))
-        , SvgAttr.y (String.fromFloat (playerY + playerDeltaY model))
+        [ SvgAttr.x (String.fromFloat (windowBoundaryX / 2))
+        , SvgAttr.y (String.fromFloat (windowBoundaryY / 2))
         , SvgAttr.fontSize "50"
         , SvgAttr.textAnchor "middle"
         , SvgAttr.fill "#000000"
@@ -463,8 +475,8 @@ view model =
         [ Svg.text ("You die! Dead times: " ++ String.fromInt (Tuple.first model.player.deadTimes))
         ]
     , Svg.text_
-        [ SvgAttr.x (String.fromFloat (playerX + playerDeltaX model))
-        , SvgAttr.y (String.fromFloat (playerY + playerDeltaY model))
+        [ SvgAttr.x (String.fromFloat (windowBoundaryX / 2))
+        , SvgAttr.y (String.fromFloat (windowBoundaryY / 2))
         , SvgAttr.fontSize "50"
         , SvgAttr.textAnchor "middle"
         , SvgAttr.fill "#ff3366"
