@@ -182,7 +182,7 @@ init a =
                         ]
                     )
             , keyPressed = []
-            , gameControl = GameControl.init MainType.Level6 []
+            , gameControl = GameControl.init MainType.Level6 [["Hit the first\"?\"","to get the wings"],["Hit the last two \"?\" again","to mix blue with red"]]
             , mainScene = MainType.Level5
             , number = []
             }

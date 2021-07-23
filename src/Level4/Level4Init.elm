@@ -118,7 +118,7 @@ init a =
                         ]
                     )
             , keyPressed = []
-            , gameControl = GameControl.init MainType.Level5 []
+            , gameControl = GameControl.init MainType.Level5 [["Note that the \"?\"","on the NoticeBoard also counts"],["The helmet can protect","you from the last \"?\""]]
             , mainScene = MainType.Level4
             , number = []
             }
