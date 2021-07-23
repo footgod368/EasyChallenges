@@ -218,7 +218,7 @@ init a =
                         ]
                     )
             , keyPressed = []
-            , gameControl = GameControl.init MainType.Level3 []
+            , gameControl = GameControl.init MainType.Level3 [["To circumvent the first NoticeBoard,","triger the switch and back off quickly,","then jump onto the NoticeBoard"],["The big \"?\" will disturb","your direction control"]]
             , mainScene = MainType.Level2
             }
     in

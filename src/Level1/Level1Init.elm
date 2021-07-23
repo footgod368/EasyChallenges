@@ -155,7 +155,7 @@ init a =
                         ( 56 * 40, 65 * 40 )
                     ]
             , keyPressed = []
-            , gameControl = GameControl.init MainType.Level2 []
+            , gameControl = GameControl.init MainType.Level2 [["To circumvent the moonster,","jump back onto the first tunnel","and then jump over the monster."]]
             , mainScene = MainType.Level1
             }
     in

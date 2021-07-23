@@ -96,7 +96,7 @@ init a =
                         ]
                     )
             , keyPressed = []
-            , gameControl = GameControl.init MainType.Level4 []
+            , gameControl = GameControl.init MainType.Level4 [["Go right and then hit \"Silver Dog\""]]
             , mainScene = MainType.Level3
             }
     in

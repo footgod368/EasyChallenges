@@ -472,7 +472,7 @@ view model =
         , SvgAttr.fill "#000000"
         , SvgAttr.opacity (String.fromInt deadOpacity)
         ]
-        [ Svg.text ("You die! Dead times: " ++ String.fromInt (Tuple.first model.player.deadTimes))
+        [ Svg.text ("You die! Times of deaths: " ++ String.fromInt (Tuple.first model.player.deadTimes))
         ]
     , Svg.text_
         [ SvgAttr.x (String.fromFloat (windowBoundaryX / 2))
