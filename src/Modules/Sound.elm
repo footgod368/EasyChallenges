@@ -121,3 +121,21 @@ viewOneSoundTrigger soundTrigger =
         None ->
             []
 
+
+{-| Play the sound
+-}
+view : { model | sound : Sound } -> List (Svg MainType.Msg)
+view model =
+    List.concat
+        [ [ Html.audio
+                [ HtmlAttr.controls True
+                , HtmlAttr.src "assets/backgroundMusic.ogg"
+                , HtmlAttr.id "BackGround"
+                , HtmlAttr.autoplay True
+                , HtmlAttr.loop True
+                ]
+                []
+          ]
+        , List.concat (List.map viewOneSoundTrigger model.sound.soundTrigger)
+        ]
+
