@@ -33,6 +33,7 @@ import Array
 import GlobalFunction.GlobalBasics as GlobalBasics
 import MainFunction.MainType as MainType
 import Modules.Player as Player
+import Modules.Sound as Sound
 import Modules.ViewMove as ViewMove
 import Svg exposing (Svg)
 import Svg.Attributes as SvgAttr
@@ -138,7 +139,7 @@ view model =
 
 {-| update one boundary's collision with player, used in `update`, not exposed.
 -}
-updateOneBoundary : GlobalBasics.Pos -> GlobalBasics.Pos -> BoundaryType -> ( { model | player : Player.Player }, Cmd MainType.Msg ) -> ( { model | player : Player.Player }, Cmd MainType.Msg )
+updateOneBoundary : GlobalBasics.Pos -> GlobalBasics.Pos -> BoundaryType -> ( { model | player : Player.Player, sound : Sound.Sound }, Cmd MainType.Msg ) -> ( { model | player : Player.Player, sound : Sound.Sound }, Cmd MainType.Msg )
 updateOneBoundary anchor area boundaryType ( model, cmd ) =
     let
         ( anchorX, anchorY ) =
@@ -211,7 +212,7 @@ updateOneBoundary anchor area boundaryType ( model, cmd ) =
 
 {-| `update` updates collision of the boundaries
 -}
-update : ( { model | boundary : Boundary, windowBoundary : GlobalBasics.Pos, levelBoundary : GlobalBasics.Pos, player : Player.Player }, Cmd MainType.Msg ) -> ( { model | boundary : Boundary, windowBoundary : GlobalBasics.Pos, levelBoundary : GlobalBasics.Pos, player : Player.Player }, Cmd MainType.Msg )
+update : ( { model | boundary : Boundary, windowBoundary : GlobalBasics.Pos, levelBoundary : GlobalBasics.Pos, player : Player.Player, sound : Sound.Sound }, Cmd MainType.Msg ) -> ( { model | boundary : Boundary, windowBoundary : GlobalBasics.Pos, levelBoundary : GlobalBasics.Pos, player : Player.Player, sound : Sound.Sound }, Cmd MainType.Msg )
 update ( model, cmd ) =
     let
         ( levelBoundaryX, levelBoundaryY ) =
