@@ -5238,6 +5238,7 @@ var $author$project$Modules$Event$AfterActEvent = function (a) {
 var $author$project$GlobalFunction$GlobalModule$Collide = function (a) {
 	return {$: 'Collide', a: a};
 };
+var $author$project$Modules$Needle$Downwards = {$: 'Downwards'};
 var $author$project$MainFunction$MainType$Level1 = {$: 'Level1'};
 var $author$project$MainFunction$MainType$Level2 = {$: 'Level2'};
 var $author$project$Modules$Monster$ListenX = function (a) {
@@ -5259,6 +5260,7 @@ var $author$project$Modules$Event$PlayerCollide = function (a) {
 var $author$project$GlobalFunction$GlobalBasics$Polygon = function (a) {
 	return {$: 'Polygon', a: a};
 };
+var $author$project$Modules$Needle$Upwards = {$: 'Upwards'};
 var $author$project$GlobalFunction$GlobalModule$Visible = function (a) {
 	return {$: 'Visible', a: a};
 };
@@ -5333,25 +5335,7 @@ var $elm$core$Array$fromList = function (list) {
 	}
 };
 var $author$project$Modules$Brick$brickCollisionBox = function (brickAppearance) {
-	if (brickAppearance.$ === 'NormalAppearance') {
-		return $author$project$GlobalFunction$GlobalBasics$Polygon(
-			$elm$core$Array$fromList(
-				_List_fromArray(
-					[
-						_Utils_Tuple2(
-						_Utils_Tuple2(0.0, 0.0),
-						_Utils_Tuple2($author$project$Modules$Brick$brickWidth, 0.0)),
-						_Utils_Tuple2(
-						_Utils_Tuple2($author$project$Modules$Brick$brickWidth, 0.0),
-						_Utils_Tuple2($author$project$Modules$Brick$brickWidth, $author$project$Modules$Brick$brickHeight)),
-						_Utils_Tuple2(
-						_Utils_Tuple2($author$project$Modules$Brick$brickWidth, $author$project$Modules$Brick$brickHeight),
-						_Utils_Tuple2(0.0, $author$project$Modules$Brick$brickHeight)),
-						_Utils_Tuple2(
-						_Utils_Tuple2(0.0, $author$project$Modules$Brick$brickHeight),
-						_Utils_Tuple2(0.0, 0.0))
-					])));
-	} else {
+	if (brickAppearance.$ === 'Detailed') {
 		var width = brickAppearance.a;
 		var height = brickAppearance.b;
 		return $author$project$GlobalFunction$GlobalBasics$Polygon(
@@ -5369,6 +5353,24 @@ var $author$project$Modules$Brick$brickCollisionBox = function (brickAppearance)
 						_Utils_Tuple2(0.0, height)),
 						_Utils_Tuple2(
 						_Utils_Tuple2(0.0, height),
+						_Utils_Tuple2(0.0, 0.0))
+					])));
+	} else {
+		return $author$project$GlobalFunction$GlobalBasics$Polygon(
+			$elm$core$Array$fromList(
+				_List_fromArray(
+					[
+						_Utils_Tuple2(
+						_Utils_Tuple2(0.0, 0.0),
+						_Utils_Tuple2($author$project$Modules$Brick$brickWidth, 0.0)),
+						_Utils_Tuple2(
+						_Utils_Tuple2($author$project$Modules$Brick$brickWidth, 0.0),
+						_Utils_Tuple2($author$project$Modules$Brick$brickWidth, $author$project$Modules$Brick$brickHeight)),
+						_Utils_Tuple2(
+						_Utils_Tuple2($author$project$Modules$Brick$brickWidth, $author$project$Modules$Brick$brickHeight),
+						_Utils_Tuple2(0.0, $author$project$Modules$Brick$brickHeight)),
+						_Utils_Tuple2(
+						_Utils_Tuple2(0.0, $author$project$Modules$Brick$brickHeight),
 						_Utils_Tuple2(0.0, 0.0))
 					])));
 	}
@@ -5424,7 +5426,7 @@ var $elm$core$List$concat = function (lists) {
 var $elm$core$Basics$negate = function (n) {
 	return -n;
 };
-var $author$project$Modules$Player$defPlayerProperty = {gravityAcce: 0.1, ifPlayerJumpOnTheGround: true, playerHeight: 20.0, playerHorizontalSpeed: 1.93, playerJumpFrames: 20, playerJumpInitialAcce: 0.6, playerJumpInitialSpeed: -1.0, playerJumpNum: 1, playerWidth: 20.0};
+var $author$project$Modules$Player$defPlayerProperty = {gravityAcce: 0.1, ifPlayerJumpOnTheGround: true, isGreen: false, playerHeight: 20.0, playerHorizontalSpeed: 1.93, playerJumpFrames: 20, playerJumpInitialAcce: 0.6, playerJumpInitialSpeed: -1.0, playerJumpNum: 1, playerWidth: 5.0};
 var $author$project$Modules$Event$StartActivated = {$: 'StartActivated'};
 var $author$project$Modules$Event$Event = F5(
 	function (info, ifStartAct, actType, duration, actCounter) {
@@ -5585,6 +5587,7 @@ var $author$project$Modules$Player$Jump = F2(
 		return {$: 'Jump', a: a, b: b};
 	});
 var $author$project$Modules$Player$Live = {$: 'Live'};
+var $author$project$Modules$Player$Right = {$: 'Right'};
 var $author$project$Modules$Player$init = F3(
 	function (pos, property, propertyChange) {
 		return {
@@ -5606,6 +5609,7 @@ var $author$project$Modules$Player$init = F3(
 							_Utils_Tuple2(0.0, 0.0))
 						]))),
 			deadTimes: _Utils_Tuple2(1, $author$project$Modules$Player$FallFromHigh),
+			faceDirection: $author$project$Modules$Player$Right,
 			ifChangeBackToLastPosX: false,
 			ifChangeBackToLastPosY: false,
 			ifThisFrameOnGround: false,
@@ -5726,9 +5730,9 @@ var $author$project$Modules$Brick$initFallingRow = F4(
 			},
 			A2($elm$core$List$range, x, y));
 	});
-var $author$project$Modules$Needle$NormalNeedle = F2(
-	function (a, b) {
-		return {$: 'NormalNeedle', a: a, b: b};
+var $author$project$Modules$Needle$NormalNeedle = F3(
+	function (a, b, c) {
+		return {$: 'NormalNeedle', a: a, b: b, c: c};
 	});
 var $author$project$Modules$Needle$needleCollisionBox = function (needleAppearance) {
 	var width = needleAppearance.a;
@@ -5753,15 +5757,15 @@ var $author$project$Modules$Needle$needleCollisionBox = function (needleAppearan
 };
 var $author$project$Modules$Needle$normalNeedleHeight = $author$project$GlobalFunction$GlobalBasics$blockSize.b / 20.0;
 var $author$project$Modules$Needle$normalNeedleWidth = $author$project$GlobalFunction$GlobalBasics$blockSize.a;
-var $author$project$Modules$Needle$initFalling = F2(
-	function (_v0, id) {
+var $author$project$Modules$Needle$initFalling = F3(
+	function (_v0, id, needleType) {
 		var x = _v0.a;
 		var y = _v0.b;
 		return {
-			appearance: A2($author$project$Modules$Needle$NormalNeedle, $author$project$Modules$Needle$normalNeedleWidth, $author$project$Modules$Needle$normalNeedleHeight),
+			appearance: A3($author$project$Modules$Needle$NormalNeedle, $author$project$Modules$Needle$normalNeedleWidth, $author$project$Modules$Needle$normalNeedleHeight, needleType),
 			collision: $author$project$GlobalFunction$GlobalModule$Collide($author$project$GlobalFunction$GlobalModule$NoNextCollision),
 			collisionBox: $author$project$Modules$Needle$needleCollisionBox(
-				A2($author$project$Modules$Needle$NormalNeedle, $author$project$Modules$Needle$normalNeedleWidth, $author$project$Modules$Needle$normalNeedleHeight)),
+				A3($author$project$Modules$Needle$NormalNeedle, $author$project$Modules$Needle$normalNeedleWidth, $author$project$Modules$Needle$normalNeedleHeight, needleType)),
 			move: A4(
 				$author$project$GlobalFunction$GlobalModule$Move,
 				$elm$core$Array$fromList(_List_Nil),
@@ -5783,27 +5787,28 @@ var $author$project$Modules$Needle$initFalling = F2(
 			visibility: $author$project$GlobalFunction$GlobalModule$Visible($author$project$GlobalFunction$GlobalModule$NoNextVisibility)
 		};
 	});
-var $author$project$Modules$Needle$initFallingRow = F4(
-	function (n, n1, n2, id) {
+var $author$project$Modules$Needle$initFallingRow = F5(
+	function (n, n1, n2, id, needleType) {
 		return A2(
 			$elm$core$List$map,
 			function (i) {
-				return A2(
+				return A3(
 					$author$project$Modules$Needle$initFalling,
 					_Utils_Tuple2(i, n),
-					id);
+					id,
+					needleType);
 			},
 			A2($elm$core$List$range, n1, n2));
 	});
-var $author$project$Modules$Needle$initHidden = F2(
-	function (_v0, id) {
+var $author$project$Modules$Needle$initHidden = F3(
+	function (_v0, id, needleType) {
 		var x = _v0.a;
 		var y = _v0.b;
 		return {
-			appearance: A2($author$project$Modules$Needle$NormalNeedle, $author$project$Modules$Needle$normalNeedleWidth, $author$project$Modules$Needle$normalNeedleHeight),
+			appearance: A3($author$project$Modules$Needle$NormalNeedle, $author$project$Modules$Needle$normalNeedleWidth, $author$project$Modules$Needle$normalNeedleHeight, needleType),
 			collision: $author$project$GlobalFunction$GlobalModule$Collide($author$project$GlobalFunction$GlobalModule$NoNextCollision),
 			collisionBox: $author$project$Modules$Needle$needleCollisionBox(
-				A2($author$project$Modules$Needle$NormalNeedle, $author$project$Modules$Needle$normalNeedleWidth, $author$project$Modules$Needle$normalNeedleHeight)),
+				A3($author$project$Modules$Needle$NormalNeedle, $author$project$Modules$Needle$normalNeedleWidth, $author$project$Modules$Needle$normalNeedleHeight, needleType)),
 			move: $author$project$GlobalFunction$GlobalModule$NoNextMove,
 			pos: $author$project$GlobalFunction$GlobalBasics$blockPos(
 				_Utils_Tuple2(x, y)),
@@ -5811,16 +5816,16 @@ var $author$project$Modules$Needle$initHidden = F2(
 				A2($author$project$GlobalFunction$GlobalModule$VisibleAfterEvent, id, $author$project$GlobalFunction$GlobalModule$NoNextVisibility))
 		};
 	});
-var $author$project$Modules$Needle$initHiddenCollideAfter = F2(
-	function (_v0, id) {
+var $author$project$Modules$Needle$initHiddenCollideAfter = F3(
+	function (_v0, id, needleType) {
 		var x = _v0.a;
 		var y = _v0.b;
 		return {
-			appearance: A2($author$project$Modules$Needle$NormalNeedle, $author$project$Modules$Needle$normalNeedleWidth, $author$project$Modules$Needle$normalNeedleHeight),
+			appearance: A3($author$project$Modules$Needle$NormalNeedle, $author$project$Modules$Needle$normalNeedleWidth, $author$project$Modules$Needle$normalNeedleHeight, needleType),
 			collision: $author$project$GlobalFunction$GlobalModule$NoCollide(
 				A2($author$project$GlobalFunction$GlobalModule$CollideAfterEvent, id, $author$project$GlobalFunction$GlobalModule$NoNextCollision)),
 			collisionBox: $author$project$Modules$Needle$needleCollisionBox(
-				A2($author$project$Modules$Needle$NormalNeedle, $author$project$Modules$Needle$normalNeedleWidth, $author$project$Modules$Needle$normalNeedleHeight)),
+				A3($author$project$Modules$Needle$NormalNeedle, $author$project$Modules$Needle$normalNeedleWidth, $author$project$Modules$Needle$normalNeedleHeight, needleType)),
 			move: $author$project$GlobalFunction$GlobalModule$NoNextMove,
 			pos: $author$project$GlobalFunction$GlobalBasics$blockPos(
 				_Utils_Tuple2(x, y)),
@@ -5828,15 +5833,15 @@ var $author$project$Modules$Needle$initHiddenCollideAfter = F2(
 				A2($author$project$GlobalFunction$GlobalModule$VisibleAfterEvent, id, $author$project$GlobalFunction$GlobalModule$NoNextVisibility))
 		};
 	});
-var $author$project$Modules$Needle$initHiddenFloat = F2(
-	function (_v0, id) {
+var $author$project$Modules$Needle$initHiddenFloat = F3(
+	function (_v0, id, needleType) {
 		var x = _v0.a;
 		var y = _v0.b;
 		return {
-			appearance: A2($author$project$Modules$Needle$NormalNeedle, $author$project$Modules$Needle$normalNeedleWidth, $author$project$Modules$Needle$normalNeedleHeight),
+			appearance: A3($author$project$Modules$Needle$NormalNeedle, $author$project$Modules$Needle$normalNeedleWidth, $author$project$Modules$Needle$normalNeedleHeight, needleType),
 			collision: $author$project$GlobalFunction$GlobalModule$Collide($author$project$GlobalFunction$GlobalModule$NoNextCollision),
 			collisionBox: $author$project$Modules$Needle$needleCollisionBox(
-				A2($author$project$Modules$Needle$NormalNeedle, $author$project$Modules$Needle$normalNeedleWidth, $author$project$Modules$Needle$normalNeedleHeight)),
+				A3($author$project$Modules$Needle$NormalNeedle, $author$project$Modules$Needle$normalNeedleWidth, $author$project$Modules$Needle$normalNeedleHeight, needleType)),
 			move: $author$project$GlobalFunction$GlobalModule$NoNextMove,
 			pos: $author$project$GlobalFunction$GlobalBasics$blockPosFloat(
 				_Utils_Tuple2(x, y)),
@@ -5844,15 +5849,16 @@ var $author$project$Modules$Needle$initHiddenFloat = F2(
 				A2($author$project$GlobalFunction$GlobalModule$VisibleAfterEvent, id, $author$project$GlobalFunction$GlobalModule$NoNextVisibility))
 		};
 	});
-var $author$project$Modules$Needle$initHiddenRow = F4(
-	function (n, n1, n2, id) {
+var $author$project$Modules$Needle$initHiddenRow = F5(
+	function (n, n1, n2, id, needleType) {
 		return A2(
 			$elm$core$List$map,
 			function (i) {
-				return A2(
+				return A3(
 					$author$project$Modules$Needle$initHiddenFloat,
 					_Utils_Tuple2(i, n),
-					id);
+					id,
+					needleType);
 			},
 			A2($elm$core$List$range, n1, n2));
 	});
@@ -5928,14 +5934,14 @@ var $author$project$Modules$Needle$init = F5(
 			visibility: visibility
 		};
 	});
-var $author$project$Modules$Needle$sword = F5(
-	function (startPos, chargePos, _v0, speed, id) {
+var $author$project$Modules$Needle$sword = F6(
+	function (startPos, chargePos, _v0, speed, id, needleType) {
 		var width = _v0.a;
 		var height = _v0.b;
 		return A5(
 			$author$project$Modules$Needle$init,
 			$author$project$GlobalFunction$GlobalBasics$blockPosFloat(startPos),
-			A2($author$project$Modules$Needle$NormalNeedle, width * 40, height * 40),
+			A3($author$project$Modules$Needle$NormalNeedle, width * 40, height * 40, needleType),
 			$author$project$GlobalFunction$GlobalModule$Invisible(
 				A2($author$project$GlobalFunction$GlobalModule$VisibleAfterEvent, id, $author$project$GlobalFunction$GlobalModule$NoNextVisibility)),
 			$author$project$GlobalFunction$GlobalModule$NoCollide(
@@ -6218,7 +6224,14 @@ var $author$project$Level1$Level1Init$init = function (a) {
 									])))),
 					$author$project$Modules$Event$quickDuration(10))
 				])),
-		gameControl: A2($author$project$Modules$GameControl$init, $author$project$MainFunction$MainType$Level2, _List_Nil),
+		gameControl: A2(
+			$author$project$Modules$GameControl$init,
+			$author$project$MainFunction$MainType$Level2,
+			_List_fromArray(
+				[
+					_List_fromArray(
+					['To circumvent the moonster,', 'jump back onto the first tunnel', 'and then jump over the monster.'])
+				])),
 		keyPressed: _List_Nil,
 		levelBoundary: _Utils_Tuple2(80 * 40, 680.0),
 		mainScene: $author$project$MainFunction$MainType$Level1,
@@ -6241,28 +6254,31 @@ var $author$project$Level1$Level1Init$init = function (a) {
 					[
 						_List_fromArray(
 						[
-							A2(
+							A3(
 							$author$project$Modules$Needle$initHidden,
 							_Utils_Tuple2(15, 13),
-							2)
+							2,
+							$author$project$Modules$Needle$Downwards)
 						]),
-						A4($author$project$Modules$Needle$initFallingRow, 13, 22, 26, 3),
+						A5($author$project$Modules$Needle$initFallingRow, 13, 22, 26, 3, $author$project$Modules$Needle$Downwards),
 						_List_fromArray(
 						[
-							A2(
+							A3(
 							$author$project$Modules$Needle$initHiddenCollideAfter,
 							_Utils_Tuple2(25, 12),
-							4)
+							4,
+							$author$project$Modules$Needle$Upwards)
 						]),
-						A4($author$project$Modules$Needle$initHiddenRow, 9, 31, 37, 9),
+						A5($author$project$Modules$Needle$initHiddenRow, 9, 31, 37, 9, $author$project$Modules$Needle$Downwards),
 						function () {
-						var tempSword = A5(
+						var tempSword = A6(
 							$author$project$Modules$Needle$sword,
 							_Utils_Tuple2(46, 14.75),
 							_Utils_Tuple2(46, -2),
 							_Utils_Tuple2(4, 0.25),
 							6.0,
-							12);
+							12,
+							$author$project$Modules$Needle$Upwards);
 						return _List_fromArray(
 							[
 								_Utils_update(
@@ -6347,7 +6363,11 @@ var $author$project$Modules$NoticeBoard$InvisibleAfterEvent = F2(
 	function (a, b) {
 		return {$: 'InvisibleAfterEvent', a: a, b: b};
 	});
+var $author$project$Modules$Needle$Laser = {$: 'Laser'};
 var $author$project$MainFunction$MainType$Level3 = {$: 'Level3'};
+var $author$project$Modules$Brick$Switch = function (a) {
+	return {$: 'Switch', a: a};
+};
 var $author$project$Modules$Event$TimeAfterStart = function (a) {
 	return {$: 'TimeAfterStart', a: a};
 };
@@ -6397,15 +6417,15 @@ var $author$project$Modules$Brick$initCollideHiddenRow = F4(
 			},
 			A2($elm$core$List$range, x, y));
 	});
-var $author$project$Modules$Needle$initHiddenFalling = F2(
-	function (_v0, id) {
+var $author$project$Modules$Needle$initHiddenFalling = F3(
+	function (_v0, id, needleType) {
 		var x = _v0.a;
 		var y = _v0.b;
 		return {
-			appearance: A2($author$project$Modules$Needle$NormalNeedle, $author$project$Modules$Needle$normalNeedleWidth, $author$project$Modules$Needle$normalNeedleHeight),
+			appearance: A3($author$project$Modules$Needle$NormalNeedle, $author$project$Modules$Needle$normalNeedleWidth, $author$project$Modules$Needle$normalNeedleHeight, needleType),
 			collision: $author$project$GlobalFunction$GlobalModule$Collide($author$project$GlobalFunction$GlobalModule$NoNextCollision),
 			collisionBox: $author$project$Modules$Needle$needleCollisionBox(
-				A2($author$project$Modules$Needle$NormalNeedle, $author$project$Modules$Needle$normalNeedleWidth, $author$project$Modules$Needle$normalNeedleHeight)),
+				A3($author$project$Modules$Needle$NormalNeedle, $author$project$Modules$Needle$normalNeedleWidth, $author$project$Modules$Needle$normalNeedleHeight, needleType)),
 			move: A4(
 				$author$project$GlobalFunction$GlobalModule$Move,
 				$elm$core$Array$fromList(_List_Nil),
@@ -6427,15 +6447,16 @@ var $author$project$Modules$Needle$initHiddenFalling = F2(
 			visibility: $author$project$GlobalFunction$GlobalModule$Invisible($author$project$GlobalFunction$GlobalModule$NoNextVisibility)
 		};
 	});
-var $author$project$Modules$Needle$initHiddenFallingRow = F4(
-	function (n, n1, n2, id) {
+var $author$project$Modules$Needle$initHiddenFallingRow = F5(
+	function (n, n1, n2, id, needleType) {
 		return A2(
 			$elm$core$List$map,
 			function (i) {
-				return A2(
+				return A3(
 					$author$project$Modules$Needle$initHiddenFalling,
 					_Utils_Tuple2(i, n),
-					id);
+					id,
+					needleType);
 			},
 			A2($elm$core$List$range, n1, n2));
 	});
@@ -6461,7 +6482,7 @@ var $author$project$Level2$Level2Init$init = function (a) {
 							$author$project$Modules$Brick$init,
 							$author$project$GlobalFunction$GlobalBasics$blockPosFloat(
 								_Utils_Tuple2(8, 14)),
-							A3($author$project$Modules$Brick$Detailed, 40, 40, '#1E90FF'),
+							$author$project$Modules$Brick$Switch(true),
 							$author$project$GlobalFunction$GlobalModule$Visible(
 								A2($author$project$GlobalFunction$GlobalModule$InvisibleAfterEvent, 1, $author$project$GlobalFunction$GlobalModule$NoNextVisibility)),
 							$author$project$GlobalFunction$GlobalModule$NoCollide($author$project$GlobalFunction$GlobalModule$NoNextCollision),
@@ -6473,7 +6494,7 @@ var $author$project$Level2$Level2Init$init = function (a) {
 							$author$project$Modules$Brick$init,
 							$author$project$GlobalFunction$GlobalBasics$blockPosFloat(
 								_Utils_Tuple2(8, 14)),
-							A3($author$project$Modules$Brick$Detailed, 40, 40, '#FFD700'),
+							$author$project$Modules$Brick$Switch(false),
 							$author$project$GlobalFunction$GlobalModule$Invisible(
 								A2($author$project$GlobalFunction$GlobalModule$VisibleAfterEvent, 1, $author$project$GlobalFunction$GlobalModule$NoNextVisibility)),
 							$author$project$GlobalFunction$GlobalModule$NoCollide($author$project$GlobalFunction$GlobalModule$NoNextCollision),
@@ -6712,7 +6733,16 @@ var $author$project$Level2$Level2Init$init = function (a) {
 					_Utils_Tuple2(78.125, 11.5 - 1.75),
 					_Utils_Tuple2(1.75, 1.75))
 				])),
-		gameControl: A2($author$project$Modules$GameControl$init, $author$project$MainFunction$MainType$Level3, _List_Nil),
+		gameControl: A2(
+			$author$project$Modules$GameControl$init,
+			$author$project$MainFunction$MainType$Level3,
+			_List_fromArray(
+				[
+					_List_fromArray(
+					['To circumvent the first NoticeBoard,', 'triger the switch and back off quickly,', 'then jump onto the NoticeBoard']),
+					_List_fromArray(
+					['The big \"?\" will disturb', 'your direction control'])
+				])),
 		keyPressed: _List_Nil,
 		levelBoundary: _Utils_Tuple2(90 * 40, 680.0),
 		mainScene: $author$project$MainFunction$MainType$Level2,
@@ -6720,9 +6750,9 @@ var $author$project$Level2$Level2Init$init = function (a) {
 			$elm$core$List$concat(
 				_List_fromArray(
 					[
-						A4($author$project$Modules$Needle$initHiddenFallingRow, 8, 7, 14, 1),
-						A4($author$project$Modules$Needle$initHiddenRow, 6, 57, 59, 8),
-						A4($author$project$Modules$Needle$initHiddenRow, 8, 57, 59, 9)
+						A5($author$project$Modules$Needle$initHiddenFallingRow, 8, 7, 14, 1, $author$project$Modules$Needle$Downwards),
+						A5($author$project$Modules$Needle$initHiddenRow, 6, 57, 59, 8, $author$project$Modules$Needle$Laser),
+						A5($author$project$Modules$Needle$initHiddenRow, 8, 57, 59, 9, $author$project$Modules$Needle$Laser)
 					]))),
 		noticeBoards: $elm$core$Array$fromList(
 			_List_fromArray(
@@ -6857,6 +6887,7 @@ var $author$project$Level2$Level2Init$init = function (a) {
 		newModel,
 		A2($elm$core$Task$perform, $author$project$MainFunction$MainType$GetViewport, $elm$browser$Browser$Dom$getViewport));
 };
+var $author$project$Modules$Needle$BombUp = {$: 'BombUp'};
 var $author$project$MainFunction$MainType$Level4 = {$: 'Level4'};
 var $author$project$Modules$EndPoint$initDetailed = F2(
 	function (_v0, _v1) {
@@ -6983,7 +7014,14 @@ var $author$project$Level3$Level3Init$init = function (a) {
 					$author$project$GlobalFunction$GlobalBasics$blockPosFloat(
 						_Utils_Tuple2(14, 14)))
 				])),
-		gameControl: A2($author$project$Modules$GameControl$init, $author$project$MainFunction$MainType$Level4, _List_Nil),
+		gameControl: A2(
+			$author$project$Modules$GameControl$init,
+			$author$project$MainFunction$MainType$Level4,
+			_List_fromArray(
+				[
+					_List_fromArray(
+					['Go right and then hit \"Silver Dog\"'])
+				])),
 		keyPressed: _List_Nil,
 		levelBoundary: _Utils_Tuple2(54 * 40, 680.0),
 		mainScene: $author$project$MainFunction$MainType$Level3,
@@ -6993,41 +7031,46 @@ var $author$project$Level3$Level3Init$init = function (a) {
 					[
 						_List_fromArray(
 						[
-							A2(
+							A3(
 							$author$project$Modules$Needle$initHidden,
 							_Utils_Tuple2(2, 12),
-							1)
+							1,
+							$author$project$Modules$Needle$Downwards)
 						]),
 						_List_fromArray(
 						[
-							A2(
+							A3(
 							$author$project$Modules$Needle$initHidden,
 							_Utils_Tuple2(4, 12),
-							2)
+							2,
+							$author$project$Modules$Needle$Downwards)
 						]),
 						_List_fromArray(
 						[
-							A2(
+							A3(
 							$author$project$Modules$Needle$initHidden,
 							_Utils_Tuple2(6, 12),
-							3)
+							3,
+							$author$project$Modules$Needle$Downwards)
 						]),
 						_List_fromArray(
 						[
-							A2(
+							A3(
 							$author$project$Modules$Needle$initHidden,
 							_Utils_Tuple2(8, 12),
-							4)
+							4,
+							$author$project$Modules$Needle$Downwards)
 						]),
 						_List_fromArray(
 						[
-							A5(
+							A6(
 							$author$project$Modules$Needle$sword,
 							_Utils_Tuple2(14, 16),
-							_Utils_Tuple2(14, -2),
+							_Utils_Tuple2(14, -3),
 							_Utils_Tuple2(2, 3),
 							8.0,
-							6)
+							6,
+							$author$project$Modules$Needle$BombUp)
 						])
 					]))),
 		noticeBoards: $elm$core$Array$fromList(
@@ -7142,6 +7185,7 @@ var $author$project$Level3$Level3Init$init = function (a) {
 		newModel,
 		A2($elm$core$Task$perform, $author$project$MainFunction$MainType$GetViewport, $elm$browser$Browser$Dom$getViewport));
 };
+var $author$project$Modules$Needle$BombLeft = {$: 'BombLeft'};
 var $author$project$Modules$NoticeBoard$Invisible = function (a) {
 	return {$: 'Invisible', a: a};
 };
@@ -7326,7 +7370,16 @@ var $author$project$Level4$Level4Init$init = function (a) {
 					_Utils_Tuple2(22.5, 11.5),
 					_Utils_Tuple2(2, 2))
 				])),
-		gameControl: A2($author$project$Modules$GameControl$init, $author$project$MainFunction$MainType$Level5, _List_Nil),
+		gameControl: A2(
+			$author$project$Modules$GameControl$init,
+			$author$project$MainFunction$MainType$Level5,
+			_List_fromArray(
+				[
+					_List_fromArray(
+					['Note that the \"?\"', 'on the NoticeBoard also counts']),
+					_List_fromArray(
+					['The helmet can protect', 'you from the last \"?\"'])
+				])),
 		keyPressed: _List_Nil,
 		levelBoundary: _Utils_Tuple2(30 * 40, 680.0),
 		mainScene: $author$project$MainFunction$MainType$Level4,
@@ -7340,7 +7393,7 @@ var $author$project$Level4$Level4Init$init = function (a) {
 							$author$project$Modules$Needle$init,
 							$author$project$GlobalFunction$GlobalBasics$blockPosFloat(
 								_Utils_Tuple2(26.1, 12.5)),
-							A2($author$project$Modules$Needle$NormalNeedle, 32, 4),
+							A3($author$project$Modules$Needle$NormalNeedle, 32, 4, $author$project$Modules$Needle$Downwards),
 							$author$project$GlobalFunction$GlobalModule$Invisible(
 								A2($author$project$GlobalFunction$GlobalModule$VisibleAfterEvent, 10, $author$project$GlobalFunction$GlobalModule$NoNextVisibility)),
 							$author$project$GlobalFunction$GlobalModule$Collide(
@@ -7349,23 +7402,25 @@ var $author$project$Level4$Level4Init$init = function (a) {
 						]),
 						_List_fromArray(
 						[
-							A5(
+							A6(
 							$author$project$Modules$Needle$sword,
 							_Utils_Tuple2(12, 15),
 							_Utils_Tuple2(12, -10),
 							_Utils_Tuple2(3, 5),
 							7.0,
-							11)
+							11,
+							$author$project$Modules$Needle$BombUp)
 						]),
 						_List_fromArray(
 						[
-							A5(
+							A6(
 							$author$project$Modules$Needle$sword,
 							_Utils_Tuple2(28, 12),
 							_Utils_Tuple2(-10, 12),
 							_Utils_Tuple2(4, 2),
 							7.0,
-							12)
+							12,
+							$author$project$Modules$Needle$BombLeft)
 						])
 					]))),
 		noticeBoards: $elm$core$Array$fromList(
@@ -7454,6 +7509,10 @@ var $author$project$Level4$Level4Init$init = function (a) {
 		A2($elm$core$Task$perform, $author$project$MainFunction$MainType$GetViewport, $elm$browser$Browser$Dom$getViewport));
 };
 var $author$project$MainFunction$MainType$Level6 = {$: 'Level6'};
+var $author$project$Modules$Brick$Pill = function (a) {
+	return {$: 'Pill', a: a};
+};
+var $author$project$Modules$Brick$Wings = {$: 'Wings'};
 var $author$project$Modules$Needle$deadlyBlock = F2(
 	function (pos, _v0) {
 		var width = _v0.a;
@@ -7461,7 +7520,7 @@ var $author$project$Modules$Needle$deadlyBlock = F2(
 		return A5(
 			$author$project$Modules$Needle$init,
 			$author$project$GlobalFunction$GlobalBasics$blockPosFloat(pos),
-			A2($author$project$Modules$Needle$NormalNeedle, width * 40, height * 40),
+			A3($author$project$Modules$Needle$NormalNeedle, width * 40, height * 40, $author$project$Modules$Needle$Laser),
 			$author$project$GlobalFunction$GlobalModule$Visible($author$project$GlobalFunction$GlobalModule$NoNextVisibility),
 			$author$project$GlobalFunction$GlobalModule$Collide($author$project$GlobalFunction$GlobalModule$NoNextCollision),
 			$author$project$GlobalFunction$GlobalModule$NoNextMove);
@@ -7523,6 +7582,9 @@ var $author$project$Level5$Level5Init$init = function (a) {
 	var newProperty = _Utils_update(
 		tempProperty,
 		{ifPlayerJumpOnTheGround: false, playerJumpNum: 999999});
+	var newnewProperty = _Utils_update(
+		newProperty,
+		{isGreen: true});
 	var newModel = {
 		actEvent: $elm$core$Array$fromList(_List_Nil),
 		boundary: $author$project$Modules$Boundary$normalInit,
@@ -7556,7 +7618,7 @@ var $author$project$Level5$Level5Init$init = function (a) {
 							$author$project$Modules$Brick$init,
 							$author$project$GlobalFunction$GlobalBasics$blockPosFloat(
 								_Utils_Tuple2(3, 36)),
-							A3($author$project$Modules$Brick$Detailed, 40, 40, '\t#778899'),
+							$author$project$Modules$Brick$Wings,
 							$author$project$GlobalFunction$GlobalModule$Invisible(
 								A2(
 									$author$project$GlobalFunction$GlobalModule$VisibleAfterEvent,
@@ -7611,7 +7673,7 @@ var $author$project$Level5$Level5Init$init = function (a) {
 							$author$project$Modules$Brick$init,
 							$author$project$GlobalFunction$GlobalBasics$blockPosFloat(
 								_Utils_Tuple2(56, 36)),
-							A3($author$project$Modules$Brick$Detailed, 40, 40, '#1E90FF'),
+							$author$project$Modules$Brick$Pill('#1E90FF'),
 							$author$project$GlobalFunction$GlobalModule$Invisible(
 								A2(
 									$author$project$GlobalFunction$GlobalModule$VisibleAfterEvent,
@@ -7641,7 +7703,7 @@ var $author$project$Level5$Level5Init$init = function (a) {
 							$author$project$Modules$Brick$init,
 							$author$project$GlobalFunction$GlobalBasics$blockPosFloat(
 								_Utils_Tuple2(58, 36)),
-							A3($author$project$Modules$Brick$Detailed, 40, 40, '#FF0000'),
+							$author$project$Modules$Brick$Pill('#FF0000'),
 							$author$project$GlobalFunction$GlobalModule$Invisible(
 								A2(
 									$author$project$GlobalFunction$GlobalModule$VisibleAfterEvent,
@@ -7671,7 +7733,7 @@ var $author$project$Level5$Level5Init$init = function (a) {
 							$author$project$Modules$Brick$init,
 							$author$project$GlobalFunction$GlobalBasics$blockPosFloat(
 								_Utils_Tuple2(66, 39)),
-							A3($author$project$Modules$Brick$Detailed, 40, 40, '\t#3CB371'),
+							$author$project$Modules$Brick$Pill('\t#3CB371'),
 							$author$project$GlobalFunction$GlobalModule$Invisible(
 								A2(
 									$author$project$GlobalFunction$GlobalModule$VisibleAfterEvent,
@@ -7844,7 +7906,16 @@ var $author$project$Level5$Level5Init$init = function (a) {
 					$author$project$GlobalFunction$GlobalBasics$blockPosFloat(
 						_Utils_Tuple2(12, 11.1)))
 				])),
-		gameControl: A2($author$project$Modules$GameControl$init, $author$project$MainFunction$MainType$Level6, _List_Nil),
+		gameControl: A2(
+			$author$project$Modules$GameControl$init,
+			$author$project$MainFunction$MainType$Level6,
+			_List_fromArray(
+				[
+					_List_fromArray(
+					['Hit the first\"?\"', 'to get the wings']),
+					_List_fromArray(
+					['Hit the last two \"?\" again', 'to mix blue with red'])
+				])),
 		keyPressed: _List_Nil,
 		levelBoundary: _Utils_Tuple2(70 * 40, 40 * 40.0),
 		mainScene: $author$project$MainFunction$MainType$Level5,
@@ -7855,13 +7926,14 @@ var $author$project$Level5$Level5Init$init = function (a) {
 						A2(
 						$elm$core$List$map,
 						function (i) {
-							return A2(
+							return A3(
 								$author$project$Modules$Needle$initHiddenCollideAfter,
 								_Utils_Tuple2(i, 10),
-								17);
+								17,
+								$author$project$Modules$Needle$Laser);
 						},
 						A2($elm$core$List$range, 6, 12)),
-						A4($author$project$Modules$Needle$initHiddenRow, 39.9, 5, 46, 2),
+						A5($author$project$Modules$Needle$initHiddenRow, 39.9, 5, 46, 2, $author$project$Modules$Needle$Upwards),
 						_List_fromArray(
 						[
 							A2(
@@ -7918,21 +7990,17 @@ var $author$project$Level5$Level5Init$init = function (a) {
 							_Utils_Tuple2(2, 6))
 						]),
 						function () {
-						var tempNeedle = A5(
-							$author$project$Modules$Needle$sword,
-							_Utils_Tuple2(53, 1),
-							_Utils_Tuple2(53, 50),
-							_Utils_Tuple2(10, 0.25),
-							10.0,
-							16);
+						var tempNeedle = A2(
+							$author$project$Modules$Needle$deadlyBlock,
+							_Utils_Tuple2(53, 10.5),
+							_Utils_Tuple2(10, 1));
 						return _List_fromArray(
 							[
 								_Utils_update(
 								tempNeedle,
 								{
 									collision: $author$project$GlobalFunction$GlobalModule$Collide(
-										A2($author$project$GlobalFunction$GlobalModule$NoCollideAfterEvent, 15, $author$project$GlobalFunction$GlobalModule$NoNextCollision)),
-									visibility: $author$project$GlobalFunction$GlobalModule$Visible($author$project$GlobalFunction$GlobalModule$NoNextVisibility)
+										A2($author$project$GlobalFunction$GlobalModule$NoCollideAfterEvent, 15, $author$project$GlobalFunction$GlobalModule$NoNextCollision))
 								})
 							]);
 					}()
@@ -8022,12 +8090,20 @@ var $author$project$Level5$Level5Init$init = function (a) {
 			$author$project$Modules$Player$init,
 			_Utils_Tuple2(50, 290.0),
 			$author$project$Modules$Player$defPlayerProperty,
-			A3($author$project$Modules$Player$ChangeTo, newProperty, 1, $author$project$Modules$Player$NoNextPropertyChange)),
+			A3(
+				$author$project$Modules$Player$ChangeTo,
+				newProperty,
+				1,
+				A3($author$project$Modules$Player$ChangeTo, newnewProperty, 15, $author$project$Modules$Player$NoNextPropertyChange))),
 		playerAtLastSavePoint: A3(
 			$author$project$Modules$Player$init,
 			_Utils_Tuple2(50, 290.0),
 			$author$project$Modules$Player$defPlayerProperty,
-			A3($author$project$Modules$Player$ChangeTo, newProperty, 1, $author$project$Modules$Player$NoNextPropertyChange)),
+			A3(
+				$author$project$Modules$Player$ChangeTo,
+				newProperty,
+				1,
+				A3($author$project$Modules$Player$ChangeTo, newnewProperty, 15, $author$project$Modules$Player$NoNextPropertyChange))),
 		savePoints: $elm$core$Array$fromList(
 			_List_fromArray(
 				[
@@ -8045,19 +8121,20 @@ var $author$project$Level5$Level5Init$init = function (a) {
 		newModel,
 		A2($elm$core$Task$perform, $author$project$MainFunction$MainType$GetViewport, $elm$browser$Browser$Dom$getViewport));
 };
-var $author$project$Modules$Needle$initPos = function (_v0) {
-	var x = _v0.a;
-	var y = _v0.b;
-	return {
-		appearance: A2($author$project$Modules$Needle$NormalNeedle, $author$project$Modules$Needle$normalNeedleWidth, $author$project$Modules$Needle$normalNeedleHeight),
-		collision: $author$project$GlobalFunction$GlobalModule$Collide($author$project$GlobalFunction$GlobalModule$NoNextCollision),
-		collisionBox: $author$project$Modules$Needle$needleCollisionBox(
-			A2($author$project$Modules$Needle$NormalNeedle, $author$project$Modules$Needle$normalNeedleWidth, $author$project$Modules$Needle$normalNeedleHeight)),
-		move: $author$project$GlobalFunction$GlobalModule$NoNextMove,
-		pos: _Utils_Tuple2(x, y),
-		visibility: $author$project$GlobalFunction$GlobalModule$Visible($author$project$GlobalFunction$GlobalModule$NoNextVisibility)
-	};
-};
+var $author$project$Modules$Needle$initPos = F2(
+	function (_v0, needleType) {
+		var x = _v0.a;
+		var y = _v0.b;
+		return {
+			appearance: A3($author$project$Modules$Needle$NormalNeedle, $author$project$Modules$Needle$normalNeedleWidth, $author$project$Modules$Needle$normalNeedleHeight, needleType),
+			collision: $author$project$GlobalFunction$GlobalModule$Collide($author$project$GlobalFunction$GlobalModule$NoNextCollision),
+			collisionBox: $author$project$Modules$Needle$needleCollisionBox(
+				A3($author$project$Modules$Needle$NormalNeedle, $author$project$Modules$Needle$normalNeedleWidth, $author$project$Modules$Needle$normalNeedleHeight, needleType)),
+			move: $author$project$GlobalFunction$GlobalModule$NoNextMove,
+			pos: _Utils_Tuple2(x, y),
+			visibility: $author$project$GlobalFunction$GlobalModule$Visible($author$project$GlobalFunction$GlobalModule$NoNextVisibility)
+		};
+	});
 var $author$project$Level6$Level6Init$init = function (a) {
 	var newModel = {
 		actEvent: $elm$core$Array$fromList(_List_Nil),
@@ -8857,7 +8934,16 @@ var $author$project$Level6$Level6Init$init = function (a) {
 					$author$project$Modules$Event$TimeAfterStart(150),
 					$author$project$Modules$Event$quickDuration(10))
 				])),
-		gameControl: A2($author$project$Modules$GameControl$init, $author$project$MainFunction$MainType$Level6, _List_Nil),
+		gameControl: A2(
+			$author$project$Modules$GameControl$init,
+			$author$project$MainFunction$MainType$Level6,
+			_List_fromArray(
+				[
+					_List_fromArray(
+					['Hit the first \"?\"', 'to disable the laser']),
+					_List_fromArray(
+					['The hidden bricks can shade the laser'])
+				])),
 		keyPressed: _List_Nil,
 		levelBoundary: _Utils_Tuple2(90 * 40, 680.0),
 		mainScene: $author$project$MainFunction$MainType$Level6,
@@ -8866,10 +8952,11 @@ var $author$project$Level6$Level6Init$init = function (a) {
 				_List_fromArray(
 					[
 						function () {
-						var needle0 = A2(
+						var needle0 = A3(
 							$author$project$Modules$Needle$initFalling,
 							_Utils_Tuple2(9, 6),
-							3);
+							3,
+							$author$project$Modules$Needle$Downwards);
 						return _List_fromArray(
 							[
 								_Utils_update(
@@ -8897,10 +8984,11 @@ var $author$project$Level6$Level6Init$init = function (a) {
 							]);
 					}(),
 						function () {
-						var needle1 = A2(
+						var needle1 = A3(
 							$author$project$Modules$Needle$initFalling,
 							_Utils_Tuple2(9, 6),
-							31);
+							31,
+							$author$project$Modules$Needle$Downwards);
 						return _List_fromArray(
 							[
 								_Utils_update(
@@ -8929,15 +9017,21 @@ var $author$project$Level6$Level6Init$init = function (a) {
 					}(),
 						_List_fromArray(
 						[
-							$author$project$Modules$Needle$initPos(
-							_Utils_Tuple2(181, 280)),
-							$author$project$Modules$Needle$initPos(
-							_Utils_Tuple2(221, 280))
+							A2(
+							$author$project$Modules$Needle$initPos,
+							_Utils_Tuple2(181, 280),
+							$author$project$Modules$Needle$Downwards),
+							A2(
+							$author$project$Modules$Needle$initPos,
+							_Utils_Tuple2(221, 280),
+							$author$project$Modules$Needle$Downwards)
 						]),
 						function () {
-						var tempNeedle1 = $author$project$Modules$Needle$initPos(
+						var tempNeedle1 = A2(
+							$author$project$Modules$Needle$initPos,
 							$author$project$GlobalFunction$GlobalBasics$blockPosFloat(
-								_Utils_Tuple2(10.5, 10.9)));
+								_Utils_Tuple2(10.5, 10.9)),
+							$author$project$Modules$Needle$Downwards);
 						return _List_fromArray(
 							[
 								_Utils_update(
@@ -8970,7 +9064,7 @@ var $author$project$Level6$Level6Init$init = function (a) {
 							$author$project$Modules$Needle$init,
 							$author$project$GlobalFunction$GlobalBasics$blockPosFloat(
 								_Utils_Tuple2(22, 11.35)),
-							A2($author$project$Modules$Needle$NormalNeedle, 711, 12),
+							A3($author$project$Modules$Needle$NormalNeedle, 711, 12, $author$project$Modules$Needle$Laser),
 							$author$project$GlobalFunction$GlobalModule$Invisible(
 								A2(
 									$author$project$GlobalFunction$GlobalModule$VisibleAfterEvent,
@@ -8989,7 +9083,7 @@ var $author$project$Level6$Level6Init$init = function (a) {
 							$author$project$Modules$Needle$init,
 							$author$project$GlobalFunction$GlobalBasics$blockPosFloat(
 								_Utils_Tuple2(40, 1)),
-							A2($author$project$Modules$Needle$NormalNeedle, 40, 351),
+							A3($author$project$Modules$Needle$NormalNeedle, 40, 351, $author$project$Modules$Needle$Laser),
 							$author$project$GlobalFunction$GlobalModule$Invisible(
 								A2(
 									$author$project$GlobalFunction$GlobalModule$VisibleAfterEvent,
@@ -9008,7 +9102,7 @@ var $author$project$Level6$Level6Init$init = function (a) {
 							$author$project$Modules$Needle$init,
 							$author$project$GlobalFunction$GlobalBasics$blockPosFloat(
 								_Utils_Tuple2(22, 10.35)),
-							A2($author$project$Modules$Needle$NormalNeedle, 711, 12),
+							A3($author$project$Modules$Needle$NormalNeedle, 711, 12, $author$project$Modules$Needle$Laser),
 							$author$project$GlobalFunction$GlobalModule$Invisible(
 								A2(
 									$author$project$GlobalFunction$GlobalModule$VisibleAfterEvent,
@@ -9027,7 +9121,7 @@ var $author$project$Level6$Level6Init$init = function (a) {
 							$author$project$Modules$Needle$init,
 							$author$project$GlobalFunction$GlobalBasics$blockPosFloat(
 								_Utils_Tuple2(22, 10.35)),
-							A2($author$project$Modules$Needle$NormalNeedle, 711, 12),
+							A3($author$project$Modules$Needle$NormalNeedle, 711, 12, $author$project$Modules$Needle$Laser),
 							$author$project$GlobalFunction$GlobalModule$Invisible(
 								A2(
 									$author$project$GlobalFunction$GlobalModule$VisibleAfterEvent,
@@ -9063,7 +9157,7 @@ var $author$project$Level6$Level6Init$init = function (a) {
 							$author$project$Modules$Needle$init,
 							$author$project$GlobalFunction$GlobalBasics$blockPosFloat(
 								_Utils_Tuple2(26.35, 1)),
-							A2($author$project$Modules$Needle$NormalNeedle, 12, 351),
+							A3($author$project$Modules$Needle$NormalNeedle, 12, 351, $author$project$Modules$Needle$Laser),
 							$author$project$GlobalFunction$GlobalModule$Invisible(
 								A2(
 									$author$project$GlobalFunction$GlobalModule$VisibleAfterEvent,
@@ -9078,37 +9172,41 @@ var $author$project$Level6$Level6Init$init = function (a) {
 						]),
 						_List_fromArray(
 						[
-							A5(
+							A6(
 							$author$project$Modules$Needle$sword,
 							_Utils_Tuple2(55, 10.5),
 							_Utils_Tuple2(19, 10.5),
 							_Utils_Tuple2(4, 2),
 							20,
-							36)
+							36,
+							$author$project$Modules$Needle$BombLeft)
 						]),
 						_List_fromArray(
 						[
-							A2(
+							A3(
 							$author$project$Modules$Needle$initHidden,
 							_Utils_Tuple2(50, 11),
-							51)
+							51,
+							$author$project$Modules$Needle$Downwards)
 						]),
 						_List_fromArray(
 						[
-							A2(
+							A3(
 							$author$project$Modules$Needle$initHidden,
 							_Utils_Tuple2(50, 10),
-							51)
+							51,
+							$author$project$Modules$Needle$Downwards)
 						]),
 						_List_fromArray(
 						[
-							A5(
+							A6(
 							$author$project$Modules$Needle$sword,
 							_Utils_Tuple2(57, 20),
 							_Utils_Tuple2(57, -4),
 							_Utils_Tuple2(2, 3),
 							12,
-							53)
+							53,
+							$author$project$Modules$Needle$BombUp)
 						]),
 						_List_fromArray(
 						[
@@ -9116,7 +9214,7 @@ var $author$project$Level6$Level6Init$init = function (a) {
 							$author$project$Modules$Needle$init,
 							$author$project$GlobalFunction$GlobalBasics$blockPosFloat(
 								_Utils_Tuple2(69.35, 8)),
-							A2($author$project$Modules$Needle$NormalNeedle, 12, 191),
+							A3($author$project$Modules$Needle$NormalNeedle, 12, 191, $author$project$Modules$Needle$Laser),
 							$author$project$GlobalFunction$GlobalModule$Invisible(
 								A2(
 									$author$project$GlobalFunction$GlobalModule$VisibleAfterEvent,
@@ -9135,7 +9233,7 @@ var $author$project$Level6$Level6Init$init = function (a) {
 							$author$project$Modules$Needle$init,
 							$author$project$GlobalFunction$GlobalBasics$blockPosFloat(
 								_Utils_Tuple2(69.35, 8)),
-							A2($author$project$Modules$Needle$NormalNeedle, 12, 191),
+							A3($author$project$Modules$Needle$NormalNeedle, 12, 191, $author$project$Modules$Needle$Laser),
 							$author$project$GlobalFunction$GlobalModule$Invisible(
 								A2($author$project$GlobalFunction$GlobalModule$VisibleAfterEvent, 55, $author$project$GlobalFunction$GlobalModule$NoNextVisibility)),
 							$author$project$GlobalFunction$GlobalModule$NoCollide(
@@ -9163,7 +9261,7 @@ var $author$project$Level6$Level6Init$init = function (a) {
 							$author$project$Modules$Needle$init,
 							$author$project$GlobalFunction$GlobalBasics$blockPosFloat(
 								_Utils_Tuple2(66.4, 5)),
-							A2($author$project$Modules$Needle$NormalNeedle, 8, 320),
+							A3($author$project$Modules$Needle$NormalNeedle, 8, 320, $author$project$Modules$Needle$Laser),
 							$author$project$GlobalFunction$GlobalModule$Invisible(
 								A2(
 									$author$project$GlobalFunction$GlobalModule$VisibleAfterEvent,
@@ -9197,7 +9295,7 @@ var $author$project$Level6$Level6Init$init = function (a) {
 							$author$project$Modules$Needle$init,
 							$author$project$GlobalFunction$GlobalBasics$blockPosFloat(
 								_Utils_Tuple2(66.4, 5)),
-							A2($author$project$Modules$Needle$NormalNeedle, 8, 200),
+							A3($author$project$Modules$Needle$NormalNeedle, 8, 200, $author$project$Modules$Needle$Laser),
 							$author$project$GlobalFunction$GlobalModule$Invisible(
 								A2(
 									$author$project$GlobalFunction$GlobalModule$VisibleAfterEvent,
@@ -9231,7 +9329,7 @@ var $author$project$Level6$Level6Init$init = function (a) {
 							$author$project$Modules$Needle$init,
 							$author$project$GlobalFunction$GlobalBasics$blockPosFloat(
 								_Utils_Tuple2(66.4, 5)),
-							A2($author$project$Modules$Needle$NormalNeedle, 8, 320),
+							A3($author$project$Modules$Needle$NormalNeedle, 8, 320, $author$project$Modules$Needle$Laser),
 							$author$project$GlobalFunction$GlobalModule$Invisible(
 								A2(
 									$author$project$GlobalFunction$GlobalModule$VisibleAfterEvent,
@@ -9265,7 +9363,7 @@ var $author$project$Level6$Level6Init$init = function (a) {
 							$author$project$Modules$Needle$init,
 							$author$project$GlobalFunction$GlobalBasics$blockPosFloat(
 								_Utils_Tuple2(52.2, 5.025)),
-							A2($author$project$Modules$Needle$NormalNeedle, 24, 318),
+							A3($author$project$Modules$Needle$NormalNeedle, 24, 318, $author$project$Modules$Needle$Laser),
 							$author$project$GlobalFunction$GlobalModule$Invisible(
 								A2($author$project$GlobalFunction$GlobalModule$VisibleAfterEvent, 55, $author$project$GlobalFunction$GlobalModule$NoNextVisibility)),
 							$author$project$GlobalFunction$GlobalModule$NoCollide(
@@ -9289,10 +9387,11 @@ var $author$project$Level6$Level6Init$init = function (a) {
 						]),
 						_List_fromArray(
 						[
-							A2(
+							A3(
 							$author$project$Modules$Needle$initFalling,
 							_Utils_Tuple2(62, 7),
-							63)
+							63,
+							$author$project$Modules$Needle$Downwards)
 						])
 					]))),
 		noticeBoards: $elm$core$Array$fromList(
@@ -9659,12 +9758,14 @@ var $author$project$Level7$Level7Init$init = function (a) {
 		needles: $elm$core$Array$fromList(
 			_List_fromArray(
 				[
-					$author$project$Modules$Needle$initPos(
+					A2(
+					$author$project$Modules$Needle$initPos,
 					A2(
 						$author$project$GlobalFunction$GlobalBasics$addPosPos,
 						_Utils_Tuple2(0.0, 30.0),
 						$author$project$GlobalFunction$GlobalBasics$blockPos(
-							_Utils_Tuple2(4, 14)))),
+							_Utils_Tuple2(4, 14))),
+					$author$project$Modules$Needle$Upwards),
 					A5(
 					$author$project$Modules$Needle$init,
 					A2(
@@ -9672,7 +9773,7 @@ var $author$project$Level7$Level7Init$init = function (a) {
 						_Utils_Tuple2(0.0, 30.0),
 						$author$project$GlobalFunction$GlobalBasics$blockPos(
 							_Utils_Tuple2(4, 11))),
-					A2($author$project$Modules$Needle$NormalNeedle, 80.0, $author$project$Modules$Needle$normalNeedleHeight),
+					A3($author$project$Modules$Needle$NormalNeedle, 80.0, $author$project$Modules$Needle$normalNeedleHeight, $author$project$Modules$Needle$Upwards),
 					$author$project$GlobalFunction$GlobalModule$Visible($author$project$GlobalFunction$GlobalModule$NoNextVisibility),
 					$author$project$GlobalFunction$GlobalModule$Collide($author$project$GlobalFunction$GlobalModule$NoNextCollision),
 					A4(
@@ -12371,8 +12472,10 @@ var $author$project$Modules$Monster$update = function (_v0) {
 				$elm$core$Array$length(model.monsters) - 1)),
 		cmd);
 };
-var $author$project$Modules$Needle$defNeedle = $author$project$Modules$Needle$initPos(
-	_Utils_Tuple2(0, 0));
+var $author$project$Modules$Needle$defNeedle = A2(
+	$author$project$Modules$Needle$initPos,
+	_Utils_Tuple2(0, 0),
+	$author$project$Modules$Needle$Laser);
 var $author$project$Modules$Needle$updateOneNeedleCollision = F2(
 	function (id, model) {
 		var needle = A2(
@@ -12605,6 +12708,7 @@ var $author$project$Modules$Player$updatePlayerProperty = function (_v0) {
 		return _Utils_Tuple2(model, cmd);
 	}
 };
+var $author$project$Modules$Player$Left = {$: 'Left'};
 var $elm$core$Basics$not = _Basics_not;
 var $author$project$Modules$Player$playerJumpAcce = F2(
 	function (model, frameNum) {
@@ -12618,6 +12722,7 @@ var $author$project$Modules$Player$updatePlayerVelocity = function (_v0) {
 	var cmd = _v0.b;
 	var velocityX = (A2($elm$core$List$member, 37, model.keyPressed) || A2($elm$core$List$member, 65, model.keyPressed)) ? ((A2($elm$core$List$member, 68, model.keyPressed) || A2($elm$core$List$member, 39, model.keyPressed)) ? 0.0 : (-model.player.property.playerHorizontalSpeed)) : ((A2($elm$core$List$member, 68, model.keyPressed) || A2($elm$core$List$member, 39, model.keyPressed)) ? model.player.property.playerHorizontalSpeed : 0.0);
 	var oldPlayer = model.player;
+	var newFaceDirection = (velocityX > 0) ? $author$project$Modules$Player$Right : ((velocityX < 0) ? $author$project$Modules$Player$Left : model.player.faceDirection);
 	var _v1 = model.player.velocity;
 	var oldVelocityX = _v1.a;
 	var oldVelocityY = _v1.b;
@@ -12646,6 +12751,7 @@ var $author$project$Modules$Player$updatePlayerVelocity = function (_v0) {
 	var newPlayer = _Utils_update(
 		oldPlayer,
 		{
+			faceDirection: newFaceDirection,
 			ifThisFrameOnGround: false,
 			jump: newJump,
 			velocity: _Utils_Tuple2(velocityX, velocityY)
@@ -13200,11 +13306,11 @@ var $author$project$Level5$Level5Update$checkBlue = function (_v0) {
 };
 var $author$project$Level5$Level5Update$notBlueOrRed = function (brick) {
 	var _v0 = brick.appearance;
-	if (_v0.$ === 'NormalAppearance') {
-		return true;
-	} else {
-		var color = _v0.c;
+	if (_v0.$ === 'Pill') {
+		var color = _v0.a;
 		return (color !== '#1E90FF') && (color !== '#FF0000');
+	} else {
+		return true;
 	}
 };
 var $author$project$Level5$Level5Update$checkBlueAndRed = function (_v0) {
@@ -13934,69 +14040,358 @@ var $author$project$Modules$Boundary$view = function (model) {
 			model.boundary.rightBoundary)
 		]);
 };
+var $elm$svg$Svg$circle = $elm$svg$Svg$trustedNode('circle');
+var $elm$svg$Svg$Attributes$cx = _VirtualDom_attribute('cx');
+var $elm$svg$Svg$Attributes$cy = _VirtualDom_attribute('cy');
+var $elm$svg$Svg$line = $elm$svg$Svg$trustedNode('line');
+var $elm$svg$Svg$Attributes$r = _VirtualDom_attribute('r');
 var $elm$svg$Svg$Attributes$stroke = _VirtualDom_attribute('stroke');
 var $elm$svg$Svg$Attributes$strokeWidth = _VirtualDom_attribute('stroke-width');
+var $elm$svg$Svg$Attributes$x1 = _VirtualDom_attribute('x1');
+var $elm$svg$Svg$Attributes$x2 = _VirtualDom_attribute('x2');
+var $elm$svg$Svg$Attributes$y1 = _VirtualDom_attribute('y1');
+var $elm$svg$Svg$Attributes$y2 = _VirtualDom_attribute('y2');
+var $author$project$Modules$Brick$drawPill = F3(
+	function (x, y, color) {
+		return _List_fromArray(
+			[
+				A2(
+				$elm$svg$Svg$circle,
+				_List_fromArray(
+					[
+						$elm$svg$Svg$Attributes$cx(
+						$elm$core$String$fromFloat(x + 10)),
+						$elm$svg$Svg$Attributes$cy(
+						$elm$core$String$fromFloat(y + 30)),
+						$elm$svg$Svg$Attributes$r('9.5'),
+						$elm$svg$Svg$Attributes$fill('#FFFFFF'),
+						$elm$svg$Svg$Attributes$stroke('#000000'),
+						$elm$svg$Svg$Attributes$strokeWidth('1')
+					]),
+				_List_Nil),
+				A2(
+				$elm$svg$Svg$circle,
+				_List_fromArray(
+					[
+						$elm$svg$Svg$Attributes$cx(
+						$elm$core$String$fromFloat(x + 30)),
+						$elm$svg$Svg$Attributes$cy(
+						$elm$core$String$fromFloat(y + 30)),
+						$elm$svg$Svg$Attributes$r('9.5'),
+						$elm$svg$Svg$Attributes$fill(color),
+						$elm$svg$Svg$Attributes$stroke('#000000'),
+						$elm$svg$Svg$Attributes$strokeWidth('1')
+					]),
+				_List_Nil),
+				A2(
+				$elm$svg$Svg$rect,
+				_List_fromArray(
+					[
+						$elm$svg$Svg$Attributes$x(
+						$elm$core$String$fromFloat(x + 10)),
+						$elm$svg$Svg$Attributes$y(
+						$elm$core$String$fromFloat(y + 21)),
+						$elm$svg$Svg$Attributes$width('10'),
+						$elm$svg$Svg$Attributes$height('18'),
+						$elm$svg$Svg$Attributes$fill('#FFFFFF')
+					]),
+				_List_Nil),
+				A2(
+				$elm$svg$Svg$rect,
+				_List_fromArray(
+					[
+						$elm$svg$Svg$Attributes$x(
+						$elm$core$String$fromFloat(x + 20)),
+						$elm$svg$Svg$Attributes$y(
+						$elm$core$String$fromFloat(y + 21)),
+						$elm$svg$Svg$Attributes$width('10'),
+						$elm$svg$Svg$Attributes$height('18'),
+						$elm$svg$Svg$Attributes$fill(color)
+					]),
+				_List_Nil),
+				A2(
+				$elm$svg$Svg$line,
+				_List_fromArray(
+					[
+						$elm$svg$Svg$Attributes$x1(
+						$elm$core$String$fromFloat(x + 10)),
+						$elm$svg$Svg$Attributes$y1(
+						$elm$core$String$fromFloat(y + 20.5)),
+						$elm$svg$Svg$Attributes$x2(
+						$elm$core$String$fromFloat(x + 30)),
+						$elm$svg$Svg$Attributes$y2(
+						$elm$core$String$fromFloat(y + 20.5)),
+						$elm$svg$Svg$Attributes$stroke('#000000'),
+						$elm$svg$Svg$Attributes$strokeWidth('1')
+					]),
+				_List_Nil),
+				A2(
+				$elm$svg$Svg$line,
+				_List_fromArray(
+					[
+						$elm$svg$Svg$Attributes$x1(
+						$elm$core$String$fromFloat(x + 10)),
+						$elm$svg$Svg$Attributes$y1(
+						$elm$core$String$fromFloat(y + 39.5)),
+						$elm$svg$Svg$Attributes$x2(
+						$elm$core$String$fromFloat(x + 30)),
+						$elm$svg$Svg$Attributes$y2(
+						$elm$core$String$fromFloat(y + 39.5)),
+						$elm$svg$Svg$Attributes$stroke('#000000'),
+						$elm$svg$Svg$Attributes$strokeWidth('1')
+					]),
+				_List_Nil)
+			]);
+	});
+var $elm$svg$Svg$Attributes$d = _VirtualDom_attribute('d');
+var $elm$svg$Svg$path = $elm$svg$Svg$trustedNode('path');
+var $author$project$Modules$Brick$drawSwitch1 = F3(
+	function (x, y, color) {
+		return _List_fromArray(
+			[
+				A2(
+				$elm$svg$Svg$line,
+				_List_fromArray(
+					[
+						$elm$svg$Svg$Attributes$x1(
+						$elm$core$String$fromFloat(x)),
+						$elm$svg$Svg$Attributes$y1(
+						$elm$core$String$fromFloat(y + 6)),
+						$elm$svg$Svg$Attributes$x2(
+						$elm$core$String$fromFloat(x + 15)),
+						$elm$svg$Svg$Attributes$y2(
+						$elm$core$String$fromFloat(y + 31.5)),
+						$elm$svg$Svg$Attributes$stroke('#000000'),
+						$elm$svg$Svg$Attributes$strokeWidth('4')
+					]),
+				_List_Nil),
+				A2(
+				$elm$svg$Svg$path,
+				_List_fromArray(
+					[
+						$elm$svg$Svg$Attributes$d(
+						'M' + ($elm$core$String$fromFloat(x) + (' ' + ($elm$core$String$fromFloat(y + 40) + ('A ' + ($elm$core$String$fromFloat(20) + (' ' + ($elm$core$String$fromFloat(20) + (', 0,' + (' 0,' + (' 1, ' + ($elm$core$String$fromFloat(x + 40) + (' ' + $elm$core$String$fromFloat(y + 40)))))))))))))),
+						$elm$svg$Svg$Attributes$fill(color),
+						$elm$svg$Svg$Attributes$stroke('#000000'),
+						$elm$svg$Svg$Attributes$strokeWidth('1')
+					]),
+				_List_Nil),
+				A2(
+				$elm$svg$Svg$line,
+				_List_fromArray(
+					[
+						$elm$svg$Svg$Attributes$x1(
+						$elm$core$String$fromFloat(x)),
+						$elm$svg$Svg$Attributes$y1(
+						$elm$core$String$fromFloat(y + 40)),
+						$elm$svg$Svg$Attributes$x2(
+						$elm$core$String$fromFloat(x + 40)),
+						$elm$svg$Svg$Attributes$y2(
+						$elm$core$String$fromFloat(y + 40)),
+						$elm$svg$Svg$Attributes$stroke('#000000'),
+						$elm$svg$Svg$Attributes$strokeWidth('1')
+					]),
+				_List_Nil),
+				A2(
+				$elm$svg$Svg$circle,
+				_List_fromArray(
+					[
+						$elm$svg$Svg$Attributes$cx(
+						$elm$core$String$fromFloat(x)),
+						$elm$svg$Svg$Attributes$cy(
+						$elm$core$String$fromFloat(y + 6)),
+						$elm$svg$Svg$Attributes$r('5'),
+						$elm$svg$Svg$Attributes$fill('#00FF00'),
+						$elm$svg$Svg$Attributes$stroke('#000000'),
+						$elm$svg$Svg$Attributes$strokeWidth('1')
+					]),
+				_List_Nil)
+			]);
+	});
+var $author$project$Modules$Brick$drawSwitch2 = F3(
+	function (x, y, color) {
+		return _List_fromArray(
+			[
+				A2(
+				$elm$svg$Svg$line,
+				_List_fromArray(
+					[
+						$elm$svg$Svg$Attributes$x1(
+						$elm$core$String$fromFloat(x + 40)),
+						$elm$svg$Svg$Attributes$y1(
+						$elm$core$String$fromFloat(y + 6)),
+						$elm$svg$Svg$Attributes$x2(
+						$elm$core$String$fromFloat(x + 25)),
+						$elm$svg$Svg$Attributes$y2(
+						$elm$core$String$fromFloat(y + 31.5)),
+						$elm$svg$Svg$Attributes$stroke('#000000'),
+						$elm$svg$Svg$Attributes$strokeWidth('4')
+					]),
+				_List_Nil),
+				A2(
+				$elm$svg$Svg$path,
+				_List_fromArray(
+					[
+						$elm$svg$Svg$Attributes$d(
+						'M' + ($elm$core$String$fromFloat(x) + (' ' + ($elm$core$String$fromFloat(y + 40) + ('A ' + ($elm$core$String$fromFloat(20) + (' ' + ($elm$core$String$fromFloat(20) + (', 0,' + (' 0,' + (' 1, ' + ($elm$core$String$fromFloat(x + 40) + (' ' + $elm$core$String$fromFloat(y + 40)))))))))))))),
+						$elm$svg$Svg$Attributes$fill(color),
+						$elm$svg$Svg$Attributes$stroke('#000000'),
+						$elm$svg$Svg$Attributes$strokeWidth('1')
+					]),
+				_List_Nil),
+				A2(
+				$elm$svg$Svg$line,
+				_List_fromArray(
+					[
+						$elm$svg$Svg$Attributes$x1(
+						$elm$core$String$fromFloat(x)),
+						$elm$svg$Svg$Attributes$y1(
+						$elm$core$String$fromFloat(y + 40)),
+						$elm$svg$Svg$Attributes$x2(
+						$elm$core$String$fromFloat(x + 40)),
+						$elm$svg$Svg$Attributes$y2(
+						$elm$core$String$fromFloat(y + 40)),
+						$elm$svg$Svg$Attributes$stroke('#000000'),
+						$elm$svg$Svg$Attributes$strokeWidth('1')
+					]),
+				_List_Nil),
+				A2(
+				$elm$svg$Svg$circle,
+				_List_fromArray(
+					[
+						$elm$svg$Svg$Attributes$cx(
+						$elm$core$String$fromFloat(x + 40)),
+						$elm$svg$Svg$Attributes$cy(
+						$elm$core$String$fromFloat(y + 6)),
+						$elm$svg$Svg$Attributes$r('5'),
+						$elm$svg$Svg$Attributes$fill('#FFFF00'),
+						$elm$svg$Svg$Attributes$stroke('#000000'),
+						$elm$svg$Svg$Attributes$strokeWidth('1')
+					]),
+				_List_Nil)
+			]);
+	});
+var $elm$svg$Svg$image = $elm$svg$Svg$trustedNode('image');
+var $elm$svg$Svg$Attributes$xlinkHref = function (value) {
+	return A3(
+		_VirtualDom_attributeNS,
+		'http://www.w3.org/1999/xlink',
+		'xlink:href',
+		_VirtualDom_noJavaScriptUri(value));
+};
 var $author$project$Modules$Brick$viewOneBrick = F2(
 	function (model, brick) {
 		var _v0 = brick.visibility;
 		switch (_v0.$) {
 			case 'Visible':
-				var _v1 = brick.pos;
-				var brickX = _v1.a;
-				var brickY = _v1.b;
-				return _List_fromArray(
-					[
-						A2(
-						$elm$svg$Svg$rect,
-						A2(
-							$elm$core$List$append,
-							_List_fromArray(
-								[
-									$elm$svg$Svg$Attributes$x(
-									$elm$core$String$fromFloat(
-										$author$project$Modules$ViewMove$deltaX(model) + brickX)),
-									$elm$svg$Svg$Attributes$y(
-									$elm$core$String$fromFloat(
-										$author$project$Modules$ViewMove$deltaY(model) + brickY)),
-									$elm$svg$Svg$Attributes$strokeWidth('2'),
-									$elm$svg$Svg$Attributes$stroke('#000000'),
-									function () {
-									var _v2 = brick.appearance;
-									if (_v2.$ === 'NormalAppearance') {
-										return $elm$svg$Svg$Attributes$fill('#00000050');
-									} else {
-										var width = _v2.a;
-										var height = _v2.b;
-										var color = _v2.c;
-										return $elm$svg$Svg$Attributes$fill(color);
-									}
-								}()
-								]),
-							function () {
-								var _v3 = brick.appearance;
-								if (_v3.$ === 'NormalAppearance') {
-									return _List_fromArray(
+				var _v1 = brick.appearance;
+				switch (_v1.$) {
+					case 'NormalAppearance':
+						var _v2 = brick.pos;
+						var brickX = _v2.a;
+						var brickY = _v2.b;
+						return _List_fromArray(
+							[
+								A2(
+								$elm$svg$Svg$rect,
+								A2(
+									$elm$core$List$append,
+									_List_fromArray(
+										[
+											$elm$svg$Svg$Attributes$x(
+											$elm$core$String$fromFloat(
+												$author$project$Modules$ViewMove$deltaX(model) + brickX)),
+											$elm$svg$Svg$Attributes$y(
+											$elm$core$String$fromFloat(
+												$author$project$Modules$ViewMove$deltaY(model) + brickY)),
+											$elm$svg$Svg$Attributes$strokeWidth('2'),
+											$elm$svg$Svg$Attributes$stroke('#000000'),
+											$elm$svg$Svg$Attributes$fill('#00000050')
+										]),
+									_List_fromArray(
 										[
 											$elm$svg$Svg$Attributes$width(
 											$elm$core$String$fromFloat($author$project$Modules$Brick$brickWidth)),
 											$elm$svg$Svg$Attributes$height(
 											$elm$core$String$fromFloat($author$project$Modules$Brick$brickHeight))
-										]);
-								} else {
-									var width = _v3.a;
-									var height = _v3.b;
-									var color = _v3.c;
-									return _List_fromArray(
+										])),
+								_List_Nil)
+							]);
+					case 'Detailed':
+						var width = _v1.a;
+						var height = _v1.b;
+						var color = _v1.c;
+						var _v3 = brick.pos;
+						var brickX = _v3.a;
+						var brickY = _v3.b;
+						return _List_fromArray(
+							[
+								A2(
+								$elm$svg$Svg$rect,
+								A2(
+									$elm$core$List$append,
+									_List_fromArray(
+										[
+											$elm$svg$Svg$Attributes$x(
+											$elm$core$String$fromFloat(
+												$author$project$Modules$ViewMove$deltaX(model) + brickX)),
+											$elm$svg$Svg$Attributes$y(
+											$elm$core$String$fromFloat(
+												$author$project$Modules$ViewMove$deltaY(model) + brickY)),
+											$elm$svg$Svg$Attributes$strokeWidth('2'),
+											$elm$svg$Svg$Attributes$stroke('#000000'),
+											$elm$svg$Svg$Attributes$fill(color)
+										]),
+									_List_fromArray(
 										[
 											$elm$svg$Svg$Attributes$width(
 											$elm$core$String$fromFloat(width)),
 											$elm$svg$Svg$Attributes$height(
 											$elm$core$String$fromFloat(height))
-										]);
-								}
-							}()),
-						_List_Nil)
-					]);
+										])),
+								_List_Nil)
+							]);
+					case 'Wings':
+						var _v4 = brick.pos;
+						var brickX = _v4.a;
+						var brickY = _v4.b;
+						return _List_fromArray(
+							[
+								A2(
+								$elm$svg$Svg$image,
+								_List_fromArray(
+									[
+										$elm$svg$Svg$Attributes$x(
+										$elm$core$String$fromFloat(
+											$author$project$Modules$ViewMove$deltaX(model) + brickX)),
+										$elm$svg$Svg$Attributes$y(
+										$elm$core$String$fromFloat(
+											$author$project$Modules$ViewMove$deltaY(model) + brickY)),
+										$elm$svg$Svg$Attributes$width(
+										$elm$core$String$fromFloat($author$project$Modules$Brick$brickWidth)),
+										$elm$svg$Svg$Attributes$height(
+										$elm$core$String$fromFloat($author$project$Modules$Brick$brickHeight)),
+										$elm$svg$Svg$Attributes$xlinkHref('assets/wings2.png')
+									]),
+								_List_Nil)
+							]);
+					case 'Switch':
+						var bool = _v1.a;
+						var _v5 = brick.pos;
+						var brickX = _v5.a;
+						var brickY = _v5.b;
+						var x0 = $author$project$Modules$ViewMove$deltaX(model) + brickX;
+						var y0 = $author$project$Modules$ViewMove$deltaY(model) + brickY;
+						return bool ? A3($author$project$Modules$Brick$drawSwitch1, x0, y0, '#00CCFF') : A3($author$project$Modules$Brick$drawSwitch2, x0, y0, '#00CCFF');
+					default:
+						var color = _v1.a;
+						var _v6 = brick.pos;
+						var brickX = _v6.a;
+						var brickY = _v6.b;
+						var x0 = $author$project$Modules$ViewMove$deltaX(model) + brickX;
+						var y0 = $author$project$Modules$ViewMove$deltaY(model) + brickY;
+						return A3($author$project$Modules$Brick$drawPill, x0, y0, color);
+				}
 			case 'Invisible':
 				return _List_Nil;
 			default:
@@ -14020,7 +14415,7 @@ var $author$project$Modules$EndPoint$view = function (model) {
 	return _List_fromArray(
 		[
 			A2(
-			$elm$svg$Svg$rect,
+			$elm$svg$Svg$image,
 			_List_fromArray(
 				[
 					$elm$svg$Svg$Attributes$x(
@@ -14033,7 +14428,7 @@ var $author$project$Modules$EndPoint$view = function (model) {
 					$elm$core$String$fromFloat($author$project$Modules$EndPoint$endPointWidth)),
 					$elm$svg$Svg$Attributes$height(
 					$elm$core$String$fromFloat($author$project$Modules$EndPoint$endPointHeight)),
-					$elm$svg$Svg$Attributes$fill('#ff3366')
+					$elm$svg$Svg$Attributes$xlinkHref('assets/silverDogLogo.svg')
 				]),
 			_List_Nil)
 		]);
@@ -14353,15 +14748,7 @@ var $author$project$Modules$GoldenDog$needleWords = _List_fromArray(
 		['“Seriously? You died from THAT?'])
 	]);
 var $elm$svg$Svg$Attributes$direction = _VirtualDom_attribute('direction');
-var $elm$svg$Svg$image = $elm$svg$Svg$trustedNode('image');
 var $elm$svg$Svg$Attributes$transform = _VirtualDom_attribute('transform');
-var $elm$svg$Svg$Attributes$xlinkHref = function (value) {
-	return A3(
-		_VirtualDom_attributeNS,
-		'http://www.w3.org/1999/xlink',
-		'xlink:href',
-		_VirtualDom_noJavaScriptUri(value));
-};
 var $author$project$Modules$GoldenDog$viewGoldenDog = _List_fromArray(
 	[
 		A2(
@@ -14466,7 +14853,7 @@ var $author$project$Modules$Monster$viewOneMonster = F2(
 		return _List_fromArray(
 			[
 				A2(
-				$elm$svg$Svg$rect,
+				$elm$svg$Svg$image,
 				_List_fromArray(
 					[
 						$elm$svg$Svg$Attributes$x(
@@ -14475,13 +14862,11 @@ var $author$project$Modules$Monster$viewOneMonster = F2(
 						$elm$svg$Svg$Attributes$y(
 						$elm$core$String$fromFloat(
 							$author$project$Modules$ViewMove$deltaY(model) + monsterY)),
-						$elm$svg$Svg$Attributes$strokeWidth('2'),
-						$elm$svg$Svg$Attributes$stroke('#00000000'),
-						$elm$svg$Svg$Attributes$fill('#FF0000FF'),
 						$elm$svg$Svg$Attributes$width(
 						$elm$core$String$fromFloat(width + 2.0)),
 						$elm$svg$Svg$Attributes$height(
-						$elm$core$String$fromFloat(height))
+						$elm$core$String$fromFloat(height)),
+						$elm$svg$Svg$Attributes$xlinkHref('assets/monster.png')
 					]),
 				_List_Nil)
 			]);
@@ -14496,6 +14881,308 @@ var $author$project$Modules$Monster$view = function (model) {
 		monstersList);
 	return $elm$core$List$concat(svgMonsterList);
 };
+var $author$project$Modules$Needle$bombViewLeft = F5(
+	function (x, y, w, h, color) {
+		return _List_fromArray(
+			[
+				A2(
+				$elm$svg$Svg$path,
+				_List_fromArray(
+					[
+						$elm$svg$Svg$Attributes$d(
+						'M' + ($elm$core$String$fromFloat(x) + (' ' + ($elm$core$String$fromFloat(y + (0.5 * h)) + (' Q ' + ($elm$core$String$fromFloat(x + (0.3 * w)) + (' ' + ($elm$core$String$fromFloat(y) + (' ' + ($elm$core$String$fromFloat(x + (0.5 * w)) + (' ' + ($elm$core$String$fromFloat(y) + (' L ' + ($elm$core$String$fromFloat(x + (0.85 * w)) + (' ' + ($elm$core$String$fromFloat(y) + (' L ' + ($elm$core$String$fromFloat(x + (0.85 * w)) + (' ' + ($elm$core$String$fromFloat(y + h) + (' L ' + ($elm$core$String$fromFloat(x + (0.5 * w)) + (' ' + ($elm$core$String$fromFloat(y + h) + (' Q ' + ($elm$core$String$fromFloat(x + (0.3 * w)) + (' ' + ($elm$core$String$fromFloat(y + h) + (' ' + ($elm$core$String$fromFloat(x) + (' ' + $elm$core$String$fromFloat(y + (0.5 * h))))))))))))))))))))))))))))))))),
+						$elm$svg$Svg$Attributes$fill(color),
+						$elm$svg$Svg$Attributes$stroke('#000000'),
+						$elm$svg$Svg$Attributes$strokeWidth('1')
+					]),
+				_List_Nil),
+				A2(
+				$elm$svg$Svg$path,
+				_List_fromArray(
+					[
+						$elm$svg$Svg$Attributes$d(
+						'M' + ($elm$core$String$fromFloat((x + (1.15 * w)) + 0.5) + (' ' + ($elm$core$String$fromFloat(y + (0.5 * h)) + (' Q ' + ($elm$core$String$fromFloat((x + w) + 0.5) + (' ' + ($elm$core$String$fromFloat(y + (0.1 * h)) + (' ' + ($elm$core$String$fromFloat((x + (0.85 * w)) + 0.5) + (' ' + ($elm$core$String$fromFloat(y + (0.1 * h)) + (' L ' + ($elm$core$String$fromFloat((x + (0.85 * w)) + 0.5) + (' ' + ($elm$core$String$fromFloat(y + (0.9 * h)) + (' Q ' + ($elm$core$String$fromFloat((x + w) + 0.5) + (' ' + ($elm$core$String$fromFloat(y + (0.9 * h)) + (' ' + ($elm$core$String$fromFloat((x + (1.15 * w)) + 0.5) + (' ' + $elm$core$String$fromFloat(y + (0.5 * h))))))))))))))))))))))))),
+						$elm$svg$Svg$Attributes$fill('#FFFF00'),
+						$elm$svg$Svg$Attributes$stroke('#000000'),
+						$elm$svg$Svg$Attributes$strokeWidth('1')
+					]),
+				_List_Nil),
+				A2(
+				$elm$svg$Svg$line,
+				_List_fromArray(
+					[
+						$elm$svg$Svg$Attributes$x1(
+						$elm$core$String$fromFloat(x + (0.6 * w))),
+						$elm$svg$Svg$Attributes$y1(
+						$elm$core$String$fromFloat(y + (0.4 * h))),
+						$elm$svg$Svg$Attributes$x2(
+						$elm$core$String$fromFloat(x + (0.6 * w))),
+						$elm$svg$Svg$Attributes$y2(
+						$elm$core$String$fromFloat(y + (0.6 * h))),
+						$elm$svg$Svg$Attributes$stroke('#000000'),
+						$elm$svg$Svg$Attributes$strokeWidth('2')
+					]),
+				_List_Nil),
+				A2(
+				$elm$svg$Svg$line,
+				_List_fromArray(
+					[
+						$elm$svg$Svg$Attributes$x1(
+						$elm$core$String$fromFloat(x + (0.4 * w))),
+						$elm$svg$Svg$Attributes$y1(
+						$elm$core$String$fromFloat(y + (0.24 * h))),
+						$elm$svg$Svg$Attributes$x2(
+						$elm$core$String$fromFloat((x + (0.45 * w)) + 1)),
+						$elm$svg$Svg$Attributes$y2(
+						$elm$core$String$fromFloat(y + (0.4 * h))),
+						$elm$svg$Svg$Attributes$stroke('#000000'),
+						$elm$svg$Svg$Attributes$strokeWidth('2')
+					]),
+				_List_Nil),
+				A2(
+				$elm$svg$Svg$line,
+				_List_fromArray(
+					[
+						$elm$svg$Svg$Attributes$x1(
+						$elm$core$String$fromFloat(x + (0.45 * w))),
+						$elm$svg$Svg$Attributes$y1(
+						$elm$core$String$fromFloat(y + (0.4 * h))),
+						$elm$svg$Svg$Attributes$x2(
+						$elm$core$String$fromFloat(x + (0.5 * w))),
+						$elm$svg$Svg$Attributes$y2(
+						$elm$core$String$fromFloat(y + (0.24 * h))),
+						$elm$svg$Svg$Attributes$stroke('#000000'),
+						$elm$svg$Svg$Attributes$strokeWidth('2')
+					]),
+				_List_Nil),
+				A2(
+				$elm$svg$Svg$line,
+				_List_fromArray(
+					[
+						$elm$svg$Svg$Attributes$x1(
+						$elm$core$String$fromFloat(x + (0.4 * w))),
+						$elm$svg$Svg$Attributes$y1(
+						$elm$core$String$fromFloat(y + (0.76 * h))),
+						$elm$svg$Svg$Attributes$x2(
+						$elm$core$String$fromFloat((x + (0.45 * w)) + 1)),
+						$elm$svg$Svg$Attributes$y2(
+						$elm$core$String$fromFloat(y + (0.6 * h))),
+						$elm$svg$Svg$Attributes$stroke('#000000'),
+						$elm$svg$Svg$Attributes$strokeWidth('2')
+					]),
+				_List_Nil),
+				A2(
+				$elm$svg$Svg$line,
+				_List_fromArray(
+					[
+						$elm$svg$Svg$Attributes$x1(
+						$elm$core$String$fromFloat(x + (0.45 * w))),
+						$elm$svg$Svg$Attributes$y1(
+						$elm$core$String$fromFloat(y + (0.6 * h))),
+						$elm$svg$Svg$Attributes$x2(
+						$elm$core$String$fromFloat(x + (0.5 * w))),
+						$elm$svg$Svg$Attributes$y2(
+						$elm$core$String$fromFloat(y + (0.76 * h))),
+						$elm$svg$Svg$Attributes$stroke('#000000'),
+						$elm$svg$Svg$Attributes$strokeWidth('2')
+					]),
+				_List_Nil)
+			]);
+	});
+var $author$project$Modules$Needle$bombViewUp = F5(
+	function (x, y, w, h, color) {
+		return _List_fromArray(
+			[
+				A2(
+				$elm$svg$Svg$path,
+				_List_fromArray(
+					[
+						$elm$svg$Svg$Attributes$d(
+						'M' + ($elm$core$String$fromFloat(x + (0.5 * w)) + (' ' + ($elm$core$String$fromFloat(y) + (' Q ' + ($elm$core$String$fromFloat(x) + (' ' + ($elm$core$String$fromFloat(y + (0.3 * h)) + (' ' + ($elm$core$String$fromFloat(x) + (' ' + ($elm$core$String$fromFloat(y + (0.5 * h)) + (' L ' + ($elm$core$String$fromFloat(x) + (' ' + ($elm$core$String$fromFloat(y + (0.85 * h)) + (' L ' + ($elm$core$String$fromFloat(x + w) + (' ' + ($elm$core$String$fromFloat(y + (0.85 * h)) + (' L ' + ($elm$core$String$fromFloat(x + w) + (' ' + ($elm$core$String$fromFloat(y + (0.5 * h)) + (' Q ' + ($elm$core$String$fromFloat(x + w) + (' ' + ($elm$core$String$fromFloat(y + (0.3 * h)) + (' ' + ($elm$core$String$fromFloat(x + (0.5 * w)) + (' ' + $elm$core$String$fromFloat(y)))))))))))))))))))))))))))))))),
+						$elm$svg$Svg$Attributes$fill(color),
+						$elm$svg$Svg$Attributes$stroke('#000000'),
+						$elm$svg$Svg$Attributes$strokeWidth('1')
+					]),
+				_List_Nil),
+				A2(
+				$elm$svg$Svg$path,
+				_List_fromArray(
+					[
+						$elm$svg$Svg$Attributes$d(
+						'M' + ($elm$core$String$fromFloat(x + (0.5 * w)) + (' ' + ($elm$core$String$fromFloat((y + (1.15 * h)) + 0.5) + (' Q ' + ($elm$core$String$fromFloat(x + (0.1 * w)) + (' ' + ($elm$core$String$fromFloat((y + h) + 0.5) + (' ' + ($elm$core$String$fromFloat(x + (0.1 * w)) + (' ' + ($elm$core$String$fromFloat((y + (0.85 * h)) + 0.5) + (' L ' + ($elm$core$String$fromFloat(x + (0.9 * w)) + (' ' + ($elm$core$String$fromFloat((y + (0.85 * h)) + 0.5) + (' Q ' + ($elm$core$String$fromFloat(x + (0.9 * w)) + (' ' + ($elm$core$String$fromFloat((y + h) + 0.5) + (' ' + ($elm$core$String$fromFloat(x + (0.5 * w)) + (' ' + $elm$core$String$fromFloat((y + (1.15 * h)) + 0.5)))))))))))))))))))))))),
+						$elm$svg$Svg$Attributes$fill('#FFFF00'),
+						$elm$svg$Svg$Attributes$stroke('#000000'),
+						$elm$svg$Svg$Attributes$strokeWidth('1')
+					]),
+				_List_Nil),
+				A2(
+				$elm$svg$Svg$line,
+				_List_fromArray(
+					[
+						$elm$svg$Svg$Attributes$x1(
+						$elm$core$String$fromFloat(x + (0.4 * w))),
+						$elm$svg$Svg$Attributes$y1(
+						$elm$core$String$fromFloat(y + (0.6 * h))),
+						$elm$svg$Svg$Attributes$x2(
+						$elm$core$String$fromFloat(x + (0.6 * w))),
+						$elm$svg$Svg$Attributes$y2(
+						$elm$core$String$fromFloat(y + (0.6 * h))),
+						$elm$svg$Svg$Attributes$stroke('#000000'),
+						$elm$svg$Svg$Attributes$strokeWidth('2')
+					]),
+				_List_Nil),
+				A2(
+				$elm$svg$Svg$line,
+				_List_fromArray(
+					[
+						$elm$svg$Svg$Attributes$x1(
+						$elm$core$String$fromFloat(x + (0.24 * w))),
+						$elm$svg$Svg$Attributes$y1(
+						$elm$core$String$fromFloat(y + (0.4 * h))),
+						$elm$svg$Svg$Attributes$x2(
+						$elm$core$String$fromFloat(x + (0.4 * w))),
+						$elm$svg$Svg$Attributes$y2(
+						$elm$core$String$fromFloat((y + (0.45 * h)) + 1)),
+						$elm$svg$Svg$Attributes$stroke('#000000'),
+						$elm$svg$Svg$Attributes$strokeWidth('2')
+					]),
+				_List_Nil),
+				A2(
+				$elm$svg$Svg$line,
+				_List_fromArray(
+					[
+						$elm$svg$Svg$Attributes$x1(
+						$elm$core$String$fromFloat(x + (0.4 * w))),
+						$elm$svg$Svg$Attributes$y1(
+						$elm$core$String$fromFloat(y + (0.45 * h))),
+						$elm$svg$Svg$Attributes$x2(
+						$elm$core$String$fromFloat(x + (0.24 * w))),
+						$elm$svg$Svg$Attributes$y2(
+						$elm$core$String$fromFloat(y + (0.5 * h))),
+						$elm$svg$Svg$Attributes$stroke('#000000'),
+						$elm$svg$Svg$Attributes$strokeWidth('2')
+					]),
+				_List_Nil),
+				A2(
+				$elm$svg$Svg$line,
+				_List_fromArray(
+					[
+						$elm$svg$Svg$Attributes$x1(
+						$elm$core$String$fromFloat(x + (0.76 * w))),
+						$elm$svg$Svg$Attributes$y1(
+						$elm$core$String$fromFloat(y + (0.4 * h))),
+						$elm$svg$Svg$Attributes$x2(
+						$elm$core$String$fromFloat(x + (0.6 * w))),
+						$elm$svg$Svg$Attributes$y2(
+						$elm$core$String$fromFloat((y + (0.45 * h)) + 1)),
+						$elm$svg$Svg$Attributes$stroke('#000000'),
+						$elm$svg$Svg$Attributes$strokeWidth('2')
+					]),
+				_List_Nil),
+				A2(
+				$elm$svg$Svg$line,
+				_List_fromArray(
+					[
+						$elm$svg$Svg$Attributes$x1(
+						$elm$core$String$fromFloat(x + (0.6 * w))),
+						$elm$svg$Svg$Attributes$y1(
+						$elm$core$String$fromFloat(y + (0.45 * h))),
+						$elm$svg$Svg$Attributes$x2(
+						$elm$core$String$fromFloat(x + (0.76 * w))),
+						$elm$svg$Svg$Attributes$y2(
+						$elm$core$String$fromFloat(y + (0.5 * h))),
+						$elm$svg$Svg$Attributes$stroke('#000000'),
+						$elm$svg$Svg$Attributes$strokeWidth('2')
+					]),
+				_List_Nil)
+			]);
+	});
+var $elm$svg$Svg$Attributes$points = _VirtualDom_attribute('points');
+var $elm$svg$Svg$polygon = $elm$svg$Svg$trustedNode('polygon');
+var $author$project$Modules$Needle$needleViewDown = F5(
+	function (x, y, w, h, color) {
+		return _List_fromArray(
+			[
+				A2(
+				$elm$svg$Svg$polygon,
+				_List_fromArray(
+					[
+						$elm$svg$Svg$Attributes$points(
+						$elm$core$String$fromFloat(x) + (' ' + ($elm$core$String$fromFloat(y) + (', ' + ($elm$core$String$fromFloat(x + (0.125 * w)) + (' ' + ($elm$core$String$fromFloat(y + h) + (', ' + ($elm$core$String$fromFloat(x + (0.25 * w)) + (' ' + $elm$core$String$fromFloat(y))))))))))),
+						$elm$svg$Svg$Attributes$fill(color)
+					]),
+				_List_Nil),
+				A2(
+				$elm$svg$Svg$polygon,
+				_List_fromArray(
+					[
+						$elm$svg$Svg$Attributes$points(
+						$elm$core$String$fromFloat(x + (0.25 * w)) + (' ' + ($elm$core$String$fromFloat(y) + (', ' + ($elm$core$String$fromFloat(x + (0.375 * w)) + (' ' + ($elm$core$String$fromFloat(y + h) + (', ' + ($elm$core$String$fromFloat(x + (0.5 * w)) + (' ' + $elm$core$String$fromFloat(y))))))))))),
+						$elm$svg$Svg$Attributes$fill(color)
+					]),
+				_List_Nil),
+				A2(
+				$elm$svg$Svg$polygon,
+				_List_fromArray(
+					[
+						$elm$svg$Svg$Attributes$points(
+						$elm$core$String$fromFloat(x + (0.5 * w)) + (' ' + ($elm$core$String$fromFloat(y) + (', ' + ($elm$core$String$fromFloat(x + (0.625 * w)) + (' ' + ($elm$core$String$fromFloat(y + h) + (', ' + ($elm$core$String$fromFloat(x + (0.75 * w)) + (' ' + $elm$core$String$fromFloat(y))))))))))),
+						$elm$svg$Svg$Attributes$fill(color)
+					]),
+				_List_Nil),
+				A2(
+				$elm$svg$Svg$polygon,
+				_List_fromArray(
+					[
+						$elm$svg$Svg$Attributes$points(
+						$elm$core$String$fromFloat(x + (0.75 * w)) + (' ' + ($elm$core$String$fromFloat(y) + (', ' + ($elm$core$String$fromFloat(x + (0.875 * w)) + (' ' + ($elm$core$String$fromFloat(y + h) + (', ' + ($elm$core$String$fromFloat(x + w) + (' ' + $elm$core$String$fromFloat(y))))))))))),
+						$elm$svg$Svg$Attributes$fill(color)
+					]),
+				_List_Nil)
+			]);
+	});
+var $author$project$Modules$Needle$needleViewUp = F5(
+	function (x, y, w, h, color) {
+		return _List_fromArray(
+			[
+				A2(
+				$elm$svg$Svg$polygon,
+				_List_fromArray(
+					[
+						$elm$svg$Svg$Attributes$points(
+						$elm$core$String$fromFloat(x) + (' ' + ($elm$core$String$fromFloat(y + h) + (', ' + ($elm$core$String$fromFloat(x + (0.125 * w)) + (' ' + ($elm$core$String$fromFloat(y) + (', ' + ($elm$core$String$fromFloat(x + (0.25 * w)) + (' ' + $elm$core$String$fromFloat(y + h))))))))))),
+						$elm$svg$Svg$Attributes$fill(color)
+					]),
+				_List_Nil),
+				A2(
+				$elm$svg$Svg$polygon,
+				_List_fromArray(
+					[
+						$elm$svg$Svg$Attributes$points(
+						$elm$core$String$fromFloat(x + (0.25 * w)) + (' ' + ($elm$core$String$fromFloat(y + h) + (', ' + ($elm$core$String$fromFloat(x + (0.375 * w)) + (' ' + ($elm$core$String$fromFloat(y) + (', ' + ($elm$core$String$fromFloat(x + (0.5 * w)) + (' ' + $elm$core$String$fromFloat(y + h))))))))))),
+						$elm$svg$Svg$Attributes$fill(color)
+					]),
+				_List_Nil),
+				A2(
+				$elm$svg$Svg$polygon,
+				_List_fromArray(
+					[
+						$elm$svg$Svg$Attributes$points(
+						$elm$core$String$fromFloat(x + (0.5 * w)) + (' ' + ($elm$core$String$fromFloat(y + h) + (', ' + ($elm$core$String$fromFloat(x + (0.625 * w)) + (' ' + ($elm$core$String$fromFloat(y) + (', ' + ($elm$core$String$fromFloat(x + (0.75 * w)) + (' ' + $elm$core$String$fromFloat(y + h))))))))))),
+						$elm$svg$Svg$Attributes$fill(color)
+					]),
+				_List_Nil),
+				A2(
+				$elm$svg$Svg$polygon,
+				_List_fromArray(
+					[
+						$elm$svg$Svg$Attributes$points(
+						$elm$core$String$fromFloat(x + (0.75 * w)) + (' ' + ($elm$core$String$fromFloat(y + h) + (', ' + ($elm$core$String$fromFloat(x + (0.875 * w)) + (' ' + ($elm$core$String$fromFloat(y) + (', ' + ($elm$core$String$fromFloat(x + w) + (' ' + $elm$core$String$fromFloat(y + h))))))))))),
+						$elm$svg$Svg$Attributes$fill(color)
+					]),
+				_List_Nil)
+			]);
+	});
 var $author$project$Modules$Needle$viewOneNeedle = F2(
 	function (model, needle) {
 		var _v0 = needle.visibility;
@@ -14504,38 +15191,62 @@ var $author$project$Modules$Needle$viewOneNeedle = F2(
 				var _v1 = needle.pos;
 				var needleX = _v1.a;
 				var needleY = _v1.b;
-				return _List_fromArray(
-					[
-						A2(
-						$elm$svg$Svg$rect,
-						A2(
-							$elm$core$List$append,
-							_List_fromArray(
-								[
-									$elm$svg$Svg$Attributes$x(
-									$elm$core$String$fromFloat(
-										($author$project$Modules$ViewMove$deltaX(model) + needleX) - 2.0)),
-									$elm$svg$Svg$Attributes$y(
-									$elm$core$String$fromFloat(
-										$author$project$Modules$ViewMove$deltaY(model) + needleY)),
-									$elm$svg$Svg$Attributes$strokeWidth('2'),
-									$elm$svg$Svg$Attributes$stroke('#00000000'),
-									$elm$svg$Svg$Attributes$fill('#FF0000FF')
-								]),
-							function () {
-								var _v2 = needle.appearance;
-								var width = _v2.a;
-								var height = _v2.b;
-								return _List_fromArray(
-									[
-										$elm$svg$Svg$Attributes$width(
-										$elm$core$String$fromFloat(width + 2.0)),
-										$elm$svg$Svg$Attributes$height(
-										$elm$core$String$fromFloat(height))
-									]);
-							}()),
-						_List_Nil)
-					]);
+				var x0 = ($author$project$Modules$ViewMove$deltaX(model) + needleX) - 2.0;
+				var y0 = $author$project$Modules$ViewMove$deltaY(model) + needleY;
+				var _v2 = needle.appearance;
+				switch (_v2.c.$) {
+					case 'Laser':
+						var width = _v2.a;
+						var height = _v2.b;
+						var _v3 = _v2.c;
+						return _List_fromArray(
+							[
+								A2(
+								$elm$svg$Svg$rect,
+								A2(
+									$elm$core$List$append,
+									_List_fromArray(
+										[
+											$elm$svg$Svg$Attributes$x(
+											$elm$core$String$fromFloat(
+												($author$project$Modules$ViewMove$deltaX(model) + needleX) - 2.0)),
+											$elm$svg$Svg$Attributes$y(
+											$elm$core$String$fromFloat(
+												$author$project$Modules$ViewMove$deltaY(model) + needleY)),
+											$elm$svg$Svg$Attributes$strokeWidth('2'),
+											$elm$svg$Svg$Attributes$stroke('#00000000'),
+											$elm$svg$Svg$Attributes$fill('#FF0000FF')
+										]),
+									_List_fromArray(
+										[
+											$elm$svg$Svg$Attributes$width(
+											$elm$core$String$fromFloat(width + 2.0)),
+											$elm$svg$Svg$Attributes$height(
+											$elm$core$String$fromFloat(height))
+										])),
+								_List_Nil)
+							]);
+					case 'BombUp':
+						var width = _v2.a;
+						var height = _v2.b;
+						var _v4 = _v2.c;
+						return A5($author$project$Modules$Needle$bombViewUp, x0, y0, width + 2.0, height, '#FF0000');
+					case 'BombLeft':
+						var width = _v2.a;
+						var height = _v2.b;
+						var _v5 = _v2.c;
+						return A5($author$project$Modules$Needle$bombViewLeft, x0, y0, width + 2.0, height, '#FF0000');
+					case 'Upwards':
+						var width = _v2.a;
+						var height = _v2.b;
+						var _v6 = _v2.c;
+						return A5($author$project$Modules$Needle$needleViewUp, x0, y0, width + 2.0, height, '#FF0000');
+					default:
+						var width = _v2.a;
+						var height = _v2.b;
+						var _v7 = _v2.c;
+						return A5($author$project$Modules$Needle$needleViewDown, x0, y0, width + 2.0, height, '#FF0000');
+				}
 			case 'Invisible':
 				return _List_Nil;
 			default:
@@ -14630,7 +15341,7 @@ var $author$project$Modules$Player$view = function (model) {
 				[
 					$elm$svg$Svg$Attributes$x(
 					$elm$core$String$fromFloat(
-						(playerX - 1.0) + $author$project$Modules$Player$playerDeltaX(model))),
+						(playerX - 11.0) + $author$project$Modules$Player$playerDeltaX(model))),
 					$elm$svg$Svg$Attributes$y(
 					$elm$core$String$fromFloat(
 						playerY + $author$project$Modules$Player$playerDeltaY(model))),
@@ -14638,7 +15349,7 @@ var $author$project$Modules$Player$view = function (model) {
 					$elm$core$String$fromFloat(model.player.property.playerWidth + 7.0)),
 					$elm$svg$Svg$Attributes$height(
 					$elm$core$String$fromFloat(model.player.property.playerHeight + 2.0)),
-					$elm$svg$Svg$Attributes$xlinkHref('assets/player.svg')
+					_Utils_eq(model.player.faceDirection, $author$project$Modules$Player$Right) ? (model.player.property.ifPlayerJumpOnTheGround ? $elm$svg$Svg$Attributes$xlinkHref('assets/playerRight.svg') : (model.player.property.isGreen ? $elm$svg$Svg$Attributes$xlinkHref('assets/playerGreenRight.png') : $elm$svg$Svg$Attributes$xlinkHref('assets/playerWingsRight.png'))) : (model.player.property.ifPlayerJumpOnTheGround ? $elm$svg$Svg$Attributes$xlinkHref('assets/playerLeft.svg') : (model.player.property.isGreen ? $elm$svg$Svg$Attributes$xlinkHref('assets/playerGreenLeft.png') : $elm$svg$Svg$Attributes$xlinkHref('assets/playerWingsLeft.png')))
 				]),
 			_List_Nil),
 			A2(
@@ -14676,7 +15387,7 @@ var $author$project$Modules$Player$view = function (model) {
 			_List_fromArray(
 				[
 					$elm$svg$Svg$text(
-					'You die! Dead times: ' + $elm$core$String$fromInt(model.player.deadTimes.a))
+					'You die! Times of born: ' + $elm$core$String$fromInt(model.player.deadTimes.a))
 				])),
 			A2(
 			$elm$svg$Svg$text_,
@@ -14700,32 +15411,34 @@ var $author$project$Modules$Player$view = function (model) {
 };
 var $author$project$Modules$SavePoint$viewOneSavePoint = F2(
 	function (model, savePoint) {
-		var saveOpacity = _Utils_eq(savePoint.appearance, $author$project$Modules$SavePoint$Saved) ? 1.0 : 0.4;
-		var _v0 = savePoint.pos;
-		var savePointX = _v0.a;
-		var savePointY = _v0.b;
-		return _List_fromArray(
-			[
-				A2(
-				$elm$svg$Svg$rect,
-				_List_fromArray(
-					[
-						$elm$svg$Svg$Attributes$x(
-						$elm$core$String$fromFloat(
-							$author$project$Modules$ViewMove$deltaX(model) + savePointX)),
-						$elm$svg$Svg$Attributes$y(
-						$elm$core$String$fromFloat(
-							$author$project$Modules$ViewMove$deltaY(model) + savePointY)),
-						$elm$svg$Svg$Attributes$width(
-						$elm$core$String$fromFloat($author$project$Modules$SavePoint$savePointWidth)),
-						$elm$svg$Svg$Attributes$height(
-						$elm$core$String$fromFloat($author$project$Modules$SavePoint$savePointHeight)),
-						$elm$svg$Svg$Attributes$fill('#45ff45'),
-						$elm$svg$Svg$Attributes$opacity(
-						$elm$core$String$fromFloat(saveOpacity))
-					]),
-				_List_Nil)
-			]);
+		if (_Utils_eq(savePoint.appearance, $author$project$Modules$SavePoint$Unsaved)) {
+			var saveOpacity = 0.4;
+			var _v0 = savePoint.pos;
+			var savePointX = _v0.a;
+			var savePointY = _v0.b;
+			return _List_fromArray(
+				[
+					A2(
+					$elm$svg$Svg$image,
+					_List_fromArray(
+						[
+							$elm$svg$Svg$Attributes$x(
+							$elm$core$String$fromFloat(
+								$author$project$Modules$ViewMove$deltaX(model) + savePointX)),
+							$elm$svg$Svg$Attributes$y(
+							$elm$core$String$fromFloat(
+								$author$project$Modules$ViewMove$deltaY(model) + savePointY)),
+							$elm$svg$Svg$Attributes$width(
+							$elm$core$String$fromFloat($author$project$Modules$SavePoint$savePointWidth)),
+							$elm$svg$Svg$Attributes$height(
+							$elm$core$String$fromFloat($author$project$Modules$SavePoint$savePointHeight)),
+							$elm$svg$Svg$Attributes$xlinkHref('assets/save.svg')
+						]),
+					_List_Nil)
+				]);
+		} else {
+			return _List_Nil;
+		}
 	});
 var $author$project$Modules$SavePoint$view = function (model) {
 	var savePointsList = $elm$core$Array$toList(model.savePoints);

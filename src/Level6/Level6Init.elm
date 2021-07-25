@@ -640,7 +640,6 @@ init a =
                     )
             , keyPressed = []
             , gameControl = GameControl.init MainType.Level6 [["Hit the first \"?\"","to disable the laser"],["The hidden bricks can shade the laser"]]
-            , gameControl = GameControl.init MainType.Level6 []
             , sound =
                 Sound.init []
             , mainScene = MainType.Level6

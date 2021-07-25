@@ -206,10 +206,10 @@ init a =
                     ]
             , needles =
                 Array.fromList
-                    [ Needle.initPos (GlobalBasics.addPosPos ( 0.0, 30.0 ) (GlobalBasics.blockPos ( 4, 14 )))
+                    [ Needle.initPos (GlobalBasics.addPosPos ( 0.0, 30.0 ) (GlobalBasics.blockPos ( 4, 14 ))) Needle.Upwards
                     , Needle.init
                         (GlobalBasics.addPosPos ( 0.0, 30.0 ) (GlobalBasics.blockPos ( 4, 11 )))
-                        (Needle.NormalNeedle 80.0 Needle.normalNeedleHeight)
+                        (Needle.NormalNeedle 80.0 Needle.normalNeedleHeight Needle.Upwards)
                         (GlobalModule.Visible GlobalModule.NoNextVisibility)
                         (GlobalModule.Collide GlobalModule.NoNextCollision)
                         (GlobalModule.Move
