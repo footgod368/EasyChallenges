@@ -152,7 +152,7 @@ checkRed ( model, cmd ) =
 notBlueOrRed : Brick.Brick -> Bool
 notBlueOrRed brick =
     case brick.appearance of
-        Brick.Detailed _ _ color ->
+        Brick.Pill color ->
             color /= "#1E90FF" && color /= "#FF0000"
         _ ->
             True
