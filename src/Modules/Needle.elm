@@ -41,6 +41,7 @@ import Modules.Player as Player
 import Modules.ViewMove as ViewMove
 import Svg exposing (Svg)
 import Svg.Attributes as SvgAttr
+import Html exposing (b)
 
 {-| Different types of needle
 -}
@@ -287,7 +288,7 @@ viewOneNeedle model needle =
                 NormalNeedle width height BombUp ->
                     bombViewUp x0 y0 (width + 2.0) height "#FF0000"
                 NormalNeedle width height BombLeft ->
-                    []
+                    bombViewLeft x0 y0 (width + 2.0) height "#FF0000"
                 NormalNeedle width height Upwards ->
                     needleViewUp x0 y0 (width + 2.0) height "#FF0000"
                 NormalNeedle width height Downwards ->
@@ -581,6 +582,56 @@ bombViewLeft x y w h color=
         , SvgAttr.fill "#FFFF00"
         , SvgAttr.stroke "#000000"
         , SvgAttr.strokeWidth "1"
+        ]
+        []
+    , 
+    Svg.line
+        [ SvgAttr.x1 (String.fromFloat (x + 0.6 * w))
+        , SvgAttr.y1 (String.fromFloat (y + 0.4 * h))
+        , SvgAttr.x2 (String.fromFloat (x + 0.6 * w))
+        , SvgAttr.y2 (String.fromFloat (y + 0.6 * h))
+        , SvgAttr.stroke "#000000"
+        , SvgAttr.strokeWidth "2"
+        ]
+        []
+    , 
+    Svg.line
+        [ SvgAttr.x1 (String.fromFloat (x + 0.4 * w))
+        , SvgAttr.y1 (String.fromFloat (y + 0.24 * h))
+        , SvgAttr.x2 (String.fromFloat (x + 0.45 * w + 1))
+        , SvgAttr.y2 (String.fromFloat (y + 0.4 * h))
+        , SvgAttr.stroke "#000000"
+        , SvgAttr.strokeWidth "2"
+        ]
+        []
+    , 
+    Svg.line
+        [ SvgAttr.x1 (String.fromFloat (x + 0.45 * w))
+        , SvgAttr.y1 (String.fromFloat (y + 0.4 * h))
+        , SvgAttr.x2 (String.fromFloat (x + 0.5 * w))
+        , SvgAttr.y2 (String.fromFloat (y + 0.24 * h))
+        , SvgAttr.stroke "#000000"
+        , SvgAttr.strokeWidth "2"
+        ]
+        []
+    , 
+    Svg.line
+        [ SvgAttr.x1 (String.fromFloat (x + 0.4 * w))
+        , SvgAttr.y1 (String.fromFloat (y + 0.76 * h))
+        , SvgAttr.x2 (String.fromFloat (x + 0.45 * w + 1))
+        , SvgAttr.y2 (String.fromFloat (y + 0.6 * h))
+        , SvgAttr.stroke "#000000"
+        , SvgAttr.strokeWidth "2"
+        ]
+        []
+    , 
+    Svg.line
+        [ SvgAttr.x1 (String.fromFloat (x + 0.45 * w))
+        , SvgAttr.y1 (String.fromFloat (y + 0.6 * h))
+        , SvgAttr.x2 (String.fromFloat (x + 0.5 * w))
+        , SvgAttr.y2 (String.fromFloat (y + 0.76 * h))
+        , SvgAttr.stroke "#000000"
+        , SvgAttr.strokeWidth "2"
         ]
         []
     ]
