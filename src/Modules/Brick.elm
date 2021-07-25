@@ -359,8 +359,11 @@ updateOneBrickCollision id model =
                                     upLS =
                                         ( ( p1X, p1Y ), ( p2X, p2Y ) )
 
+                                    ( playerWidth, playerHeight ) =
+                                        ( model.player.property.playerWidth, model.player.property.playerHeight )
+
                                     ( playerDownX, playerDownY ) =
-                                        GlobalBasics.addPosPos model.player.pos ( 20, 20 )
+                                        GlobalBasics.addPosPos model.player.pos ( 0, playerHeight )
 
                                     ( blockUpX, blockUpY ) =
                                         GlobalBasics.addPosPos brick.pos ( 20, 0 )

@@ -41,7 +41,17 @@ view model =
             [ SvgAttr.width (String.fromFloat (Tuple.first model.windowBoundary))
             , SvgAttr.height (String.fromFloat (Tuple.second model.windowBoundary))
             ]
-            (SavePoint.view model
+            ( [ Svg.image
+                [ SvgAttr.x (String.fromFloat 0.0)
+                , SvgAttr.y (String.fromFloat 0.0)
+                , SvgAttr.width (String.fromFloat (Tuple.first model.levelBoundary))
+                , SvgAttr.height (String.fromFloat (Tuple.second model.levelBoundary))
+                , SvgAttr.transform ""
+                , SvgAttr.xlinkHref "assets/background.svg"
+                ]
+                []
+              ]
+                ++ SavePoint.view model
                 ++ EndPoint.view model
                 ++ Brick.view model
                 ++ Boundary.view model
