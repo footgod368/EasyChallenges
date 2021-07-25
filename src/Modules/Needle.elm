@@ -38,6 +38,7 @@ import MainFunction.MainType as MainType
 import Maybe exposing (withDefault)
 import Modules.Event as Event
 import Modules.Player as Player
+import Modules.Sound as Sound
 import Modules.ViewMove as ViewMove
 import Svg exposing (Svg)
 import Svg.Attributes as SvgAttr
@@ -653,14 +654,14 @@ view model =
 
 {-| update function of needle unit
 -}
-update : ( { model | player : Player.Player, needles : Array Needle, actEvent : Array Event.ActEvent }, Cmd MainType.Msg ) -> ( { model | player : Player.Player, needles : Array Needle, actEvent : Array Event.ActEvent }, Cmd MainType.Msg )
+update : ( { model | player : Player.Player, needles : Array Needle, actEvent : Array Event.ActEvent, sound : Sound.Sound }, Cmd MainType.Msg ) -> ( { model | player : Player.Player, needles : Array Needle, actEvent : Array Event.ActEvent, sound : Sound.Sound }, Cmd MainType.Msg )
 update ( model, cmd ) =
     ( List.foldl updateOneNeedle model (List.range 0 (Array.length model.needles - 1)), cmd )
 
 
 {-| update one needle. Used in update. Not exposed.
 -}
-updateOneNeedle : Int -> { model | player : Player.Player, needles : Array Needle, actEvent : Array Event.ActEvent } -> { model | player : Player.Player, needles : Array Needle, actEvent : Array Event.ActEvent }
+updateOneNeedle : Int -> { model | player : Player.Player, needles : Array Needle, actEvent : Array Event.ActEvent, sound : Sound.Sound } -> { model | player : Player.Player, needles : Array Needle, actEvent : Array Event.ActEvent, sound : Sound.Sound }
 updateOneNeedle id model =
     let
         needle =
@@ -681,7 +682,7 @@ updateOneNeedle id model =
 
 {-| update needle collision. Used in update. Not exposed.
 -}
-updateOneNeedleCollision : Int -> { model | player : Player.Player, needles : Array Needle, actEvent : Array Event.ActEvent } -> { model | player : Player.Player, needles : Array Needle, actEvent : Array Event.ActEvent }
+updateOneNeedleCollision : Int -> { model | player : Player.Player, needles : Array Needle, actEvent : Array Event.ActEvent, sound : Sound.Sound } -> { model | player : Player.Player, needles : Array Needle, actEvent : Array Event.ActEvent, sound : Sound.Sound }
 updateOneNeedleCollision id model =
     let
         needle =
@@ -734,7 +735,8 @@ updateOneNeedleCollision id model =
                         newNeedlesModel
 
                     else
-                        Player.playerDead newNeedlesModel Player.StepOnNeedle
+                        Sound.trigger ( Player.playerDead newNeedlesModel Player.StepOnNeedle ) Sound.Needle
+
 
                 _ ->
                     newNeedlesModel

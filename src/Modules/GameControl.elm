@@ -1,4 +1,4 @@
-module Modules.GameControl exposing
+port module Modules.GameControl exposing
     ( GameControl
     , init
     , update
@@ -57,6 +57,7 @@ type alias GameControl =
     , hint : List (List String)
     , hintLength : Int
     , nextLevel : MainType.MainScene
+    , soundLoudness : Float
     }
 
 
@@ -66,10 +67,11 @@ init : MainType.MainScene -> List (List String) -> GameControl
 init nextLevel hint =
     { controlStatus = Normal
     , buttonState =
-        Array.fromList (List.map (\i -> MainConstant.buttonNormalColor) (List.range 0 3))
+        Array.fromList (List.map (\i -> MainConstant.buttonNormalColor) (List.range 0 5))
     , hint = hint
     , hintLength = List.length hint
     , nextLevel = nextLevel
+    , soundLoudness = 1.0
     }
 
 
@@ -125,6 +127,7 @@ update msg ( model, cmd ) =
                             ( { model | mainScene = model.gameControl.nextLevel }, Task.perform MainType.GetViewport getViewport )
 
                         2 ->
+                            --gameHint
                             let
                                 oldOldGameControl =
                                     model.gameControl
@@ -136,12 +139,11 @@ update msg ( model, cmd ) =
 
                                         Hint n ->
                                             { oldOldGameControl | controlStatus = Hint (modBy model.gameControl.hintLength (n + 1)) }
-
-                                --gameHint
                             in
                             ( { model | gameControl = oldNewGameControl }, Cmd.batch [ cmd ] )
 
                         3 ->
+                            --gameHintCloseButton
                             let
                                 oldOldGameControl =
                                     model.gameControl
@@ -150,6 +152,48 @@ update msg ( model, cmd ) =
                                     { oldOldGameControl | controlStatus = Normal }
                             in
                             ( { model | gameControl = oldNewGameControl }, Cmd.batch [ cmd ] )
+
+                        5 ->
+                            --soundQuieterButton
+                            let
+                                oldOldGameControl =
+                                    model.gameControl
+
+                                oldNewGameControl =
+                                    { oldOldGameControl | soundLoudness = max (oldOldGameControl.soundLoudness - 0.1) 0}
+
+                            in
+                            ( { model | gameControl = oldNewGameControl }
+                            ,   Cmd.batch
+                                    [ changeVolume ( "BackGround", oldNewGameControl.soundLoudness )
+                                    , changeVolume ( "Jump", oldNewGameControl.soundLoudness )
+                                    , changeVolume ( "RandomBox", oldNewGameControl.soundLoudness )
+                                    , changeVolume ( "Needle", oldNewGameControl.soundLoudness )
+                                    , changeVolume ( "Dead", oldNewGameControl.soundLoudness )
+                                    , changeVolume ( "Sword", oldNewGameControl.soundLoudness )
+                                    ]
+                            )
+
+                        4 ->
+                            --soundLouderButton
+                            let
+                                oldOldGameControl =
+                                    model.gameControl
+
+                                oldNewGameControl =
+                                    { oldOldGameControl | soundLoudness = min (oldOldGameControl.soundLoudness + 0.1) 1.0}
+
+                            in
+                            ( { model | gameControl = oldNewGameControl }
+                            ,   Cmd.batch
+                                    [ changeVolume ( "BackGround", oldNewGameControl.soundLoudness )
+                                    , changeVolume ( "Jump", oldNewGameControl.soundLoudness )
+                                    , changeVolume ( "RandomBox", oldNewGameControl.soundLoudness )
+                                    , changeVolume ( "Needle", oldNewGameControl.soundLoudness )
+                                    , changeVolume ( "Dead", oldNewGameControl.soundLoudness )
+                                    , changeVolume ( "Sword", oldNewGameControl.soundLoudness )
+                                    ]
+                            )
 
                         _ ->
                             ( model, Cmd.batch [ cmd ] )
@@ -163,7 +207,16 @@ update msg ( model, cmd ) =
             ( { newModel | gameControl = newGameControl }, Cmd.batch [ newCmd ] )
 
         _ ->
-            ( model, cmd )
+            ( model
+            ,   Cmd.batch
+                    [ changeVolume ( "BackGround", model.gameControl.soundLoudness )
+                    , changeVolume ( "Jump", model.gameControl.soundLoudness )
+                    , changeVolume ( "RandomBox", model.gameControl.soundLoudness )
+                    , changeVolume ( "Needle", model.gameControl.soundLoudness )
+                    , changeVolume ( "Dead", model.gameControl.soundLoudness )
+                    , changeVolume ( "Sword", model.gameControl.soundLoudness )
+                    ]
+            )
 
 
 viewOneButton : { model | gameControl : GameControl, windowBoundary : GlobalBasics.Pos, player : Player } -> ( Float, Float ) -> ( Float, Float ) -> Int -> String -> List (Svg MainType.Msg)
@@ -239,10 +292,22 @@ view model =
     List.concat
         [ viewOneButton
             model
-            ( windowBoundaryX - 120.0, 30.0 )
+            ( windowBoundaryX - 150.0, 30.0 )
             ( 100.0, 50.0 )
             MainConstant.gameBackButton
             "Back"
+        , viewOneButton
+            model
+            ( windowBoundaryX - 150.0, 100.0 )
+            ( 160.0, 50.0 )
+            MainConstant.soundLouderButton
+            "Volume +"
+        , viewOneButton
+            model
+            ( windowBoundaryX - 340.0, 100.0 )
+            ( 160.0, 50.0 )
+            MainConstant.soundQuieterButton
+            "Volume -"
         , if model.player.liveState == Player.Win then
             viewOneButton
                 model
@@ -256,7 +321,7 @@ view model =
                 Normal ->
                     viewOneButton
                         model
-                        ( windowBoundaryX - 300.0, 30.0 )
+                        ( windowBoundaryX - 340.0, 30.0 )
                         ( 140.0, 50.0 )
                         MainConstant.gameHintButton
                         "Hint"
@@ -294,3 +359,81 @@ view model =
                             "Close"
                         ]
         ]
+
+{-| This is a port function that can help you to control the volume of the music.
+For example, if you want to change the volume of a audio tag, you need to make sure that the audio tag is written like this in view:
+
+    audio
+        [ Html.Attributes.src "assets/sample.ogg"
+        , Html.Attributes.id "audio-sample"
+        ]
+        []
+
+Change the id to a name that you want.
+
+Then, if you want to change the volume on the music to 95%, you just need to call:
+
+    changeVolume ( "audio-sample", 0.95 )
+
+Please note that the function returns a Cmd Msg. Please return it in the Update function. When you successfully call the changeVolume function, it will print a console log in the browser like this
+
+    Change_Volume audio - sample 0.9
+
+-}
+port changeVolume : ( String, Float ) -> Cmd msg
+
+
+{-| This is a port function that can help you to pause the music.
+For example, if you want to pause a music that is tagged "audio-sample", please write like this:
+Change the id to a name that you want.
+
+    pause "audio-sample"
+
+Please note that the function returns a Cmd Msg. Please return it in the Update function. When you successfully call the function, it will print a console log in the browser like this
+
+    Pause: audio - sample
+
+-}
+port pause : String -> Cmd msg
+
+
+{-| This is a port function that can help you to start the music.
+For example, if you want to start a music that is tagged "audio-sample", please write like this:
+Change the id to a name that you want.
+
+    start "audio-sample"
+
+Please note that the function returns a Cmd Msg. Please return it in the Update function. When you successfully call the function, it will print a console log in the browser like this
+
+    Start_Music: audio - sample
+
+-}
+port start : String -> Cmd msg
+
+
+{-| This is a port function that can help you to set the progression bar of the music.
+For example, if you want to set a music that is tagged "audio-sample" to 10s, please write like this:
+Change the id to a name that you want.
+
+    settime ( "audio-sample", 10 )
+
+Please note that the function returns a Cmd Msg. Please return it in the Update function. When you successfully call the function, it will print a console log in the browser like this
+
+    Set_Play_Time: audio - sample 10
+
+-}
+port settime : ( String, Float ) -> Cmd msg
+
+
+{-| This is a port function that can help you to slow down or speed up the music.
+For example, if you want to set the rate of a music that is tagged "audio-sample" to 0.5, please write like this:
+Change the id to a name that you want.
+
+    setrate ( "audio-sample", 0.5 )
+
+Please note that the function returns a Cmd Msg. Please return it in the Update function. When you successfully call the function, it will print a console log in the browser like this
+
+    Set_Music_Rate: audio - sample
+
+-}
+port setrate : ( String, Float ) -> Cmd msg

@@ -22,6 +22,7 @@ import Modules.Needle as Needle
 import Modules.NoticeBoard as NoticeBoard
 import Modules.Player as Player
 import Modules.SavePoint as SavePoint
+import Modules.Sound as Sound
 
 
 {-| `update` of Level1
@@ -54,6 +55,7 @@ update msg model =
                             |> Boundary.update
                             |> NoticeBoard.update
                             |> Needle.update
+                            |> Sound.update
                             |> Monster.update
                             |> Player.updateJustPlayerPos
 

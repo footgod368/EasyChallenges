@@ -35,6 +35,7 @@ import MainFunction.MainType as MainType
 import Maybe exposing (withDefault)
 import Modules.Event as Event
 import Modules.Player as Player
+import Modules.Sound as Sound
 import Modules.ViewMove as ViewMove
 import Svg exposing (Svg)
 import Svg.Attributes as SvgAttr
@@ -136,14 +137,14 @@ defMonster =
 
 {-| update function of monster
 -}
-update : ( { model | player : Player.Player, monsters : Array Monster }, Cmd MainType.Msg ) -> ( { model | player : Player.Player, monsters : Array Monster }, Cmd MainType.Msg )
+update : ( { model | player : Player.Player, monsters : Array Monster, sound : Sound.Sound }, Cmd MainType.Msg ) -> ( { model | player : Player.Player, monsters : Array Monster, sound : Sound.Sound }, Cmd MainType.Msg )
 update ( model, cmd ) =
     ( List.foldl updateOneMonster model (List.range 0 (Array.length model.monsters - 1)), cmd )
 
 
 {-| update one monster. Used in update. Not exposed.
 -}
-updateOneMonster : Int -> { model | player : Player.Player, monsters : Array Monster } -> { model | player : Player.Player, monsters : Array Monster }
+updateOneMonster : Int -> { model | player : Player.Player, monsters : Array Monster, sound : Sound.Sound } -> { model | player : Player.Player, monsters : Array Monster, sound : Sound.Sound }
 updateOneMonster id model =
     model
         |> updateOneMonsterMode id
@@ -154,7 +155,7 @@ updateOneMonster id model =
 
 {-| update one monster's mode, not exposed.
 -}
-updateOneMonsterMode : Int -> { model | player : Player.Player, monsters : Array Monster } -> { model | player : Player.Player, monsters : Array Monster }
+updateOneMonsterMode : Int -> { model | player : Player.Player, monsters : Array Monster, sound : Sound.Sound } -> { model | player : Player.Player, monsters : Array Monster, sound : Sound.Sound }
 updateOneMonsterMode id model =
     let
         monster =
@@ -208,7 +209,7 @@ updateOneMonsterMode id model =
 
 {-| update one monster's move in x direction, not exposed
 -}
-updateOneMonsterMoveX : Int -> { model | player : Player.Player, monsters : Array Monster } -> { model | player : Player.Player, monsters : Array Monster }
+updateOneMonsterMoveX : Int -> { model | player : Player.Player, monsters : Array Monster, sound : Sound.Sound } -> { model | player : Player.Player, monsters : Array Monster, sound : Sound.Sound }
 updateOneMonsterMoveX id model =
     let
         monster =
@@ -252,7 +253,7 @@ updateOneMonsterMoveX id model =
 
 {-| update one monster's move in y direction, not exposed
 -}
-updateOneMonsterMoveY : Int -> { model | player : Player.Player, monsters : Array Monster } -> { model | player : Player.Player, monsters : Array Monster }
+updateOneMonsterMoveY : Int -> { model | player : Player.Player, monsters : Array Monster, sound : Sound.Sound } -> { model | player : Player.Player, monsters : Array Monster, sound : Sound.Sound }
 updateOneMonsterMoveY id model =
     let
         monster =
@@ -308,7 +309,7 @@ updateOneMonsterMoveY id model =
 
 {-| update one monster's collision, not exposed
 -}
-updateOneMonsterCollision : Int -> { model | player : Player.Player, monsters : Array Monster } -> { model | player : Player.Player, monsters : Array Monster }
+updateOneMonsterCollision : Int -> { model | player : Player.Player, monsters : Array Monster, sound : Sound.Sound } -> { model | player : Player.Player, monsters : Array Monster, sound : Sound.Sound }
 updateOneMonsterCollision id model =
     let
         monster =

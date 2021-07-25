@@ -33,6 +33,7 @@ import Array exposing (Array)
 import GlobalFunction.GlobalBasics as GlobalBasics
 import MainFunction.MainType as MainType
 import Maybe exposing (withDefault)
+import Modules.GameControl as GameControl
 import Modules.Player as Player exposing (Player)
 import Modules.ViewMove as ViewMove
 import Svg exposing (Svg)
@@ -185,7 +186,7 @@ update ( model, cmd ) =
 
 {-| Reset the Level with playerPos in the save point
 -}
-updateReset : (() -> ( { model | savePoints : Array SavePoint, player : Player.Player, playerAtLastSavePoint : Player.Player }, Cmd MainType.Msg )) -> ( { model | player : Player.Player, savePoints : Array SavePoint, playerAtLastSavePoint : Player.Player }, Cmd MainType.Msg ) -> ( { model | player : Player.Player, savePoints : Array SavePoint, playerAtLastSavePoint : Player.Player }, Cmd MainType.Msg )
+updateReset : (() -> ( { model | savePoints : Array SavePoint, player : Player.Player, playerAtLastSavePoint : Player.Player, gameControl : GameControl.GameControl }, Cmd MainType.Msg )) -> ( { model | player : Player.Player, savePoints : Array SavePoint, playerAtLastSavePoint : Player.Player, gameControl : GameControl.GameControl }, Cmd MainType.Msg ) -> ( { model | player :  Player.Player, savePoints : Array SavePoint, playerAtLastSavePoint : Player.Player,  gameControl : GameControl.GameControl}, Cmd MainType.Msg )
 updateReset levelInit ( model, cmd ) =
     let
         ( initModel, initCmd ) =
@@ -207,9 +208,13 @@ updateReset levelInit ( model, cmd ) =
             model.playerAtLastSavePoint
 
         newPlayer =
-            { player | saveNumber = oldSaveNumber, pos = lastSavePoint.pos, deadTimes = oldDeadTimes }
+            { player
+                | saveNumber = oldSaveNumber
+                , pos = GlobalBasics.addPosPos lastSavePoint.pos ( 0.0, -2.0 )
+                , deadTimes = oldDeadTimes
+            }
 
         newInitModel =
-            { initModel | savePoints = oldSavePoints, player = newPlayer, playerAtLastSavePoint = newPlayer }
+            { initModel | savePoints = oldSavePoints, player = newPlayer, playerAtLastSavePoint = newPlayer, gameControl = model.gameControl }
     in
     ( newInitModel, initCmd )

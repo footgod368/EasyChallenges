@@ -100,6 +100,9 @@ updateButton msg ( model, cmd ) =
                     --
                     --else
                     case num of
+                        7 ->
+                            --menuButtonLevel0
+                            ( { model | mainStatus = MainType.Level7 }, Cmd.batch [ cmd ] )
 
                         1 ->
                             --menuButtonLevel1

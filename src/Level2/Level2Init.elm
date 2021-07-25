@@ -24,6 +24,7 @@ import Modules.Needle as Needle
 import Modules.NoticeBoard as NoticeBoard
 import Modules.Player as Player
 import Modules.SavePoint as SavePoint
+import Modules.Sound as Sound
 import Task
 
 
@@ -219,6 +220,8 @@ init a =
                     )
             , keyPressed = []
             , gameControl = GameControl.init MainType.Level3 [["To circumvent the first NoticeBoard,","triger the switch and back off quickly,","then jump onto the NoticeBoard"],["The big \"?\" will disturb","your direction control"]]
+            , sound =
+                Sound.init []
             , mainScene = MainType.Level2
             }
     in

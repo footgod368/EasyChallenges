@@ -133,8 +133,8 @@ drawButtons model =
             model.windowBoundary
     in
     List.concat
-        [
-         drawLevelButton model MainConstant.menuButtonLevel1 ( windowBoundaryX / 2 - 100.0, 200.0 )
+        [ drawLevelButton model MainConstant.menuButtonLevel7 ( windowBoundaryX / 2 - 100.0, 800.0 )
+        , drawLevelButton model MainConstant.menuButtonLevel1 ( windowBoundaryX / 2 - 100.0, 200.0 )
         , drawLevelButton model MainConstant.menuButtonLevel2 ( windowBoundaryX / 2 - 100.0, 300.0 )
         , drawLevelButton model MainConstant.menuButtonLevel3 ( windowBoundaryX / 2 - 100.0, 400.0 )
         , drawLevelButton model MainConstant.menuButtonLevel4 ( windowBoundaryX / 2 - 100.0, 500.0 )

@@ -24,6 +24,7 @@ import Modules.Needle as Needle
 import Modules.NoticeBoard as NoticeBoard
 import Modules.Player as Player exposing (Player)
 import Modules.SavePoint as SavePoint
+import Modules.Sound as Sound
 import Task
 
 
@@ -156,11 +157,11 @@ init a =
                     (List.concat
                         [ List.map (\i -> Needle.initHiddenCollideAfter ( i, 10 ) 17 Needle.Laser) (List.range 6 12)
                         , Needle.initHiddenRow 39.9 5 46 2 Needle.Upwards
-                        , [ Needle.deadlyBlock ( 20, 20 ) ( 2, 8 ) 
-                          , Needle.deadlyBlock ( 20, 32 ) ( 2, 8 ) 
+                        , [ Needle.deadlyBlock ( 20, 20 ) ( 2, 8 )
+                          , Needle.deadlyBlock ( 20, 32 ) ( 2, 8 )
                           ]
-                        , [ Needle.deadlyBlock ( 26, 20 ) ( 2, 4 ) 
-                          , Needle.deadlyBlock ( 26, 28 ) ( 2, 12 ) 
+                        , [ Needle.deadlyBlock ( 26, 20 ) ( 2, 4 )
+                          , Needle.deadlyBlock ( 26, 28 ) ( 2, 12 )
                           ]
                         , [ Needle.deadlyBlock ( 32, 20 ) ( 2, 6 )
                           , Needle.deadlyBlock ( 32, 30 ) ( 2, 10 )
@@ -174,11 +175,13 @@ init a =
                         , let
                             tempNeedle =  Needle.deadlyBlock (53,10.5) (10,1)
                           in
-                          [{tempNeedle | collision = GlobalModule.Collide (GlobalModule.NoCollideAfterEvent 15 GlobalModule.NoNextCollision)}]   
+                          [{tempNeedle | collision = GlobalModule.Collide (GlobalModule.NoCollideAfterEvent 15 GlobalModule.NoNextCollision)}]
                         ]
                     )
             , keyPressed = []
             , gameControl = GameControl.init MainType.Level6 [["Hit the first\"?\"","to get the wings"],["Hit the last two \"?\" again","to mix blue with red"]]
+            , sound =
+                Sound.init []
             , mainScene = MainType.Level5
             , number = []
             }

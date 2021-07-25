@@ -24,6 +24,7 @@ import Modules.Needle as Needle
 import Modules.NoticeBoard as NoticeBoard exposing (NoticeBoardVisibility(..))
 import Modules.Player as Player
 import Modules.SavePoint as SavePoint
+import Modules.Sound as Sound
 import Task
 import Modules.Needle exposing (Needle)
 
@@ -639,6 +640,8 @@ init a =
                     )
             , keyPressed = []
             , gameControl = GameControl.init MainType.Level6 [["Hit the first \"?\"","to disable the laser"],["The hidden bricks can shade the laser"]]
+            , sound =
+                Sound.init []
             , mainScene = MainType.Level6
             }
     in
