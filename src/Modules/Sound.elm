@@ -1,4 +1,33 @@
-module Modules.Sound exposing (..)
+module Modules.Sound exposing
+    ( SoundEffect(..), SoundTrigger(..), Sound
+    , init, trigger
+    , view
+    , update
+    )
+
+{-| Sound module, control the sound effect.
+
+
+# Sound
+
+@docs SoundEffect, SoundTrigger, Sound
+
+
+# init
+
+@docs init, trigger
+
+
+# view
+
+@docs view
+
+
+# update
+
+@docs update
+
+-}
 
 import Array exposing (Array)
 import Html exposing (Html)
