@@ -2,6 +2,7 @@
 .doit.db
 .elm-doc
 elm-stuff
+build
 index.html
 main.js
 elm-doc.sh
