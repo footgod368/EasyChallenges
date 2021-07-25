@@ -51,6 +51,7 @@ type BrickAppearance
     | Wings
     | Switch Bool
     | Pill String
+    | Helmet
 
 
 {-| brickWidth Constant
@@ -321,6 +322,20 @@ viewOneBrick model brick =
                         y0 = ViewMove.deltaY model + brickY
                     in
                     drawPill x0 y0 color
+                Helmet ->
+                    let
+                        ( brickX, brickY ) =
+                            brick.pos
+                    in
+                    [ Svg.image
+                        [ SvgAttr.x (String.fromFloat (ViewMove.deltaX model + brickX))
+                        , SvgAttr.y (String.fromFloat (ViewMove.deltaY model + brickY))
+                        , SvgAttr.width (String.fromFloat   brickWidth)
+                        , SvgAttr.height (String.fromFloat  brickHeight)
+                        , SvgAttr.xlinkHref "assets/helmet.png"
+                        ]
+                        []
+                    ]
         GlobalModule.Invisible _ ->
             []
 
