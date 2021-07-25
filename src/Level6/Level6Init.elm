@@ -25,6 +25,7 @@ import Modules.NoticeBoard as NoticeBoard exposing (NoticeBoardVisibility(..))
 import Modules.Player as Player
 import Modules.SavePoint as SavePoint
 import Task
+import Modules.Needle exposing (Needle)
 
 
 {-| `init` of Level6 \`Model
@@ -470,7 +471,7 @@ init a =
                     (List.concat
                         [ let
                             needle0 =
-                                Needle.initFalling ( 9, 6 ) 3
+                                Needle.initFalling ( 9, 6 ) 3 Needle.Downwards
                           in
                           [ { needle0
                                 | move =
@@ -483,7 +484,7 @@ init a =
                           ]
                         , let
                             needle1 =
-                                Needle.initFalling ( 9, 6 ) 31
+                                Needle.initFalling ( 9, 6 ) 31 Needle.Downwards
                           in
                           [ { needle1
                                 | move =
@@ -494,10 +495,10 @@ init a =
                                 , pos = GlobalBasics.blockPosFloat ( 9.5, 6 )
                             }
                           ]
-                        , [ Needle.initPos ( 181, 280 ), Needle.initPos ( 221, 280 ) ]
+                        , [ Needle.initPos ( 181, 280 ) Needle.Downwards, Needle.initPos ( 221, 280 ) Needle.Downwards]
                         , let
                             tempNeedle1 =
-                                Needle.initPos (GlobalBasics.blockPosFloat ( 10.5, 10.9 ))
+                                Needle.initPos (GlobalBasics.blockPosFloat ( 10.5, 10.9 )) Needle.Downwards
                           in
                           [ { tempNeedle1
                                 | move =
@@ -508,25 +509,25 @@ init a =
                             }
                           ]
                         , [ Needle.init (GlobalBasics.blockPosFloat ( 22, 11.35 ))
-                                (Needle.NormalNeedle 711 12)
+                                (Needle.NormalNeedle 711 12 Needle.Laser)
                                 (GlobalModule.Invisible (GlobalModule.VisibleAfterEvent 11 (GlobalModule.InvisibleAfterEvent 13 GlobalModule.NoNextVisibility)))
                                 (GlobalModule.NoCollide (GlobalModule.CollideAfterEvent 12 (GlobalModule.NoCollideAfterEvent 13 GlobalModule.NoNextCollision)))
                                 GlobalModule.NoNextMove
                           ]
                         , [ Needle.init (GlobalBasics.blockPosFloat ( 40, 1 ))
-                                (Needle.NormalNeedle 40 351)
+                                (Needle.NormalNeedle 40 351 Needle.Laser)
                                 (GlobalModule.Invisible (GlobalModule.VisibleAfterEvent 9 (GlobalModule.InvisibleAfterEvent 30 GlobalModule.NoNextVisibility)))
                                 (GlobalModule.NoCollide (GlobalModule.CollideAfterEvent 9 (GlobalModule.NoCollideAfterEvent 30 GlobalModule.NoNextCollision)))
                                 GlobalModule.NoNextMove
                           ]
                         , [ Needle.init (GlobalBasics.blockPosFloat ( 22, 10.35 ))
-                                (Needle.NormalNeedle 711 12)
+                                (Needle.NormalNeedle 711 12 Needle.Laser)
                                 (GlobalModule.Invisible (GlobalModule.VisibleAfterEvent 16 (GlobalModule.InvisibleAfterEvent 18 GlobalModule.NoNextVisibility)))
                                 (GlobalModule.NoCollide (GlobalModule.CollideAfterEvent 17 (GlobalModule.NoCollideAfterEvent 18 GlobalModule.NoNextCollision)))
                                 GlobalModule.NoNextMove
                           ]
                         , [ Needle.init (GlobalBasics.blockPosFloat ( 22, 10.35 ))
-                                (Needle.NormalNeedle 711 12)
+                                (Needle.NormalNeedle 711 12 Needle.Laser)
                                 (GlobalModule.Invisible (GlobalModule.VisibleAfterEvent 19 (GlobalModule.InvisibleAfterEvent 21 GlobalModule.NoNextVisibility)))
                                 (GlobalModule.NoCollide (GlobalModule.CollideAfterEvent 20 (GlobalModule.NoCollideAfterEvent 21 GlobalModule.NoNextCollision)))
                                 (GlobalModule.Move (Array.fromList [])
@@ -536,23 +537,23 @@ init a =
                                 )
                           ]
                         , [ Needle.init (GlobalBasics.blockPosFloat ( 26.35, 1 ))
-                                (Needle.NormalNeedle 12 351)
+                                (Needle.NormalNeedle 12 351 Needle.Laser)
                                 (GlobalModule.Invisible (GlobalModule.VisibleAfterEvent 7 (GlobalModule.InvisibleAfterEvent 34 GlobalModule.NoNextVisibility)))
                                 (GlobalModule.NoCollide (GlobalModule.CollideAfterEvent 7 (GlobalModule.NoCollideAfterEvent 34 GlobalModule.NoNextCollision)))
                                 GlobalModule.NoNextMove
                           ]
                         , [ Needle.sword ( 55, 10.5 ) ( 19, 10.5 ) ( 4, 2 ) 20 36 ]
-                        , [ Needle.initHidden ( 50, 11 ) 51 ]
-                        , [ Needle.initHidden ( 50, 10 ) 51 ]
+                        , [ Needle.initHidden ( 50, 11 ) 51 Needle.Downwards]
+                        , [ Needle.initHidden ( 50, 10 ) 51 Needle.Downwards]
                         , [ Needle.sword ( 57, 20 ) ( 57, -4 ) ( 2, 3 ) 12 53 ]
                         , [ Needle.init (GlobalBasics.blockPosFloat ( 69.35, 8 ))
-                                (Needle.NormalNeedle 12 191)
+                                (Needle.NormalNeedle 12 191 Needle.Laser)
                                 (GlobalModule.Invisible (GlobalModule.VisibleAfterEvent 54 (GlobalModule.InvisibleAfterEvent 55 GlobalModule.NoNextVisibility)))
                                 (GlobalModule.NoCollide (GlobalModule.CollideAfterEvent 54 (GlobalModule.NoCollideAfterEvent 55 GlobalModule.NoNextCollision)))
                                 GlobalModule.NoNextMove
                           ]
                         , [ Needle.init (GlobalBasics.blockPosFloat ( 69.35, 8 ))
-                                (Needle.NormalNeedle 12 191)
+                                (Needle.NormalNeedle 12 191 Needle.Laser)
                                 (GlobalModule.Invisible (GlobalModule.VisibleAfterEvent 55 GlobalModule.NoNextVisibility))
                                 (GlobalModule.NoCollide (GlobalModule.CollideAfterEvent 55 GlobalModule.NoNextCollision))
                                 (GlobalModule.Move (Array.fromList [])
@@ -562,7 +563,7 @@ init a =
                                 )
                           ]
                         , [ Needle.init (GlobalBasics.blockPosFloat ( 66.4, 5 ))
-                                (Needle.NormalNeedle 8 320)
+                                (Needle.NormalNeedle 8 320 Needle.Laser)
                                 (GlobalModule.Invisible
                                     (GlobalModule.VisibleAfterEvent 55
                                         (GlobalModule.InvisibleAfterEvent 59 GlobalModule.NoNextVisibility)
@@ -580,7 +581,7 @@ init a =
                                 )
                           ]
                         , [ Needle.init (GlobalBasics.blockPosFloat ( 66.4, 5 ))
-                                (Needle.NormalNeedle 8 200)
+                                (Needle.NormalNeedle 8 200 Needle.Laser)
                                 (GlobalModule.Invisible
                                     (GlobalModule.VisibleAfterEvent 59
                                         (GlobalModule.InvisibleAfterEvent 60 GlobalModule.NoNextVisibility)
@@ -598,7 +599,7 @@ init a =
                                 )
                           ]
                         , [ Needle.init (GlobalBasics.blockPosFloat ( 66.4, 5 ))
-                                (Needle.NormalNeedle 8 320)
+                                (Needle.NormalNeedle 8 320 Needle.Laser)
                                 (GlobalModule.Invisible
                                     (GlobalModule.VisibleAfterEvent 60
                                         (GlobalModule.InvisibleAfterEvent 61 GlobalModule.NoNextVisibility)
@@ -616,7 +617,7 @@ init a =
                                 )
                           ]
                         , [ Needle.init (GlobalBasics.blockPosFloat ( 52.2, 5.025 ))
-                                (Needle.NormalNeedle 24 318)
+                                (Needle.NormalNeedle 24 318 Needle.Laser)
                                 (GlobalModule.Invisible
                                     (GlobalModule.VisibleAfterEvent 55
                                         GlobalModule.NoNextVisibility
@@ -633,7 +634,7 @@ init a =
                                     (GlobalModule.Move (Array.fromList [ GlobalBasics.blockPosFloat ( 72.4, 5.025 ) ]) 1.5 -1 GlobalModule.NoNextMove)
                                 )
                           ]
-                        , [ Needle.initFalling ( 62, 7 ) 63 ]
+                        , [ Needle.initFalling ( 62, 7 ) 63 Needle.Downwards]
                         ]
                     )
             , keyPressed = []

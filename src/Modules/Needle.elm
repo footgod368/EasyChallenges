@@ -1,5 +1,5 @@
 module Modules.Needle exposing
-    ( NeedleAppearance(..), Needle
+    ( NeedleAppearance(..), Needle, NeedleType(..)
     , init, initFalling, initFallingRow, initHiddenRow, normalNeedleWidth, initHidden, initHiddenCollideAfter
     , initHiddenFalling, initHiddenFallingRow, initHiddenFloat, initPos, needleCollisionBox, normalNeedleHeight, sword, deadlyBlock
     , view
@@ -11,7 +11,7 @@ module Modules.Needle exposing
 
 # Needle
 
-@docs NeedleAppearance, Needle
+@docs NeedleAppearance, Needle, NeedleType
 
 
 # Init
@@ -42,11 +42,18 @@ import Modules.ViewMove as ViewMove
 import Svg exposing (Svg)
 import Svg.Attributes as SvgAttr
 
+{-| Different types of needle
+-}
+type NeedleType
+    = Laser
+    | Bomb
+    | Upwards
+    | Downwards
 
 {-| For future different shapes of blocks.
 -}
 type NeedleAppearance
-    = NormalNeedle Float Float
+    = NormalNeedle Float Float NeedleType
 
 
 {-| needleWidth Constant
@@ -79,7 +86,7 @@ type alias Needle =
 -}
 defNeedle : Needle
 defNeedle =
-    initPos ( 0, 0 )
+    initPos ( 0, 0 ) Laser
 
 
 {-| initiate a needle, with full functions
@@ -97,11 +104,11 @@ init ( x, y ) needleAppearance visibility collision move =
 
 {-| default appearance, always visible, have collision, don't move
 -}
-initPos : ( Float, Float ) -> Needle
-initPos ( x, y ) =
+initPos : ( Float, Float ) -> NeedleType-> Needle
+initPos ( x, y ) needleType=
     { pos = ( x, y )
-    , collisionBox = needleCollisionBox (NormalNeedle normalNeedleWidth normalNeedleHeight)
-    , appearance = NormalNeedle normalNeedleWidth normalNeedleHeight
+    , collisionBox = needleCollisionBox (NormalNeedle normalNeedleWidth normalNeedleHeight needleType)
+    , appearance = NormalNeedle normalNeedleWidth normalNeedleHeight needleType
     , visibility = GlobalModule.Visible GlobalModule.NoNextVisibility
     , collision = GlobalModule.Collide GlobalModule.NoNextCollision
     , move = GlobalModule.NoNextMove
@@ -110,11 +117,11 @@ initPos ( x, y ) =
 
 {-| quick function to create one hidden needle
 -}
-initHidden : ( Int, Int ) -> Int -> Needle
-initHidden ( x, y ) id =
+initHidden : ( Int, Int ) -> Int -> NeedleType-> Needle
+initHidden ( x, y ) id needleType=
     { pos = GlobalBasics.blockPos ( x, y )
-    , collisionBox = needleCollisionBox (NormalNeedle normalNeedleWidth normalNeedleHeight)
-    , appearance = NormalNeedle normalNeedleWidth normalNeedleHeight
+    , collisionBox = needleCollisionBox (NormalNeedle normalNeedleWidth normalNeedleHeight needleType)
+    , appearance = NormalNeedle normalNeedleWidth normalNeedleHeight needleType
     , visibility = GlobalModule.Invisible (GlobalModule.VisibleAfterEvent id GlobalModule.NoNextVisibility)
     , collision = GlobalModule.Collide GlobalModule.NoNextCollision
     , move = GlobalModule.NoNextMove
@@ -123,11 +130,11 @@ initHidden ( x, y ) id =
 
 {-| quick function to create one hidden needle with float pos
 -}
-initHiddenFloat : ( Float, Float ) -> Int -> Needle
-initHiddenFloat ( x, y ) id =
+initHiddenFloat : ( Float, Float ) -> Int  -> NeedleType ->Needle
+initHiddenFloat ( x, y ) id needleType=
     { pos = GlobalBasics.blockPosFloat ( x, y )
-    , collisionBox = needleCollisionBox (NormalNeedle normalNeedleWidth normalNeedleHeight)
-    , appearance = NormalNeedle normalNeedleWidth normalNeedleHeight
+    , collisionBox = needleCollisionBox (NormalNeedle normalNeedleWidth normalNeedleHeight needleType)
+    , appearance = NormalNeedle normalNeedleWidth normalNeedleHeight needleType
     , visibility = GlobalModule.Invisible (GlobalModule.VisibleAfterEvent id GlobalModule.NoNextVisibility)
     , collision = GlobalModule.Collide GlobalModule.NoNextCollision
     , move = GlobalModule.NoNextMove
@@ -136,18 +143,18 @@ initHiddenFloat ( x, y ) id =
 
 {-| quick function to create a row of hidden needles
 -}
-initHiddenRow : Float -> Int -> Int -> Int -> List Needle
-initHiddenRow n n1 n2 id =
-    List.map (\i -> initHiddenFloat ( toFloat i, n ) id) (List.range n1 n2)
+initHiddenRow : Float -> Int -> Int -> Int -> NeedleType -> List Needle
+initHiddenRow n n1 n2 id needleType=
+    List.map (\i -> initHiddenFloat ( toFloat i, n ) id needleType) (List.range n1 n2)
 
 
 {-| quick function to create a needle which is only collidable after a given event.
 -}
-initHiddenCollideAfter : ( Int, Int ) -> Int -> Needle
-initHiddenCollideAfter ( x, y ) id =
+initHiddenCollideAfter : ( Int, Int ) -> Int -> NeedleType -> Needle
+initHiddenCollideAfter ( x, y ) id needleType=
     { pos = GlobalBasics.blockPos ( x, y )
-    , collisionBox = needleCollisionBox (NormalNeedle normalNeedleWidth normalNeedleHeight)
-    , appearance = NormalNeedle normalNeedleWidth normalNeedleHeight
+    , collisionBox = needleCollisionBox (NormalNeedle normalNeedleWidth normalNeedleHeight needleType)
+    , appearance = NormalNeedle normalNeedleWidth normalNeedleHeight needleType
     , visibility = GlobalModule.Invisible (GlobalModule.VisibleAfterEvent id GlobalModule.NoNextVisibility)
     , collision = GlobalModule.NoCollide (GlobalModule.CollideAfterEvent id GlobalModule.NoNextCollision)
     , move = GlobalModule.NoNextMove
@@ -156,11 +163,11 @@ initHiddenCollideAfter ( x, y ) id =
 
 {-| quick function to create one needle which falls after a given event, give an id of -1 to just create a normal needle row.
 -}
-initFalling : ( Int, Int ) -> Int -> Needle
-initFalling ( x, y ) id =
+initFalling : ( Int, Int ) -> Int -> NeedleType -> Needle
+initFalling ( x, y ) id needleType =
     { pos = GlobalBasics.blockPos ( x, y )
-    , collisionBox = needleCollisionBox (NormalNeedle normalNeedleWidth normalNeedleHeight)
-    , appearance = NormalNeedle normalNeedleWidth normalNeedleHeight
+    , collisionBox = needleCollisionBox (NormalNeedle normalNeedleWidth normalNeedleHeight needleType)
+    , appearance = NormalNeedle normalNeedleWidth normalNeedleHeight needleType
     , visibility = GlobalModule.Visible GlobalModule.NoNextVisibility
     , collision = GlobalModule.Collide GlobalModule.NoNextCollision
     , move =
@@ -173,11 +180,11 @@ initFalling ( x, y ) id =
 
 {-| quick function to create one hidden needle which falls after a given event
 -}
-initHiddenFalling : ( Int, Int ) -> Int -> Needle
-initHiddenFalling ( x, y ) id =
+initHiddenFalling : ( Int, Int ) -> Int -> NeedleType -> Needle
+initHiddenFalling ( x, y ) id needleType=
     { pos = GlobalBasics.blockPos ( x, y )
-    , collisionBox = needleCollisionBox (NormalNeedle normalNeedleWidth normalNeedleHeight)
-    , appearance = NormalNeedle normalNeedleWidth normalNeedleHeight
+    , collisionBox = needleCollisionBox (NormalNeedle normalNeedleWidth normalNeedleHeight needleType)
+    , appearance = NormalNeedle normalNeedleWidth normalNeedleHeight needleType
     , visibility = GlobalModule.Invisible GlobalModule.NoNextVisibility
     , collision = GlobalModule.Collide GlobalModule.NoNextCollision
     , move =
@@ -190,16 +197,16 @@ initHiddenFalling ( x, y ) id =
 
 {-| quick function to create one row of needles which falls after a given event
 -}
-initFallingRow : Int -> Int -> Int -> Int -> List Needle
-initFallingRow n n1 n2 id =
-    List.map (\i -> initFalling ( i, n ) id) (List.range n1 n2)
+initFallingRow : Int -> Int -> Int -> Int -> NeedleType -> List Needle
+initFallingRow n n1 n2 id needleType=
+    List.map (\i -> initFalling ( i, n ) id needleType) (List.range n1 n2)
 
 
 {-| quick function to create one row of hidden needles which falls after a given event
 -}
-initHiddenFallingRow : Int -> Int -> Int -> Int -> List Needle
-initHiddenFallingRow n n1 n2 id =
-    List.map (\i -> initHiddenFalling ( i, n ) id) (List.range n1 n2)
+initHiddenFallingRow : Int -> Int -> Int -> Int -> NeedleType-> List Needle
+initHiddenFallingRow n n1 n2 id needleType =
+    List.map (\i -> initHiddenFalling ( i, n ) id needleType) (List.range n1 n2)
 
 
 {-| a 'needle' that can customize size
@@ -208,7 +215,7 @@ deadlyBlock : ( Float, Float ) -> ( Float, Float ) -> Needle
 deadlyBlock pos ( width, height ) =
     init
         (GlobalBasics.blockPosFloat pos)
-        (NormalNeedle (width * 40) (height * 40))
+        (NormalNeedle (width * 40) (height * 40) Laser)
         (GlobalModule.Visible GlobalModule.NoNextVisibility)
         (GlobalModule.Collide GlobalModule.NoNextCollision)
         GlobalModule.NoNextMove
@@ -220,7 +227,7 @@ sword : ( Float, Float ) -> ( Float, Float ) -> ( Float, Float ) -> Float -> Int
 sword startPos chargePos ( width, height ) speed id =
     init
         (GlobalBasics.blockPosFloat startPos)
-        (NormalNeedle (width * 40) (height * 40))
+        (NormalNeedle (width * 40) (height * 40) Bomb)
         (GlobalModule.Invisible (GlobalModule.VisibleAfterEvent id GlobalModule.NoNextVisibility))
         (GlobalModule.NoCollide (GlobalModule.CollideAfterEvent id GlobalModule.NoNextCollision))
         (GlobalModule.Move (Array.fromList [])
@@ -235,7 +242,7 @@ sword startPos chargePos ( width, height ) speed id =
 needleCollisionBox : NeedleAppearance -> GlobalBasics.CollisionBox
 needleCollisionBox needleAppearance =
     case needleAppearance of
-        NormalNeedle width height ->
+        NormalNeedle width height _->
             GlobalBasics.Polygon
                 (Array.fromList
                     [ ( ( 0.0, 0.0 ), ( width, 0.0 ) )
@@ -256,23 +263,30 @@ viewOneNeedle model needle =
                 ( needleX, needleY ) =
                     needle.pos
             in
-            [ Svg.rect
-                (List.append
-                    [ SvgAttr.x (String.fromFloat (ViewMove.deltaX model + needleX - 2.0))
-                    , SvgAttr.y (String.fromFloat (ViewMove.deltaY model + needleY))
-                    , SvgAttr.strokeWidth "2"
-                    , SvgAttr.stroke "#00000000"
-                    , SvgAttr.fill "#FF0000FF"
-                    ]
-                    (case needle.appearance of
-                        NormalNeedle width height ->
-                            [ SvgAttr.width (String.fromFloat (width + 2.0))
-                            , SvgAttr.height (String.fromFloat height)
+            case needle.appearance of
+                NormalNeedle width height Laser->
+                    [ Svg.rect
+                        (List.append
+                            [ SvgAttr.x (String.fromFloat (ViewMove.deltaX model + needleX - 2.0))
+                            , SvgAttr.y (String.fromFloat (ViewMove.deltaY model + needleY))
+                            , SvgAttr.strokeWidth "2"
+                            , SvgAttr.stroke "#00000000"
+                            , SvgAttr.fill "#FF0000FF"
                             ]
-                    )
-                )
-                []
-            ]
+                            (
+                                    [ SvgAttr.width (String.fromFloat (width + 2.0))
+                                    , SvgAttr.height (String.fromFloat height)
+                                    ]
+                            )
+                        )
+                        []
+                    ]
+                NormalNeedle width height Bomb ->
+                    []
+                NormalNeedle width height Upwards ->
+                    []
+                NormalNeedle width height Downwards ->
+                    []
 
         GlobalModule.Invisible _ ->
             []

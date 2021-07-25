@@ -25,7 +25,6 @@ import Time exposing (Posix)
 -}
 type MainScene
     = Menu
-    | Level0
     | Level1
     | Level2
     | Level3

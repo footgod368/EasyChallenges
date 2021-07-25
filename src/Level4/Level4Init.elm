@@ -108,7 +108,7 @@ init a =
                     (List.concat
                         [ [ Needle.init
                                 (GlobalBasics.blockPosFloat ( 26.1, 12.5 ))
-                                (Needle.NormalNeedle 32 4)
+                                (Needle.NormalNeedle 32 4 Needle.Downwards)
                                 (GlobalModule.Invisible (GlobalModule.VisibleAfterEvent 10 GlobalModule.NoNextVisibility))
                                 (GlobalModule.Collide (GlobalModule.NoCollideAfterEvent 9 GlobalModule.NoNextCollision))
                                 GlobalModule.NoNextMove

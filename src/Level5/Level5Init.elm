@@ -153,13 +153,13 @@ init a =
             , needles =
                 Array.fromList
                     (List.concat
-                        [ List.map (\i -> Needle.initHiddenCollideAfter ( i, 10 ) 17) (List.range 6 12)
-                        , Needle.initHiddenRow 39.9 5 46 2
-                        , [ Needle.deadlyBlock ( 20, 20 ) ( 2, 8 )
-                          , Needle.deadlyBlock ( 20, 32 ) ( 2, 8 )
+                        [ List.map (\i -> Needle.initHiddenCollideAfter ( i, 10 ) 17 Needle.Laser) (List.range 6 12)
+                        , Needle.initHiddenRow 39.9 5 46 2 Needle.Upwards
+                        , [ Needle.deadlyBlock ( 20, 20 ) ( 2, 8 ) 
+                          , Needle.deadlyBlock ( 20, 32 ) ( 2, 8 ) 
                           ]
-                        , [ Needle.deadlyBlock ( 26, 20 ) ( 2, 4 )
-                          , Needle.deadlyBlock ( 26, 28 ) ( 2, 12 )
+                        , [ Needle.deadlyBlock ( 26, 20 ) ( 2, 4 ) 
+                          , Needle.deadlyBlock ( 26, 28 ) ( 2, 12 ) 
                           ]
                         , [ Needle.deadlyBlock ( 32, 20 ) ( 2, 6 )
                           , Needle.deadlyBlock ( 32, 30 ) ( 2, 10 )

@@ -212,9 +212,9 @@ init a =
             , needles =
                 Array.fromList
                     (List.concat
-                        [ Needle.initHiddenFallingRow 8 7 14 1
-                        , Needle.initHiddenRow 6 57 59 8
-                        , Needle.initHiddenRow 8 57 59 9
+                        [ Needle.initHiddenFallingRow 8 7 14 1 Needle.Downwards
+                        , Needle.initHiddenRow 6 57 59 8 Needle.Laser
+                        , Needle.initHiddenRow 8 57 59 9 Needle.Laser
                         ]
                     )
             , keyPressed = []
