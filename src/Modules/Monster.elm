@@ -58,8 +58,14 @@ type alias Monster =
     , ySpeed : Float
     , range : ( Float, Float )
     , fixY : Float
+    , faceDirecton: FaceDirection
     }
 
+{-| the face direction of monster
+-}
+type FaceDirection
+    = Right
+    | Left
 
 {-| MonsterAppearance currently describes the size of the monster, maybe different styles will be implemented later.
 -}
@@ -103,6 +109,7 @@ init ( x, y ) monsterAppearance monsterX monsterY xSpeed ( x1, x2 ) =
     , ySpeed = 0
     , range = ( x1, x2 )
     , fixY = y
+    , faceDirecton = Left
     }
 
 
@@ -234,8 +241,15 @@ updateOneMonsterMoveX id model =
             else
                 monster.xSpeed
 
+        newFaceDirecrion = if newSpeed > 0 then
+                                Right
+                            else if newSpeed < 0 then
+                                Left
+                            else
+                                monster.faceDirecton
+
         newMonster =
-            { monster | pos = ( newX, Tuple.second monster.pos ), xSpeed = newSpeed }
+            { monster | pos = ( newX, Tuple.second monster.pos ), xSpeed = newSpeed, faceDirecton = newFaceDirecrion }
 
         newMonsters =
             Array.set id newMonster model.monsters
@@ -331,6 +345,19 @@ viewOneMonster model monster =
     in
     case monster.appearance of
         MonsterA width height ->
+            if monster.faceDirecton == Right then 
+            [ Svg.rect
+                [ SvgAttr.x (String.fromFloat (ViewMove.deltaX model + monsterX - 2.0))
+                , SvgAttr.y (String.fromFloat (ViewMove.deltaY model + monsterY))
+                , SvgAttr.strokeWidth "2"
+                , SvgAttr.stroke "#00000000"
+                , SvgAttr.fill "#FF0000FF"
+                , SvgAttr.width (String.fromFloat (width + 2.0))
+                , SvgAttr.height (String.fromFloat height)
+                ]
+                []
+            ]
+            else
             [ Svg.rect
                 [ SvgAttr.x (String.fromFloat (ViewMove.deltaX model + monsterX - 2.0))
                 , SvgAttr.y (String.fromFloat (ViewMove.deltaY model + monsterY))
