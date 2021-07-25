@@ -109,12 +109,12 @@ view model =
         ( endPointX, endPointY ) =
             model.endPoint.pos
     in
-    [ Svg.rect
+    [ Svg.image
         [ SvgAttr.x (String.fromFloat (ViewMove.deltaX model + endPointX))
         , SvgAttr.y (String.fromFloat (ViewMove.deltaY model + endPointY))
-        , SvgAttr.width (String.fromFloat endPointWidth)
-        , SvgAttr.height (String.fromFloat endPointHeight)
-        , SvgAttr.fill "#ff3366"
+        , SvgAttr.width (String.fromFloat  endPointWidth)
+        , SvgAttr.height (String.fromFloat  endPointHeight)
+        , SvgAttr.xlinkHref "assets/silverDogLogo.svg"
         ]
         []
     ]
