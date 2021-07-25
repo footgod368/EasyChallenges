@@ -139,3 +139,51 @@ view model =
         , List.concat (List.map viewOneSoundTrigger model.sound.soundTrigger)
         ]
 
+
+updateOneSoundTrigger : { model | actEvent : Array { id : Int, name : String} } -> SoundTrigger -> SoundTrigger
+updateOneSoundTrigger model soundTrigger =
+    case soundTrigger of
+        Event eventId soundEffect ->
+            if Array.foldl
+               (\actEvent sum ->
+                   if actEvent.id == eventId then
+                       sum + 1
+
+                   else
+                       sum
+               )
+               0
+               model.actEvent
+               /= 0 then
+                case soundEffect of
+                    BackGround ->
+                        Activated backGroundLength soundEffect soundTrigger
+
+                    Jump ->
+                        Activated jumpLength soundEffect soundTrigger
+
+                    RandomBox ->
+                        Activated randomBoxLength soundEffect soundTrigger
+
+                    Needle ->
+                        Activated needleLength soundEffect soundTrigger
+
+                    Dead ->
+                        Activated deadLength soundEffect soundTrigger
+
+                    Sword ->
+                        Activated swordLength soundEffect soundTrigger
+
+            else
+                soundTrigger
+
+        Activated timeLeft soundEffect nextSoundTrigger ->
+            if timeLeft <= 0 then
+                nextSoundTrigger
+
+            else
+                Activated (timeLeft - 1) soundEffect nextSoundTrigger
+
+        None ->
+            None
+
