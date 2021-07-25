@@ -39,6 +39,7 @@ import Array exposing (Array)
 import GlobalFunction.GlobalBasics as GlobalBasics
 import MainFunction.MainType as MainType
 import Maybe exposing (withDefault)
+import Modules.Sound as Sound
 import Svg exposing (Svg)
 import Svg.Attributes as SvgAttr
 
@@ -129,7 +130,7 @@ type LiveState
 
 {-| Change the state of player to Dead
 -}
-playerDead : { model | player : Player } -> DeadType -> { model | player : Player }
+playerDead : { model | player : Player, sound : Sound.Sound } -> DeadType -> { model | player : Player, sound : Sound.Sound }
 playerDead model deadType =
     let
         oldPlayer =
@@ -141,7 +142,7 @@ playerDead model deadType =
         newPlayer =
             { oldPlayer | liveState = Dead, deadTimes = ( oldDeadTimes + 1, deadType ) }
     in
-    { model | player = newPlayer }
+    Sound.trigger { model | player = newPlayer } Sound.Dead
 
 
 {-| Change the state of player to Win
@@ -233,7 +234,7 @@ init pos property propertyChange =
 
 {-| Update of player unit. Calls sub update.
 -}
-update : ( { model | player : Player, keyPressed : List Int, actEvent : Array { id : Int, name : String } }, Cmd MainType.Msg ) -> ( { model | player : Player, keyPressed : List Int, actEvent : Array { id : Int, name : String } }, Cmd MainType.Msg )
+update : ( { model | player : Player, keyPressed : List Int, actEvent : Array { id : Int, name : String }, sound : Sound.Sound }, Cmd MainType.Msg ) -> ( { model | player : Player, keyPressed : List Int, actEvent : Array { id : Int, name : String }, sound : Sound.Sound }, Cmd MainType.Msg )
 update ( model, cmd ) =
     case model.player.liveState of
         Live ->
@@ -249,7 +250,7 @@ update ( model, cmd ) =
             ( model, cmd )
 
 
-updatePlayerProperty : ( { model | player : Player, actEvent : Array { id : Int, name : String } }, Cmd MainType.Msg ) -> ( { model | player : Player, actEvent : Array { id : Int, name : String } }, Cmd MainType.Msg )
+updatePlayerProperty : ( { model | player : Player, actEvent : Array { id : Int, name : String }, sound : Sound.Sound }, Cmd MainType.Msg ) -> ( { model | player : Player, actEvent : Array { id : Int, name : String }, sound : Sound.Sound }, Cmd MainType.Msg )
 updatePlayerProperty ( model, cmd ) =
     case model.player.propertyChange of
         ChangeTo newProperty eventID nextPropertyChange ->
@@ -284,7 +285,7 @@ updatePlayerProperty ( model, cmd ) =
 
 {-| Updates player control, move left, right and jump. Not exposed.
 -}
-updatePlayerVelocity : ( { model | player : Player, keyPressed : List Int }, Cmd MainType.Msg ) -> ( { model | player : Player, keyPressed : List Int }, Cmd MainType.Msg )
+updatePlayerVelocity : ( { model | player : Player, keyPressed : List Int, sound : Sound.Sound }, Cmd MainType.Msg ) -> ( { model | player : Player, keyPressed : List Int, sound : Sound.Sound }, Cmd MainType.Msg )
 updatePlayerVelocity ( model, cmd ) =
     let
         ( oldVelocityX, oldVelocityY ) =
@@ -320,9 +321,6 @@ updatePlayerVelocity ( model, cmd ) =
                         if jumpFrame == -1 && (not model.player.property.ifPlayerJumpOnTheGround || model.player.ifThisFrameOnGround) then
                             ( Jump jumpNum (model.player.property.playerJumpFrames - 1)
                             , model.player.property.playerJumpInitialSpeed
-                                + playerJumpAcce
-                                    model
-                                    model.player.property.playerJumpFrames
                             )
 
                         else if jumpFrame > 0 then
@@ -352,8 +350,15 @@ updatePlayerVelocity ( model, cmd ) =
 
         newPlayer =
             { oldPlayer | jump = newJump, velocity = ( velocityX, velocityY ), ifThisFrameOnGround = False }
+
+        newModel =
+            if Tuple.second newPlayer.velocity == model.player.property.playerJumpInitialSpeed then
+                Sound.trigger { model | player = newPlayer } Sound.Jump
+
+            else
+                { model | player = newPlayer }
     in
-    ( { model | player = newPlayer }, cmd )
+    ( newModel, cmd )
 
 
 {-| Used in the end of the Level update, will make the player go back to last pos if collided.
@@ -451,6 +456,7 @@ view model =
         , SvgAttr.y (String.fromFloat (playerY + playerDeltaY model))
         , SvgAttr.width (String.fromFloat (model.player.property.playerWidth + 7.0))
         , SvgAttr.height (String.fromFloat (model.player.property.playerHeight + 2.0))
+
         --, SvgAttr.fill "#000000"
         , SvgAttr.xlinkHref "assets/player.svg"
         ]
