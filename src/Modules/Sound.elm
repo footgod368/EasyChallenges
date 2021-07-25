@@ -35,3 +35,30 @@ deadLength =
 swordLength : Int
 swordLength =
     200
+
+
+{-| The effect of sounds in the game
+-}
+type SoundEffect
+    = BackGround
+    | Jump
+    | RandomBox
+    | Needle
+    | Dead
+    | Sword
+
+
+{-| The trigger of sound, Activated and None is reserved for progress
+-}
+type SoundTrigger
+    = Event Int SoundEffect
+    | Activated Int SoundEffect SoundTrigger
+    | None
+
+
+{-| Definition of sound
+-}
+type alias Sound =
+    { soundTrigger : List SoundTrigger
+    }
+
