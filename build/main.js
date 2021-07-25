@@ -5426,7 +5426,7 @@ var $elm$core$List$concat = function (lists) {
 var $elm$core$Basics$negate = function (n) {
 	return -n;
 };
-var $author$project$Modules$Player$defPlayerProperty = {gravityAcce: 0.1, ifPlayerJumpOnTheGround: true, isGreen: false, playerHeight: 20.0, playerHorizontalSpeed: 1.93, playerJumpFrames: 20, playerJumpInitialAcce: 0.6, playerJumpInitialSpeed: -1.0, playerJumpNum: 1, playerWidth: 5.0};
+var $author$project$Modules$Player$defPlayerProperty = {gravityAcce: 0.1, ifPlayerJumpOnTheGround: true, isGreen: false, playerHeight: 20.0, playerHorizontalSpeed: 1.93, playerJumpFrames: 20, playerJumpInitialAcce: 0.6, playerJumpInitialSpeed: -1.0, playerJumpNum: 1, playerWidth: 20.0};
 var $author$project$Modules$Event$StartActivated = {$: 'StartActivated'};
 var $author$project$Modules$Event$Event = F5(
 	function (info, ifStartAct, actType, duration, actCounter) {
@@ -15341,7 +15341,7 @@ var $author$project$Modules$Player$view = function (model) {
 				[
 					$elm$svg$Svg$Attributes$x(
 					$elm$core$String$fromFloat(
-						(playerX - 11.0) + $author$project$Modules$Player$playerDeltaX(model))),
+						(playerX - 1.0) + $author$project$Modules$Player$playerDeltaX(model))),
 					$elm$svg$Svg$Attributes$y(
 					$elm$core$String$fromFloat(
 						playerY + $author$project$Modules$Player$playerDeltaY(model))),

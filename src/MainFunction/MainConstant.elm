@@ -108,12 +108,14 @@ gameHintCloseButton : Int
 gameHintCloseButton =
     3
 
-
+{-| button id
+-}
 soundLouderButton : Int
 soundLouderButton =
     4
 
-
+{-| button id
+-}
 soundQuieterButton : Int
 soundQuieterButton =
     5
