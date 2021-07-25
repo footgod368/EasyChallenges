@@ -109,16 +109,17 @@ init a =
                     (List.concat
                         [ [ Needle.init
                                 (GlobalBasics.blockPosFloat ( 26.1, 12.5 ))
-                                (Needle.NormalNeedle 32 4)
+                                (Needle.NormalNeedle 32 4 Needle.Downwards)
                                 (GlobalModule.Invisible (GlobalModule.VisibleAfterEvent 10 GlobalModule.NoNextVisibility))
                                 (GlobalModule.Collide (GlobalModule.NoCollideAfterEvent 9 GlobalModule.NoNextCollision))
                                 GlobalModule.NoNextMove
                           ]
-                        , [ Needle.sword ( 12, 15 ) ( 12, -10 ) ( 3, 5 ) 7.0 11 ]
-                        , [ Needle.sword ( 28, 12 ) ( -10, 12 ) ( 4, 2 ) 7.0 12 ]
+                        , [ Needle.sword ( 12, 15 ) ( 12, -10 ) ( 3, 5 ) 7.0 11 Needle.BombUp]
+                        , [ Needle.sword ( 28, 12 ) ( -10, 12 ) ( 4, 2 ) 7.0 12 Needle.BombLeft]
                         ]
                     )
             , keyPressed = []
+            , gameControl = GameControl.init MainType.Level5 [["Note that the \"?\"","on the NoticeBoard also counts"],["The helmet can protect","you from the last \"?\""]]
             , gameControl = GameControl.init MainType.Level5 []
             , sound =
                 Sound.init []

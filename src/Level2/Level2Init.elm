@@ -90,14 +90,14 @@ init a =
                         [ Brick.initRow 15 1 14
                         , [ Brick.init
                                 (GlobalBasics.blockPosFloat ( 8, 14 ))
-                                (Brick.Detailed 40 40 "#1E90FF")
+                                (Brick.Switch True)
                                 (GlobalModule.Visible (GlobalModule.InvisibleAfterEvent 1 GlobalModule.NoNextVisibility))
                                 (GlobalModule.NoCollide GlobalModule.NoNextCollision)
                                 GlobalModule.NoNextMove
                           ]
                         , [ Brick.init
                                 (GlobalBasics.blockPosFloat ( 8, 14 ))
-                                (Brick.Detailed 40 40 "#FFD700")
+                                (Brick.Switch False)
                                 (GlobalModule.Invisible (GlobalModule.VisibleAfterEvent 1 GlobalModule.NoNextVisibility))
                                 (GlobalModule.NoCollide GlobalModule.NoNextCollision)
                                 GlobalModule.NoNextMove
@@ -213,12 +213,13 @@ init a =
             , needles =
                 Array.fromList
                     (List.concat
-                        [ Needle.initHiddenFallingRow 8 7 14 1
-                        , Needle.initHiddenRow 6 57 59 8
-                        , Needle.initHiddenRow 8 57 59 9
+                        [ Needle.initHiddenFallingRow 8 7 14 1 Needle.Downwards
+                        , Needle.initHiddenRow 6 57 59 8 Needle.Laser
+                        , Needle.initHiddenRow 8 57 59 9 Needle.Laser
                         ]
                     )
             , keyPressed = []
+            , gameControl = GameControl.init MainType.Level3 [["To circumvent the first NoticeBoard,","triger the switch and back off quickly,","then jump onto the NoticeBoard"],["The big \"?\" will disturb","your direction control"]]
             , gameControl = GameControl.init MainType.Level3 []
             , sound =
                 Sound.init []
