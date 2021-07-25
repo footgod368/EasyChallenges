@@ -224,3 +224,19 @@ trigger model soundEffect =
     in
     { model | sound = newSound }
 
+
+{-| Update soundTrigger
+-}
+update : ( { model | sound : Sound, actEvent : Array { id : Int, name : String} }, Cmd MainType.Msg ) -> ( { model | sound : Sound, actEvent : Array { id : Int, name : String} }, Cmd MainType.Msg )
+update ( model, cmd ) =
+    let
+        oldSound =
+            model.sound
+
+        newSoundTrigger =
+            List.map (updateOneSoundTrigger model) oldSound.soundTrigger
+
+        newSound =
+            { oldSound | soundTrigger = newSoundTrigger }
+    in
+    ( { model | sound = newSound }, cmd )
