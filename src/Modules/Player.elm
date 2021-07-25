@@ -468,9 +468,15 @@ view model =
         , SvgAttr.height (String.fromFloat (model.player.property.playerHeight + 2.0))
         --, SvgAttr.fill "#000000"
         ,if model.player.faceDirection == Right then
-            SvgAttr.xlinkHref "assets/playerRight.svg"
+            if model.player.property.ifPlayerJumpOnTheGround then
+                SvgAttr.xlinkHref "assets/playerRight.svg"
+            else
+                SvgAttr.xlinkHref "assets/playerWingsRight.png"
         else
-            SvgAttr.xlinkHref "assets/playerLeft.svg"
+            if model.player.property.ifPlayerJumpOnTheGround then
+                SvgAttr.xlinkHref "assets/playerRight.svg"
+            else
+                SvgAttr.xlinkHref "assets/playerWingsLeft.png"
         ]
         []
     , Svg.rect

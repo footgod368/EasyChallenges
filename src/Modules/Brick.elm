@@ -48,6 +48,7 @@ import Svg.Attributes as SvgAttr
 type BrickAppearance
     = NormalAppearance --standard brick
     | Detailed Float Float String --with designable size and color
+    | Wings
 
 
 {-| brickWidth Constant
@@ -226,6 +227,15 @@ brickCollisionBox brickAppearance =
                     , ( ( 0.0, height ), ( 0.0, 0.0 ) )
                     ]
                 )
+        Wings ->
+                    GlobalBasics.Polygon
+            (Array.fromList
+                [ ( ( 0.0, 0.0 ), ( brickWidth, 0.0 ) )
+                , ( ( brickWidth, 0.0 ), ( brickWidth, brickHeight ) )
+                , ( ( brickWidth, brickHeight ), ( 0.0, brickHeight ) )
+                , ( ( 0.0, brickHeight ), ( 0.0, 0.0 ) )
+                ]
+            )
 
 
 {-| quick function to yield the 'collisionBox' of a brick given the position
@@ -243,38 +253,63 @@ viewOneBrick : { model | windowBoundary : GlobalBasics.Pos, levelBoundary : Glob
 viewOneBrick model brick =
     case brick.visibility of
         GlobalModule.Visible _ ->
-            let
-                ( brickX, brickY ) =
-                    brick.pos
-            in
-            [ Svg.rect
-                (List.append
-                    [ SvgAttr.x (String.fromFloat (ViewMove.deltaX model + brickX))
-                    , SvgAttr.y (String.fromFloat (ViewMove.deltaY model + brickY))
-                    , SvgAttr.strokeWidth "2"
-                    , SvgAttr.stroke "#000000"
-                    , case brick.appearance of
-                        NormalAppearance ->
-                            SvgAttr.fill "#00000050"
-
-                        Detailed width height color ->
-                            SvgAttr.fill color
+            case brick.appearance of
+                NormalAppearance ->
+                    let
+                        ( brickX, brickY ) =
+                            brick.pos
+                    in
+                    [ Svg.rect
+                        (List.append
+                            [ SvgAttr.x (String.fromFloat (ViewMove.deltaX model + brickX))
+                            , SvgAttr.y (String.fromFloat (ViewMove.deltaY model + brickY))
+                            , SvgAttr.strokeWidth "2"
+                            , SvgAttr.stroke "#000000"
+                            , SvgAttr.fill "#00000050"
+                            ]
+                            (
+                                    [ SvgAttr.width (String.fromFloat brickWidth)
+                                    , SvgAttr.height (String.fromFloat brickHeight)
+                                    ]
+                            )
+                        )
+                        []
                     ]
-                    (case brick.appearance of
-                        NormalAppearance ->
-                            [ SvgAttr.width (String.fromFloat brickWidth)
-                            , SvgAttr.height (String.fromFloat brickHeight)
+                Detailed width height color ->
+                    let
+                        ( brickX, brickY ) =
+                            brick.pos
+                    in
+                    [ Svg.rect
+                        (List.append
+                            [ SvgAttr.x (String.fromFloat (ViewMove.deltaX model + brickX))
+                            , SvgAttr.y (String.fromFloat (ViewMove.deltaY model + brickY))
+                            , SvgAttr.strokeWidth "2"
+                            , SvgAttr.stroke "#000000"
+                            , SvgAttr.fill color
                             ]
-
-                        Detailed width height color ->
-                            [ SvgAttr.width (String.fromFloat width)
-                            , SvgAttr.height (String.fromFloat height)
-                            ]
-                    )
-                )
-                []
-            ]
-
+                            (
+                                    [ SvgAttr.width (String.fromFloat width)
+                                    , SvgAttr.height (String.fromFloat height)
+                                    ]
+                            )
+                        )
+                        []
+                    ]
+                Wings ->
+                    let
+                        ( brickX, brickY ) =
+                            brick.pos
+                    in
+                    [ Svg.image
+                        [ SvgAttr.x (String.fromFloat (ViewMove.deltaX model + brickX))
+                        , SvgAttr.y (String.fromFloat (ViewMove.deltaY model + brickY))
+                        , SvgAttr.width (String.fromFloat   brickWidth)
+                        , SvgAttr.height (String.fromFloat  brickHeight)
+                        , SvgAttr.xlinkHref "assets/wings2.png"
+                        ]
+                        []
+                    ]
         GlobalModule.Invisible _ ->
             []
 

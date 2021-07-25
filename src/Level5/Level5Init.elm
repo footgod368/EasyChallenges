@@ -83,7 +83,7 @@ init a =
                         , [ Brick.initPosVolumeColor (GlobalBasics.blockPosFloat ( 3, 37 )) ( 40, 40 ) "#FFFF00" ]
                         , [ Brick.init
                                 (GlobalBasics.blockPosFloat ( 3, 36 ))
-                                (Brick.Detailed 40 40 "\t#778899")
+                                (Brick.Wings)
                                 (GlobalModule.Invisible (GlobalModule.VisibleAfterEvent 3 (GlobalModule.InvisibleAfterEvent 1 GlobalModule.NoNextVisibility)))
                                 (GlobalModule.NoCollide GlobalModule.NoNextCollision)
                                 GlobalModule.NoNextMove

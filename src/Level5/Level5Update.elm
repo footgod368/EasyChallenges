@@ -157,6 +157,8 @@ notBlueOrRed brick =
 
         Brick.Detailed _ _ color ->
             color /= "#1E90FF" && color /= "#FF0000"
+        Brick.Wings ->
+            True
 
 
 {-| delete the blue and red bricks from model when they have mixed into green
