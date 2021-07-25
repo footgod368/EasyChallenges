@@ -3,6 +3,7 @@
 .elm-doc
 elm-stuff
 index.html
+main.js
 elm-doc.sh
 replace.sh
 output.txt
