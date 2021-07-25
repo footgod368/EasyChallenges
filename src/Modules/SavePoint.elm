@@ -114,16 +114,16 @@ viewOneSavePoint model savePoint =
             saveOpacity =
                     0.4
         in
-        [ Svg.rect
+        [ Svg.image
             [ SvgAttr.x (String.fromFloat (ViewMove.deltaX model + savePointX))
             , SvgAttr.y (String.fromFloat (ViewMove.deltaY model + savePointY))
-            , SvgAttr.width (String.fromFloat savePointWidth)
-            , SvgAttr.height (String.fromFloat savePointHeight)
-            , SvgAttr.fill "#45ff45"
-            , SvgAttr.opacity (String.fromFloat saveOpacity)
+            , SvgAttr.width (String.fromFloat  savePointWidth)
+            , SvgAttr.height (String.fromFloat  savePointHeight)
+            , SvgAttr.xlinkHref "assets/save.svg"
             ]
             []
         ]
+
     else
         []
 

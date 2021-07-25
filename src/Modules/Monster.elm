@@ -346,26 +346,22 @@ viewOneMonster model monster =
     case monster.appearance of
         MonsterA width height ->
             if monster.faceDirecton == Right then 
-            [ Svg.rect
+            [ Svg.image
                 [ SvgAttr.x (String.fromFloat (ViewMove.deltaX model + monsterX - 2.0))
                 , SvgAttr.y (String.fromFloat (ViewMove.deltaY model + monsterY))
-                , SvgAttr.strokeWidth "2"
-                , SvgAttr.stroke "#00000000"
-                , SvgAttr.fill "#FF0000FF"
                 , SvgAttr.width (String.fromFloat (width + 2.0))
                 , SvgAttr.height (String.fromFloat height)
+                , SvgAttr.xlinkHref "assets/monsterRight.svg"
                 ]
                 []
             ]
             else
-            [ Svg.rect
+            [ Svg.image
                 [ SvgAttr.x (String.fromFloat (ViewMove.deltaX model + monsterX - 2.0))
                 , SvgAttr.y (String.fromFloat (ViewMove.deltaY model + monsterY))
-                , SvgAttr.strokeWidth "2"
-                , SvgAttr.stroke "#00000000"
-                , SvgAttr.fill "#FF0000FF"
                 , SvgAttr.width (String.fromFloat (width + 2.0))
                 , SvgAttr.height (String.fromFloat height)
+                , SvgAttr.xlinkHref "assets/monsterLeft.svg"
                 ]
                 []
             ]
