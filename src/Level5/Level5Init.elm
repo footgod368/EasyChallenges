@@ -99,21 +99,21 @@ init a =
                         , [ Brick.initPosVolumeColor (GlobalBasics.blockPosFloat ( 58, 37 )) ( 40, 40 ) "#FFFF00" ]
                         , [ Brick.init
                                 (GlobalBasics.blockPosFloat ( 56, 36 ))
-                                (Brick.Detailed 40 40 "#1E90FF")
+                                (Brick.Pill "#1E90FF")
                                 (GlobalModule.Invisible (GlobalModule.VisibleAfterEvent 4 (GlobalModule.InvisibleAfterEvent 6 GlobalModule.NoNextVisibility)))
                                 (GlobalModule.NoCollide GlobalModule.NoNextCollision)
                                 (GlobalModule.Move (Array.fromList []) 5.0 11 (GlobalModule.Move (Array.fromList [ GlobalBasics.blockPosFloat ( 66, 39 ) ]) 5.0 -1 GlobalModule.NoNextMove))
                           ]
                         , [ Brick.init
                                 (GlobalBasics.blockPosFloat ( 58, 36 ))
-                                (Brick.Detailed 40 40 "#FF0000")
+                                (Brick.Pill "#FF0000")
                                 (GlobalModule.Invisible (GlobalModule.VisibleAfterEvent 5 (GlobalModule.InvisibleAfterEvent 7 GlobalModule.NoNextVisibility)))
                                 (GlobalModule.NoCollide GlobalModule.NoNextCollision)
                                 (GlobalModule.Move (Array.fromList []) 5.0 12 (GlobalModule.Move (Array.fromList [ GlobalBasics.blockPosFloat ( 66, 39 ) ]) 5.0 -1 GlobalModule.NoNextMove))
                           ]
                         , [ Brick.init
                                 (GlobalBasics.blockPosFloat ( 66, 39 ))
-                                (Brick.Detailed 40 40 "\t#3CB371")
+                                (Brick.Pill "\t#3CB371")
                                 (GlobalModule.Invisible (GlobalModule.VisibleAfterEvent 14 (GlobalModule.InvisibleAfterEvent 15 GlobalModule.NoNextVisibility)))
                                 (GlobalModule.NoCollide GlobalModule.NoNextCollision)
                                 GlobalModule.NoNextMove

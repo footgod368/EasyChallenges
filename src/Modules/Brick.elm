@@ -50,6 +50,7 @@ type BrickAppearance
     | Detailed Float Float String --with designable size and color
     | Wings
     | Switch Bool
+    | Pill String
 
 
 {-| brickWidth Constant
@@ -209,16 +210,6 @@ initCollideHiddenRow n x y id =
 brickCollisionBox : BrickAppearance -> GlobalBasics.CollisionBox
 brickCollisionBox brickAppearance =
     case brickAppearance of
-        NormalAppearance ->
-            GlobalBasics.Polygon
-                (Array.fromList
-                    [ ( ( 0.0, 0.0 ), ( brickWidth, 0.0 ) )
-                    , ( ( brickWidth, 0.0 ), ( brickWidth, brickHeight ) )
-                    , ( ( brickWidth, brickHeight ), ( 0.0, brickHeight ) )
-                    , ( ( 0.0, brickHeight ), ( 0.0, 0.0 ) )
-                    ]
-                )
-
         Detailed width height _ ->
             GlobalBasics.Polygon
                 (Array.fromList
@@ -228,24 +219,15 @@ brickCollisionBox brickAppearance =
                     , ( ( 0.0, height ), ( 0.0, 0.0 ) )
                     ]
                 )
-        Wings ->
+        _ ->
             GlobalBasics.Polygon
-            (Array.fromList
-                [ ( ( 0.0, 0.0 ), ( brickWidth, 0.0 ) )
-                , ( ( brickWidth, 0.0 ), ( brickWidth, brickHeight ) )
-                , ( ( brickWidth, brickHeight ), ( 0.0, brickHeight ) )
-                , ( ( 0.0, brickHeight ), ( 0.0, 0.0 ) )
-                ]
-            )
-        Switch _ ->
-            GlobalBasics.Polygon
-            (Array.fromList
-                [ ( ( 0.0, 0.0 ), ( brickWidth, 0.0 ) )
-                , ( ( brickWidth, 0.0 ), ( brickWidth, brickHeight ) )
-                , ( ( brickWidth, brickHeight ), ( 0.0, brickHeight ) )
-                , ( ( 0.0, brickHeight ), ( 0.0, 0.0 ) )
-                ]
-            )
+                (Array.fromList
+                    [ ( ( 0.0, 0.0 ), ( brickWidth, 0.0 ) )
+                    , ( ( brickWidth, 0.0 ), ( brickWidth, brickHeight ) )
+                    , ( ( brickWidth, brickHeight ), ( 0.0, brickHeight ) )
+                    , ( ( 0.0, brickHeight ), ( 0.0, 0.0 ) )
+                    ]
+                )
 
 
 {-| quick function to yield the 'collisionBox' of a brick given the position
@@ -331,6 +313,8 @@ viewOneBrick model brick =
                         drawSwitch1 x0 y0 "#00CCFF"
                     else
                         drawSwitch2 x0 y0 "#00CCFF"
+                Pill color ->
+                    []
         GlobalModule.Invisible _ ->
             []
 

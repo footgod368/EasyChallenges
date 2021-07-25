@@ -152,14 +152,9 @@ checkRed ( model, cmd ) =
 notBlueOrRed : Brick.Brick -> Bool
 notBlueOrRed brick =
     case brick.appearance of
-        Brick.NormalAppearance ->
-            True
-
         Brick.Detailed _ _ color ->
             color /= "#1E90FF" && color /= "#FF0000"
-        Brick.Wings ->
-            True
-        Brick.Switch _ ->
+        _ ->
             True
 
 
