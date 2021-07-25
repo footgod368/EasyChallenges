@@ -469,7 +469,7 @@ view model =
                 0
     in
     [ Svg.image
-        [ SvgAttr.x (String.fromFloat (playerX - 11.0 + playerDeltaX model))
+        [ SvgAttr.x (String.fromFloat (playerX - 1.0 + playerDeltaX model))
         , SvgAttr.y (String.fromFloat (playerY + playerDeltaY model))
         , SvgAttr.width (String.fromFloat (model.player.property.playerWidth + 7.0))
         , SvgAttr.height (String.fromFloat (model.player.property.playerHeight + 2.0))
