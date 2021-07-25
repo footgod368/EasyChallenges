@@ -63,6 +63,7 @@ type alias PlayerProperty =
     , playerJumpInitialSpeed : Float
     , playerHorizontalSpeed : Float
     , gravityAcce : Float
+    , isGreen: Bool
     }
 
 
@@ -79,6 +80,7 @@ defPlayerProperty =
     , playerJumpInitialSpeed = -1.0
     , playerHorizontalSpeed = 1.93
     , gravityAcce = 0.1
+    , isGreen = False
     }
 
 
@@ -466,17 +468,22 @@ view model =
         , SvgAttr.y (String.fromFloat (playerY + playerDeltaY model))
         , SvgAttr.width (String.fromFloat (model.player.property.playerWidth + 7.0))
         , SvgAttr.height (String.fromFloat (model.player.property.playerHeight + 2.0))
-        --, SvgAttr.fill "#000000"
         ,if model.player.faceDirection == Right then
             if model.player.property.ifPlayerJumpOnTheGround then
                 SvgAttr.xlinkHref "assets/playerRight.svg"
             else
-                SvgAttr.xlinkHref "assets/playerWingsRight.png"
+                if model.player.property.isGreen then
+                    SvgAttr.xlinkHref "assets/playerGreenRight.png"
+                else
+                    SvgAttr.xlinkHref "assets/playerWingsRight.png"
         else
             if model.player.property.ifPlayerJumpOnTheGround then
-                SvgAttr.xlinkHref "assets/playerRight.svg"
+                SvgAttr.xlinkHref "assets/playerLeft.svg"
             else
-                SvgAttr.xlinkHref "assets/playerWingsLeft.png"
+                if model.player.property.isGreen then
+                    SvgAttr.xlinkHref "assets/playerGreenLeft.png"
+                else
+                    SvgAttr.xlinkHref "assets/playerWingsLeft.png"
         ]
         []
     , Svg.rect

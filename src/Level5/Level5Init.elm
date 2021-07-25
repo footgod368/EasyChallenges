@@ -40,7 +40,8 @@ init a =
                 | playerJumpNum = 999999
                 , ifPlayerJumpOnTheGround = False
             }
-
+        newnewProperty =
+          {newProperty | isGreen = True}
         newModel =
             { windowBoundary = ( 1000.0, 800.0 )
             , levelBoundary = ( 70 * 40, 40 * 40.0 )
@@ -71,9 +72,9 @@ init a =
                     , Event.hitLineSeg 17 "jump down" (GlobalBasics.blockPosFloat ( 6, 11.1 )) (GlobalBasics.blockPosFloat ( 12, 11.1 ))
                     ]
             , boundary = Boundary.normalInit
-            , playerAtLastSavePoint = Player.init ( 50, 290.0 ) Player.defPlayerProperty (Player.ChangeTo newProperty 1 Player.NoNextPropertyChange)
+            , playerAtLastSavePoint = Player.init ( 50, 290.0 ) Player.defPlayerProperty (Player.ChangeTo newProperty 1 (Player.ChangeTo newnewProperty 15 Player.NoNextPropertyChange))
             , player =
-                Player.init ( 50, 290.0 ) Player.defPlayerProperty (Player.ChangeTo newProperty 1 Player.NoNextPropertyChange)
+                Player.init ( 50, 290.0 ) Player.defPlayerProperty (Player.ChangeTo newProperty 1 (Player.ChangeTo newnewProperty 15 Player.NoNextPropertyChange))
             , bricks =
                 Array.fromList
                     (List.concat
