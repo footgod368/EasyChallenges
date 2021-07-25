@@ -314,12 +314,76 @@ viewOneBrick model brick =
                     else
                         drawSwitch2 x0 y0 "#00CCFF"
                 Pill color ->
-                    []
+                    let
+                        ( brickX, brickY ) =
+                            brick.pos
+                        x0 = ViewMove.deltaX model + brickX
+                        y0 = ViewMove.deltaY model + brickY
+                    in
+                    drawPill x0 y0 color
         GlobalModule.Invisible _ ->
             []
 
         _ ->
             []
+
+{-| View of pill, not exposed.
+-}
+drawPill : Float -> Float -> String -> List (Svg MainType.Msg)
+drawPill x y color =
+    [ Svg.circle
+        [ SvgAttr.cx (String.fromFloat (x + 10))
+        , SvgAttr.cy (String.fromFloat (y + 30))
+        , SvgAttr.r "9.5"
+        , SvgAttr.fill "#FFFFFF"
+        , SvgAttr.stroke "#000000"
+        , SvgAttr.strokeWidth "1"
+        ]
+        []
+    , Svg.circle
+        [ SvgAttr.cx (String.fromFloat (x + 30))
+        , SvgAttr.cy (String.fromFloat (y + 30))
+        , SvgAttr.r "9.5"
+        , SvgAttr.fill color
+        , SvgAttr.stroke "#000000"
+        , SvgAttr.strokeWidth "1"
+        ]
+        [] 
+    , Svg.rect
+        [ SvgAttr.x (String.fromFloat (x + 10))
+        , SvgAttr.y (String.fromFloat (y + 21))
+        , SvgAttr.width "10"
+        , SvgAttr.height "18"
+        , SvgAttr.fill "#FFFFFF"
+        ]
+        []
+    , Svg.rect
+        [ SvgAttr.x (String.fromFloat (x + 20))
+        , SvgAttr.y (String.fromFloat (y + 21))
+        , SvgAttr.width "10"
+        , SvgAttr.height "18"
+        , SvgAttr.fill color
+        ]
+        []
+    , Svg.line
+        [ SvgAttr.x1 (String.fromFloat (x + 10))
+        , SvgAttr.y1 (String.fromFloat (y + 20.5))
+        , SvgAttr.x2 (String.fromFloat (x + 30))
+        , SvgAttr.y2 (String.fromFloat (y + 20.5))
+        , SvgAttr.stroke "#000000"
+        , SvgAttr.strokeWidth "1"
+        ]
+        []
+    , Svg.line
+        [ SvgAttr.x1 (String.fromFloat (x + 10))
+        , SvgAttr.y1 (String.fromFloat (y + 39.5))
+        , SvgAttr.x2 (String.fromFloat (x + 30))
+        , SvgAttr.y2 (String.fromFloat (y + 39.5))
+        , SvgAttr.stroke "#000000"
+        , SvgAttr.strokeWidth "1"
+        ]
+        []
+    ]
 
 {-| View of switch, not exposed.
 -}
