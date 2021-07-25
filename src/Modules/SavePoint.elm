@@ -106,27 +106,26 @@ init ( x, y ) =
 -}
 viewOneSavePoint : { model | windowBoundary : GlobalBasics.Pos, levelBoundary : GlobalBasics.Pos, player : Player.Player } -> SavePoint -> List (Svg MainType.Msg)
 viewOneSavePoint model savePoint =
-    let
-        ( savePointX, savePointY ) =
-            savePoint.pos
+    if savePoint.appearance == Unsaved then
+        let
+            ( savePointX, savePointY ) =
+                savePoint.pos
 
-        saveOpacity =
-            if savePoint.appearance == Saved then
-                1.0
-
-            else
-                0.4
-    in
-    [ Svg.rect
-        [ SvgAttr.x (String.fromFloat (ViewMove.deltaX model + savePointX))
-        , SvgAttr.y (String.fromFloat (ViewMove.deltaY model + savePointY))
-        , SvgAttr.width (String.fromFloat savePointWidth)
-        , SvgAttr.height (String.fromFloat savePointHeight)
-        , SvgAttr.fill "#45ff45"
-        , SvgAttr.opacity (String.fromFloat saveOpacity)
+            saveOpacity =
+                    0.4
+        in
+        [ Svg.image
+            [ SvgAttr.x (String.fromFloat (ViewMove.deltaX model + savePointX))
+            , SvgAttr.y (String.fromFloat (ViewMove.deltaY model + savePointY))
+            , SvgAttr.width (String.fromFloat  savePointWidth)
+            , SvgAttr.height (String.fromFloat  savePointHeight)
+            , SvgAttr.xlinkHref "assets/save.svg"
+            ]
+            []
         ]
+
+    else
         []
-    ]
 
 
 {-| view function of savePoint

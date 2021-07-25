@@ -60,6 +60,11 @@ type alias Monster =
     , fixY : Float
     }
 
+{-| the face direction of monster
+-}
+type FaceDirection
+    = Right
+    | Left
 
 {-| MonsterAppearance currently describes the size of the monster, maybe different styles will be implemented later.
 -}
@@ -233,7 +238,6 @@ updateOneMonsterMoveX id model =
 
             else
                 monster.xSpeed
-
         newMonster =
             { monster | pos = ( newX, Tuple.second monster.pos ), xSpeed = newSpeed }
 
@@ -331,14 +335,12 @@ viewOneMonster model monster =
     in
     case monster.appearance of
         MonsterA width height ->
-            [ Svg.rect
+            [ Svg.image
                 [ SvgAttr.x (String.fromFloat (ViewMove.deltaX model + monsterX - 2.0))
                 , SvgAttr.y (String.fromFloat (ViewMove.deltaY model + monsterY))
-                , SvgAttr.strokeWidth "2"
-                , SvgAttr.stroke "#00000000"
-                , SvgAttr.fill "#FF0000FF"
                 , SvgAttr.width (String.fromFloat (width + 2.0))
                 , SvgAttr.height (String.fromFloat height)
+                , SvgAttr.xlinkHref "assets/monster.png"
                 ]
                 []
             ]

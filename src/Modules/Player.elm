@@ -63,6 +63,7 @@ type alias PlayerProperty =
     , playerJumpInitialSpeed : Float
     , playerHorizontalSpeed : Float
     , gravityAcce : Float
+    , isGreen: Bool
     }
 
 
@@ -79,6 +80,7 @@ defPlayerProperty =
     , playerJumpInitialSpeed = -1.0
     , playerHorizontalSpeed = 1.93
     , gravityAcce = 0.1
+    , isGreen = False
     }
 
 
@@ -89,6 +91,11 @@ type PropertyChange
     = ChangeTo PlayerProperty Int PropertyChange
     | NoNextPropertyChange
 
+{-| the face direction of player, used in 'view'
+-}
+type FaceDirection
+    = Left
+    | Right
 
 {-| Definition of player, `pos` is current position, `lastPos` store the last position, used in collision test,
 `velocity` is its velocity, divided into x-axis and y-axis. `collisionBox` is its `CollisionBox`, `jumpNum` is how
@@ -101,6 +108,7 @@ type alias Player =
     , pos : GlobalBasics.Pos
     , lastPos : GlobalBasics.Pos
     , velocity : GlobalBasics.Pos
+    , faceDirection: FaceDirection
     , jump : PlayerJump
     , ifThisFrameOnGround : Bool
     , collisionBox : GlobalBasics.CollisionBox
@@ -212,6 +220,7 @@ init pos property propertyChange =
     , pos = pos
     , lastPos = pos
     , velocity = ( 0.0, 0.0 )
+    , faceDirection = Right
     , jump = Jump 2 -1
     , ifThisFrameOnGround = False
     , collisionBox =
@@ -241,6 +250,7 @@ update ( model, cmd ) =
                 |> updatePlayerProperty
                 |> updatePlayerPos
                 |> updatePlayerVelocity
+
 
         Dead ->
             ( model, cmd )
@@ -310,6 +320,13 @@ updatePlayerVelocity ( model, cmd ) =
             else
                 0.0
 
+        newFaceDirection = if velocityX > 0 then
+                                Right
+                            else if velocityX < 0 then
+                                Left
+                            else
+                                model.player.faceDirection
+
         ( newJump, velocityY ) =
             case model.player.jump of
                 Jump jumpNum jumpFrame ->
@@ -351,7 +368,7 @@ updatePlayerVelocity ( model, cmd ) =
             model.player
 
         newPlayer =
-            { oldPlayer | jump = newJump, velocity = ( velocityX, velocityY ), ifThisFrameOnGround = False }
+            { oldPlayer | jump = newJump, velocity = ( velocityX, velocityY ), ifThisFrameOnGround = False , faceDirection = newFaceDirection}
     in
     ( { model | player = newPlayer }, cmd )
 
@@ -451,8 +468,22 @@ view model =
         , SvgAttr.y (String.fromFloat (playerY + playerDeltaY model))
         , SvgAttr.width (String.fromFloat (model.player.property.playerWidth + 7.0))
         , SvgAttr.height (String.fromFloat (model.player.property.playerHeight + 2.0))
-        --, SvgAttr.fill "#000000"
-        , SvgAttr.xlinkHref "assets/player.svg"
+        ,if model.player.faceDirection == Right then
+            if model.player.property.ifPlayerJumpOnTheGround then
+                SvgAttr.xlinkHref "assets/playerRight.svg"
+            else
+                if model.player.property.isGreen then
+                    SvgAttr.xlinkHref "assets/playerGreenRight.png"
+                else
+                    SvgAttr.xlinkHref "assets/playerWingsRight.png"
+        else
+            if model.player.property.ifPlayerJumpOnTheGround then
+                SvgAttr.xlinkHref "assets/playerLeft.svg"
+            else
+                if model.player.property.isGreen then
+                    SvgAttr.xlinkHref "assets/playerGreenLeft.png"
+                else
+                    SvgAttr.xlinkHref "assets/playerWingsLeft.png"
         ]
         []
     , Svg.rect

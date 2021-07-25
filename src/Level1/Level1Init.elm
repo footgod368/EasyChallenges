@@ -124,10 +124,10 @@ init a =
             , needles =
                 Array.fromList
                     (List.concat
-                        [ [ Needle.initHidden ( 15, 13 ) 2 ]
-                        , Needle.initFallingRow 13 22 26 3
-                        , [ Needle.initHiddenCollideAfter ( 25, 12 ) 4 ]
-                        , Needle.initHiddenRow 9 31 37 9
+                        [ [ Needle.initHidden ( 15, 13 ) 2 Needle.Downwards]
+                        , Needle.initFallingRow 13 22 26 3 Needle.Downwards
+                        , [ Needle.initHiddenCollideAfter ( 25, 12 ) 4 Needle.Upwards]
+                        , Needle.initHiddenRow 9 31 37 9 Needle.Downwards
 
                         -- , [ Needle.initPos (GlobalBasics.blockPosFloat ( 46.0, 14.75 ))
                         --   , Needle.initPos (GlobalBasics.blockPosFloat ( 47.0, 14.75 ))
@@ -136,7 +136,7 @@ init a =
                         --   ]
                         , let
                             tempSword =
-                                Needle.sword ( 46, 14.75 ) ( 46, -2 ) ( 4, 0.25 ) 6.0 12
+                                Needle.sword ( 46, 14.75 ) ( 46, -2 ) ( 4, 0.25 ) 6.0 12 Needle.Upwards
                           in
                           [ { tempSword
                                 | visibility = GlobalModule.Visible GlobalModule.NoNextVisibility

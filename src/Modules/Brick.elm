@@ -48,6 +48,9 @@ import Svg.Attributes as SvgAttr
 type BrickAppearance
     = NormalAppearance --standard brick
     | Detailed Float Float String --with designable size and color
+    | Wings
+    | Switch Bool
+    | Pill String
 
 
 {-| brickWidth Constant
@@ -207,16 +210,6 @@ initCollideHiddenRow n x y id =
 brickCollisionBox : BrickAppearance -> GlobalBasics.CollisionBox
 brickCollisionBox brickAppearance =
     case brickAppearance of
-        NormalAppearance ->
-            GlobalBasics.Polygon
-                (Array.fromList
-                    [ ( ( 0.0, 0.0 ), ( brickWidth, 0.0 ) )
-                    , ( ( brickWidth, 0.0 ), ( brickWidth, brickHeight ) )
-                    , ( ( brickWidth, brickHeight ), ( 0.0, brickHeight ) )
-                    , ( ( 0.0, brickHeight ), ( 0.0, 0.0 ) )
-                    ]
-                )
-
         Detailed width height _ ->
             GlobalBasics.Polygon
                 (Array.fromList
@@ -224,6 +217,15 @@ brickCollisionBox brickAppearance =
                     , ( ( width, 0.0 ), ( width, height ) )
                     , ( ( width, height ), ( 0.0, height ) )
                     , ( ( 0.0, height ), ( 0.0, 0.0 ) )
+                    ]
+                )
+        _ ->
+            GlobalBasics.Polygon
+                (Array.fromList
+                    [ ( ( 0.0, 0.0 ), ( brickWidth, 0.0 ) )
+                    , ( ( brickWidth, 0.0 ), ( brickWidth, brickHeight ) )
+                    , ( ( brickWidth, brickHeight ), ( 0.0, brickHeight ) )
+                    , ( ( 0.0, brickHeight ), ( 0.0, 0.0 ) )
                     ]
                 )
 
@@ -243,44 +245,255 @@ viewOneBrick : { model | windowBoundary : GlobalBasics.Pos, levelBoundary : Glob
 viewOneBrick model brick =
     case brick.visibility of
         GlobalModule.Visible _ ->
-            let
-                ( brickX, brickY ) =
-                    brick.pos
-            in
-            [ Svg.rect
-                (List.append
-                    [ SvgAttr.x (String.fromFloat (ViewMove.deltaX model + brickX))
-                    , SvgAttr.y (String.fromFloat (ViewMove.deltaY model + brickY))
-                    , SvgAttr.strokeWidth "2"
-                    , SvgAttr.stroke "#000000"
-                    , case brick.appearance of
-                        NormalAppearance ->
-                            SvgAttr.fill "#00000050"
-
-                        Detailed width height color ->
-                            SvgAttr.fill color
+            case brick.appearance of
+                NormalAppearance ->
+                    let
+                        ( brickX, brickY ) =
+                            brick.pos
+                    in
+                    [ Svg.rect
+                        (List.append
+                            [ SvgAttr.x (String.fromFloat (ViewMove.deltaX model + brickX))
+                            , SvgAttr.y (String.fromFloat (ViewMove.deltaY model + brickY))
+                            , SvgAttr.strokeWidth "2"
+                            , SvgAttr.stroke "#000000"
+                            , SvgAttr.fill "#00000050"
+                            ]
+                            (
+                                    [ SvgAttr.width (String.fromFloat brickWidth)
+                                    , SvgAttr.height (String.fromFloat brickHeight)
+                                    ]
+                            )
+                        )
+                        []
                     ]
-                    (case brick.appearance of
-                        NormalAppearance ->
-                            [ SvgAttr.width (String.fromFloat brickWidth)
-                            , SvgAttr.height (String.fromFloat brickHeight)
+                Detailed width height color ->
+                    let
+                        ( brickX, brickY ) =
+                            brick.pos
+                    in
+                    [ Svg.rect
+                        (List.append
+                            [ SvgAttr.x (String.fromFloat (ViewMove.deltaX model + brickX))
+                            , SvgAttr.y (String.fromFloat (ViewMove.deltaY model + brickY))
+                            , SvgAttr.strokeWidth "2"
+                            , SvgAttr.stroke "#000000"
+                            , SvgAttr.fill color
                             ]
-
-                        Detailed width height color ->
-                            [ SvgAttr.width (String.fromFloat width)
-                            , SvgAttr.height (String.fromFloat height)
-                            ]
-                    )
-                )
-                []
-            ]
-
+                            (
+                                    [ SvgAttr.width (String.fromFloat width)
+                                    , SvgAttr.height (String.fromFloat height)
+                                    ]
+                            )
+                        )
+                        []
+                    ]
+                Wings ->
+                    let
+                        ( brickX, brickY ) =
+                            brick.pos
+                    in
+                    [ Svg.image
+                        [ SvgAttr.x (String.fromFloat (ViewMove.deltaX model + brickX))
+                        , SvgAttr.y (String.fromFloat (ViewMove.deltaY model + brickY))
+                        , SvgAttr.width (String.fromFloat   brickWidth)
+                        , SvgAttr.height (String.fromFloat  brickHeight)
+                        , SvgAttr.xlinkHref "assets/wings2.png"
+                        ]
+                        []
+                    ]
+                Switch bool ->
+                    let
+                        ( brickX, brickY ) =
+                            brick.pos
+                        x0 = ViewMove.deltaX model + brickX
+                        y0 = ViewMove.deltaY model + brickY
+                    in
+                    if bool then
+                        drawSwitch1 x0 y0 "#00CCFF"
+                    else
+                        drawSwitch2 x0 y0 "#00CCFF"
+                Pill color ->
+                    let
+                        ( brickX, brickY ) =
+                            brick.pos
+                        x0 = ViewMove.deltaX model + brickX
+                        y0 = ViewMove.deltaY model + brickY
+                    in
+                    drawPill x0 y0 color
         GlobalModule.Invisible _ ->
             []
 
         _ ->
             []
 
+{-| View of pill, not exposed.
+-}
+drawPill : Float -> Float -> String -> List (Svg MainType.Msg)
+drawPill x y color =
+    [ Svg.circle
+        [ SvgAttr.cx (String.fromFloat (x + 10))
+        , SvgAttr.cy (String.fromFloat (y + 30))
+        , SvgAttr.r "9.5"
+        , SvgAttr.fill "#FFFFFF"
+        , SvgAttr.stroke "#000000"
+        , SvgAttr.strokeWidth "1"
+        ]
+        []
+    , Svg.circle
+        [ SvgAttr.cx (String.fromFloat (x + 30))
+        , SvgAttr.cy (String.fromFloat (y + 30))
+        , SvgAttr.r "9.5"
+        , SvgAttr.fill color
+        , SvgAttr.stroke "#000000"
+        , SvgAttr.strokeWidth "1"
+        ]
+        [] 
+    , Svg.rect
+        [ SvgAttr.x (String.fromFloat (x + 10))
+        , SvgAttr.y (String.fromFloat (y + 21))
+        , SvgAttr.width "10"
+        , SvgAttr.height "18"
+        , SvgAttr.fill "#FFFFFF"
+        ]
+        []
+    , Svg.rect
+        [ SvgAttr.x (String.fromFloat (x + 20))
+        , SvgAttr.y (String.fromFloat (y + 21))
+        , SvgAttr.width "10"
+        , SvgAttr.height "18"
+        , SvgAttr.fill color
+        ]
+        []
+    , Svg.line
+        [ SvgAttr.x1 (String.fromFloat (x + 10))
+        , SvgAttr.y1 (String.fromFloat (y + 20.5))
+        , SvgAttr.x2 (String.fromFloat (x + 30))
+        , SvgAttr.y2 (String.fromFloat (y + 20.5))
+        , SvgAttr.stroke "#000000"
+        , SvgAttr.strokeWidth "1"
+        ]
+        []
+    , Svg.line
+        [ SvgAttr.x1 (String.fromFloat (x + 10))
+        , SvgAttr.y1 (String.fromFloat (y + 39.5))
+        , SvgAttr.x2 (String.fromFloat (x + 30))
+        , SvgAttr.y2 (String.fromFloat (y + 39.5))
+        , SvgAttr.stroke "#000000"
+        , SvgAttr.strokeWidth "1"
+        ]
+        []
+    ]
+
+{-| View of switch, not exposed.
+-}
+drawSwitch2 : Float -> Float -> String -> List (Svg MainType.Msg)
+drawSwitch2 x y color =
+    [ Svg.line
+        [ SvgAttr.x1 (String.fromFloat (x + 40))
+        , SvgAttr.y1 (String.fromFloat (y + 6))
+        , SvgAttr.x2 (String.fromFloat (x + 25))
+        , SvgAttr.y2 (String.fromFloat (y + 31.5))
+        , SvgAttr.stroke "#000000"
+        , SvgAttr.strokeWidth "4"
+        ]
+        []
+    , Svg.path
+        [ SvgAttr.d
+            ("M"
+                ++ String.fromFloat x
+                ++ " "
+                ++ String.fromFloat (y + 40)
+                ++ "A "
+                ++ String.fromFloat 20
+                ++ " "
+                ++ String.fromFloat 20
+                ++ ", 0,"
+                ++ " 0,"
+                ++ " 1, "
+                ++ String.fromFloat (x + 40)
+                ++ " "
+                ++ String.fromFloat (y + 40)
+            )
+        , SvgAttr.fill color
+        , SvgAttr.stroke "#000000"
+        , SvgAttr.strokeWidth "1"
+        ]
+        []
+    , Svg.line
+        [ SvgAttr.x1 (String.fromFloat x)
+        , SvgAttr.y1 (String.fromFloat (y + 40))
+        , SvgAttr.x2 (String.fromFloat (x + 40))
+        , SvgAttr.y2 (String.fromFloat (y + 40))
+        , SvgAttr.stroke "#000000"
+        , SvgAttr.strokeWidth "1"
+        ]
+        []
+    , Svg.circle
+        [ SvgAttr.cx (String.fromFloat (x + 40))
+        , SvgAttr.cy (String.fromFloat (y + 6))
+        , SvgAttr.r "5"
+        , SvgAttr.fill "#FFFF00"
+        , SvgAttr.stroke "#000000"
+        , SvgAttr.strokeWidth "1"
+        ]
+        []
+    ]
+
+{-| View of switch, not exposed.
+-}
+drawSwitch1 : Float -> Float -> String -> List (Svg MainType.Msg)
+drawSwitch1 x y color =
+    [ Svg.line
+        [ SvgAttr.x1 (String.fromFloat x)
+        , SvgAttr.y1 (String.fromFloat (y + 6))
+        , SvgAttr.x2 (String.fromFloat (x + 15))
+        , SvgAttr.y2 (String.fromFloat (y + 31.5))
+        , SvgAttr.stroke "#000000"
+        , SvgAttr.strokeWidth "4"
+        ]
+        []
+    , Svg.path
+        [ SvgAttr.d
+            ("M"
+                ++ String.fromFloat x
+                ++ " "
+                ++ String.fromFloat (y + 40)
+                ++ "A "
+                ++ String.fromFloat 20
+                ++ " "
+                ++ String.fromFloat 20
+                ++ ", 0,"
+                ++ " 0,"
+                ++ " 1, "
+                ++ String.fromFloat (x + 40)
+                ++ " "
+                ++ String.fromFloat (y + 40)
+            )
+        , SvgAttr.fill color
+        , SvgAttr.stroke "#000000"
+        , SvgAttr.strokeWidth "1"
+        ]
+        []
+    , Svg.line
+        [ SvgAttr.x1 (String.fromFloat x)
+        , SvgAttr.y1 (String.fromFloat (y + 40))
+        , SvgAttr.x2 (String.fromFloat (x + 40))
+        , SvgAttr.y2 (String.fromFloat (y + 40))
+        , SvgAttr.stroke "#000000"
+        , SvgAttr.strokeWidth "1"
+        ]
+        []
+    , Svg.circle
+        [ SvgAttr.cx (String.fromFloat x)
+        , SvgAttr.cy (String.fromFloat (y + 6))
+        , SvgAttr.r "5"
+        , SvgAttr.fill "#00FF00"
+        , SvgAttr.stroke "#000000"
+        , SvgAttr.strokeWidth "1"
+        ]
+        []
+    ]
 
 {-| view function of brick
 -}

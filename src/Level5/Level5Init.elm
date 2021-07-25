@@ -40,7 +40,8 @@ init a =
                 | playerJumpNum = 999999
                 , ifPlayerJumpOnTheGround = False
             }
-
+        newnewProperty =
+          {newProperty | isGreen = True}
         newModel =
             { windowBoundary = ( 1000.0, 800.0 )
             , levelBoundary = ( 70 * 40, 40 * 40.0 )
@@ -71,9 +72,9 @@ init a =
                     , Event.hitLineSeg 17 "jump down" (GlobalBasics.blockPosFloat ( 6, 11.1 )) (GlobalBasics.blockPosFloat ( 12, 11.1 ))
                     ]
             , boundary = Boundary.normalInit
-            , playerAtLastSavePoint = Player.init ( 50, 290.0 ) Player.defPlayerProperty (Player.ChangeTo newProperty 1 Player.NoNextPropertyChange)
+            , playerAtLastSavePoint = Player.init ( 50, 290.0 ) Player.defPlayerProperty (Player.ChangeTo newProperty 1 (Player.ChangeTo newnewProperty 15 Player.NoNextPropertyChange))
             , player =
-                Player.init ( 50, 290.0 ) Player.defPlayerProperty (Player.ChangeTo newProperty 1 Player.NoNextPropertyChange)
+                Player.init ( 50, 290.0 ) Player.defPlayerProperty (Player.ChangeTo newProperty 1 (Player.ChangeTo newnewProperty 15 Player.NoNextPropertyChange))
             , bricks =
                 Array.fromList
                     (List.concat
@@ -83,7 +84,7 @@ init a =
                         , [ Brick.initPosVolumeColor (GlobalBasics.blockPosFloat ( 3, 37 )) ( 40, 40 ) "#FFFF00" ]
                         , [ Brick.init
                                 (GlobalBasics.blockPosFloat ( 3, 36 ))
-                                (Brick.Detailed 40 40 "\t#778899")
+                                (Brick.Wings)
                                 (GlobalModule.Invisible (GlobalModule.VisibleAfterEvent 3 (GlobalModule.InvisibleAfterEvent 1 GlobalModule.NoNextVisibility)))
                                 (GlobalModule.NoCollide GlobalModule.NoNextCollision)
                                 GlobalModule.NoNextMove
@@ -98,21 +99,21 @@ init a =
                         , [ Brick.initPosVolumeColor (GlobalBasics.blockPosFloat ( 58, 37 )) ( 40, 40 ) "#FFFF00" ]
                         , [ Brick.init
                                 (GlobalBasics.blockPosFloat ( 56, 36 ))
-                                (Brick.Detailed 40 40 "#1E90FF")
+                                (Brick.Pill "#1E90FF")
                                 (GlobalModule.Invisible (GlobalModule.VisibleAfterEvent 4 (GlobalModule.InvisibleAfterEvent 6 GlobalModule.NoNextVisibility)))
                                 (GlobalModule.NoCollide GlobalModule.NoNextCollision)
                                 (GlobalModule.Move (Array.fromList []) 5.0 11 (GlobalModule.Move (Array.fromList [ GlobalBasics.blockPosFloat ( 66, 39 ) ]) 5.0 -1 GlobalModule.NoNextMove))
                           ]
                         , [ Brick.init
                                 (GlobalBasics.blockPosFloat ( 58, 36 ))
-                                (Brick.Detailed 40 40 "#FF0000")
+                                (Brick.Pill "#FF0000")
                                 (GlobalModule.Invisible (GlobalModule.VisibleAfterEvent 5 (GlobalModule.InvisibleAfterEvent 7 GlobalModule.NoNextVisibility)))
                                 (GlobalModule.NoCollide GlobalModule.NoNextCollision)
                                 (GlobalModule.Move (Array.fromList []) 5.0 12 (GlobalModule.Move (Array.fromList [ GlobalBasics.blockPosFloat ( 66, 39 ) ]) 5.0 -1 GlobalModule.NoNextMove))
                           ]
                         , [ Brick.init
                                 (GlobalBasics.blockPosFloat ( 66, 39 ))
-                                (Brick.Detailed 40 40 "\t#3CB371")
+                                (Brick.Pill "\t#3CB371")
                                 (GlobalModule.Invisible (GlobalModule.VisibleAfterEvent 14 (GlobalModule.InvisibleAfterEvent 15 GlobalModule.NoNextVisibility)))
                                 (GlobalModule.NoCollide GlobalModule.NoNextCollision)
                                 GlobalModule.NoNextMove
@@ -153,13 +154,13 @@ init a =
             , needles =
                 Array.fromList
                     (List.concat
-                        [ List.map (\i -> Needle.initHiddenCollideAfter ( i, 10 ) 17) (List.range 6 12)
-                        , Needle.initHiddenRow 39.9 5 46 2
-                        , [ Needle.deadlyBlock ( 20, 20 ) ( 2, 8 )
-                          , Needle.deadlyBlock ( 20, 32 ) ( 2, 8 )
+                        [ List.map (\i -> Needle.initHiddenCollideAfter ( i, 10 ) 17 Needle.Laser) (List.range 6 12)
+                        , Needle.initHiddenRow 39.9 5 46 2 Needle.Upwards
+                        , [ Needle.deadlyBlock ( 20, 20 ) ( 2, 8 ) 
+                          , Needle.deadlyBlock ( 20, 32 ) ( 2, 8 ) 
                           ]
-                        , [ Needle.deadlyBlock ( 26, 20 ) ( 2, 4 )
-                          , Needle.deadlyBlock ( 26, 28 ) ( 2, 12 )
+                        , [ Needle.deadlyBlock ( 26, 20 ) ( 2, 4 ) 
+                          , Needle.deadlyBlock ( 26, 28 ) ( 2, 12 ) 
                           ]
                         , [ Needle.deadlyBlock ( 32, 20 ) ( 2, 6 )
                           , Needle.deadlyBlock ( 32, 30 ) ( 2, 10 )
@@ -171,14 +172,9 @@ init a =
                           , Needle.deadlyBlock ( 44, 34 ) ( 2, 6 )
                           ]
                         , let
-                            tempNeedle =
-                                Needle.sword ( 53, 1 ) ( 53, 50 ) ( 10, 0.25 ) 10.0 16
+                            tempNeedle =  Needle.deadlyBlock (53,10.5) (10,1)
                           in
-                          [ { tempNeedle
-                                | visibility = GlobalModule.Visible GlobalModule.NoNextVisibility
-                                , collision = GlobalModule.Collide (GlobalModule.NoCollideAfterEvent 15 GlobalModule.NoNextCollision)
-                            }
-                          ]
+                          [{tempNeedle | collision = GlobalModule.Collide (GlobalModule.NoCollideAfterEvent 15 GlobalModule.NoNextCollision)}]   
                         ]
                     )
             , keyPressed = []
