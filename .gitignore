@@ -3,7 +3,7 @@
 .elm-doc
 elm-stuff
 build
-index.html
+/index.html
 main.js
 elm-doc.sh
 replace.sh
