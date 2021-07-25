@@ -324,15 +324,71 @@ viewOneBrick model brick =
                     let
                         ( brickX, brickY ) =
                             brick.pos
+                        x0 = ViewMove.deltaX model + brickX
+                        y0 = ViewMove.deltaY model + brickY
                     in
-                    [ 
-                    ]
+                    if bool then
+                        drawSwitch2 x0 y0 "#00FF00"
+                    else
+                        []
         GlobalModule.Invisible _ ->
             []
 
         _ ->
             []
 
+drawSwitch2 : Float -> Float -> String -> List (Svg MainType.Msg)
+drawSwitch2 x y color =
+    [ Svg.line
+        [ SvgAttr.x1 (String.fromFloat (x + 40))
+        , SvgAttr.y1 (String.fromFloat (y + 6))
+        , SvgAttr.x2 (String.fromFloat (x + 25))
+        , SvgAttr.y2 (String.fromFloat (y + 31.5))
+        , SvgAttr.stroke "#000000"
+        , SvgAttr.strokeWidth "4"
+        ]
+        []
+    , Svg.path
+        [ SvgAttr.d
+            ("M"
+                ++ String.fromFloat x
+                ++ " "
+                ++ String.fromFloat (y + 40)
+                ++ "A "
+                ++ String.fromFloat 20
+                ++ " "
+                ++ String.fromFloat 20
+                ++ ", 0,"
+                ++ " 0,"
+                ++ " 1, "
+                ++ String.fromFloat (x + 40)
+                ++ " "
+                ++ String.fromFloat (y + 40)
+            )
+        , SvgAttr.fill color
+        , SvgAttr.stroke "#000000"
+        , SvgAttr.strokeWidth "1"
+        ]
+        []
+    , Svg.line
+        [ SvgAttr.x1 (String.fromFloat x)
+        , SvgAttr.y1 (String.fromFloat (y + 40))
+        , SvgAttr.x2 (String.fromFloat (x + 40))
+        , SvgAttr.y2 (String.fromFloat (y + 40))
+        , SvgAttr.stroke "#000000"
+        , SvgAttr.strokeWidth "1"
+        ]
+        []
+    , Svg.circle
+        [ SvgAttr.cx (String.fromFloat (x + 40))
+        , SvgAttr.cy (String.fromFloat (y + 6))
+        , SvgAttr.r "5"
+        , SvgAttr.fill "#FFFF00"
+        , SvgAttr.stroke "#000000"
+        , SvgAttr.strokeWidth "1"
+        ]
+        []
+    ]
 
 {-| view function of brick
 -}
