@@ -508,6 +508,50 @@ bombViewUp x y w h color=
         []
     ]
 
+bombViewLeft : Float -> Float -> Float -> Float -> String -> List (Svg MainType.Msg)
+bombViewLeft x y w h color=
+    [ Svg.path
+        [ SvgAttr.d
+            ("M"
+                ++ String.fromFloat x
+                ++ " "
+                ++ String.fromFloat (y + 0.5 * h)
+                ++ " Q "
+                ++ String.fromFloat (x + 0.3 * w)
+                ++ " "
+                ++ String.fromFloat y
+                ++ " "
+                ++ String.fromFloat (x + 0.5 * w)
+                ++ " "
+                ++ String.fromFloat y
+                ++ " L "
+                ++ String.fromFloat (x + 0.85 * w)
+                ++ " "
+                ++ String.fromFloat y
+                ++ " L "
+                ++ String.fromFloat (x + 0.85 * w)
+                ++ " "
+                ++ String.fromFloat (y + h)
+                ++ " L "
+                ++ String.fromFloat (x + 0.5 * w)
+                ++ " "
+                ++ String.fromFloat (y + h)
+                ++ " Q "
+                ++ String.fromFloat (x + 0.3 * w)
+                ++ " "
+                ++ String.fromFloat (y + h)
+                ++ " "
+                ++ String.fromFloat x
+                ++ " "
+                ++ String.fromFloat (y + 0.5 * h)
+            )
+        , SvgAttr.fill color
+        , SvgAttr.stroke "#000000"
+        , SvgAttr.strokeWidth "1"
+        ]
+        []
+    ]
+
 {-| view function of needle
 -}
 view : { model | needles : Array Needle, windowBoundary : GlobalBasics.Pos, levelBoundary : GlobalBasics.Pos, player : Player.Player } -> List (Svg MainType.Msg)
