@@ -113,8 +113,8 @@ init a =
                                 (GlobalModule.Collide (GlobalModule.NoCollideAfterEvent 9 GlobalModule.NoNextCollision))
                                 GlobalModule.NoNextMove
                           ]
-                        , [ Needle.sword ( 12, 15 ) ( 12, -10 ) ( 3, 5 ) 7.0 11 ]
-                        , [ Needle.sword ( 28, 12 ) ( -10, 12 ) ( 4, 2 ) 7.0 12 ]
+                        , [ Needle.sword ( 12, 15 ) ( 12, -10 ) ( 3, 5 ) 7.0 11 Needle.BombUp]
+                        , [ Needle.sword ( 28, 12 ) ( -10, 12 ) ( 4, 2 ) 7.0 12 Needle.BombLeft]
                         ]
                     )
             , keyPressed = []

@@ -170,15 +170,16 @@ init a =
                         , [ Needle.deadlyBlock ( 44, 20 ) ( 2, 10 )
                           , Needle.deadlyBlock ( 44, 34 ) ( 2, 6 )
                           ]
-                        , let
-                            tempNeedle =
-                                Needle.sword ( 53, 1 ) ( 53, 50 ) ( 10, 0.25 ) 10.0 16
-                          in
-                          [ { tempNeedle
-                                | visibility = GlobalModule.Visible GlobalModule.NoNextVisibility
-                                , collision = GlobalModule.Collide (GlobalModule.NoCollideAfterEvent 15 GlobalModule.NoNextCollision)
-                            }
-                          ]
+                        -- , let
+                        --     tempNeedle =
+                        --         Needle.sword ( 53, 1 ) ( 53, 50 ) ( 10, 0.25 ) 10.0 16 
+                        --   in
+                        --   [ { tempNeedle
+                        --         | visibility = GlobalModule.Visible GlobalModule.NoNextVisibility
+                        --         , collision = GlobalModule.Collide (GlobalModule.NoCollideAfterEvent 15 GlobalModule.NoNextCollision)
+                        --     }
+                        --   ]
+                        , List.map (\i -> Needle.initPos (GlobalBasics.blockPos (i,11)) Needle.Laser) (List.range 53 62) 
                         ]
                     )
             , keyPressed = []

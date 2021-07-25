@@ -136,7 +136,7 @@ init a =
                         --   ]
                         , let
                             tempSword =
-                                Needle.sword ( 46, 14.75 ) ( 46, -2 ) ( 4, 0.25 ) 6.0 12
+                                Needle.sword ( 46, 14.75 ) ( 46, -2 ) ( 4, 0.25 ) 6.0 12 Needle.Upwards
                           in
                           [ { tempSword
                                 | visibility = GlobalModule.Visible GlobalModule.NoNextVisibility

@@ -46,7 +46,8 @@ import Svg.Attributes as SvgAttr
 -}
 type NeedleType
     = Laser
-    | Bomb
+    | BombUp
+    | BombLeft
     | Upwards
     | Downwards
 
@@ -223,11 +224,11 @@ deadlyBlock pos ( width, height ) =
 
 {-| quickfunction to create a sword that will charge for a given position after a given event
 -}
-sword : ( Float, Float ) -> ( Float, Float ) -> ( Float, Float ) -> Float -> Int -> Needle
-sword startPos chargePos ( width, height ) speed id =
+sword : ( Float, Float ) -> ( Float, Float ) -> ( Float, Float ) -> Float -> Int -> NeedleType -> Needle
+sword startPos chargePos ( width, height ) speed id needleType=
     init
         (GlobalBasics.blockPosFloat startPos)
-        (NormalNeedle (width * 40) (height * 40) Bomb)
+        (NormalNeedle (width * 40) (height * 40) needleType)
         (GlobalModule.Invisible (GlobalModule.VisibleAfterEvent id GlobalModule.NoNextVisibility))
         (GlobalModule.NoCollide (GlobalModule.CollideAfterEvent id GlobalModule.NoNextCollision))
         (GlobalModule.Move (Array.fromList [])
@@ -281,7 +282,9 @@ viewOneNeedle model needle =
                         )
                         []
                     ]
-                NormalNeedle width height Bomb ->
+                NormalNeedle width height BombUp ->
+                    []
+                NormalNeedle width height BombLeft ->
                     []
                 NormalNeedle width height Upwards ->
                     []

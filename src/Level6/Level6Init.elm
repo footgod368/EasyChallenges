@@ -542,10 +542,10 @@ init a =
                                 (GlobalModule.NoCollide (GlobalModule.CollideAfterEvent 7 (GlobalModule.NoCollideAfterEvent 34 GlobalModule.NoNextCollision)))
                                 GlobalModule.NoNextMove
                           ]
-                        , [ Needle.sword ( 55, 10.5 ) ( 19, 10.5 ) ( 4, 2 ) 20 36 ]
+                        , [ Needle.sword ( 55, 10.5 ) ( 19, 10.5 ) ( 4, 2 ) 20 36 Needle.BombLeft]
                         , [ Needle.initHidden ( 50, 11 ) 51 Needle.Downwards]
                         , [ Needle.initHidden ( 50, 10 ) 51 Needle.Downwards]
-                        , [ Needle.sword ( 57, 20 ) ( 57, -4 ) ( 2, 3 ) 12 53 ]
+                        , [ Needle.sword ( 57, 20 ) ( 57, -4 ) ( 2, 3 ) 12 53 Needle.BombUp]
                         , [ Needle.init (GlobalBasics.blockPosFloat ( 69.35, 8 ))
                                 (Needle.NormalNeedle 12 191 Needle.Laser)
                                 (GlobalModule.Invisible (GlobalModule.VisibleAfterEvent 54 (GlobalModule.InvisibleAfterEvent 55 GlobalModule.NoNextVisibility)))
