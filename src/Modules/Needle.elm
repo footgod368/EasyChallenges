@@ -211,6 +211,7 @@ initHiddenFallingRow n n1 n2 id needleType =
     List.map (\i -> initHiddenFalling ( i, n ) id needleType) (List.range n1 n2)
 
 
+
 {-| a 'needle' that can customize size
 -}
 deadlyBlock : ( Float, Float ) -> ( Float, Float ) -> Needle

@@ -58,7 +58,6 @@ type alias Monster =
     , ySpeed : Float
     , range : ( Float, Float )
     , fixY : Float
-    , faceDirecton: FaceDirection
     }
 
 {-| the face direction of monster
@@ -109,7 +108,6 @@ init ( x, y ) monsterAppearance monsterX monsterY xSpeed ( x1, x2 ) =
     , ySpeed = 0
     , range = ( x1, x2 )
     , fixY = y
-    , faceDirecton = Left
     }
 
 
@@ -240,16 +238,8 @@ updateOneMonsterMoveX id model =
 
             else
                 monster.xSpeed
-
-        newFaceDirecrion = if newSpeed > 0 then
-                                Right
-                            else if newSpeed < 0 then
-                                Left
-                            else
-                                monster.faceDirecton
-
         newMonster =
-            { monster | pos = ( newX, Tuple.second monster.pos ), xSpeed = newSpeed, faceDirecton = newFaceDirecrion }
+            { monster | pos = ( newX, Tuple.second monster.pos ), xSpeed = newSpeed }
 
         newMonsters =
             Array.set id newMonster model.monsters
@@ -345,23 +335,12 @@ viewOneMonster model monster =
     in
     case monster.appearance of
         MonsterA width height ->
-            if monster.faceDirecton == Right then 
             [ Svg.image
                 [ SvgAttr.x (String.fromFloat (ViewMove.deltaX model + monsterX - 2.0))
                 , SvgAttr.y (String.fromFloat (ViewMove.deltaY model + monsterY))
                 , SvgAttr.width (String.fromFloat (width + 2.0))
                 , SvgAttr.height (String.fromFloat height)
-                , SvgAttr.xlinkHref "assets/monsterRight.svg"
-                ]
-                []
-            ]
-            else
-            [ Svg.image
-                [ SvgAttr.x (String.fromFloat (ViewMove.deltaX model + monsterX - 2.0))
-                , SvgAttr.y (String.fromFloat (ViewMove.deltaY model + monsterY))
-                , SvgAttr.width (String.fromFloat (width + 2.0))
-                , SvgAttr.height (String.fromFloat height)
-                , SvgAttr.xlinkHref "assets/monsterLeft.svg"
+                , SvgAttr.xlinkHref "assets/monster.png"
                 ]
                 []
             ]
