@@ -187,3 +187,40 @@ updateOneSoundTrigger model soundTrigger =
         None ->
             None
 
+
+{-| Trigger a sound effect
+-}
+trigger : { model | sound : Sound } -> SoundEffect -> { model | sound : Sound }
+trigger model soundEffect =
+    let
+        oldSound =
+            model.sound
+
+        newSoundTrigger =
+            case soundEffect of
+                BackGround ->
+                    Activated backGroundLength BackGround None
+
+                Jump ->
+                    Activated jumpLength Jump None
+
+                RandomBox ->
+                    Activated randomBoxLength RandomBox None
+
+                Needle ->
+                    Activated needleLength Needle None
+
+                Dead ->
+                    Activated deadLength Dead None
+
+                Sword ->
+                    Activated swordLength Sword None
+
+        newSoundTriggerList =
+            newSoundTrigger :: oldSound.soundTrigger
+
+        newSound =
+            { oldSound | soundTrigger = newSoundTriggerList }
+    in
+    { model | sound = newSound }
+
