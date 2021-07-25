@@ -328,15 +328,17 @@ viewOneBrick model brick =
                         y0 = ViewMove.deltaY model + brickY
                     in
                     if bool then
-                        drawSwitch2 x0 y0 "#00FF00"
+                        drawSwitch1 x0 y0 "#00CCFF"
                     else
-                        []
+                        drawSwitch2 x0 y0 "#00CCFF"
         GlobalModule.Invisible _ ->
             []
 
         _ ->
             []
 
+{-| View of switch, not exposed.
+-}
 drawSwitch2 : Float -> Float -> String -> List (Svg MainType.Msg)
 drawSwitch2 x y color =
     [ Svg.line
@@ -384,6 +386,61 @@ drawSwitch2 x y color =
         , SvgAttr.cy (String.fromFloat (y + 6))
         , SvgAttr.r "5"
         , SvgAttr.fill "#FFFF00"
+        , SvgAttr.stroke "#000000"
+        , SvgAttr.strokeWidth "1"
+        ]
+        []
+    ]
+
+{-| View of switch, not exposed.
+-}
+drawSwitch1 : Float -> Float -> String -> List (Svg MainType.Msg)
+drawSwitch1 x y color =
+    [ Svg.line
+        [ SvgAttr.x1 (String.fromFloat x)
+        , SvgAttr.y1 (String.fromFloat (y + 6))
+        , SvgAttr.x2 (String.fromFloat (x + 15))
+        , SvgAttr.y2 (String.fromFloat (y + 31.5))
+        , SvgAttr.stroke "#000000"
+        , SvgAttr.strokeWidth "4"
+        ]
+        []
+    , Svg.path
+        [ SvgAttr.d
+            ("M"
+                ++ String.fromFloat x
+                ++ " "
+                ++ String.fromFloat (y + 40)
+                ++ "A "
+                ++ String.fromFloat 20
+                ++ " "
+                ++ String.fromFloat 20
+                ++ ", 0,"
+                ++ " 0,"
+                ++ " 1, "
+                ++ String.fromFloat (x + 40)
+                ++ " "
+                ++ String.fromFloat (y + 40)
+            )
+        , SvgAttr.fill color
+        , SvgAttr.stroke "#000000"
+        , SvgAttr.strokeWidth "1"
+        ]
+        []
+    , Svg.line
+        [ SvgAttr.x1 (String.fromFloat x)
+        , SvgAttr.y1 (String.fromFloat (y + 40))
+        , SvgAttr.x2 (String.fromFloat (x + 40))
+        , SvgAttr.y2 (String.fromFloat (y + 40))
+        , SvgAttr.stroke "#000000"
+        , SvgAttr.strokeWidth "1"
+        ]
+        []
+    , Svg.circle
+        [ SvgAttr.cx (String.fromFloat x)
+        , SvgAttr.cy (String.fromFloat (y + 6))
+        , SvgAttr.r "5"
+        , SvgAttr.fill "#00FF00"
         , SvgAttr.stroke "#000000"
         , SvgAttr.strokeWidth "1"
         ]
