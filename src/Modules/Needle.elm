@@ -423,6 +423,39 @@ bombViewUp x y w h color=
         , SvgAttr.strokeWidth "1"
         ]
         []
+    ,
+    Svg.path
+        [ SvgAttr.d
+            ("M"
+                ++ String.fromFloat (x + 0.5 * w)
+                ++ " "
+                ++ String.fromFloat (y + 1.15 * h + 0.5)
+                ++ " Q "
+                ++ String.fromFloat (x + 0.1 * w)
+                ++ " "
+                ++ String.fromFloat (y + h + 0.5)
+                ++ " "
+                ++ String.fromFloat (x + 0.1 * w)
+                ++ " "
+                ++ String.fromFloat (y + 0.85 * h + 0.5)
+                ++ " L "
+                ++ String.fromFloat (x + 0.9 * w)
+                ++ " "
+                ++ String.fromFloat (y + 0.85 * h + 0.5)
+                ++ " Q "
+                ++ String.fromFloat (x + 0.9 * w)
+                ++ " "
+                ++ String.fromFloat (y + h + 0.5)
+                ++ " "
+                ++ String.fromFloat (x + 0.5 * w)
+                ++ " "
+                ++ String.fromFloat (y + 1.15 * h + 0.5)
+            )
+        , SvgAttr.fill "#FFFF00"
+        , SvgAttr.stroke "#000000"
+        , SvgAttr.strokeWidth "1"
+        ]
+        []
     ]
 
 {-| view function of needle
