@@ -291,7 +291,7 @@ viewOneNeedle model needle =
                 NormalNeedle width height Upwards ->
                     needleViewUp x0 y0 (width + 2.0) height "#FF0000"
                 NormalNeedle width height Downwards ->
-                    []
+                    needleViewDown x0 y0 (width + 2.0) height "#FF0000"
 
         GlobalModule.Invisible _ ->
             []
@@ -299,6 +299,8 @@ viewOneNeedle model needle =
         _ ->
             []
 
+{-| View one appearance of needle, used in viewOneNeedle, not exposed.
+-}
 needleViewUp : Float -> Float -> Float -> Float -> String -> List (Svg MainType.Msg)
 needleViewUp x y w h color=
     [ Svg.polygon
@@ -338,7 +340,46 @@ needleViewUp x y w h color=
         []
     ]
 
-
+{-| View one appearance of needle, used in viewOneNeedle, not exposed.
+-}
+needleViewDown : Float -> Float -> Float -> Float -> String -> List (Svg MainType.Msg)
+needleViewDown x y w h color=
+    [ Svg.polygon
+        [ SvgAttr.points (String.fromFloat x ++ " " ++ String.fromFloat y ++ ", " ++ 
+            String.fromFloat (x + 0.125 * w) ++ " " ++ String.fromFloat (y + h) ++ ", " ++
+            String.fromFloat (x + 0.25 * w) ++ " " ++ String.fromFloat y
+        )
+        , SvgAttr.fill color
+        ]
+        []
+        ,
+        Svg.polygon
+        [ SvgAttr.points (String.fromFloat (x + 0.25 * w) ++ " " ++ String.fromFloat y ++ ", " ++ 
+            String.fromFloat (x + 0.375 * w) ++ " " ++ String.fromFloat (y + h) ++ ", " ++
+            String.fromFloat (x + 0.5 * w) ++ " " ++ String.fromFloat y
+        )
+        , SvgAttr.fill color
+        ]
+        []
+        ,
+        Svg.polygon
+        [ SvgAttr.points (String.fromFloat (x + 0.5 * w) ++ " " ++ String.fromFloat y ++ ", " ++ 
+            String.fromFloat (x + 0.625 * w) ++ " " ++ String.fromFloat (y + h) ++ ", " ++
+            String.fromFloat (x + 0.75 * w) ++ " " ++ String.fromFloat y
+        )
+        , SvgAttr.fill color
+        ]
+        []
+        ,
+        Svg.polygon
+        [ SvgAttr.points (String.fromFloat (x + 0.75 * w) ++ " " ++ String.fromFloat y ++ ", " ++ 
+            String.fromFloat (x + 0.875 * w) ++ " " ++ String.fromFloat (y + h) ++ ", " ++
+            String.fromFloat (x + w) ++ " " ++ String.fromFloat y
+        )
+        , SvgAttr.fill color
+        ]
+        []
+    ]
 
 {-| view function of needle
 -}
