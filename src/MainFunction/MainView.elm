@@ -10,7 +10,7 @@ module MainFunction.MainView exposing (view)
 -}
 
 import Html exposing (Html)
-import Level0.Level0View as Level0View
+import Level7.Level7View as Level7View
 import Level1.Level1View as Level1View
 import Level2.Level2View as Level2View
 import Level3.Level3View as Level3View
@@ -30,8 +30,8 @@ view model =
         MainType.Menu ->
             MenuView.view model.menuModel
 
-        MainType.Level0 ->
-            Level0View.view model.level0Model
+        MainType.Level7 ->
+            Level7View.view model.level7Model
 
         MainType.Level1 ->
             Level1View.view model.level1Model

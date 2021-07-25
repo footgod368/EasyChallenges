@@ -9,7 +9,7 @@ module MainFunction.MainModel exposing (Model)
 
 -}
 
-import Level0.Level0Type as Level0Type
+import Level7.Level7Type as Level7Type
 import Level1.Level1Type as Level1Type
 import Level2.Level2Type as Level2Type
 import Level3.Level3Type as Level3Type
@@ -25,7 +25,7 @@ import Menu.MenuType as MenuType
 type alias Model =
     { mainScene : MainType.MainScene
     , menuModel : MenuType.Model
-    , level0Model : Level0Type.Model
+    , level7Model : Level7Type.Model
     , level1Model : Level1Type.Model
     , level2Model : Level2Type.Model
     , level3Model : Level3Type.Model

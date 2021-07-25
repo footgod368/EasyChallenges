@@ -1,5 +1,6 @@
 module MainFunction.MainConstant exposing
-    ( menuButtonLevel0, menuButtonLevel1, menuButtonLevel2, menuButtonLevel3, menuButtonLevel4, menuButtonLevel5
+    ( soundLouderButton, soundQuieterButton
+    , menuButtonLevel7, menuButtonLevel1, menuButtonLevel2, menuButtonLevel3, menuButtonLevel4, menuButtonLevel5
     , menuButtonLevel6
     , gameBackButton, gameNextLevelButton, gameHintButton, gameHintCloseButton
     , buttonNormalColor, buttonDownColor, buttonOverColor
@@ -8,9 +9,14 @@ module MainFunction.MainConstant exposing
 {-| Constants used in all places.
 
 
+# Global
+
+@docs soundLouderButton, soundQuieterButton
+
+
 # Menu
 
-@docs menuButtonLevel0, menuButtonLevel1, menuButtonLevel2, menuButtonLevel3, menuButtonLevel4, menuButtonLevel5
+@docs menuButtonLevel7, menuButtonLevel1, menuButtonLevel2, menuButtonLevel3, menuButtonLevel4, menuButtonLevel5
 @docs menuButtonLevel6
 
 
@@ -28,9 +34,9 @@ module MainFunction.MainConstant exposing
 
 {-| Id of button
 -}
-menuButtonLevel0 : Int
-menuButtonLevel0 =
-    0
+menuButtonLevel7 : Int
+menuButtonLevel7 =
+    7
 
 
 {-| Id of button
@@ -101,6 +107,16 @@ gameHintButton =
 gameHintCloseButton : Int
 gameHintCloseButton =
     3
+
+
+soundLouderButton : Int
+soundLouderButton =
+    4
+
+
+soundQuieterButton : Int
+soundQuieterButton =
+    5
 
 
 {-| Normal color of button
