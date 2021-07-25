@@ -2,7 +2,8 @@
 .doit.db
 .elm-doc
 elm-stuff
-index.html
+build
+/index.html
 main.js
 elm-doc.sh
 replace.sh
