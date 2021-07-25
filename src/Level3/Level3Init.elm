@@ -92,7 +92,7 @@ init a =
                         , [ Needle.initHidden ( 4, 12 ) 2 Needle.Downwards]
                         , [ Needle.initHidden ( 6, 12 ) 3 Needle.Downwards]
                         , [ Needle.initHidden ( 8, 12 ) 4 Needle.Downwards]
-                        , [ Needle.sword ( 14, 16 ) ( 14, -2 ) ( 2, 3 ) 8.0 6 Needle.BombUp]
+                        , [ Needle.sword ( 14, 16 ) ( 14, -3 ) ( 2, 3 ) 8.0 6 Needle.BombUp]
                         ]
                     )
             , keyPressed = []

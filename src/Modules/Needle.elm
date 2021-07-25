@@ -285,7 +285,7 @@ viewOneNeedle model needle =
                         []
                     ]
                 NormalNeedle width height BombUp ->
-                    []
+                    bombViewUp x0 y0 (width + 2.0) height "#FF0000"
                 NormalNeedle width height BombLeft ->
                     []
                 NormalNeedle width height Upwards ->
@@ -454,6 +454,56 @@ bombViewUp x y w h color=
         , SvgAttr.fill "#FFFF00"
         , SvgAttr.stroke "#000000"
         , SvgAttr.strokeWidth "1"
+        ]
+        []
+    , 
+    Svg.line
+        [ SvgAttr.x1 (String.fromFloat (x + 0.4 * w))
+        , SvgAttr.y1 (String.fromFloat (y + 0.6 * h))
+        , SvgAttr.x2 (String.fromFloat (x + 0.6 * w))
+        , SvgAttr.y2 (String.fromFloat (y + 0.6 * h))
+        , SvgAttr.stroke "#000000"
+        , SvgAttr.strokeWidth "2"
+        ]
+        []
+    , 
+    Svg.line
+        [ SvgAttr.x1 (String.fromFloat (x + 0.24 * w))
+        , SvgAttr.y1 (String.fromFloat (y + 0.4 * h))
+        , SvgAttr.x2 (String.fromFloat (x + 0.4 * w))
+        , SvgAttr.y2 (String.fromFloat (y + 0.45 * h + 1))
+        , SvgAttr.stroke "#000000"
+        , SvgAttr.strokeWidth "2"
+        ]
+        []
+    , 
+    Svg.line
+        [ SvgAttr.x1 (String.fromFloat (x + 0.4 * w))
+        , SvgAttr.y1 (String.fromFloat (y + 0.45 * h))
+        , SvgAttr.x2 (String.fromFloat (x + 0.24 * w))
+        , SvgAttr.y2 (String.fromFloat (y + 0.5 * h))
+        , SvgAttr.stroke "#000000"
+        , SvgAttr.strokeWidth "2"
+        ]
+        []
+    , 
+    Svg.line
+        [ SvgAttr.x1 (String.fromFloat (x + 0.76 * w))
+        , SvgAttr.y1 (String.fromFloat (y + 0.4 * h))
+        , SvgAttr.x2 (String.fromFloat (x + 0.6 * w))
+        , SvgAttr.y2 (String.fromFloat (y + 0.45 * h + 1))
+        , SvgAttr.stroke "#000000"
+        , SvgAttr.strokeWidth "2"
+        ]
+        []
+    , 
+    Svg.line
+        [ SvgAttr.x1 (String.fromFloat (x + 0.6 * w))
+        , SvgAttr.y1 (String.fromFloat (y + 0.45 * h))
+        , SvgAttr.x2 (String.fromFloat (x + 0.76 * w))
+        , SvgAttr.y2 (String.fromFloat (y + 0.5 * h))
+        , SvgAttr.stroke "#000000"
+        , SvgAttr.strokeWidth "2"
         ]
         []
     ]
