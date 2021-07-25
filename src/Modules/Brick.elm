@@ -49,6 +49,7 @@ type BrickAppearance
     = NormalAppearance --standard brick
     | Detailed Float Float String --with designable size and color
     | Wings
+    | Switch Bool
 
 
 {-| brickWidth Constant
@@ -228,7 +229,16 @@ brickCollisionBox brickAppearance =
                     ]
                 )
         Wings ->
-                    GlobalBasics.Polygon
+            GlobalBasics.Polygon
+            (Array.fromList
+                [ ( ( 0.0, 0.0 ), ( brickWidth, 0.0 ) )
+                , ( ( brickWidth, 0.0 ), ( brickWidth, brickHeight ) )
+                , ( ( brickWidth, brickHeight ), ( 0.0, brickHeight ) )
+                , ( ( 0.0, brickHeight ), ( 0.0, 0.0 ) )
+                ]
+            )
+        Switch _ ->
+            GlobalBasics.Polygon
             (Array.fromList
                 [ ( ( 0.0, 0.0 ), ( brickWidth, 0.0 ) )
                 , ( ( brickWidth, 0.0 ), ( brickWidth, brickHeight ) )
@@ -309,6 +319,13 @@ viewOneBrick model brick =
                         , SvgAttr.xlinkHref "assets/wings2.png"
                         ]
                         []
+                    ]
+                Switch bool ->
+                    let
+                        ( brickX, brickY ) =
+                            brick.pos
+                    in
+                    [ 
                     ]
         GlobalModule.Invisible _ ->
             []

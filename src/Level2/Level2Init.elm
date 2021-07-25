@@ -89,14 +89,14 @@ init a =
                         [ Brick.initRow 15 1 14
                         , [ Brick.init
                                 (GlobalBasics.blockPosFloat ( 8, 14 ))
-                                (Brick.Detailed 40 40 "#1E90FF")
+                                (Brick.Switch True)
                                 (GlobalModule.Visible (GlobalModule.InvisibleAfterEvent 1 GlobalModule.NoNextVisibility))
                                 (GlobalModule.NoCollide GlobalModule.NoNextCollision)
                                 GlobalModule.NoNextMove
                           ]
                         , [ Brick.init
                                 (GlobalBasics.blockPosFloat ( 8, 14 ))
-                                (Brick.Detailed 40 40 "#FFD700")
+                                (Brick.Switch False)
                                 (GlobalModule.Invisible (GlobalModule.VisibleAfterEvent 1 GlobalModule.NoNextVisibility))
                                 (GlobalModule.NoCollide GlobalModule.NoNextCollision)
                                 GlobalModule.NoNextMove
