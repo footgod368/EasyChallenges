@@ -22,6 +22,7 @@ import Modules.Needle as Needle
 import Modules.NoticeBoard as NoticeBoard
 import Modules.Player as Player exposing (Player)
 import Modules.SavePoint as SavePoint
+import Modules.Sound as Sound
 
 
 {-| `update` of Level5
@@ -51,6 +52,7 @@ update msg model =
                             |> Boundary.update
                             |> NoticeBoard.update
                             |> Needle.update
+                            |> Sound.update
                             |> Player.updateJustPlayerPos
                             |> count
                             |> checkBlueOrRed

@@ -24,6 +24,7 @@ import Modules.Needle as Needle
 import Modules.NoticeBoard as NoticeBoard
 import Modules.Player as Player exposing (Player)
 import Modules.SavePoint as SavePoint
+import Modules.Sound as Sound
 import Task
 
 
@@ -183,6 +184,8 @@ init a =
                     )
             , keyPressed = []
             , gameControl = GameControl.init MainType.Level6 []
+            , sound =
+                Sound.init []
             , mainScene = MainType.Level5
             , number = []
             }

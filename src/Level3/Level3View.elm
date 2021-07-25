@@ -21,6 +21,7 @@ import Modules.Needle as Needle
 import Modules.NoticeBoard as NoticeBoard
 import Modules.Player as Player
 import Modules.SavePoint as SavePoint
+import Modules.Sound as Sound
 import Svg
 import Svg.Attributes as SvgAttr
 
@@ -41,6 +42,7 @@ view model =
             , SvgAttr.height (String.fromFloat (Tuple.second model.windowBoundary))
             ]
             (SavePoint.view model
+                ++ Sound.view model
                 ++ Brick.view model
                 ++ Boundary.view model
                 ++ NoticeBoard.view model
