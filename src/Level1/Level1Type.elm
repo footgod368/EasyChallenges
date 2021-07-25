@@ -22,6 +22,7 @@ import Modules.Needle as Needle
 import Modules.NoticeBoard as NoticeBoard
 import Modules.Player as Player
 import Modules.SavePoint as SavePoint
+import Modules.Sound as Sound
 
 
 {-| `Model` that used in level1
@@ -41,6 +42,7 @@ type alias Model =
     , needles : Array Needle.Needle
     , monsters : Array Monster.Monster
     , gameControl : GameControl.GameControl
+    , sound : Sound.Sound
     , mainScene : MainType.MainScene
     , keyPressed : List Int
     }
