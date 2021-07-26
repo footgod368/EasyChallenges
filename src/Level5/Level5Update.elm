@@ -22,6 +22,7 @@ import Modules.Needle as Needle
 import Modules.NoticeBoard as NoticeBoard
 import Modules.Player as Player exposing (Player)
 import Modules.SavePoint as SavePoint
+import Modules.Sound as Sound
 
 
 {-| `update` of Level5
@@ -51,15 +52,18 @@ update msg model =
                             |> Boundary.update
                             |> NoticeBoard.update
                             |> Needle.update
+                            |> Sound.update
                             |> Player.updateJustPlayerPos
                             |> count
                             |> checkBlueOrRed
                             |> checkBlue
                             |> checkRed
                             |> checkBlueAndRed
+                            |> GameControl.update ( MainType.Tick timePassed )
 
                     else
                         ( model, Cmd.none )
+                            |> GameControl.update ( MainType.Tick timePassed )
             in
             if List.member 82 newModel.keyPressed then
                 SavePoint.updateReset Level5Init.init ( model, Cmd.none )
@@ -102,7 +106,7 @@ count ( model, cmd ) =
 checkBlueOrRed : ( Level5Type.Model, Cmd MainType.Msg ) -> ( Level5Type.Model, Cmd MainType.Msg )
 checkBlueOrRed ( model, cmd ) =
     if Event.ifActEventById model 6 == Event.ActEventAct || Event.ifActEventById model 7 == Event.ActEventAct then
-        ( Player.playerKill model, cmd )
+        ( Player.playerKill model Player.StepOnNeedle, cmd )
 
     else
         ( model, cmd )
@@ -152,11 +156,10 @@ checkRed ( model, cmd ) =
 notBlueOrRed : Brick.Brick -> Bool
 notBlueOrRed brick =
     case brick.appearance of
-        Brick.NormalAppearance ->
-            True
-
-        Brick.Detailed _ _ color ->
+        Brick.Pill color ->
             color /= "#1E90FF" && color /= "#FF0000"
+        _ ->
+            True
 
 
 {-| delete the blue and red bricks from model when they have mixed into green

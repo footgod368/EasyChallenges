@@ -21,6 +21,7 @@ import Modules.Needle as Needle
 import Modules.NoticeBoard as NoticeBoard
 import Modules.Player as Player
 import Modules.SavePoint as SavePoint
+import Modules.Sound as Sound
 
 
 {-| `update` of Level3
@@ -53,10 +54,13 @@ update msg model =
                             |> Boundary.update
                             |> NoticeBoard.update
                             |> Needle.update
+                            |> Sound.update
                             |> Player.updateJustPlayerPos
+                            |> GameControl.update ( MainType.Tick timePassed )
 
                     else
                         ( model, Cmd.none )
+                            |> GameControl.update ( MainType.Tick timePassed )
             in
             if List.member 82 newModel.keyPressed then
                 SavePoint.updateReset Level3Init.init ( model, Cmd.none )

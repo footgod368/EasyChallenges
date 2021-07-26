@@ -1,5 +1,5 @@
 module Modules.Player exposing
-    ( Player, PlayerProperty, defPlayerProperty, PropertyChange(..), LiveState(..)
+    ( Player, PlayerProperty, defPlayerProperty, PropertyChange(..), LiveState(..), DeadType(..)
     , init
     , update, updateJustPlayerPos
     , view
@@ -11,7 +11,7 @@ module Modules.Player exposing
 
 # Player
 
-@docs Player, PlayerProperty, defPlayerProperty, PropertyChange, LiveState
+@docs Player, PlayerProperty, defPlayerProperty, PropertyChange, LiveState, DeadType
 
 
 # init
@@ -39,6 +39,7 @@ import Array exposing (Array)
 import GlobalFunction.GlobalBasics as GlobalBasics
 import MainFunction.MainType as MainType
 import Maybe exposing (withDefault)
+import Modules.Sound as Sound
 import Svg exposing (Svg)
 import Svg.Attributes as SvgAttr
 
@@ -63,6 +64,7 @@ type alias PlayerProperty =
     , playerJumpInitialSpeed : Float
     , playerHorizontalSpeed : Float
     , gravityAcce : Float
+    , isGreen: Bool
     }
 
 
@@ -70,8 +72,8 @@ type alias PlayerProperty =
 -}
 defPlayerProperty : PlayerProperty
 defPlayerProperty =
-    { playerWidth = 20.0
-    , playerHeight = 20.0
+    { playerWidth = 10.0
+    , playerHeight = 25.0
     , playerJumpNum = 1
     , ifPlayerJumpOnTheGround = True
     , playerJumpFrames = 20
@@ -79,6 +81,7 @@ defPlayerProperty =
     , playerJumpInitialSpeed = -1.0
     , playerHorizontalSpeed = 1.93
     , gravityAcce = 0.1
+    , isGreen = False
     }
 
 
@@ -89,6 +92,11 @@ type PropertyChange
     = ChangeTo PlayerProperty Int PropertyChange
     | NoNextPropertyChange
 
+{-| the face direction of player, used in 'view'
+-}
+type FaceDirection
+    = Left
+    | Right
 
 {-| Definition of player, `pos` is current position, `lastPos` store the last position, used in collision test,
 `velocity` is its velocity, divided into x-axis and y-axis. `collisionBox` is its `CollisionBox`, `jumpNum` is how
@@ -101,15 +109,23 @@ type alias Player =
     , pos : GlobalBasics.Pos
     , lastPos : GlobalBasics.Pos
     , velocity : GlobalBasics.Pos
+    , faceDirection: FaceDirection
     , jump : PlayerJump
     , ifThisFrameOnGround : Bool
     , collisionBox : GlobalBasics.CollisionBox
     , ifChangeBackToLastPosX : Bool
     , ifChangeBackToLastPosY : Bool
     , liveState : LiveState
-    , deadTimes : Int
+    , deadTimes : ( Int, DeadType )
     , saveNumber : Int
     }
+
+
+{-| The type of player dead, falling or needle
+-}
+type DeadType
+    = FallFromHigh
+    | StepOnNeedle
 
 
 {-| LiveState defines if the player is live, dead, or win this level.
@@ -122,16 +138,19 @@ type LiveState
 
 {-| Change the state of player to Dead
 -}
-playerDead : { model | player : Player } -> { model | player : Player }
-playerDead model =
+playerDead : { model | player : Player, sound : Sound.Sound } -> DeadType -> { model | player : Player, sound : Sound.Sound }
+playerDead model deadType =
     let
         oldPlayer =
             model.player
 
+        ( oldDeadTimes, oldDeadType ) =
+            model.player.deadTimes
+
         newPlayer =
-            { oldPlayer | liveState = Dead }
+            { oldPlayer | liveState = Dead, deadTimes = ( oldDeadTimes + 1, deadType ) }
     in
-    { model | player = newPlayer }
+    Sound.trigger { model | player = newPlayer } Sound.Dead
 
 
 {-| Change the state of player to Win
@@ -150,14 +169,17 @@ playerWin model =
 
 {-| Change the state of player to Dead
 -}
-playerKill : { model | player : Player } -> { model | player : Player }
-playerKill model =
+playerKill : { model | player : Player } -> DeadType -> { model | player : Player }
+playerKill model deadType =
     let
         oldPlayer =
             model.player
 
+        ( oldDeadTimes, oldDeadType ) =
+            model.player.deadTimes
+
         newPlayer =
-            { oldPlayer | liveState = Dead }
+            { oldPlayer | liveState = Dead, deadTimes = ( oldDeadTimes + 1, deadType ) }
     in
     { model | player = newPlayer }
 
@@ -199,6 +221,7 @@ init pos property propertyChange =
     , pos = pos
     , lastPos = pos
     , velocity = ( 0.0, 0.0 )
+    , faceDirection = Right
     , jump = Jump 2 -1
     , ifThisFrameOnGround = False
     , collisionBox =
@@ -213,14 +236,14 @@ init pos property propertyChange =
     , ifChangeBackToLastPosX = False
     , ifChangeBackToLastPosY = False
     , liveState = Live
-    , deadTimes = 1
+    , deadTimes = ( 0, FallFromHigh )
     , saveNumber = -1
     }
 
 
 {-| Update of player unit. Calls sub update.
 -}
-update : ( { model | player : Player, keyPressed : List Int, actEvent : Array { id : Int, name : String } }, Cmd MainType.Msg ) -> ( { model | player : Player, keyPressed : List Int, actEvent : Array { id : Int, name : String } }, Cmd MainType.Msg )
+update : ( { model | player : Player, keyPressed : List Int, actEvent : Array { id : Int, name : String }, sound : Sound.Sound }, Cmd MainType.Msg ) -> ( { model | player : Player, keyPressed : List Int, actEvent : Array { id : Int, name : String }, sound : Sound.Sound }, Cmd MainType.Msg )
 update ( model, cmd ) =
     case model.player.liveState of
         Live ->
@@ -229,6 +252,7 @@ update ( model, cmd ) =
                 |> updatePlayerPos
                 |> updatePlayerVelocity
 
+
         Dead ->
             ( model, cmd )
 
@@ -236,7 +260,7 @@ update ( model, cmd ) =
             ( model, cmd )
 
 
-updatePlayerProperty : ( { model | player : Player, actEvent : Array { id : Int, name : String } }, Cmd MainType.Msg ) -> ( { model | player : Player, actEvent : Array { id : Int, name : String } }, Cmd MainType.Msg )
+updatePlayerProperty : ( { model | player : Player, actEvent : Array { id : Int, name : String }, sound : Sound.Sound }, Cmd MainType.Msg ) -> ( { model | player : Player, actEvent : Array { id : Int, name : String }, sound : Sound.Sound }, Cmd MainType.Msg )
 updatePlayerProperty ( model, cmd ) =
     case model.player.propertyChange of
         ChangeTo newProperty eventID nextPropertyChange ->
@@ -271,7 +295,7 @@ updatePlayerProperty ( model, cmd ) =
 
 {-| Updates player control, move left, right and jump. Not exposed.
 -}
-updatePlayerVelocity : ( { model | player : Player, keyPressed : List Int }, Cmd MainType.Msg ) -> ( { model | player : Player, keyPressed : List Int }, Cmd MainType.Msg )
+updatePlayerVelocity : ( { model | player : Player, keyPressed : List Int, sound : Sound.Sound }, Cmd MainType.Msg ) -> ( { model | player : Player, keyPressed : List Int, sound : Sound.Sound }, Cmd MainType.Msg )
 updatePlayerVelocity ( model, cmd ) =
     let
         ( oldVelocityX, oldVelocityY ) =
@@ -297,6 +321,13 @@ updatePlayerVelocity ( model, cmd ) =
             else
                 0.0
 
+        newFaceDirection = if velocityX > 0 then
+                                Right
+                            else if velocityX < 0 then
+                                Left
+                            else
+                                model.player.faceDirection
+
         ( newJump, velocityY ) =
             case model.player.jump of
                 Jump jumpNum jumpFrame ->
@@ -307,9 +338,6 @@ updatePlayerVelocity ( model, cmd ) =
                         if jumpFrame == -1 && (not model.player.property.ifPlayerJumpOnTheGround || model.player.ifThisFrameOnGround) then
                             ( Jump jumpNum (model.player.property.playerJumpFrames - 1)
                             , model.player.property.playerJumpInitialSpeed
-                                + playerJumpAcce
-                                    model
-                                    model.player.property.playerJumpFrames
                             )
 
                         else if jumpFrame > 0 then
@@ -338,9 +366,16 @@ updatePlayerVelocity ( model, cmd ) =
             model.player
 
         newPlayer =
-            { oldPlayer | jump = newJump, velocity = ( velocityX, velocityY ), ifThisFrameOnGround = False }
+            { oldPlayer | jump = newJump, velocity = ( velocityX, velocityY ), ifThisFrameOnGround = False , faceDirection = newFaceDirection}
+
+        newModel =
+            if Tuple.second newPlayer.velocity == model.player.property.playerJumpInitialSpeed then
+                Sound.trigger { model | player = newPlayer } Sound.Jump
+
+            else
+                { model | player = newPlayer }
     in
-    ( { model | player = newPlayer }, cmd )
+    ( newModel, cmd )
 
 
 {-| Used in the end of the Level update, will make the player go back to last pos if collided.
@@ -416,6 +451,9 @@ view model =
         ( playerX, playerY ) =
             model.player.pos
 
+        ( windowBoundaryX, windowBoundaryY ) =
+            model.windowBoundary
+
         deadOpacity =
             if model.player.liveState == Dead then
                 1
@@ -430,30 +468,84 @@ view model =
             else
                 0
     in
-    [ Svg.rect
-        [ SvgAttr.x (String.fromFloat (playerX - 1.0 + playerDeltaX model))
-        , SvgAttr.y (String.fromFloat (playerY + playerDeltaY model))
-        , SvgAttr.width (String.fromFloat (model.player.property.playerWidth + 1.0))
-        , SvgAttr.height (String.fromFloat model.player.property.playerHeight)
-        , SvgAttr.fill "#000000"
+    [ Svg.image
+        [ SvgAttr.x (String.fromFloat (playerX - model.player.property.playerWidth * 0.86 + playerDeltaX model))
+        , SvgAttr.y (String.fromFloat (playerY - model.player.property.playerHeight * 0.9 + playerDeltaY model))
+        , SvgAttr.width (String.fromFloat (model.player.property.playerWidth * 2.6))
+        , SvgAttr.height (String.fromFloat (model.player.property.playerHeight * 2.6))
+        ,if model.player.faceDirection == Right then
+            if model.player.property.ifPlayerJumpOnTheGround then
+                SvgAttr.xlinkHref "assets/playerRight.svg"
+            else
+                if model.player.property.isGreen then
+                    SvgAttr.xlinkHref "assets/playerGreenRight.png"
+                else
+                    SvgAttr.xlinkHref "assets/playerWingsRight.png"
+        else
+            if model.player.property.ifPlayerJumpOnTheGround then
+                SvgAttr.xlinkHref "assets/playerLeft.svg"
+            else
+                if model.player.property.isGreen then
+                    SvgAttr.xlinkHref "assets/playerGreenLeft.png"
+                else
+                    SvgAttr.xlinkHref "assets/playerWingsLeft.png"
+        ]
+        []
+    , Svg.rect
+        [
+        if playerX + playerDeltaX model < 350.0 then
+            SvgAttr.x "0"
+        else if playerX + playerDeltaX model + 350.0 > windowBoundaryX then
+            SvgAttr.x (String.fromFloat (windowBoundaryX - 700))
+        else
+            SvgAttr.x (String.fromFloat (playerX + playerDeltaX model - 350.0))
+        ,
+        if playerY + playerDeltaY model < windowBoundaryY / 2.0 then
+            SvgAttr.y (String.fromFloat (playerY + playerDeltaY model + 30.0))
+        else
+            SvgAttr.y (String.fromFloat (playerY + playerDeltaY model - 210.0))
+        , SvgAttr.width (String.fromFloat 700)
+        , SvgAttr.height (String.fromFloat 200)
+        , SvgAttr.opacity (String.fromInt (max deadOpacity winOpacity))
+        , SvgAttr.fill "#EEEEEE"
         ]
         []
     , Svg.text_
-        [ SvgAttr.x (String.fromFloat (playerX + playerDeltaX model))
-        , SvgAttr.y (String.fromFloat (playerY + playerDeltaY model))
+        [
+        if playerX + playerDeltaX model < 350.0 then
+            SvgAttr.x "350"
+        else if playerX + playerDeltaX model + 350.0 > windowBoundaryX then
+            SvgAttr.x (String.fromFloat (windowBoundaryX - 350))
+        else
+            SvgAttr.x (String.fromFloat (playerX + playerDeltaX model))
+        ,
+        if playerY + playerDeltaY model < windowBoundaryY / 2.0 then
+            SvgAttr.y (String.fromFloat (playerY + playerDeltaY model + 130.0))
+        else
+            SvgAttr.y (String.fromFloat (playerY + playerDeltaY model - 110.0))
         , SvgAttr.fontSize "50"
         , SvgAttr.textAnchor "middle"
         , SvgAttr.fill "#000000"
         , SvgAttr.opacity (String.fromInt deadOpacity)
         ]
-        [ Svg.text ("You die! Dead times: " ++ String.fromInt model.player.deadTimes)
+        [ Svg.text ("You die! Times of death: " ++ String.fromInt (Tuple.first model.player.deadTimes))
         ]
     , Svg.text_
-        [ SvgAttr.x (String.fromFloat (playerX + playerDeltaX model))
-        , SvgAttr.y (String.fromFloat (playerY + playerDeltaY model))
+        [
+        if playerX + playerDeltaX model < 350.0 then
+            SvgAttr.x "350"
+        else if playerX + playerDeltaX model + 350.0 > windowBoundaryX then
+            SvgAttr.x (String.fromFloat (windowBoundaryX - 350))
+        else
+            SvgAttr.x (String.fromFloat (playerX + playerDeltaX model))
+        ,
+        if playerY + playerDeltaY model < windowBoundaryY / 2.0 then
+            SvgAttr.y (String.fromFloat (playerY + playerDeltaY model + 130.0))
+        else
+            SvgAttr.y (String.fromFloat (playerY + playerDeltaY model - 110.0))
         , SvgAttr.fontSize "50"
         , SvgAttr.textAnchor "middle"
-        , SvgAttr.fill "#ff3366"
+        , SvgAttr.fill "#000000"
         , SvgAttr.opacity (String.fromInt winOpacity)
         ]
         [ Svg.text "You Win!"

@@ -1,4 +1,4 @@
-module Level0.Level0Update exposing (update)
+module Level7.Level7Update exposing (update)
 
 {-| update Level1
 
@@ -9,9 +9,8 @@ module Level0.Level0Update exposing (update)
 
 -}
 
-import Level0.Level0Init as Level0Init
-import Level0.Level0Type as Level0Type
-import Level1.Level1Type as Level1Type
+import Level7.Level7Init as Level0Init
+import Level7.Level7Type as Level0Type
 import MainFunction.MainType as MainType
 import Modules.Boundary as Boundary
 import Modules.Brick as Brick
@@ -22,6 +21,7 @@ import Modules.Needle as Needle
 import Modules.NoticeBoard as NoticeBoard
 import Modules.Player as Player
 import Modules.SavePoint as SavePoint
+import Modules.Sound as Sound
 
 
 {-| `update` of Level1
@@ -54,10 +54,13 @@ update msg model =
                             |> Boundary.update
                             |> NoticeBoard.update
                             |> Needle.update
+                            |> Sound.update
                             |> Player.updateJustPlayerPos
+                            |> GameControl.update ( MainType.Tick timePassed )
 
                     else
                         ( model, Cmd.none )
+                            |> GameControl.update ( MainType.Tick timePassed )
             in
             if List.member 82 newModel.keyPressed then
                 SavePoint.updateReset Level0Init.init ( model, Cmd.none )

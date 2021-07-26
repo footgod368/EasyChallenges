@@ -25,13 +25,13 @@ import Time exposing (Posix)
 -}
 type MainScene
     = Menu
-    | Level0
     | Level1
     | Level2
     | Level3
     | Level4
     | Level6
     | Level5
+    | Level7
 
 
 {-| `Msg` stores the callbacks of subscriptions

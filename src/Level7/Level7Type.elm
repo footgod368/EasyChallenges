@@ -1,4 +1,4 @@
-module Level0.Level0Type exposing (Model)
+module Level7.Level7Type exposing (Model)
 
 {-| stores level1 Model
 
@@ -21,6 +21,7 @@ import Modules.Needle as Needle
 import Modules.NoticeBoard as NoticeBoard
 import Modules.Player as Player
 import Modules.SavePoint as SavePoint
+import Modules.Sound as Sound
 
 
 {-| `Model` that used in level1
@@ -39,6 +40,7 @@ type alias Model =
     , noticeBoards : Array NoticeBoard.NoticeBoard
     , needles : Array Needle.Needle
     , gameControl : GameControl.GameControl
+    , sound : Sound.Sound
     , mainScene : MainType.MainScene
     , keyPressed : List Int
     }

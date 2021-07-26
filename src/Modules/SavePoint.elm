@@ -33,6 +33,7 @@ import Array exposing (Array)
 import GlobalFunction.GlobalBasics as GlobalBasics
 import MainFunction.MainType as MainType
 import Maybe exposing (withDefault)
+import Modules.GameControl as GameControl
 import Modules.Player as Player exposing (Player)
 import Modules.ViewMove as ViewMove
 import Svg exposing (Svg)
@@ -106,27 +107,26 @@ init ( x, y ) =
 -}
 viewOneSavePoint : { model | windowBoundary : GlobalBasics.Pos, levelBoundary : GlobalBasics.Pos, player : Player.Player } -> SavePoint -> List (Svg MainType.Msg)
 viewOneSavePoint model savePoint =
-    let
-        ( savePointX, savePointY ) =
-            savePoint.pos
+    if savePoint.appearance == Unsaved then
+        let
+            ( savePointX, savePointY ) =
+                savePoint.pos
 
-        saveOpacity =
-            if savePoint.appearance == Saved then
-                1.0
-
-            else
-                0.4
-    in
-    [ Svg.rect
-        [ SvgAttr.x (String.fromFloat (ViewMove.deltaX model + savePointX))
-        , SvgAttr.y (String.fromFloat (ViewMove.deltaY model + savePointY))
-        , SvgAttr.width (String.fromFloat savePointWidth)
-        , SvgAttr.height (String.fromFloat savePointHeight)
-        , SvgAttr.fill "#45ff45"
-        , SvgAttr.opacity (String.fromFloat saveOpacity)
+            saveOpacity =
+                    0.4
+        in
+        [ Svg.image
+            [ SvgAttr.x (String.fromFloat (ViewMove.deltaX model + savePointX))
+            , SvgAttr.y (String.fromFloat (ViewMove.deltaY model + savePointY))
+            , SvgAttr.width (String.fromFloat  savePointWidth)
+            , SvgAttr.height (String.fromFloat  savePointHeight)
+            , SvgAttr.xlinkHref "assets/save.svg"
+            ]
+            []
         ]
+
+    else
         []
-    ]
 
 
 {-| view function of savePoint
@@ -186,7 +186,7 @@ update ( model, cmd ) =
 
 {-| Reset the Level with playerPos in the save point
 -}
-updateReset : (() -> ( { model | savePoints : Array SavePoint, player : Player.Player, playerAtLastSavePoint : Player.Player }, Cmd MainType.Msg )) -> ( { model | player : Player.Player, savePoints : Array SavePoint, playerAtLastSavePoint : Player.Player }, Cmd MainType.Msg ) -> ( { model | player : Player.Player, savePoints : Array SavePoint, playerAtLastSavePoint : Player.Player }, Cmd MainType.Msg )
+updateReset : (() -> ( { model | savePoints : Array SavePoint, player : Player.Player, playerAtLastSavePoint : Player.Player, gameControl : GameControl.GameControl }, Cmd MainType.Msg )) -> ( { model | player : Player.Player, savePoints : Array SavePoint, playerAtLastSavePoint : Player.Player, gameControl : GameControl.GameControl }, Cmd MainType.Msg ) -> ( { model | player :  Player.Player, savePoints : Array SavePoint, playerAtLastSavePoint : Player.Player,  gameControl : GameControl.GameControl}, Cmd MainType.Msg )
 updateReset levelInit ( model, cmd ) =
     let
         ( initModel, initCmd ) =
@@ -201,16 +201,20 @@ updateReset levelInit ( model, cmd ) =
         oldDeadTimes =
             model.player.deadTimes
 
-        lastsavePoint =
+        lastSavePoint =
             Array.get oldSaveNumber oldSavePoints |> withDefault defSavePoint
 
         player =
             model.playerAtLastSavePoint
 
         newPlayer =
-            { player | saveNumber = oldSaveNumber, deadTimes = oldDeadTimes + 1, pos = lastsavePoint.pos }
+            { player
+                | saveNumber = oldSaveNumber
+                , pos = GlobalBasics.addPosPos lastSavePoint.pos ( 0.0, -2.0 )
+                , deadTimes = oldDeadTimes
+            }
 
         newInitModel =
-            { initModel | savePoints = oldSavePoints, player = newPlayer, playerAtLastSavePoint = newPlayer }
+            { initModel | savePoints = oldSavePoints, player = newPlayer, playerAtLastSavePoint = newPlayer, gameControl = model.gameControl }
     in
     ( newInitModel, initCmd )

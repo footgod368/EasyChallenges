@@ -10,7 +10,7 @@ module MainFunction.MainInit exposing (init)
 -}
 
 import Browser.Dom exposing (Viewport, getViewport)
-import Level0.Level0Init as Level0Init
+import Level7.Level7Init as Level7Init
 import Level1.Level1Init as Level1Init
 import Level2.Level2Init as Level2Init
 import Level3.Level3Init as Level3Init
@@ -30,7 +30,7 @@ init a =
     let
         mainModel =
             { mainScene = MainType.Menu
-            , level0Model = Level0Init.init () |> Tuple.first
+            , level7Model = Level7Init.init () |> Tuple.first
             , level1Model = Level1Init.init () |> Tuple.first
             , level2Model = Level2Init.init () |> Tuple.first
             , level3Model = Level3Init.init () |> Tuple.first

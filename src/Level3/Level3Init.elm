@@ -24,6 +24,7 @@ import Modules.Needle as Needle
 import Modules.NoticeBoard as NoticeBoard
 import Modules.Player as Player
 import Modules.SavePoint as SavePoint
+import Modules.Sound as Sound
 import Task
 
 
@@ -88,15 +89,17 @@ init a =
             , needles =
                 Array.fromList
                     (List.concat
-                        [ [ Needle.initHidden ( 2, 12 ) 1 ]
-                        , [ Needle.initHidden ( 4, 12 ) 2 ]
-                        , [ Needle.initHidden ( 6, 12 ) 3 ]
-                        , [ Needle.initHidden ( 8, 12 ) 4 ]
-                        , [ Needle.sword ( 14, 16 ) ( 14, -2 ) ( 2, 3 ) 8.0 6 ]
+                        [ [ Needle.initHidden ( 2, 12 ) 1 Needle.Downwards]
+                        , [ Needle.initHidden ( 4, 12 ) 2 Needle.Downwards]
+                        , [ Needle.initHidden ( 6, 12 ) 3 Needle.Downwards]
+                        , [ Needle.initHidden ( 8, 12 ) 4 Needle.Downwards]
+                        , [ Needle.sword ( 14, 16 ) ( 14, -3 ) ( 2, 3 ) 8.0 6 Needle.BombUp]
                         ]
                     )
             , keyPressed = []
-            , gameControl = GameControl.init MainType.Level4
+            , gameControl = GameControl.init MainType.Level4 [["Go right and then hit \"Silver Dog\""]]
+            , sound =
+                Sound.init []
             , mainScene = MainType.Level3
             }
     in

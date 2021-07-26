@@ -17,10 +17,12 @@ import Modules.Boundary as Boundary
 import Modules.Brick as Brick
 import Modules.EndPoint as EndPoint
 import Modules.GameControl as GameControl
+import Modules.GoldenDog as GoldenDog
 import Modules.Needle as Needle
 import Modules.NoticeBoard as NoticeBoard
 import Modules.Player as Player
 import Modules.SavePoint as SavePoint
+import Modules.Sound as Sound
 import Svg
 import Svg.Attributes as SvgAttr
 
@@ -40,7 +42,8 @@ view model =
             [ SvgAttr.width (String.fromFloat (Tuple.first model.windowBoundary))
             , SvgAttr.height (String.fromFloat (Tuple.second model.windowBoundary))
             ]
-            (SavePoint.view model
+            ( Sound.view model
+                ++ SavePoint.view model
                 ++ Brick.view model
                 ++ EndPoint.view model
                 ++ Boundary.view model
@@ -48,28 +51,6 @@ view model =
                 ++ Needle.view model
                 ++ Player.view model
                 ++ GameControl.view model
+                ++ GoldenDog.view model
             )
-        , Html.audio
-            [ HtmlAttr.width 0
-            , HtmlAttr.height 0
-            , if
-                List.member 37 model.keyPressed
-                    || List.member 39 model.keyPressed
-                    || List.member 65 model.keyPressed
-                    || List.member 68 model.keyPressed
-              then
-                HtmlAttr.src "assets/lah.ogg"
-
-              else if
-                List.member 38 model.keyPressed
-                    || List.member 87 model.keyPressed
-              then
-                HtmlAttr.src "assets/tech.ogg"
-
-              else
-                HtmlAttr.src "assets/latex.ogg"
-            , HtmlAttr.autoplay True
-            , HtmlAttr.loop True
-            ]
-            []
         ]

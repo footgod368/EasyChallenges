@@ -1,4 +1,4 @@
-module Level0.Level0Init exposing (init)
+module Level7.Level7Init exposing (init)
 
 {-| Init of Level1 Model.
 
@@ -13,7 +13,7 @@ import Array
 import Browser.Dom exposing (getViewport)
 import GlobalFunction.GlobalBasics as GlobalBasics
 import GlobalFunction.GlobalModule as GlobalModule
-import Level0.Level0Type as Level0Type
+import Level7.Level7Type as Level0Type
 import MainFunction.MainType as MainType
 import Modules.Boundary as Boundary
 import Modules.Brick as Brick
@@ -24,6 +24,7 @@ import Modules.Needle as Needle
 import Modules.NoticeBoard as NoticeBoard
 import Modules.Player as Player
 import Modules.SavePoint as SavePoint
+import Modules.Sound as Sound
 import Task
 
 
@@ -107,7 +108,7 @@ init a =
                     , Event.init
                         { id = 6, name = "Event6" }
                         (Event.AfterActEvent 4)
-                        (Event.TimeAfterStart 20)
+                        (Event.TimeAfterStart 40)
                         (Event.quickDuration 10)
                     ]
             , boundary = Boundary.normalInit
@@ -205,10 +206,10 @@ init a =
                     ]
             , needles =
                 Array.fromList
-                    [ Needle.initPos (GlobalBasics.addPosPos ( 0.0, 30.0 ) (GlobalBasics.blockPos ( 4, 14 )))
+                    [ Needle.initPos (GlobalBasics.addPosPos ( 0.0, 30.0 ) (GlobalBasics.blockPos ( 4, 14 ))) Needle.Upwards
                     , Needle.init
                         (GlobalBasics.addPosPos ( 0.0, 30.0 ) (GlobalBasics.blockPos ( 4, 11 )))
-                        (Needle.NormalNeedle 80.0 Needle.normalNeedleHeight)
+                        (Needle.NormalNeedle 80.0 Needle.normalNeedleHeight Needle.Upwards)
                         (GlobalModule.Visible GlobalModule.NoNextVisibility)
                         (GlobalModule.Collide GlobalModule.NoNextCollision)
                         (GlobalModule.Move
@@ -228,8 +229,14 @@ init a =
                             )
                         )
                     ]
-            , gameControl = GameControl.init MainType.Level1
-            , mainScene = MainType.Level0
+            , gameControl =
+                GameControl.init MainType.Level1 [ [ "!!", "??" ], [ "@@@" ] ]
+            , sound =
+                Sound.init
+                    [ Sound.Event 4 Sound.Sword
+                    , Sound.Event 5 Sound.Sword
+                    ]
+            , mainScene = MainType.Level7
             , keyPressed = []
             }
     in

@@ -24,6 +24,7 @@ import Modules.Needle as Needle
 import Modules.NoticeBoard as NoticeBoard
 import Modules.Player as Player
 import Modules.SavePoint as SavePoint
+import Modules.Sound as Sound
 import Task
 
 
@@ -75,7 +76,7 @@ init a =
                         , [ NoticeBoard.boundary ( 19, 7 ) ( 6, 3 ) ]
                         , [ Brick.init
                                 (GlobalBasics.blockPosFloat ( 20, 14 ))
-                                (Brick.Detailed 40 40 "#FFFF00")
+                                (Brick.Helmet)
                                 (GlobalModule.Invisible (GlobalModule.VisibleAfterEvent 8 (GlobalModule.InvisibleAfterEvent 9 GlobalModule.NoNextVisibility)))
                                 (GlobalModule.NoCollide GlobalModule.NoNextCollision)
                                 GlobalModule.NoNextMove
@@ -108,17 +109,19 @@ init a =
                     (List.concat
                         [ [ Needle.init
                                 (GlobalBasics.blockPosFloat ( 26.1, 12.5 ))
-                                (Needle.NormalNeedle 32 4)
+                                (Needle.NormalNeedle 32 4 Needle.Downwards)
                                 (GlobalModule.Invisible (GlobalModule.VisibleAfterEvent 10 GlobalModule.NoNextVisibility))
                                 (GlobalModule.Collide (GlobalModule.NoCollideAfterEvent 9 GlobalModule.NoNextCollision))
                                 GlobalModule.NoNextMove
                           ]
-                        , [ Needle.sword ( 12, 15 ) ( 12, -10 ) ( 3, 5 ) 7.0 11 ]
-                        , [ Needle.sword ( 28, 12 ) ( -10, 12 ) ( 4, 2 ) 7.0 12 ]
+                        , [ Needle.sword ( 12, 15 ) ( 12, -10 ) ( 3, 5 ) 7.0 11 Needle.BombUp]
+                        , [ Needle.sword ( 28, 12 ) ( -10, 12 ) ( 4, 2 ) 7.0 12 Needle.BombLeft]
                         ]
                     )
             , keyPressed = []
-            , gameControl = GameControl.init MainType.Level5
+            , gameControl = GameControl.init MainType.Level5 [["Note that the \"?\"","on the NoticeBoard also counts"],["The helmet can protect","you from the last \"?\""]]
+            , sound =
+                Sound.init []
             , mainScene = MainType.Level4
             , number = []
             }

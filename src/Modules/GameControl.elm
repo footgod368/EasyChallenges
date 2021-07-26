@@ -1,4 +1,4 @@
-module Modules.GameControl exposing
+port module Modules.GameControl exposing
     ( GameControl
     , init
     , update
@@ -46,9 +46,7 @@ import Task
 -}
 type ControlStatus
     = Normal
-    | Pause
-    | Win
-    | BackToMenu
+    | Hint Int
 
 
 {-| GameStatus records the current game status
@@ -56,18 +54,24 @@ type ControlStatus
 type alias GameControl =
     { controlStatus : ControlStatus
     , buttonState : Array String
+    , hint : List (List String)
+    , hintLength : Int
     , nextLevel : MainType.MainScene
+    , soundLoudness : Float
     }
 
 
 {-| Init one Level's gameControl
 -}
-init : MainType.MainScene -> GameControl
-init nextLevel =
+init : MainType.MainScene -> List (List String) -> GameControl
+init nextLevel hint =
     { controlStatus = Normal
     , buttonState =
-        Array.fromList (List.map (\i -> MainConstant.buttonNormalColor) (List.range 0 2))
+        Array.fromList (List.map (\i -> MainConstant.buttonNormalColor) (List.range 0 5))
+    , hint = hint
+    , hintLength = List.length hint
     , nextLevel = nextLevel
+    , soundLoudness = 1.0
     }
 
 
@@ -122,19 +126,159 @@ update msg ( model, cmd ) =
                             --gameNextLevel
                             ( { model | mainScene = model.gameControl.nextLevel }, Task.perform MainType.GetViewport getViewport )
 
+                        2 ->
+                            --gameHint
+                            let
+                                oldOldGameControl =
+                                    model.gameControl
+
+                                oldNewGameControl =
+                                    case oldOldGameControl.controlStatus of
+                                        Normal ->
+                                            { oldOldGameControl | controlStatus = Hint 0 }
+
+                                        Hint n ->
+                                            { oldOldGameControl | controlStatus = Hint (modBy model.gameControl.hintLength (n + 1)) }
+                            in
+                            ( { model | gameControl = oldNewGameControl }, Cmd.batch [ cmd ] )
+
+                        3 ->
+                            --gameHintCloseButton
+                            let
+                                oldOldGameControl =
+                                    model.gameControl
+
+                                oldNewGameControl =
+                                    { oldOldGameControl | controlStatus = Normal }
+                            in
+                            ( { model | gameControl = oldNewGameControl }, Cmd.batch [ cmd ] )
+
+                        5 ->
+                            --soundQuieterButton
+                            let
+                                oldOldGameControl =
+                                    model.gameControl
+
+                                oldNewGameControl =
+                                    { oldOldGameControl | soundLoudness = max (oldOldGameControl.soundLoudness - 0.1) 0}
+
+                            in
+                            ( { model | gameControl = oldNewGameControl }
+                            ,   Cmd.batch
+                                    [ changeVolume ( "BackGround", oldNewGameControl.soundLoudness )
+                                    , changeVolume ( "Jump", oldNewGameControl.soundLoudness )
+                                    , changeVolume ( "RandomBox", oldNewGameControl.soundLoudness )
+                                    , changeVolume ( "Needle", oldNewGameControl.soundLoudness )
+                                    , changeVolume ( "Dead", oldNewGameControl.soundLoudness )
+                                    , changeVolume ( "Sword", oldNewGameControl.soundLoudness )
+                                    ]
+                            )
+
+                        4 ->
+                            --soundLouderButton
+                            let
+                                oldOldGameControl =
+                                    model.gameControl
+
+                                oldNewGameControl =
+                                    { oldOldGameControl | soundLoudness = min (oldOldGameControl.soundLoudness + 0.1) 1.0}
+
+                            in
+                            ( { model | gameControl = oldNewGameControl }
+                            ,   Cmd.batch
+                                    [ changeVolume ( "BackGround", oldNewGameControl.soundLoudness )
+                                    , changeVolume ( "Jump", oldNewGameControl.soundLoudness )
+                                    , changeVolume ( "RandomBox", oldNewGameControl.soundLoudness )
+                                    , changeVolume ( "Needle", oldNewGameControl.soundLoudness )
+                                    , changeVolume ( "Dead", oldNewGameControl.soundLoudness )
+                                    , changeVolume ( "Sword", oldNewGameControl.soundLoudness )
+                                    ]
+                            )
+
                         _ ->
                             ( model, Cmd.batch [ cmd ] )
 
                 oldGameControl =
-                    model.gameControl
+                    newModel.gameControl
 
                 newGameControl =
-                    { oldGameControl | buttonState = Array.set num MainConstant.buttonOverColor model.gameControl.buttonState }
+                    { oldGameControl | buttonState = Array.set num MainConstant.buttonOverColor newModel.gameControl.buttonState }
             in
             ( { newModel | gameControl = newGameControl }, Cmd.batch [ newCmd ] )
 
         _ ->
-            ( model, cmd )
+            ( model
+            ,   Cmd.batch
+                    [ changeVolume ( "BackGround", model.gameControl.soundLoudness )
+                    , changeVolume ( "Jump", model.gameControl.soundLoudness )
+                    , changeVolume ( "RandomBox", model.gameControl.soundLoudness )
+                    , changeVolume ( "Needle", model.gameControl.soundLoudness )
+                    , changeVolume ( "Dead", model.gameControl.soundLoudness )
+                    , changeVolume ( "Sword", model.gameControl.soundLoudness )
+                    ]
+            )
+
+
+viewOneButton : { model | gameControl : GameControl, windowBoundary : GlobalBasics.Pos, player : Player } -> ( Float, Float ) -> ( Float, Float ) -> Int -> String -> List (Svg MainType.Msg)
+viewOneButton model ( x, y ) ( width, height ) buttonID text =
+    [ Svg.rect
+        [ SvgAttr.x (String.fromFloat x)
+        , SvgAttr.y (String.fromFloat y)
+        , SvgAttr.width (String.fromFloat width)
+        , SvgAttr.height (String.fromFloat height)
+        , SvgAttr.fill (withDefault "White" (Array.get buttonID model.gameControl.buttonState))
+        ]
+        []
+    , Svg.text_
+        [ SvgAttr.x (String.fromFloat (x + width / 2))
+        , SvgAttr.y (String.fromFloat (y + height / 2 + 11.0))
+        , SvgAttr.fontSize "30"
+        , SvgAttr.textAnchor "middle"
+        , SvgAttr.fill "#e85239"
+        ]
+        [ Svg.text text ]
+    , Svg.rect
+        [ SvgAttr.x (String.fromFloat x)
+        , SvgAttr.y (String.fromFloat y)
+        , SvgAttr.width (String.fromFloat width)
+        , SvgAttr.height (String.fromFloat height)
+        , SvgAttr.fill "#00000000"
+        , SvgEvent.onMouseOver (MainType.OnMouseOver buttonID)
+        , SvgEvent.onMouseOut (MainType.OnMouseOut buttonID)
+        , SvgEvent.onMouseDown (MainType.OnMouseDown buttonID)
+        , SvgEvent.onMouseUp (MainType.OnMouseUp buttonID)
+        ]
+        []
+    ]
+
+
+viewOneHintLine : ( Float, Float ) -> String -> List (Svg MainType.Msg)
+viewOneHintLine ( x, y ) text =
+    [ Svg.text_
+        [ SvgAttr.x (String.fromFloat x)
+        , SvgAttr.y (String.fromFloat y)
+        , SvgAttr.fontSize "30"
+        , SvgAttr.textAnchor "middle"
+        , SvgAttr.fill "#e85239"
+        ]
+        [ Svg.text text ]
+    ]
+
+
+viewOneHint : ( Float, Float ) -> List String -> List (Svg MainType.Msg)
+viewOneHint ( x, y ) textList =
+    List.foldl
+        (\text ( list, i ) ->
+            let
+                oneText =
+                    viewOneHintLine ( x, y + 50.0 * i ) text
+            in
+            ( oneText :: list, i + 1 )
+        )
+        ( [], 0 )
+        textList
+        |> Tuple.first
+        |> List.concat
 
 
 {-| View function for gameControl, draw pause, back buttons
@@ -146,74 +290,150 @@ view model =
             model.windowBoundary
     in
     List.concat
-        [ [ Svg.rect
-                [ SvgAttr.x (String.fromFloat (windowBoundaryX - 120.0))
-                , SvgAttr.y (String.fromFloat 30.0)
-                , SvgAttr.width "100"
-                , SvgAttr.height "50"
-                , SvgAttr.fill (withDefault "White" (Array.get MainConstant.gameBackButton model.gameControl.buttonState))
-                ]
-                []
-          , Svg.text_
-                [ SvgAttr.x (String.fromFloat (windowBoundaryX - 70.0))
-                , SvgAttr.y (String.fromFloat 65.0)
-                , SvgAttr.fontSize "30"
-                , SvgAttr.textAnchor "middle"
-                , SvgAttr.fill "#e85239"
-                ]
-                [ Svg.text "Back" ]
-          , Svg.rect
-                [ SvgAttr.x (String.fromFloat (windowBoundaryX - 120.0))
-                , SvgAttr.y (String.fromFloat 30.0)
-                , SvgAttr.width "100"
-                , SvgAttr.height "50"
-                , SvgAttr.fill "#00000000"
-                , SvgEvent.onMouseOver (MainType.OnMouseOver MainConstant.gameBackButton)
-                , SvgEvent.onMouseOut (MainType.OnMouseOut MainConstant.gameBackButton)
-                , SvgEvent.onMouseDown (MainType.OnMouseDown MainConstant.gameBackButton)
-                , SvgEvent.onMouseUp (MainType.OnMouseUp MainConstant.gameBackButton)
-                ]
-                []
-          ]
+        [ viewOneButton
+            model
+            ( windowBoundaryX - 150.0, 30.0 )
+            ( 100.0, 50.0 )
+            MainConstant.gameBackButton
+            "Back"
+        , viewOneButton
+            model
+            ( windowBoundaryX - 150.0, 100.0 )
+            ( 160.0, 50.0 )
+            MainConstant.soundLouderButton
+            "Volume +"
+        , viewOneButton
+            model
+            ( windowBoundaryX - 340.0, 100.0 )
+            ( 160.0, 50.0 )
+            MainConstant.soundQuieterButton
+            "Volume -"
         , if model.player.liveState == Player.Win then
-            [ Svg.rect
-                [ SvgAttr.x (String.fromFloat (windowBoundaryX / 2.0))
-                , SvgAttr.y (String.fromFloat (windowBoundaryY / 2.0))
-                , SvgAttr.width "200"
-                , SvgAttr.height "100"
-                , SvgAttr.fill (withDefault "White" (Array.get MainConstant.gameNextLevelButton model.gameControl.buttonState))
-                ]
-                []
-            , Svg.text_
-                [ SvgAttr.x (String.fromFloat (windowBoundaryX / 2.0 + 100.0))
-                , SvgAttr.y (String.fromFloat (windowBoundaryY / 2.0 + 50.0))
-                , SvgAttr.fontSize "30"
-                , SvgAttr.textAnchor "middle"
-                , SvgAttr.fill "#e85239"
-                ]
-                [ Svg.text "Next Level" ]
-            , Svg.rect
-                [ SvgAttr.x (String.fromFloat (windowBoundaryX / 2.0))
-                , SvgAttr.y (String.fromFloat (windowBoundaryY / 2.0))
-                , SvgAttr.width "200"
-                , SvgAttr.height "100"
-                , SvgAttr.fill "#00000000"
-                , SvgEvent.onMouseOver (MainType.OnMouseOver MainConstant.gameNextLevelButton)
-                , SvgEvent.onMouseOut (MainType.OnMouseOut MainConstant.gameNextLevelButton)
-                , SvgEvent.onMouseDown (MainType.OnMouseDown MainConstant.gameNextLevelButton)
-                , SvgEvent.onMouseUp (MainType.OnMouseUp MainConstant.gameNextLevelButton)
-                ]
-                []
-            ]
+            viewOneButton
+                model
+                ( windowBoundaryX / 2.0, windowBoundaryY / 2.0 + 200.0 )
+                ( 200.0, 100.0 )
+                MainConstant.gameNextLevelButton
+                "Next Level"
 
           else
-            [--Svg.rect
-             --    [ SvgAttr.x (String.fromFloat (windowBoundaryX / 2.0))
-             --    , SvgAttr.y (String.fromFloat (windowBoundaryY / 2.0))
-             --    , SvgAttr.width "200"
-             --    , SvgAttr.height "100"
-             --    , SvgAttr.fill "#000000"
-             --    ]
-             --    []
-            ]
+            case model.gameControl.controlStatus of
+                Normal ->
+                    viewOneButton
+                        model
+                        ( windowBoundaryX - 340.0, 30.0 )
+                        ( 140.0, 50.0 )
+                        MainConstant.gameHintButton
+                        "Hint"
+
+                Hint n ->
+                    List.concat
+                        [ [ Svg.rect
+                                [ SvgAttr.x (String.fromFloat (windowBoundaryX / 2.0 - 300))
+                                , SvgAttr.y (String.fromFloat (windowBoundaryY / 2.0 - 150))
+                                , SvgAttr.width (String.fromFloat 600)
+                                , SvgAttr.height (String.fromFloat 300)
+                                , SvgAttr.fill "#FAFAFA"
+                                ]
+                                []
+                          ]
+                        , let
+                            hintList =
+                                model.gameControl.hint
+                                    |> List.drop n
+                                    |> List.head
+                                    |> withDefault []
+                          in
+                          viewOneHint ( windowBoundaryX / 2.0, windowBoundaryY / 2.0 - 120 ) hintList
+                        , viewOneButton
+                            model
+                            ( windowBoundaryX / 2.0 - 75.0, windowBoundaryY / 2.0 + 80.0 )
+                            ( 150.0, 50.0 )
+                            MainConstant.gameHintButton
+                            "Next Hint"
+                        , viewOneButton
+                            model
+                            ( windowBoundaryX / 2.0 + 170.0, windowBoundaryY / 2.0 + 80.0 )
+                            ( 100.0, 50.0 )
+                            MainConstant.gameHintCloseButton
+                            "Close"
+                        ]
         ]
+
+{-| This is a port function that can help you to control the volume of the music.
+For example, if you want to change the volume of a audio tag, you need to make sure that the audio tag is written like this in view:
+
+    audio
+        [ Html.Attributes.src "assets/sample.ogg"
+        , Html.Attributes.id "audio-sample"
+        ]
+        []
+
+Change the id to a name that you want.
+
+Then, if you want to change the volume on the music to 95%, you just need to call:
+
+    changeVolume ( "audio-sample", 0.95 )
+
+Please note that the function returns a Cmd Msg. Please return it in the Update function. When you successfully call the changeVolume function, it will print a console log in the browser like this
+
+    Change_Volume audio - sample 0.9
+
+-}
+port changeVolume : ( String, Float ) -> Cmd msg
+
+
+{-| This is a port function that can help you to pause the music.
+For example, if you want to pause a music that is tagged "audio-sample", please write like this:
+Change the id to a name that you want.
+
+    pause "audio-sample"
+
+Please note that the function returns a Cmd Msg. Please return it in the Update function. When you successfully call the function, it will print a console log in the browser like this
+
+    Pause: audio - sample
+
+-}
+port pause : String -> Cmd msg
+
+
+{-| This is a port function that can help you to start the music.
+For example, if you want to start a music that is tagged "audio-sample", please write like this:
+Change the id to a name that you want.
+
+    start "audio-sample"
+
+Please note that the function returns a Cmd Msg. Please return it in the Update function. When you successfully call the function, it will print a console log in the browser like this
+
+    Start_Music: audio - sample
+
+-}
+port start : String -> Cmd msg
+
+
+{-| This is a port function that can help you to set the progression bar of the music.
+For example, if you want to set a music that is tagged "audio-sample" to 10s, please write like this:
+Change the id to a name that you want.
+
+    settime ( "audio-sample", 10 )
+
+Please note that the function returns a Cmd Msg. Please return it in the Update function. When you successfully call the function, it will print a console log in the browser like this
+
+    Set_Play_Time: audio - sample 10
+
+-}
+port settime : ( String, Float ) -> Cmd msg
+
+
+{-| This is a port function that can help you to slow down or speed up the music.
+For example, if you want to set the rate of a music that is tagged "audio-sample" to 0.5, please write like this:
+Change the id to a name that you want.
+
+    setrate ( "audio-sample", 0.5 )
+
+Please note that the function returns a Cmd Msg. Please return it in the Update function. When you successfully call the function, it will print a console log in the browser like this
+
+    Set_Music_Rate: audio - sample
+
+-}
+port setrate : ( String, Float ) -> Cmd msg
