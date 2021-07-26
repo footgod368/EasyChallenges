@@ -311,7 +311,7 @@ view model =
         , if model.player.liveState == Player.Win then
             viewOneButton
                 model
-                ( windowBoundaryX / 2.0, windowBoundaryY / 2.0 )
+                ( windowBoundaryX / 2.0, windowBoundaryY / 2.0 + 200.0 )
                 ( 200.0, 100.0 )
                 MainConstant.gameNextLevelButton
                 "Next Level"

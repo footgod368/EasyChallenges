@@ -531,11 +531,21 @@ view model =
         [ Svg.text ("You die! Times of death: " ++ String.fromInt (Tuple.first model.player.deadTimes))
         ]
     , Svg.text_
-        [ SvgAttr.x (String.fromFloat (windowBoundaryX / 2))
-        , SvgAttr.y (String.fromFloat (windowBoundaryY / 2))
+        [
+        if playerX + playerDeltaX model < 350.0 then
+            SvgAttr.x "350"
+        else if playerX + playerDeltaX model + 350.0 > windowBoundaryX then
+            SvgAttr.x (String.fromFloat (windowBoundaryX - 350))
+        else
+            SvgAttr.x (String.fromFloat (playerX + playerDeltaX model))
+        ,
+        if playerY + playerDeltaY model < windowBoundaryY / 2.0 then
+            SvgAttr.y (String.fromFloat (playerY + playerDeltaY model + 130.0))
+        else
+            SvgAttr.y (String.fromFloat (playerY + playerDeltaY model - 110.0))
         , SvgAttr.fontSize "50"
         , SvgAttr.textAnchor "middle"
-        , SvgAttr.fill "#ff3366"
+        , SvgAttr.fill "#000000"
         , SvgAttr.opacity (String.fromInt winOpacity)
         ]
         [ Svg.text "You Win!"
