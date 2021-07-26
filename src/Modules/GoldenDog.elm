@@ -124,7 +124,7 @@ view model =
             ( windowBoundaryX, windowBoundaryY ) =
                 model.windowBoundary
           in
-          if deadTimes == 1 then
+          if deadTimes == 0 then
             []
 
           else

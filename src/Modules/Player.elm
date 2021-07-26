@@ -72,8 +72,8 @@ type alias PlayerProperty =
 -}
 defPlayerProperty : PlayerProperty
 defPlayerProperty =
-    { playerWidth = 20.0
-    , playerHeight = 20.0
+    { playerWidth = 10.0
+    , playerHeight = 25.0
     , playerJumpNum = 1
     , ifPlayerJumpOnTheGround = True
     , playerJumpFrames = 20
@@ -236,7 +236,7 @@ init pos property propertyChange =
     , ifChangeBackToLastPosX = False
     , ifChangeBackToLastPosY = False
     , liveState = Live
-    , deadTimes = ( 1, FallFromHigh )
+    , deadTimes = ( 0, FallFromHigh )
     , saveNumber = -1
     }
 
@@ -469,10 +469,10 @@ view model =
                 0
     in
     [ Svg.image
-        [ SvgAttr.x (String.fromFloat (playerX - 1.0 + playerDeltaX model))
-        , SvgAttr.y (String.fromFloat (playerY + playerDeltaY model))
-        , SvgAttr.width (String.fromFloat (model.player.property.playerWidth + 7.0))
-        , SvgAttr.height (String.fromFloat (model.player.property.playerHeight + 2.0))
+        [ SvgAttr.x (String.fromFloat (playerX - model.player.property.playerWidth * 0.86 + playerDeltaX model))
+        , SvgAttr.y (String.fromFloat (playerY - model.player.property.playerHeight * 0.9 + playerDeltaY model))
+        , SvgAttr.width (String.fromFloat (model.player.property.playerWidth * 2.6))
+        , SvgAttr.height (String.fromFloat (model.player.property.playerHeight * 2.6))
         ,if model.player.faceDirection == Right then
             if model.player.property.ifPlayerJumpOnTheGround then
                 SvgAttr.xlinkHref "assets/playerRight.svg"
@@ -492,23 +492,43 @@ view model =
         ]
         []
     , Svg.rect
-        [ SvgAttr.x (String.fromFloat (windowBoundaryX / 2.0 - 300))
-        , SvgAttr.y (String.fromFloat (windowBoundaryY / 2.0 - 120))
-        , SvgAttr.width (String.fromFloat 600)
+        [
+        if playerX + playerDeltaX model < 350.0 then
+            SvgAttr.x "0"
+        else if playerX + playerDeltaX model + 350.0 > windowBoundaryX then
+            SvgAttr.x (String.fromFloat (windowBoundaryX - 700))
+        else
+            SvgAttr.x (String.fromFloat (playerX + playerDeltaX model - 350.0))
+        ,
+        if playerY + playerDeltaY model < windowBoundaryY / 2.0 then
+            SvgAttr.y (String.fromFloat (playerY + playerDeltaY model + 30.0))
+        else
+            SvgAttr.y (String.fromFloat (playerY + playerDeltaY model - 210.0))
+        , SvgAttr.width (String.fromFloat 700)
         , SvgAttr.height (String.fromFloat 200)
         , SvgAttr.opacity (String.fromInt (max deadOpacity winOpacity))
         , SvgAttr.fill "#EEEEEE"
         ]
         []
     , Svg.text_
-        [ SvgAttr.x (String.fromFloat (windowBoundaryX / 2))
-        , SvgAttr.y (String.fromFloat (windowBoundaryY / 2))
+        [
+        if playerX + playerDeltaX model < 350.0 then
+            SvgAttr.x "350"
+        else if playerX + playerDeltaX model + 350.0 > windowBoundaryX then
+            SvgAttr.x (String.fromFloat (windowBoundaryX - 350))
+        else
+            SvgAttr.x (String.fromFloat (playerX + playerDeltaX model))
+        ,
+        if playerY + playerDeltaY model < windowBoundaryY / 2.0 then
+            SvgAttr.y (String.fromFloat (playerY + playerDeltaY model + 130.0))
+        else
+            SvgAttr.y (String.fromFloat (playerY + playerDeltaY model - 110.0))
         , SvgAttr.fontSize "50"
         , SvgAttr.textAnchor "middle"
         , SvgAttr.fill "#000000"
         , SvgAttr.opacity (String.fromInt deadOpacity)
         ]
-        [ Svg.text ("You die! Times of born: " ++ String.fromInt (Tuple.first model.player.deadTimes))
+        [ Svg.text ("You die! Times of death: " ++ String.fromInt (Tuple.first model.player.deadTimes))
         ]
     , Svg.text_
         [ SvgAttr.x (String.fromFloat (windowBoundaryX / 2))

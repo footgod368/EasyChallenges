@@ -42,8 +42,8 @@ view model =
             [ SvgAttr.width (String.fromFloat (Tuple.first model.windowBoundary))
             , SvgAttr.height (String.fromFloat (Tuple.second model.windowBoundary))
             ]
-            (SavePoint.view model
-                ++ Sound.view model
+            ( Sound.view model
+                ++ SavePoint.view model
                 ++ Brick.view model
                 ++ EndPoint.view model
                 ++ Boundary.view model
@@ -53,27 +53,4 @@ view model =
                 ++ GameControl.view model
                 ++ GoldenDog.view model
             )
-        , Html.audio
-            [ HtmlAttr.width 0
-            , HtmlAttr.height 0
-            , if
-                List.member 37 model.keyPressed
-                    || List.member 39 model.keyPressed
-                    || List.member 65 model.keyPressed
-                    || List.member 68 model.keyPressed
-              then
-                HtmlAttr.src "assets/lah.ogg"
-
-              else if
-                List.member 38 model.keyPressed
-                    || List.member 87 model.keyPressed
-              then
-                HtmlAttr.src "assets/tech.ogg"
-
-              else
-                HtmlAttr.src "assets/latex.ogg"
-            , HtmlAttr.autoplay True
-            , HtmlAttr.loop True
-            ]
-            []
         ]
