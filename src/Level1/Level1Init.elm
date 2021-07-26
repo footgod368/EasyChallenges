@@ -158,7 +158,18 @@ init a =
             , keyPressed = []
             , gameControl = GameControl.init MainType.Level2 [["To circumvent the moonster,","jump back onto the first tunnel","and then jump over the monster."]]
             , sound =
-                Sound.init []
+                Sound.init [
+                    Sound.Event 2 Sound.RandomBox
+                ,   Sound.Event 3 Sound.Needle
+                ,   Sound.Event 4 Sound.RandomBox
+                ,   Sound.Event 5 Sound.RandomBox
+                ,   Sound.Event 6 Sound.RandomBox
+                ,   Sound.Event 7 Sound.RandomBox
+                ,   Sound.Event 8 Sound.RandomBox
+                ,   Sound.Event 9 Sound.Needle
+                ,   Sound.Event 10 Sound.RandomBox
+                ,   Sound.Event 11 Sound.RandomBox
+                ]
             , mainScene = MainType.Level1
             }
     in

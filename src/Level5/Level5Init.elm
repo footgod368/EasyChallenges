@@ -181,7 +181,13 @@ init a =
             , keyPressed = []
             , gameControl = GameControl.init MainType.Level6 [["Hit the first\"?\"","to get the wings"],["Hit the last two \"?\" again","to mix blue with red"]]
             , sound =
-                Sound.init []
+                Sound.init [
+                  Sound.Event 3 Sound.RandomBox
+                ,    Sound.Event 4 Sound.RandomBox
+                ,    Sound.Event 5 Sound.RandomBox
+                ,    Sound.Event 11 Sound.RandomBox
+                ,    Sound.Event 12 Sound.RandomBox
+                ]
             , mainScene = MainType.Level5
             , number = []
             }

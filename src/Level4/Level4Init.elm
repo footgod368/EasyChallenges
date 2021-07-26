@@ -121,7 +121,19 @@ init a =
             , keyPressed = []
             , gameControl = GameControl.init MainType.Level5 [["Note that the \"?\"","on the NoticeBoard also counts"],["The helmet can protect","you from the last \"?\""]]
             , sound =
-                Sound.init []
+                Sound.init [
+                    Sound.Event 1 Sound.RandomBox
+                ,    Sound.Event 2 Sound.RandomBox
+                ,    Sound.Event 3 Sound.RandomBox
+                ,    Sound.Event 4 Sound.RandomBox
+                ,    Sound.Event 5 Sound.RandomBox
+                ,    Sound.Event 6 Sound.RandomBox
+                ,    Sound.Event 7 Sound.RandomBox
+                ,    Sound.Event 8 Sound.RandomBox
+                ,    Sound.Event 10 Sound.Needle
+                ,    Sound.Event 11 Sound.Sword
+                ,    Sound.Event 12 Sound.Sword
+                ]
             , mainScene = MainType.Level4
             , number = []
             }
