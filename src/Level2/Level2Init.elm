@@ -222,7 +222,7 @@ init a =
             , gameControl = GameControl.init MainType.Level3 [["To circumvent the first NoticeBoard,","triger the switch and back off quickly,","then jump onto the NoticeBoard"],["The big \"?\" will disturb","your direction control"]]
             , sound =
                 Sound.init [
-                   Sound.Event 2 Sound.RandomBox
+                    Sound.Event 2 Sound.RandomBox
                 ,   Sound.Event 7 Sound.RandomBox
                 ,   Sound.Event 10 Sound.RandomBox
                 ,   Sound.Event 11 Sound.RandomBox
