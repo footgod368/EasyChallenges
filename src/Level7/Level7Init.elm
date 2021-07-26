@@ -108,7 +108,7 @@ init a =
                     , Event.init
                         { id = 6, name = "Event6" }
                         (Event.AfterActEvent 4)
-                        (Event.TimeAfterStart 20)
+                        (Event.TimeAfterStart 40)
                         (Event.quickDuration 10)
                     ]
             , boundary = Boundary.normalInit
@@ -234,6 +234,7 @@ init a =
             , sound =
                 Sound.init
                     [ Sound.Event 4 Sound.Sword
+                    , Sound.Event 5 Sound.Sword
                     ]
             , mainScene = MainType.Level7
             , keyPressed = []
