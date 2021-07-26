@@ -636,7 +636,7 @@ init a =
                         ]
                     )
             , keyPressed = []
-            , gameControl = GameControl.init MainType.Level6 [["Hit the first \"?\"","to disable the laser"],["Jump onto the inverse magic box ","and jump again to dodge the laser"],["The hidden bricks can shade the laser"]]
+            , gameControl = GameControl.init MainType.Level7 [["Hit the first \"?\"","to disable the laser"],["Jump onto the inverse magic box ","and jump again to dodge the laser"],["The hidden bricks can shade the laser"]]
             , sound =
                 Sound.init [
                     Sound.Event 34 Sound.RandomBox
