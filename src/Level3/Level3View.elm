@@ -41,8 +41,8 @@ view model =
             [ SvgAttr.width (String.fromFloat (Tuple.first model.windowBoundary))
             , SvgAttr.height (String.fromFloat (Tuple.second model.windowBoundary))
             ]
-            (SavePoint.view model
-                ++ Sound.view model
+            ( Sound.view model
+                ++ SavePoint.view model
                 ++ Brick.view model
                 ++ Boundary.view model
                 ++ NoticeBoard.view model
