@@ -76,7 +76,7 @@ init a =
                         , [ NoticeBoard.boundary ( 19, 7 ) ( 6, 3 ) ]
                         , [ Brick.init
                                 (GlobalBasics.blockPosFloat ( 20, 14 ))
-                                (Brick.Detailed 40 40 "#FFFF00")
+                                (Brick.Helmet)
                                 (GlobalModule.Invisible (GlobalModule.VisibleAfterEvent 8 (GlobalModule.InvisibleAfterEvent 9 GlobalModule.NoNextVisibility)))
                                 (GlobalModule.NoCollide GlobalModule.NoNextCollision)
                                 GlobalModule.NoNextMove
