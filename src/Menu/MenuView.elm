@@ -40,7 +40,7 @@ view model =
             [ HtmlAttr.id "player"
 
             --, HtmlAttr.controls True
-            , HtmlAttr.src "assets/rimworldMove.mp3"
+            --, HtmlAttr.src "assets/rimworldMove.mp3"
             , HtmlAttr.preload "auto"
             , HtmlAttr.autoplay True
             , HtmlAttr.loop True

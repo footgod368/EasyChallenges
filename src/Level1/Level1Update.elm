@@ -58,9 +58,11 @@ update msg model =
                             |> Sound.update
                             |> Monster.update
                             |> Player.updateJustPlayerPos
+                            |> GameControl.update ( MainType.Tick timePassed )
 
                     else
                         ( model, Cmd.none )
+                            |> GameControl.update ( MainType.Tick timePassed )
             in
             if List.member 82 newModel.keyPressed then
                 SavePoint.updateReset Level1Init.init ( model, Cmd.none )

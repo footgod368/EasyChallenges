@@ -59,9 +59,11 @@ update msg model =
                             |> checkBlue
                             |> checkRed
                             |> checkBlueAndRed
+                            |> GameControl.update ( MainType.Tick timePassed )
 
                     else
                         ( model, Cmd.none )
+                            |> GameControl.update ( MainType.Tick timePassed )
             in
             if List.member 82 newModel.keyPressed then
                 SavePoint.updateReset Level5Init.init ( model, Cmd.none )
