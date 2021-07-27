@@ -95,7 +95,30 @@ type Move
     | NoNextMove
 
 
-{-| update visibility. Used in update. Not exposed.
+{-| update visibility. Used in update for individual update. Assume there's actEvent in model while visibility in
+module model. Then, you can use it like this.
+
+    type alias Module =
+    { visibility : Visibility
+    }
+
+    myModule : Module
+    myModule =
+        Module ( Invisible ( VisibleAfterEvent 2 NoNextVisibility ) )
+
+    type alias Model =
+    { actEvent : Array Event.ActEvent
+    }
+
+    model : Model
+    model =
+        Model ( Array.fromList [{id = 2, label = "event2"}] )
+
+    -- updateModule == Module  ( Visible NoNextVisibility ), this is because eventID = 2 is activated
+    updateModule : Module
+    updateModule =
+        updateOneVisibility model myModule
+
 -}
 updateOneVisibility : { model | actEvent : Array Event.ActEvent } -> { myModule | visibility : Visibility } -> { myModule | visibility : Visibility }
 updateOneVisibility model myModule =
@@ -136,7 +159,30 @@ updateOneVisibility model myModule =
     newModule
 
 
-{-| update collision. Used in update. Not exposed.
+{-| update collision. Used in update for individual update. Assume there's actEvent in model while visibility in
+module model. Then, you can use it like this.
+
+    type alias Module =
+    { visibility : Visibility
+    }
+
+    myModule : Module
+    myModule =
+        Module ( Invisible ( VisibleAfterEvent 2 NoNextVisibility ) )
+
+    type alias Model =
+    { actEvent : Array Event.ActEvent
+    }
+
+    model : Model
+    model =
+        Model ( Array.fromList [{id = 2, label = "event2"}] )
+
+    -- updateModule == Module  ( Visible NoNextVisibility ), this is because eventID = 2 is activated
+    updateModule : Module
+    updateModule =
+        updateOneVisibility model myModule
+
 -}
 updateOneCollision : { model | actEvent : Array Event.ActEvent } -> { myModule | collision : Collision } -> { myModule | collision : Collision }
 updateOneCollision model myModule =
