@@ -31,10 +31,9 @@ view model =
         , HtmlAttr.style "height" "100%"
         , HtmlAttr.style "left" "50"
         , HtmlAttr.style "top" "50"
-
-        --, HtmlAttr.style "background-image" "url(assets/menuBackground.jpg)"
-        --, HtmlAttr.style "background-size" "100% 100%"
-        --, HtmlAttr.style "background-position" "0px 0px"
+        , HtmlAttr.style "background-image" "url(assets/menuBackground.png)"
+        , HtmlAttr.style "background-size" "100% 100%"
+        , HtmlAttr.style "background-position" "0px 0px"
         ]
         [ Html.audio
             [ HtmlAttr.id "player"
