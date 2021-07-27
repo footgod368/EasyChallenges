@@ -454,6 +454,10 @@ init a =
                         (NoticeBoard.Visible "¿" (NoticeBoard.InvisibleAfterEvent 57 NoticeBoard.NoNextNoticeBoardVisibility))
                         GlobalModule.NoNextMove
                         40
+                    , NoticeBoard.init (GlobalBasics.blockPosFloat ( 74.5, 14 ))
+                        (NoticeBoard.Visible "Come here!" (NoticeBoard.InvisibleAfterEvent 68 NoticeBoard.NoNextNoticeBoardVisibility))
+                        GlobalModule.NoNextMove
+                        16
                     , NoticeBoard.init (GlobalBasics.blockPosFloat ( 68.5, 11.85 ))
                         (NoticeBoard.Invisible
                             (NoticeBoard.VisibleAfterEvent 65
@@ -636,7 +640,10 @@ init a =
                         ]
                     )
             , keyPressed = []
-            , gameControl = GameControl.init MainType.Level7 [["Hit the first \"?\"","to disable the laser"],["Jump onto the inverse magic box ","and jump again to dodge the laser"],["The hidden bricks can shade the laser"]]
+            , gameControl = GameControl.init MainType.Level7 [["At the beginning of the level, ","you can just rush to the right ","and ignore the two falling needles"],
+                ["Before the second savepoint, ","you have to dodge three attacks from ","the horizontal laser, jump ","before the first and the third attacks"],
+                ["In the final part, "," jump onto the inverse magic box ","and jump again to dodge the first laser"],
+                ["You can hide under the bricks ","to dodge the second laser"]]
             , sound =
                 Sound.init [
                     Sound.Event 34 Sound.RandomBox
