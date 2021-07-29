@@ -47,7 +47,7 @@ view model =
             []
         , Svg.svg
             [ SvgAttr.width (String.fromFloat (Tuple.first model.windowBoundary))
-            , SvgAttr.height (String.fromFloat (Tuple.first model.windowBoundary))
+            , SvgAttr.height (String.fromFloat (Tuple.second model.windowBoundary))
             ]
             (drawBackground model
                 --    ++ drawBall model
