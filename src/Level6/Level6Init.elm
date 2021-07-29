@@ -53,7 +53,7 @@ init a =
                         (Event.AfterActEvent 5)
                         (Event.TimeAfterStart 100)
                         (Event.quickDuration 10)
-                    , Event.hitBlock 7 "needle" ( 26.2, 6 ) ( 0.6, 4.8 )
+                    , Event.hitBlock 7 "needle" ( 26.2, 5.5 ) ( 0.6, 4.8 )
                     , Event.hitBlock 9 "finaltrap" ( 36, 6 ) ( 1, 7 )
                     , Event.init
                         { id = 10, name = "Falling" }
@@ -149,10 +149,10 @@ init a =
                         (Event.quickDuration 10)
                     , let
                         temp =
-                            Event.hitLineSeg 34 "g" (GlobalBasics.blockPosFloat ( 26, 11 )) (GlobalBasics.blockPosFloat ( 27, 11 ))
+                            Event.hitLineSeg 34 "g" (GlobalBasics.blockPosFloat ( 26, 10.5 )) (GlobalBasics.blockPosFloat ( 27, 10.5 ))
                       in
                       { temp | duration = Event.quickDuration 10 }
-                    , Event.hitBlock 35 "hidden" ( 28, 9 ) ( 2, 2 )
+                    , Event.hitBlock 35 "hidden" ( 28, 8.5 ) ( 2, 2 )
                     , Event.hitBlock 36 "sword" ( 28.2, 11 ) ( 1, 1 )
                     , Event.hitBlock 51 "magicbox" ( 50, 9.9 ) ( 1, 1.2 )
                     , Event.hitBlock 52 "hidden" ( 55, 10 ) ( 2, 1 )
@@ -295,12 +295,12 @@ init a =
                                         )
                             }
                           ]
-                        , [Brick.initPos (GlobalBasics.blockPosFloat ( 25, 10 ))]
-                        , [Brick.initPos (GlobalBasics.blockPosFloat ( 27, 10 ))]
-                        , [Brick.initPosVolumeColor ( GlobalBasics.blockPosFloat ( 26, 10 )) ( 40, 40 ) "#FFFF00"]
+                        , [Brick.initPos (GlobalBasics.blockPosFloat ( 25, 9.5 ))]
+                        , [Brick.initPos (GlobalBasics.blockPosFloat ( 27, 9.5 ))]
+                        , [Brick.initPosVolumeColor ( GlobalBasics.blockPosFloat ( 26, 9.5 )) ( 40, 40 ) "#FFFF00"]
                         , let
                             base0 =
-                                Brick.initPosVolumeColor (GlobalBasics.blockPosFloat ( 26.1, 9.8 )) ( 32, 8 ) "#700000"
+                                Brick.initPosVolumeColor (GlobalBasics.blockPosFloat ( 26.1, 9.3 )) ( 32, 8 ) "#700000"
                           in
                           [ { base0
                                 | visibility = GlobalModule.Visible (GlobalModule.InvisibleAfterEvent 34 GlobalModule.NoNextVisibility)
@@ -309,7 +309,7 @@ init a =
                           ]
                         , let
                             hidden =
-                                Brick.initCollideHidden ( 28, 9 ) 35
+                                Brick.initCollideHidden ( 28, 8.5 ) 35
                           in
                           [ { hidden
                                 | appearance = Brick.Detailed 80 80 "#00000050"
@@ -448,12 +448,16 @@ init a =
                         GlobalModule.NoNextMove
                         16
                     , NoticeBoard.quickInit (GlobalBasics.blockPosFloat ( 6.5, 7.4 )) "↓" 40
-                    , NoticeBoard.quickInit (GlobalBasics.blockPosFloat ( 26.5, 10.85 )) "?" 40
+                    , NoticeBoard.quickInit (GlobalBasics.blockPosFloat ( 26.5, 10.35 )) "?" 40
                     , NoticeBoard.quickInit (GlobalBasics.blockPosFloat ( 50.5, 10.85 )) "?" 40
                     , NoticeBoard.init (GlobalBasics.blockPosFloat ( 63.8, 10.65 ))
                         (NoticeBoard.Visible "¿" (NoticeBoard.InvisibleAfterEvent 57 NoticeBoard.NoNextNoticeBoardVisibility))
                         GlobalModule.NoNextMove
                         40
+                    , NoticeBoard.init (GlobalBasics.blockPosFloat ( 74.5, 14 ))
+                        (NoticeBoard.Visible "Come here!" (NoticeBoard.InvisibleAfterEvent 68 NoticeBoard.NoNextNoticeBoardVisibility))
+                        GlobalModule.NoNextMove
+                        16
                     , NoticeBoard.init (GlobalBasics.blockPosFloat ( 68.5, 11.85 ))
                         (NoticeBoard.Invisible
                             (NoticeBoard.VisibleAfterEvent 65
@@ -534,7 +538,7 @@ init a =
                                     (GlobalModule.Move (Array.fromList [ GlobalBasics.blockPosFloat ( 22, 10.35 ), GlobalBasics.blockPosFloat ( 22, 11.35 ) ]) 1.5 -1 GlobalModule.NoNextMove)
                                 )
                           ]
-                        , [ Needle.init (GlobalBasics.blockPosFloat ( 26.35, 1 ))
+                        , [ Needle.init (GlobalBasics.blockPosFloat ( 26.35, 0.5 ))
                                 (Needle.NormalNeedle 12 351 Needle.Laser)
                                 (GlobalModule.Invisible (GlobalModule.VisibleAfterEvent 7 (GlobalModule.InvisibleAfterEvent 34 GlobalModule.NoNextVisibility)))
                                 (GlobalModule.NoCollide (GlobalModule.CollideAfterEvent 7 (GlobalModule.NoCollideAfterEvent 34 GlobalModule.NoNextCollision)))
@@ -636,7 +640,10 @@ init a =
                         ]
                     )
             , keyPressed = []
-            , gameControl = GameControl.init MainType.Level7 [["Hit the first \"?\"","to disable the laser"],["Jump onto the inverse magic box ","and jump again to dodge the laser"],["The hidden bricks can shade the laser"]]
+            , gameControl = GameControl.init MainType.Level7 [["At the beginning of the level, ","you can just rush to the right ","and ignore the two falling needles"],
+                ["Before the second savepoint, ","you have to dodge three attacks from ","the horizontal laser, jump ","before the first and the third attacks"],
+                ["In the final part, "," jump onto the inverse magic box ","and jump again to dodge the first laser"],
+                ["You can hide under the bricks ","to dodge the second laser"]]
             , sound =
                 Sound.init [
                     Sound.Event 34 Sound.RandomBox

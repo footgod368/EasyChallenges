@@ -237,7 +237,8 @@ defPoly =
     Array.fromList []
 
 
-{-| `CollisionStatus` is a type used in collide function return
+{-| `CollisionStatus` is a type used in collide function return. Collided means collision happens, NotCollided means
+NoCollided happen.
 -}
 type CollisionStatus
     = Collided
@@ -417,14 +418,20 @@ ifCollidePolyPoly poly1 poly2 =
         Collided
 
 
-{-| The size of the block
+{-| The size of the block. Act as global constants.
 -}
 blockSize : ( Float, Float )
 blockSize =
     ( 40.0, 40.0 )
 
 
-{-| Along current block size, input the position returns the actual position
+{-| Along current block size, input the position returns the actual position. Output the result depending on
+blockSize. You can use it like this
+
+    -- pos == ( 0.0, 40.0 )
+    pos : Pos
+    pos =
+        blockPos ( 1, 2 )
 -}
 blockPos : ( Int, Int ) -> ( Float, Float )
 blockPos ( x, y ) =
@@ -441,7 +448,14 @@ blockPos ( x, y ) =
     ( posX, posY )
 
 
-{-| Along current block size, input the position(can be float) returns the actual position
+{-| Along current block size, input the position(can be float) returns the actual position. Output the result
+depending on blockSize. You can use it like this
+
+    -- pos == ( 4.0, 40.0 )
+    pos : Pos
+    pos =
+        blockPos ( 1.1, 2.0 )
+
 -}
 blockPosFloat : ( Float, Float ) -> ( Float, Float )
 blockPosFloat ( x, y ) =

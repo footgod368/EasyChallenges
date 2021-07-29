@@ -31,10 +31,9 @@ view model =
         , HtmlAttr.style "height" "100%"
         , HtmlAttr.style "left" "50"
         , HtmlAttr.style "top" "50"
-
-        --, HtmlAttr.style "background-image" "url(assets/menuBackground.jpg)"
-        --, HtmlAttr.style "background-size" "100% 100%"
-        --, HtmlAttr.style "background-position" "0px 0px"
+        , HtmlAttr.style "background-image" "url(assets/menuBackground.png)"
+        , HtmlAttr.style "background-size" "100% 100%"
+        , HtmlAttr.style "background-position" "0px 0px"
         ]
         [ Html.audio
             [ HtmlAttr.id "player"
@@ -48,7 +47,7 @@ view model =
             []
         , Svg.svg
             [ SvgAttr.width (String.fromFloat (Tuple.first model.windowBoundary))
-            , SvgAttr.height (String.fromFloat (Tuple.first model.windowBoundary))
+            , SvgAttr.height (String.fromFloat (Tuple.second model.windowBoundary))
             ]
             (drawBackground model
                 --    ++ drawBall model
@@ -133,11 +132,11 @@ drawButtons model =
             model.windowBoundary
     in
     List.concat
-        [ drawLevelButton model MainConstant.menuButtonLevel7 ( windowBoundaryX / 2 - 100.0, 800.0 )
-        , drawLevelButton model MainConstant.menuButtonLevel1 ( windowBoundaryX / 2 - 100.0, 200.0 )
-        , drawLevelButton model MainConstant.menuButtonLevel2 ( windowBoundaryX / 2 - 100.0, 300.0 )
-        , drawLevelButton model MainConstant.menuButtonLevel3 ( windowBoundaryX / 2 - 100.0, 400.0 )
-        , drawLevelButton model MainConstant.menuButtonLevel4 ( windowBoundaryX / 2 - 100.0, 500.0 )
-        , drawLevelButton model MainConstant.menuButtonLevel5 ( windowBoundaryX / 2 - 100.0, 600.0 )
-        , drawLevelButton model MainConstant.menuButtonLevel6 ( windowBoundaryX / 2 - 100.0, 700.0 )
+        [ drawLevelButton model MainConstant.menuButtonLevel7 ( windowBoundaryX / 2 + 200.0, 500.0 )
+        , drawLevelButton model MainConstant.menuButtonLevel1 ( windowBoundaryX / 2 - 400.0, 200.0 )
+        , drawLevelButton model MainConstant.menuButtonLevel2 ( windowBoundaryX / 2 - 400.0, 300.0 )
+        , drawLevelButton model MainConstant.menuButtonLevel3 ( windowBoundaryX / 2 - 400.0, 400.0 )
+        , drawLevelButton model MainConstant.menuButtonLevel4 ( windowBoundaryX / 2 + 200.0, 200.0 )
+        , drawLevelButton model MainConstant.menuButtonLevel5 ( windowBoundaryX / 2 + 200.0, 300.0 )
+        , drawLevelButton model MainConstant.menuButtonLevel6 ( windowBoundaryX / 2 + 200.0, 400.0 )
         ]
