@@ -10,8 +10,6 @@ module MainFunction.MainUpdate exposing (update)
 -}
 
 import Browser.Dom exposing (getViewport)
-import Level7.Level7Init as Level7Init
-import Level7.Level7Update as Level7Update
 import Level1.Level1Init as Level1Init
 import Level1.Level1Update as Level1Update
 import Level2.Level2Init as Level2Init
@@ -37,9 +35,6 @@ changeToLevel newScene ( model, cmd ) =
             { model | mainScene = newScene }
     in
     case newScene of
-        MainType.Level7 ->
-            ( { newModel | level7Model = Level7Init.init () |> Tuple.first }, cmd )
-
         MainType.Level1 ->
             ( { newModel | level1Model = Level1Init.init () |> Tuple.first }, cmd )
 
@@ -77,13 +72,6 @@ update msg model =
 
             else
                 ( { model | menuModel = newMenuModel }, cmd )
-
-        MainType.Level7 ->
-            let
-                ( newLevel7Model, cmd ) =
-                    Level7Update.update msg model.level7Model
-            in
-            ( { model | level7Model = newLevel7Model, mainScene = newLevel7Model.mainScene }, cmd )
 
         MainType.Level1 ->
             let
