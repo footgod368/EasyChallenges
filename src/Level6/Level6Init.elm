@@ -640,7 +640,7 @@ init a =
                         ]
                     )
             , keyPressed = []
-            , gameControl = GameControl.init MainType.Level7 [["At the beginning of the level, ","you can just rush to the right ","and ignore the two falling needles"],
+            , gameControl = GameControl.init MainType.Level1 [["At the beginning of the level, ","you can just rush to the right ","and ignore the two falling needles"],
                 ["Before the second savepoint, ","you have to dodge three attacks from ","the horizontal laser, jump ","before the first and the third attacks"],
                 ["In the final part, "," jump onto the inverse magic box ","and jump again to dodge the first laser"],
                 ["You can hide under the bricks ","to dodge the second laser"]]
