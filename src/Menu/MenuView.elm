@@ -49,16 +49,16 @@ view model =
             [ SvgAttr.width (String.fromFloat (Tuple.first model.windowBoundary))
             , SvgAttr.height (String.fromFloat (Tuple.second model.windowBoundary))
             ]
-            (drawBackground model
+            (--drawBackground model
                 --    ++ drawBall model
-                ++ drawButtons model
+                drawButtons model
              --    ++ drawCrown model
             )
         ]
 
 
-drawBackground : MenuType.Model -> List (Svg MainType.Msg)
-drawBackground model =
+-- drawBackground : MenuType.Model -> List (Svg MainType.Msg)
+-- drawBackground model =
     ----background
     --  [ Svg.rect
     --    [ SvgAttr.x "0"
@@ -69,27 +69,28 @@ drawBackground model =
     --    ]
     --    []
     --logo
-    let
-        ( windowBoundaryX, windowBoundaryY ) =
-            model.windowBoundary
-    in
-    [ Svg.image
-        [ SvgAttr.x "0"
-        , SvgAttr.y "0"
-        , SvgAttr.width "100"
-        , SvgAttr.height "100"
-        , SvgAttr.xlinkHref "assets/silverDogLogo.svg"
-        ]
-        []
-    , Svg.text_
-        [ SvgAttr.x (String.fromFloat (windowBoundaryX / 2 - 200.0))
-        , SvgAttr.y "100"
-        , SvgAttr.fontSize "60"
-        , SvgAttr.textAnchor "left"
-        , SvgAttr.fill "#A0E6E8"
-        ]
-        [ Svg.text "Easy Challenges" ]
-    ]
+    -- let
+    --     ( windowBoundaryX, windowBoundaryY ) =
+    --         model.windowBoundary
+    -- in
+    -- [ 
+        -- Svg.image
+        -- [ SvgAttr.x "0"
+        -- , SvgAttr.y "0"
+        -- , SvgAttr.width "100"
+        -- , SvgAttr.height "100"
+        -- , SvgAttr.xlinkHref "assets/silverDogLogo.svg"
+        -- ]
+        -- []
+    --  Svg.text_
+    --     [ SvgAttr.x (String.fromFloat (windowBoundaryX / 2 - 200.0))
+    --     , SvgAttr.y "100"
+    --     , SvgAttr.fontSize "60"
+    --     , SvgAttr.textAnchor "left"
+    --     , SvgAttr.fill "#A0E6E8"
+    --     ]
+    --     [ Svg.text "Easy Challenges" ]
+    -- ]
 
 
 drawLevelButton : MenuType.Model -> Int -> GlobalBasics.Pos -> List (Svg MainType.Msg)
@@ -132,11 +133,11 @@ drawButtons model =
             model.windowBoundary
     in
     List.concat
-        [ drawLevelButton model MainConstant.menuButtonLevel7 ( windowBoundaryX / 2 + 200.0, 500.0 )
-        , drawLevelButton model MainConstant.menuButtonLevel1 ( windowBoundaryX / 2 - 400.0, 200.0 )
-        , drawLevelButton model MainConstant.menuButtonLevel2 ( windowBoundaryX / 2 - 400.0, 300.0 )
-        , drawLevelButton model MainConstant.menuButtonLevel3 ( windowBoundaryX / 2 - 400.0, 400.0 )
-        , drawLevelButton model MainConstant.menuButtonLevel4 ( windowBoundaryX / 2 + 200.0, 200.0 )
-        , drawLevelButton model MainConstant.menuButtonLevel5 ( windowBoundaryX / 2 + 200.0, 300.0 )
-        , drawLevelButton model MainConstant.menuButtonLevel6 ( windowBoundaryX / 2 + 200.0, 400.0 )
+        [-- [ drawLevelButton model MainConstant.menuButtonLevel7 ( windowBoundaryX / 2 + 200.0, 500.0 )
+         drawLevelButton model MainConstant.menuButtonLevel1 ( windowBoundaryX / 2 , windowBoundaryY/1.7 - windowBoundaryY/7 )
+        , drawLevelButton model MainConstant.menuButtonLevel2 ( windowBoundaryX / 2 , windowBoundaryY/1.7 )
+        , drawLevelButton model MainConstant.menuButtonLevel3 ( windowBoundaryX / 2 , windowBoundaryY/1.7 + windowBoundaryY/7 )
+        , drawLevelButton model MainConstant.menuButtonLevel4 ( windowBoundaryX / 2 + windowBoundaryX / 4 , windowBoundaryY/1.7 - windowBoundaryY/7 )
+        , drawLevelButton model MainConstant.menuButtonLevel5 ( windowBoundaryX / 2 + windowBoundaryX / 4 , windowBoundaryY/1.7 )
+        , drawLevelButton model MainConstant.menuButtonLevel6 ( windowBoundaryX / 2 + windowBoundaryX / 4 , windowBoundaryY/1.7 + windowBoundaryY/7 )
         ]
