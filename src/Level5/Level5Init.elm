@@ -16,19 +16,19 @@ import GlobalFunction.GlobalModule as GlobalModule
 import Level5.Level5Type as Level5Type
 import MainFunction.MainType as MainType
 import Modules.Boundary as Boundary
-import Modules.Brick as Brick exposing (Brick)
+import Modules.Brick as Brick
 import Modules.EndPoint as EndPoint
-import Modules.Event as Event exposing (Event, hitBlock)
+import Modules.Event as Event
 import Modules.GameControl as GameControl
 import Modules.Needle as Needle
 import Modules.NoticeBoard as NoticeBoard
-import Modules.Player as Player exposing (Player)
+import Modules.Player as Player
 import Modules.SavePoint as SavePoint
 import Modules.Sound as Sound
 import Task
 
 
-{-| `init` of Level5 \`Model
+{-| `init` of Level5 Model. See in level1Init, highly repetition
 -}
 init : () -> ( Level5Type.Model, Cmd MainType.Msg )
 init a =

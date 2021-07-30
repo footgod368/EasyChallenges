@@ -19,12 +19,12 @@ import Modules.Event as Event
 import Modules.GameControl as GameControl
 import Modules.Needle as Needle
 import Modules.NoticeBoard as NoticeBoard
-import Modules.Player as Player exposing (Player)
+import Modules.Player as Player
 import Modules.SavePoint as SavePoint
 import Modules.Sound as Sound
 
 
-{-| `Model` that used in level5
+{-| `Model` that used in level5. See in level1Type, highly repetition.
 -}
 type alias Model =
     { windowBoundary : GlobalBasics.Pos
