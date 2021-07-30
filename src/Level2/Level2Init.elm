@@ -28,7 +28,7 @@ import Modules.Sound as Sound
 import Task
 
 
-{-| `init` of Level2\`Model
+{-| `init` of Level2 Model, stores the whole game info.
 -}
 init : () -> ( Level2Type.Model, Cmd MainType.Msg )
 init a =
