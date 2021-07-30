@@ -117,32 +117,32 @@ viewOneSoundTrigger soundTrigger =
                     ]
                     (case soundEffect of
                         BackGround ->
-                            [ HtmlAttr.src "assets/backgroundMusic.ogg"
+                            [ HtmlAttr.src "assets/audio/backgroundMusic.ogg"
                             , HtmlAttr.id "BackGround"
                             ]
 
                         Jump ->
-                            [ HtmlAttr.src "assets/jumpMusic.ogg"
+                            [ HtmlAttr.src "assets/audio/jumpMusic.ogg"
                             , HtmlAttr.id "Jump"
                             ]
 
                         RandomBox ->
-                            [ HtmlAttr.src "assets/randomBoxMusic.ogg"
+                            [ HtmlAttr.src "assets/audio/randomBoxMusic.ogg"
                             , HtmlAttr.id "RandomBox"
                             ]
 
                         Needle ->
-                            [ HtmlAttr.src "assets/needleMusic.ogg"
+                            [ HtmlAttr.src "assets/audio/needleMusic.ogg"
                             , HtmlAttr.id "Needle"
                             ]
 
                         Sword ->
-                            [ HtmlAttr.src "assets/swordMusic.ogg"
+                            [ HtmlAttr.src "assets/audio/swordMusic.ogg"
                             , HtmlAttr.id "Sword"
                             ]
 
                         Dead ->
-                            [ HtmlAttr.src "assets/deadMusic.ogg"
+                            [ HtmlAttr.src "assets/audio/deadMusic.ogg"
                             , HtmlAttr.id "Dead"
                             ]
                     )
@@ -161,7 +161,7 @@ view model =
     List.concat
         [ [ Html.audio
                 [ HtmlAttr.controls True
-                , HtmlAttr.src "assets/backgroundMusic.ogg"
+                , HtmlAttr.src "assets/audio/backgroundMusic.ogg"
                 , HtmlAttr.id "BackGround"
                 , HtmlAttr.autoplay True
                 , HtmlAttr.loop True

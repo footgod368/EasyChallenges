@@ -56,7 +56,7 @@ viewGoldenDog =
         , SvgAttr.transform "translate(170,0) scale(-1, 1)"
 
         --, SvgAttr.fill "#000000"
-        , SvgAttr.xlinkHref "assets/goldenDog.svg"
+        , SvgAttr.xlinkHref "assets/images/goldenDog.svg"
         ]
         []
     ]
