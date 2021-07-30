@@ -28,7 +28,7 @@ import Modules.Sound as Sound
 import Task
 
 
-{-| `init` of Level4 \`Model
+{-| `init` of Level4  Model, see in level4Init, highly repetition.
 -}
 init : () -> ( Level4Type.Model, Cmd MainType.Msg )
 init a =
