@@ -13,7 +13,7 @@ import Array
 import Browser.Dom exposing (getViewport)
 import GlobalFunction.GlobalBasics as GlobalBasics
 import GlobalFunction.GlobalModule as GlobalModule
-import Level7.Level7Type as Level0Type
+import Level7.Level7Type as Level7Type
 import MainFunction.MainType as MainType
 import Modules.Boundary as Boundary
 import Modules.Brick as Brick
@@ -28,9 +28,9 @@ import Modules.Sound as Sound
 import Task
 
 
-{-| `init` of Level1 \`Model
+{-| `init` of Level7 Model, see in level1Init for detail.
 -}
-init : () -> ( Level0Type.Model, Cmd MainType.Msg )
+init : () -> ( Level7Type.Model, Cmd MainType.Msg )
 init a =
     let
         newModel =
