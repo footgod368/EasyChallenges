@@ -345,7 +345,7 @@ viewOneMonster model monster =
                 , SvgAttr.y (String.fromFloat (ViewMove.deltaY model + monsterY))
                 , SvgAttr.width (String.fromFloat (width + 2.0))
                 , SvgAttr.height (String.fromFloat height)
-                , SvgAttr.xlinkHref "assets/monster.png"
+                , SvgAttr.xlinkHref "assets/images/monster.png"
                 ]
                 []
             ]

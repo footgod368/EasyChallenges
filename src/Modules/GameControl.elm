@@ -366,7 +366,7 @@ view model =
 For example, if you want to change the volume of a audio tag, you need to make sure that the audio tag is written like this in view:
 
     audio
-        [ Html.Attributes.src "assets/sample.ogg"
+        [ Html.Attributes.src "assets/audio/sample.ogg"
         , Html.Attributes.id "audio-sample"
         ]
         []

@@ -120,7 +120,7 @@ viewOneSavePoint model savePoint =
             , SvgAttr.y (String.fromFloat (ViewMove.deltaY model + savePointY))
             , SvgAttr.width (String.fromFloat savePointWidth)
             , SvgAttr.height (String.fromFloat savePointHeight)
-            , SvgAttr.xlinkHref "assets/save.svg"
+            , SvgAttr.xlinkHref "assets/images/save.svg"
             ]
             []
         ]
