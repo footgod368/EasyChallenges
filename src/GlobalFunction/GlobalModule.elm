@@ -159,16 +159,16 @@ updateOneVisibility model myModule =
     newModule
 
 
-{-| update collision. Used in update for individual update. Assume there's actEvent in model while visibility in
+{-| update collision. Used in update for individual update. Assume there's actEvent in model while collision in
 module model. Then, you can use it like this.
 
     type alias Module =
-    { visibility : Visibility
+    { collision : Collision
     }
 
     myModule : Module
     myModule =
-        Module ( Invisible ( VisibleAfterEvent 2 NoNextVisibility ) )
+        Module ( NoCollide ( CollideAfterEvent 2 NoNextCollide ) )
 
     type alias Model =
     { actEvent : Array Event.ActEvent
@@ -178,10 +178,10 @@ module model. Then, you can use it like this.
     model =
         Model ( Array.fromList [{id = 2, label = "event2"}] )
 
-    -- updateModule == Module  ( Visible NoNextVisibility ), this is because eventID = 2 is activated
+    -- updateModule == Module  ( Collide NoNextCollide ), this is because eventID = 2 is activated
     updateModule : Module
     updateModule =
-        updateOneVisibility model myModule
+        updateOneCollision model myModule
 
 -}
 updateOneCollision : { model | actEvent : Array Event.ActEvent } -> { myModule | collision : Collision } -> { myModule | collision : Collision }
@@ -223,7 +223,30 @@ updateOneCollision model myModule =
     newModule
 
 
-{-| update move event. Used in `update`. Not exposed
+{-| update move. Used in update for individual update. Assume there's actEvent in model while move in
+module model. Then, you can use it like this.
+
+    type alias Module =
+    { move : Move
+    }
+
+    myModule : Module
+    myModule =
+        Module ( Move ( Array.fromList [ ( 100.0, 0.0 ) ] 10.0 2 NoNextMove) 
+
+    type alias Model =
+    { actEvent : Array Event.ActEvent
+    }
+
+    model : Model
+    model =
+        Model ( Array.fromList [{id = 2, label = "event2"}] )
+
+    -- updateModule == Module NoNextMove, this is because eventID = 2 is activated and module reach the endPoint
+    updateModule : Module
+    updateModule =
+        updateOneMove model myModule
+
 -}
 updateOneMove : { model | actEvent : Array Event.ActEvent } -> { myModule | pos : GlobalBasics.Pos, move : Move } -> { myModule | pos : GlobalBasics.Pos, move : Move }
 updateOneMove model myModule =
