@@ -104,48 +104,55 @@ initEvent =
                 (GlobalBasics.Polygon (Array.fromList [ ( GlobalBasics.blockPosFloat ( 46, 1 ), GlobalBasics.blockPosFloat ( 46, 15 ) ) ]))
             )
             (Event.quickDuration 10)
+        , Event.hitBlockAfter 13 "get pill" (25,11) (1,1) 4
         ]
 
 
 initBricks : Array Brick.Brick
 initBricks =
     Array.fromList
-    (List.concat
-        [ [ NoticeBoard.boundary ( 2, 5 ) ( 7, 4 ) ]
-        , Brick.initRow 15 1 4
-        , Brick.initFallingRow 15 5 8 1
-        , Brick.initRow 15 9 32
-        , Brick.initRow 12 22 26
-        , [ Brick.initPosVolumeColor (GlobalBasics.blockPosFloat ( 15, 12 )) ( 40, 40 ) "#FFFF00" ]
-        , [ Brick.initPosVolumeColor (GlobalBasics.blockPosFloat ( 24, 9 )) ( 40, 40 ) "#FFFF00" ]
-        , [ Brick.initCollideHidden ( 22, 8 ) 4
-            , Brick.initCollideHidden ( 23, 8 ) 4
-            , Brick.initCollideHidden ( 24, 8 ) 4
-            , Brick.initCollideHidden ( 25, 8 ) 4
-            , Brick.initCollideHidden ( 26, 8 ) 4
-            , Brick.initCollideHidden ( 22, 9 ) 4
-            , Brick.initCollideHidden ( 26, 9 ) 4
-            , Brick.initCollideHidden ( 26, 10 ) 4
-            , Brick.initCollideHidden ( 26, 11 ) 4
-            , Brick.initCollideHidden ( 22, 10 ) 4
-            , Brick.initCollideHidden ( 22, 11 ) 4
+        (List.concat
+            [ [ NoticeBoard.boundary ( 2, 5 ) ( 7, 4 ) ]
+            , Brick.initRow 15 1 4
+            , Brick.initFallingRow 15 5 8 1
+            , Brick.initRow 15 9 32
+            , Brick.initRow 12 22 26
+            , [ Brick.initPosVolumeColor (GlobalBasics.blockPosFloat ( 15, 12 )) ( 40, 40 ) "#FFFF00" ]
+            , [ Brick.initPosVolumeColor (GlobalBasics.blockPosFloat ( 24, 9 )) ( 40, 40 ) "#FFFF00" ]
+            , [ Brick.initCollideHidden ( 22, 8 ) 4
+                , Brick.initCollideHidden ( 23, 8 ) 4
+                , Brick.initCollideHidden ( 24, 8 ) 4
+                , Brick.initCollideHidden ( 25, 8 ) 4
+                , Brick.initCollideHidden ( 26, 8 ) 4
+                , Brick.initCollideHidden ( 22, 9 ) 4
+                , Brick.initCollideHidden ( 26, 9 ) 4
+                , Brick.initCollideHidden ( 26, 10 ) 4
+                , Brick.initCollideHidden ( 26, 11 ) 4
+                , Brick.initCollideHidden ( 22, 10 ) 4
+                , Brick.initCollideHidden ( 22, 11 ) 4
+                ]
+            , [ Brick.initNoCollideHidden ( 4.5, 12 ) 5
+                , Brick.initNoCollideHidden ( 5.5, 12 ) 6
+                ]
+            , Brick.initRow 15 36 80
+            , [ NoticeBoard.boundary ( 31, 5 ) ( 7, 4 ) ]
+            , [ Brick.initNoCollideHidden ( 32.5, 12 ) 7
+                , Brick.initNoCollideHidden ( 33.5, 12 ) 8
+                ]
+            , [ Brick.initNoCollideHidden ( 44, 12 ) 10
+                , Brick.initNoCollideHidden ( 45, 12 ) 11
+                ]
+            , [ Brick.initPosVolumeColor (GlobalBasics.blockPosFloat ( 55, 11.5 )) ( 2.0 * 40.0, 3.5 * 40.0 ) "#008000"
+                , Brick.initPosVolumeColor (GlobalBasics.blockPosFloat ( 67, 11.5 )) ( 2.0 * 40.0, 3.5 * 40.0 ) "#008000"
+                ]
+            , [Brick.init 
+                    (GlobalBasics.blockPosFloat (25,11))
+                    (Brick.Pill "#FF0000")
+                    (GlobalModule.Invisible (GlobalModule.VisibleAfterEvent 4 GlobalModule.NoNextVisibility))
+                    (GlobalModule.NoCollide (GlobalModule.CollideAfterEvent 4 GlobalModule.NoNextCollision))
+                    GlobalModule.NoNextMove ]
             ]
-        , [ Brick.initNoCollideHidden ( 4.5, 12 ) 5
-            , Brick.initNoCollideHidden ( 5.5, 12 ) 6
-            ]
-        , Brick.initRow 15 36 80
-        , [ NoticeBoard.boundary ( 31, 5 ) ( 7, 4 ) ]
-        , [ Brick.initNoCollideHidden ( 32.5, 12 ) 7
-            , Brick.initNoCollideHidden ( 33.5, 12 ) 8
-            ]
-        , [ Brick.initNoCollideHidden ( 44, 12 ) 10
-            , Brick.initNoCollideHidden ( 45, 12 ) 11
-            ]
-        , [ Brick.initPosVolumeColor (GlobalBasics.blockPosFloat ( 55, 11.5 )) ( 2.0 * 40.0, 3.5 * 40.0 ) "#008000"
-            , Brick.initPosVolumeColor (GlobalBasics.blockPosFloat ( 67, 11.5 )) ( 2.0 * 40.0, 3.5 * 40.0 ) "#008000"
-            ]
-        ]
-    )
+        )
 
 initNoticeBoards : Array NoticeBoard.NoticeBoard
 initNoticeBoards =
@@ -178,7 +185,6 @@ initNeedles =
         (List.concat
             [ [ Needle.initHidden ( 15, 13 ) 2 Needle.Downwards]
             , Needle.initFallingRow 13 22 26 3 Needle.Downwards
-            , [ Needle.initHiddenCollideAfter ( 25, 12 ) 4 Needle.Upwards]
             , Needle.initHiddenRow 9 31 37 9 Needle.Downwards
             , let
                 tempSword =

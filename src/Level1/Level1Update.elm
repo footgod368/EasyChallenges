@@ -59,7 +59,9 @@ update msg model =
                             |> Sound.update
                             |> Monster.update
                             |> Player.updateJustPlayerPos
+                            |> checkPill
                             |> GameControl.update ( MainType.Tick timePassed )
+
 
                     else
                         ( model, Cmd.none )
@@ -73,3 +75,13 @@ update msg model =
 
         buttonMsg ->
             GameControl.update buttonMsg ( model, Cmd.none )
+
+{-| check whether player gets the pill and kill them if so
+-}
+checkPill : ( Level1Type.Model, Cmd MainType.Msg ) -> ( Level1Type.Model, Cmd MainType.Msg )
+checkPill ( model, cmd ) =
+    if Event.ifActEventById model 13 == Event.ActEventAct then
+        ( Player.playerKill model Player.StepOnNeedle, cmd )
+
+    else
+        ( model, cmd )
