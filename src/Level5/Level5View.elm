@@ -27,7 +27,7 @@ import Svg
 import Svg.Attributes as SvgAttr
 
 
-{-| `view` of level5.
+{-| `view` of level5. See in level1View, highly repetition.
 -}
 view : Level5Type.Model -> Html MainType.Msg
 view model =

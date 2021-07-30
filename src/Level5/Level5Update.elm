@@ -16,16 +16,16 @@ import MainFunction.MainType as MainType
 import Modules.Boundary as Boundary
 import Modules.Brick as Brick
 import Modules.EndPoint as EndPoint
-import Modules.Event as Event exposing (Event)
+import Modules.Event as Event
 import Modules.GameControl as GameControl
 import Modules.Needle as Needle
 import Modules.NoticeBoard as NoticeBoard
-import Modules.Player as Player exposing (Player)
+import Modules.Player as Player
 import Modules.SavePoint as SavePoint
 import Modules.Sound as Sound
 
 
-{-| `update` of Level5
+{-| `update` of Level5, see in level5Update, highly repetition.
 -}
 update : MainType.Msg -> Level5Type.Model -> ( Level5Type.Model, Cmd MainType.Msg )
 update msg model =
