@@ -52,7 +52,12 @@ type PlayerJump
     = Jump Int Int
 
 
-{-| Properties that can change during the game
+{-| Properties that can change during the game, playerWidth, playerHeight are the width and heigh of the player.
+playerJumpNum is how many times the player can jump. ifPlayerJumpOnTheGround is a special mode that player can jump only
+once and must on ground. playerJumpFrames is the maximum frames. playerJumpInitialAcce is the accleration of the
+player's jump, playerJumpInitialSpeed is the initial speed when the player press jump, playerHorizontalSpeed is how fast
+the player moves horizontally, gravityAcce is the gravity acceleration. isGreen stores whether the player gets the green
+pill in level5.
 -}
 type alias PlayerProperty =
     { playerWidth : Float
@@ -92,7 +97,8 @@ type PropertyChange
     = ChangeTo PlayerProperty Int PropertyChange
     | NoNextPropertyChange
 
-{-| the face direction of player, used in 'view'
+{-| the face direction of player, used in 'view'. Left means player is facing left, while right means player is facing
+right.
 -}
 type FaceDirection
     = Left
@@ -121,14 +127,14 @@ type alias Player =
     }
 
 
-{-| The type of player dead, falling or needle
+{-| The type of player dead, falling or needle. The name contains its meaning.
 -}
 type DeadType
     = FallFromHigh
     | StepOnNeedle
 
 
-{-| LiveState defines if the player is live, dead, or win this level.
+{-| LiveState defines if the player is live, dead, or win this level. The name contains its meaning.
 -}
 type LiveState
     = Live
@@ -136,7 +142,7 @@ type LiveState
     | Win
 
 
-{-| Change the state of player to Dead
+{-| Change the state of player to Dead, use pattern matching so that it works for all level.
 -}
 playerDead : { model | player : Player, sound : Sound.Sound } -> DeadType -> { model | player : Player, sound : Sound.Sound }
 playerDead model deadType =
@@ -144,7 +150,7 @@ playerDead model deadType =
         oldPlayer =
             model.player
 
-        ( oldDeadTimes, oldDeadType ) =
+        ( oldDeadTimes, _ ) =
             model.player.deadTimes
 
         newPlayer =
@@ -153,7 +159,7 @@ playerDead model deadType =
     Sound.trigger { model | player = newPlayer } Sound.Dead
 
 
-{-| Change the state of player to Win
+{-| Change the state of player to Win, use pattern matching so that it works for all level.
 -}
 playerWin : { model | player : Player } -> { model | player : Player }
 playerWin model =
@@ -167,7 +173,7 @@ playerWin model =
     { model | player = newPlayer }
 
 
-{-| Change the state of player to Dead
+{-| Change the state of player to Dead, use pattern matching so that it works for all level.
 -}
 playerKill : { model | player : Player } -> DeadType -> { model | player : Player }
 playerKill model deadType =
@@ -184,7 +190,7 @@ playerKill model deadType =
     { model | player = newPlayer }
 
 
-{-| Check if the state of player is Dead
+{-| Check if the state of player is Dead, use pattern matching so that it works for all level.
 -}
 checkDead : Player -> Bool
 checkDead player =
@@ -241,7 +247,7 @@ init pos property propertyChange =
     }
 
 
-{-| Update of player unit. Calls sub update.
+{-| Update of player unit. Calls sub update, namely will update player's property, pos and velocity.
 -}
 update : ( { model | player : Player, keyPressed : List Int, actEvent : Array { id : Int, name : String }, sound : Sound.Sound }, Cmd MainType.Msg ) -> ( { model | player : Player, keyPressed : List Int, actEvent : Array { id : Int, name : String }, sound : Sound.Sound }, Cmd MainType.Msg )
 update ( model, cmd ) =

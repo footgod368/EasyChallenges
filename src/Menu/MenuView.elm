@@ -22,7 +22,7 @@ import Svg.Attributes as SvgAttr
 import Svg.Events as SvgEvent
 
 
-{-| View the Menu page
+{-| View the Menu page. Just view the buttons and image, nothing special
 -}
 view : MenuType.Model -> Html MainType.Msg
 view model =
@@ -31,16 +31,9 @@ view model =
         , HtmlAttr.style "height" "100%"
         , HtmlAttr.style "left" "50"
         , HtmlAttr.style "top" "50"
-
-        --, HtmlAttr.style "background-image" "url(assets/menuBackground.jpg)"
-        --, HtmlAttr.style "background-size" "100% 100%"
-        --, HtmlAttr.style "background-position" "0px 0px"
         ]
         [ Html.audio
             [ HtmlAttr.id "player"
-
-            --, HtmlAttr.controls True
-            --, HtmlAttr.src "assets/rimworldMove.mp3"
             , HtmlAttr.preload "auto"
             , HtmlAttr.autoplay True
             , HtmlAttr.loop True
@@ -51,9 +44,7 @@ view model =
             , SvgAttr.height (String.fromFloat (Tuple.first model.windowBoundary))
             ]
             (drawBackground model
-                --    ++ drawBall model
                 ++ drawButtons model
-             --    ++ drawCrown model
             )
         ]
 
@@ -71,7 +62,7 @@ drawBackground model =
     --    []
     --logo
     let
-        ( windowBoundaryX, windowBoundaryY ) =
+        ( windowBoundaryX, _ ) =
             model.windowBoundary
     in
     [ Svg.image
@@ -129,7 +120,7 @@ drawLevelButton model buttonId ( x, y ) =
 drawButtons : MenuType.Model -> List (Svg MainType.Msg)
 drawButtons model =
     let
-        ( windowBoundaryX, windowBoundaryY ) =
+        ( windowBoundaryX, _ ) =
             model.windowBoundary
     in
     List.concat

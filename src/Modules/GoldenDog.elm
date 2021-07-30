@@ -111,7 +111,7 @@ viewOneSentence textList n =
         )
 
 
-{-| Drawing the golden dog figure and says words
+{-| Drawing the golden dog figure and says words. The words are stored as a list.
 -}
 view : { model | player : Player.Player, windowBoundary : GlobalBasics.Pos, gameControl : GameControl.GameControl } -> List (Svg MainType.Msg)
 view model =
@@ -120,9 +120,6 @@ view model =
         , let
             ( deadTimes, deadType ) =
                 model.player.deadTimes
-
-            ( windowBoundaryX, windowBoundaryY ) =
-                model.windowBoundary
           in
           if deadTimes == 0 then
             []

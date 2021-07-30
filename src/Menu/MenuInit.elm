@@ -20,12 +20,12 @@ import Task
 {-| Init for the Menu, nothing special
 -}
 init : () -> ( MenuType.Model, Cmd MainType.Msg )
-init a =
+init _ =
     ( { mainStatus = MainType.Menu
       , menuStatus = MenuType.MainMenu
       , keyPressed = []
       , buttonState =
-            Array.fromList (List.map (\i -> MainConstant.buttonNormalColor) (List.range 0 100))
+            Array.fromList (List.map (\_ -> MainConstant.buttonNormalColor) (List.range 0 100))
       , windowBoundary = ( 1000.0, 800.0 )
       }
     , Task.perform MainType.GetViewport getViewport

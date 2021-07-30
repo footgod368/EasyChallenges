@@ -15,11 +15,11 @@ import MainFunction.MainType as MainType exposing (Msg(..))
 import Menu.MenuType as MenuType
 
 
-{-| Handles update `Resize` and `GetViewPort` Message
+{-| Handles update `Resize` and `GetViewPort` Message. Sub functions handles player control(keyboard) input, and player
+control on buttons.
 -}
 update : MainType.Msg -> ( MenuType.Model, Cmd MainType.Msg ) -> ( MenuType.Model, Cmd MainType.Msg )
 update msg ( model, cmd ) =
-    --( model, Cmd.batch[consoleLog ("update " ++ if (model.menuStatus == Hall) then "Hall" else "Room")] )
     case msg of
         MainType.Resize width height ->
             ( { model | windowBoundary = ( toFloat width * 0.95, toFloat height * 0.95 ) }, Cmd.none )
@@ -29,7 +29,6 @@ update msg ( model, cmd ) =
 
         _ ->
             ( model, cmd )
-                --|> updateServerMainType.Msg msg
                 |> updateButton msg
                 |> updateControl msg
 

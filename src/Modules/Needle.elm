@@ -73,7 +73,8 @@ normalNeedleHeight =
     Tuple.second GlobalBasics.blockSize / 20.0
 
 
-{-| `Needle` is a record of the block unit. See detail definitions in individual definition.
+{-| `Needle` is a record of the block unit. See detail definitions in individual definition. Almost the same as the,
+You can see in Block for detail.
 -}
 type alias Needle =
     { pos : GlobalBasics.Pos
@@ -92,7 +93,7 @@ defNeedle =
     initPos ( 0, 0 ) Laser
 
 
-{-| initiate a needle, with full functions
+{-| initiate a needle, with full functions. See in level5Init for examples, it's quite easy to see how to use.
 -}
 init : ( Float, Float ) -> NeedleAppearance -> GlobalModule.Visibility -> GlobalModule.Collision -> GlobalModule.Move -> Needle
 init ( x, y ) needleAppearance visibility collision move =
@@ -105,7 +106,8 @@ init ( x, y ) needleAppearance visibility collision move =
     }
 
 
-{-| default appearance, always visible, have collision, don't move
+{-| default appearance, always visible, have collision, don't move. See in level5Init for examples, it's quite easy to
+see how to use.
 -}
 initPos : ( Float, Float ) -> NeedleType-> Needle
 initPos ( x, y ) needleType=
@@ -118,7 +120,7 @@ initPos ( x, y ) needleType=
     }
 
 
-{-| quick function to create one hidden needle
+{-| quick function to create one hidden needle. See in level5Init for examples, it's quite easy to see how to use.
 -}
 initHidden : ( Int, Int ) -> Int -> NeedleType-> Needle
 initHidden ( x, y ) id needleType=
@@ -131,7 +133,8 @@ initHidden ( x, y ) id needleType=
     }
 
 
-{-| quick function to create one hidden needle with float pos
+{-| quick function to create one hidden needle with float pos. See in level5Init for examples, it's quite easy to see
+how to use.
 -}
 initHiddenFloat : ( Float, Float ) -> Int  -> NeedleType ->Needle
 initHiddenFloat ( x, y ) id needleType=
@@ -144,14 +147,15 @@ initHiddenFloat ( x, y ) id needleType=
     }
 
 
-{-| quick function to create a row of hidden needles
+{-| quick function to create a row of hidden needles. See in level5Init for examples, it's quite easy to see how to use.
 -}
 initHiddenRow : Float -> Int -> Int -> Int -> NeedleType -> List Needle
 initHiddenRow n n1 n2 id needleType=
     List.map (\i -> initHiddenFloat ( toFloat i, n ) id needleType) (List.range n1 n2)
 
 
-{-| quick function to create a needle which is only collidable after a given event.
+{-| quick function to create a needle which is only collidable after a given event. See in level5Init for examples, it's
+quite easy to see how to use.
 -}
 initHiddenCollideAfter : ( Int, Int ) -> Int -> NeedleType -> Needle
 initHiddenCollideAfter ( x, y ) id needleType=
@@ -164,7 +168,8 @@ initHiddenCollideAfter ( x, y ) id needleType=
     }
 
 
-{-| quick function to create one needle which falls after a given event, give an id of -1 to just create a normal needle row.
+{-| quick function to create one needle which falls after a given event, give an id of -1 to just create a normal needle
+row. See in level5Init for examples, it's quite easy to see how to use.
 -}
 initFalling : ( Int, Int ) -> Int -> NeedleType -> Needle
 initFalling ( x, y ) id needleType =
@@ -181,7 +186,8 @@ initFalling ( x, y ) id needleType =
     }
 
 
-{-| quick function to create one hidden needle which falls after a given event
+{-| quick function to create one hidden needle which falls after a given event. See in level5Init for examples, it's
+quite easy to see how to use.
 -}
 initHiddenFalling : ( Int, Int ) -> Int -> NeedleType -> Needle
 initHiddenFalling ( x, y ) id needleType=
@@ -198,14 +204,16 @@ initHiddenFalling ( x, y ) id needleType=
     }
 
 
-{-| quick function to create one row of needles which falls after a given event
+{-| quick function to create one row of needles which falls after a given event. See in level5Init for examples, it's
+quite easy to see how to use.
 -}
 initFallingRow : Int -> Int -> Int -> Int -> NeedleType -> List Needle
 initFallingRow n n1 n2 id needleType=
     List.map (\i -> initFalling ( i, n ) id needleType) (List.range n1 n2)
 
 
-{-| quick function to create one row of hidden needles which falls after a given event
+{-| quick function to create one row of hidden needles which falls after a given event. See in level5Init for examples,
+it's quite easy to see how to use.
 -}
 initHiddenFallingRow : Int -> Int -> Int -> Int -> NeedleType-> List Needle
 initHiddenFallingRow n n1 n2 id needleType =
@@ -225,7 +233,8 @@ deadlyBlock pos ( width, height ) =
         GlobalModule.NoNextMove
 
 
-{-| quickfunction to create a sword that will charge for a given position after a given event
+{-| quickfunction to create a sword that will charge for a given position after a given event. See in level5Init for
+examples, it's quite easy to see how to use.
 -}
 sword : ( Float, Float ) -> ( Float, Float ) -> ( Float, Float ) -> Float -> Int -> NeedleType -> Needle
 sword startPos chargePos ( width, height ) speed id needleType=
@@ -638,7 +647,7 @@ bombViewLeft x y w h color=
         []
     ]
 
-{-| view function of needle
+{-| view function of needle. Will view each needle according to its appearance.
 -}
 view : { model | needles : Array Needle, windowBoundary : GlobalBasics.Pos, levelBoundary : GlobalBasics.Pos, player : Player.Player } -> List (Svg MainType.Msg)
 view model =
@@ -652,7 +661,7 @@ view model =
     List.concat svgNeedleListList
 
 
-{-| update function of needle unit
+{-| update function of needle unit. Update each needle individually.
 -}
 update : ( { model | player : Player.Player, needles : Array Needle, actEvent : Array Event.ActEvent, sound : Sound.Sound }, Cmd MainType.Msg ) -> ( { model | player : Player.Player, needles : Array Needle, actEvent : Array Event.ActEvent, sound : Sound.Sound }, Cmd MainType.Msg )
 update ( model, cmd ) =

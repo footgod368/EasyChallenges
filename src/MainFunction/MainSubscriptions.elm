@@ -10,7 +10,7 @@ like this.
 
 -}
 
-import Browser.Events exposing (onAnimationFrameDelta, onKeyDown, onKeyUp, onResize)
+import Browser.Events exposing (onKeyDown, onKeyUp, onResize)
 import Html.Events exposing (keyCode)
 import Json.Decode as Decode
 import MainFunction.MainModel as MainModel
@@ -18,10 +18,10 @@ import MainFunction.MainType as MainType
 import Time
 
 
-{-| `subscriptions` handles tick, key press, key up and key down.
+{-| `subscriptions` handles tick, key press, key up, key down and onResize, which works for all scenes in the game.
 -}
 subscriptions : MainModel.Model -> Sub MainType.Msg
-subscriptions model =
+subscriptions _ =
     Sub.batch
         [ Time.every 8 MainType.Tick
         , onKeyDown (Decode.map keyDown keyCode)

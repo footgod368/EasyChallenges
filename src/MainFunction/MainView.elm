@@ -22,7 +22,7 @@ import MainFunction.MainType as MainType
 import Menu.MenuView as MenuView
 
 
-{-| View according to Model
+{-| View according to Model, will view each level.
 -}
 view : MainModel.Model -> Html MainType.Msg
 view model =

@@ -75,7 +75,8 @@ defEndBox =
         )
 
 
-{-| Init an endPoint, only input its position
+{-| Init an endPoint, only input its position, others will be handled automatically. See in level5Init for examples,
+it's quite easy to see how to use.
 -}
 init : ( Float, Float ) -> EndPoint
 init ( x, y ) =
@@ -101,7 +102,7 @@ initDetailed ( x, y ) ( width, height ) =
     }
 
 
-{-| view function of an endPoint
+{-| view function of an endPoint. View the endPoint, nothing special, straight forward.
 -}
 view : { model | endPoint : EndPoint, windowBoundary : GlobalBasics.Pos, levelBoundary : GlobalBasics.Pos, player : Player.Player } -> List (Svg MainType.Msg)
 view model =
@@ -120,7 +121,8 @@ view model =
     ]
 
 
-{-| update function of an endPoint
+{-| update function of an endPoint. Mainly handles checking whether the player collides with endPoint and handles the
+action
 -}
 update : ( { model | player : Player.Player, endPoint : EndPoint }, Cmd MainType.Msg ) -> ( { model | player : Player.Player, endPoint : EndPoint }, Cmd MainType.Msg )
 update ( model, cmd ) =

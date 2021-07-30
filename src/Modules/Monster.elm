@@ -33,7 +33,6 @@ import Array exposing (Array)
 import GlobalFunction.GlobalBasics as GlobalBasics
 import MainFunction.MainType as MainType
 import Maybe exposing (withDefault)
-import Modules.Event as Event
 import Modules.Player as Player
 import Modules.Sound as Sound
 import Modules.ViewMove as ViewMove
@@ -96,7 +95,9 @@ type MonsterYMode
     | Follow
 
 
-{-| Initiate a monster
+{-| Initiate a monster. Input pos, monsterAppearance shows how the monster will be, monsterX and monsterY is the mode
+for the monster move Stage. xSpeed stores how fast the monster will move horizontally. ( x1, x2 ) is how large the
+monster's collisionBox will be.
 -}
 init : ( Float, Float ) -> MonsterAppearance -> MonsterXMode -> MonsterYMode -> Float -> ( Float, Float ) -> Monster
 init ( x, y ) monsterAppearance monsterX monsterY xSpeed ( x1, x2 ) =
@@ -135,7 +136,7 @@ defMonster =
     init ( 0, 0 ) (MonsterA 20 20) StopX StopY 1 ( 0, 0 )
 
 
-{-| update function of monster
+{-| update function of monster. Update his position due to his moveMode and handles collision with the player.
 -}
 update : ( { model | player : Player.Player, monsters : Array Monster, sound : Sound.Sound }, Cmd MainType.Msg ) -> ( { model | player : Player.Player, monsters : Array Monster, sound : Sound.Sound }, Cmd MainType.Msg )
 update ( model, cmd ) =
