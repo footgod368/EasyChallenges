@@ -66,7 +66,9 @@ swordLength =
     200
 
 
-{-| The effect of sounds in the game
+{-| The effect of sounds in the game. BackGround is the backGround music, Jump is the jump sound, RandomBox is the sound
+that player collides with the random box, Needle is the sound when player steps on the needle. Dead is when the player
+is dead, Sword is when the player collides with the swords.
 -}
 type SoundEffect
     = BackGround
@@ -77,7 +79,8 @@ type SoundEffect
     | Sword
 
 
-{-| The trigger of sound, Activated and None is reserved for progress
+{-| The trigger of sound, Activated and None is reserved for progress. Event Int SOundEffect means after Event id = Int
+is activated, the SoundEffect is triggered.
 -}
 type SoundTrigger
     = Event Int SoundEffect
@@ -92,7 +95,7 @@ type alias Sound =
     }
 
 
-{-| Input the list of soundTrigger to init
+{-| Input the list of soundTrigger to init. See in level5Init for details.
 -}
 init : List SoundTrigger -> Sound
 init soundTriggerList =
@@ -151,7 +154,7 @@ viewOneSoundTrigger soundTrigger =
             []
 
 
-{-| Play the sound
+{-| Play the sound according to the current soundTrigger.
 -}
 view : { model | sound : Sound } -> List (Svg MainType.Msg)
 view model =
@@ -169,21 +172,23 @@ view model =
         ]
 
 
-updateOneSoundTrigger : { model | actEvent : Array { id : Int, name : String} } -> SoundTrigger -> SoundTrigger
+updateOneSoundTrigger : { model | actEvent : Array { id : Int, name : String } } -> SoundTrigger -> SoundTrigger
 updateOneSoundTrigger model soundTrigger =
     case soundTrigger of
         Event eventId soundEffect ->
-            if Array.foldl
-               (\actEvent sum ->
-                   if actEvent.id == eventId then
-                       sum + 1
+            if
+                Array.foldl
+                    (\actEvent sum ->
+                        if actEvent.id == eventId then
+                            sum + 1
 
-                   else
-                       sum
-               )
-               0
-               model.actEvent
-               /= 0 then
+                        else
+                            sum
+                    )
+                    0
+                    model.actEvent
+                    /= 0
+            then
                 case soundEffect of
                     BackGround ->
                         Activated backGroundLength soundEffect soundTrigger
@@ -254,9 +259,9 @@ trigger model soundEffect =
     { model | sound = newSound }
 
 
-{-| Update soundTrigger
+{-| Update soundTrigger individually.
 -}
-update : ( { model | sound : Sound, actEvent : Array { id : Int, name : String} }, Cmd MainType.Msg ) -> ( { model | sound : Sound, actEvent : Array { id : Int, name : String} }, Cmd MainType.Msg )
+update : ( { model | sound : Sound, actEvent : Array { id : Int, name : String } }, Cmd MainType.Msg ) -> ( { model | sound : Sound, actEvent : Array { id : Int, name : String } }, Cmd MainType.Msg )
 update ( model, cmd ) =
     let
         oldSound =

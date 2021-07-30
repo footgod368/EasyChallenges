@@ -28,7 +28,8 @@ import Svg
 import Svg.Attributes as SvgAttr
 
 
-{-| `view` of level1.
+{-| `view` of level1. Handles the resize by showing the windowBoundary in svg boundary. Others just view the modules
+individually.
 -}
 view : Level1Type.Model -> Html MainType.Msg
 view model =
@@ -43,7 +44,7 @@ view model =
             [ SvgAttr.width (String.fromFloat (Tuple.first model.windowBoundary))
             , SvgAttr.height (String.fromFloat (Tuple.second model.windowBoundary))
             ]
-            ( Sound.view model
+            (Sound.view model
                 ++ SavePoint.view model
                 ++ Brick.view model
                 ++ EndPoint.view model

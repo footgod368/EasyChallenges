@@ -16,16 +16,16 @@ import MainFunction.MainType as MainType
 import Modules.Boundary as Boundary
 import Modules.Brick as Brick
 import Modules.EndPoint as EndPoint
-import Modules.Event as Event exposing (Event)
+import Modules.Event as Event
 import Modules.GameControl as GameControl
 import Modules.Needle as Needle
 import Modules.NoticeBoard as NoticeBoard
-import Modules.Player as Player exposing (Player)
+import Modules.Player as Player
 import Modules.SavePoint as SavePoint
 import Modules.Sound as Sound
 
 
-{-| `update` of Level6
+{-| `update` of Level6. See in level1Update, highly repetition.
 -}
 update : MainType.Msg -> Level6Type.Model -> ( Level6Type.Model, Cmd MainType.Msg )
 update msg model =
@@ -54,11 +54,11 @@ update msg model =
                             |> Needle.update
                             |> Sound.update
                             |> Player.updateJustPlayerPos
-                            |> GameControl.update ( MainType.Tick timePassed )
+                            |> GameControl.update (MainType.Tick timePassed)
 
                     else
                         ( model, Cmd.none )
-                            |> GameControl.update ( MainType.Tick timePassed )
+                            |> GameControl.update (MainType.Tick timePassed)
             in
             if List.member 82 newModel.keyPressed then
                 SavePoint.updateReset Level6Init.init ( model, Cmd.none )

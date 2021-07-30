@@ -34,6 +34,7 @@ module Modules.Needle exposing
 import Array exposing (Array)
 import GlobalFunction.GlobalBasics as GlobalBasics
 import GlobalFunction.GlobalModule as GlobalModule
+import Html exposing (b)
 import MainFunction.MainType as MainType
 import Maybe exposing (withDefault)
 import Modules.Event as Event
@@ -42,7 +43,7 @@ import Modules.Sound as Sound
 import Modules.ViewMove as ViewMove
 import Svg exposing (Svg)
 import Svg.Attributes as SvgAttr
-import Html exposing (b)
+
 
 {-| Different types of needle
 -}
@@ -52,6 +53,7 @@ type NeedleType
     | BombLeft
     | Upwards
     | Downwards
+
 
 {-| For future different shapes of blocks.
 -}
@@ -73,7 +75,8 @@ normalNeedleHeight =
     Tuple.second GlobalBasics.blockSize / 20.0
 
 
-{-| `Needle` is a record of the block unit. See detail definitions in individual definition.
+{-| `Needle` is a record of the block unit. See detail definitions in individual definition. Almost the same as the,
+You can see in Block for detail.
 -}
 type alias Needle =
     { pos : GlobalBasics.Pos
@@ -92,7 +95,7 @@ defNeedle =
     initPos ( 0, 0 ) Laser
 
 
-{-| initiate a needle, with full functions
+{-| initiate a needle, with full functions. See in level5Init for examples, it's quite easy to see how to use.
 -}
 init : ( Float, Float ) -> NeedleAppearance -> GlobalModule.Visibility -> GlobalModule.Collision -> GlobalModule.Move -> Needle
 init ( x, y ) needleAppearance visibility collision move =
@@ -105,10 +108,11 @@ init ( x, y ) needleAppearance visibility collision move =
     }
 
 
-{-| default appearance, always visible, have collision, don't move
+{-| default appearance, always visible, have collision, don't move. See in level5Init for examples, it's quite easy to
+see how to use.
 -}
-initPos : ( Float, Float ) -> NeedleType-> Needle
-initPos ( x, y ) needleType=
+initPos : ( Float, Float ) -> NeedleType -> Needle
+initPos ( x, y ) needleType =
     { pos = ( x, y )
     , collisionBox = needleCollisionBox (NormalNeedle normalNeedleWidth normalNeedleHeight needleType)
     , appearance = NormalNeedle normalNeedleWidth normalNeedleHeight needleType
@@ -118,10 +122,10 @@ initPos ( x, y ) needleType=
     }
 
 
-{-| quick function to create one hidden needle
+{-| quick function to create one hidden needle. See in level5Init for examples, it's quite easy to see how to use.
 -}
-initHidden : ( Int, Int ) -> Int -> NeedleType-> Needle
-initHidden ( x, y ) id needleType=
+initHidden : ( Int, Int ) -> Int -> NeedleType -> Needle
+initHidden ( x, y ) id needleType =
     { pos = GlobalBasics.blockPos ( x, y )
     , collisionBox = needleCollisionBox (NormalNeedle normalNeedleWidth normalNeedleHeight needleType)
     , appearance = NormalNeedle normalNeedleWidth normalNeedleHeight needleType
@@ -131,10 +135,11 @@ initHidden ( x, y ) id needleType=
     }
 
 
-{-| quick function to create one hidden needle with float pos
+{-| quick function to create one hidden needle with float pos. See in level5Init for examples, it's quite easy to see
+how to use.
 -}
-initHiddenFloat : ( Float, Float ) -> Int  -> NeedleType ->Needle
-initHiddenFloat ( x, y ) id needleType=
+initHiddenFloat : ( Float, Float ) -> Int -> NeedleType -> Needle
+initHiddenFloat ( x, y ) id needleType =
     { pos = GlobalBasics.blockPosFloat ( x, y )
     , collisionBox = needleCollisionBox (NormalNeedle normalNeedleWidth normalNeedleHeight needleType)
     , appearance = NormalNeedle normalNeedleWidth normalNeedleHeight needleType
@@ -144,17 +149,18 @@ initHiddenFloat ( x, y ) id needleType=
     }
 
 
-{-| quick function to create a row of hidden needles
+{-| quick function to create a row of hidden needles. See in level5Init for examples, it's quite easy to see how to use.
 -}
 initHiddenRow : Float -> Int -> Int -> Int -> NeedleType -> List Needle
-initHiddenRow n n1 n2 id needleType=
+initHiddenRow n n1 n2 id needleType =
     List.map (\i -> initHiddenFloat ( toFloat i, n ) id needleType) (List.range n1 n2)
 
 
-{-| quick function to create a needle which is only collidable after a given event.
+{-| quick function to create a needle which is only collidable after a given event. See in level5Init for examples, it's
+quite easy to see how to use.
 -}
 initHiddenCollideAfter : ( Int, Int ) -> Int -> NeedleType -> Needle
-initHiddenCollideAfter ( x, y ) id needleType=
+initHiddenCollideAfter ( x, y ) id needleType =
     { pos = GlobalBasics.blockPos ( x, y )
     , collisionBox = needleCollisionBox (NormalNeedle normalNeedleWidth normalNeedleHeight needleType)
     , appearance = NormalNeedle normalNeedleWidth normalNeedleHeight needleType
@@ -164,7 +170,8 @@ initHiddenCollideAfter ( x, y ) id needleType=
     }
 
 
-{-| quick function to create one needle which falls after a given event, give an id of -1 to just create a normal needle row.
+{-| quick function to create one needle which falls after a given event, give an id of -1 to just create a normal needle
+row. See in level5Init for examples, it's quite easy to see how to use.
 -}
 initFalling : ( Int, Int ) -> Int -> NeedleType -> Needle
 initFalling ( x, y ) id needleType =
@@ -181,10 +188,11 @@ initFalling ( x, y ) id needleType =
     }
 
 
-{-| quick function to create one hidden needle which falls after a given event
+{-| quick function to create one hidden needle which falls after a given event. See in level5Init for examples, it's
+quite easy to see how to use.
 -}
 initHiddenFalling : ( Int, Int ) -> Int -> NeedleType -> Needle
-initHiddenFalling ( x, y ) id needleType=
+initHiddenFalling ( x, y ) id needleType =
     { pos = GlobalBasics.blockPos ( x, y )
     , collisionBox = needleCollisionBox (NormalNeedle normalNeedleWidth normalNeedleHeight needleType)
     , appearance = NormalNeedle normalNeedleWidth normalNeedleHeight needleType
@@ -198,19 +206,20 @@ initHiddenFalling ( x, y ) id needleType=
     }
 
 
-{-| quick function to create one row of needles which falls after a given event
+{-| quick function to create one row of needles which falls after a given event. See in level5Init for examples, it's
+quite easy to see how to use.
 -}
 initFallingRow : Int -> Int -> Int -> Int -> NeedleType -> List Needle
-initFallingRow n n1 n2 id needleType=
+initFallingRow n n1 n2 id needleType =
     List.map (\i -> initFalling ( i, n ) id needleType) (List.range n1 n2)
 
 
-{-| quick function to create one row of hidden needles which falls after a given event
+{-| quick function to create one row of hidden needles which falls after a given event. See in level5Init for examples,
+it's quite easy to see how to use.
 -}
-initHiddenFallingRow : Int -> Int -> Int -> Int -> NeedleType-> List Needle
+initHiddenFallingRow : Int -> Int -> Int -> Int -> NeedleType -> List Needle
 initHiddenFallingRow n n1 n2 id needleType =
     List.map (\i -> initHiddenFalling ( i, n ) id needleType) (List.range n1 n2)
-
 
 
 {-| a 'needle' that can customize size
@@ -225,10 +234,11 @@ deadlyBlock pos ( width, height ) =
         GlobalModule.NoNextMove
 
 
-{-| quickfunction to create a sword that will charge for a given position after a given event
+{-| quickfunction to create a sword that will charge for a given position after a given event. See in level5Init for
+examples, it's quite easy to see how to use.
 -}
 sword : ( Float, Float ) -> ( Float, Float ) -> ( Float, Float ) -> Float -> Int -> NeedleType -> Needle
-sword startPos chargePos ( width, height ) speed id needleType=
+sword startPos chargePos ( width, height ) speed id needleType =
     init
         (GlobalBasics.blockPosFloat startPos)
         (NormalNeedle (width * 40) (height * 40) needleType)
@@ -246,7 +256,7 @@ sword startPos chargePos ( width, height ) speed id needleType=
 needleCollisionBox : NeedleAppearance -> GlobalBasics.CollisionBox
 needleCollisionBox needleAppearance =
     case needleAppearance of
-        NormalNeedle width height _->
+        NormalNeedle width height _ ->
             GlobalBasics.Polygon
                 (Array.fromList
                     [ ( ( 0.0, 0.0 ), ( width, 0.0 ) )
@@ -266,11 +276,15 @@ viewOneNeedle model needle =
             let
                 ( needleX, needleY ) =
                     needle.pos
-                x0 = ViewMove.deltaX model + needleX - 2.0
-                y0 = ViewMove.deltaY model + needleY
+
+                x0 =
+                    ViewMove.deltaX model + needleX - 2.0
+
+                y0 =
+                    ViewMove.deltaY model + needleY
             in
             case needle.appearance of
-                NormalNeedle width height Laser->
+                NormalNeedle width height Laser ->
                     [ Svg.rect
                         (List.append
                             [ SvgAttr.x (String.fromFloat (ViewMove.deltaX model + needleX - 2.0))
@@ -279,20 +293,22 @@ viewOneNeedle model needle =
                             , SvgAttr.stroke "#00000000"
                             , SvgAttr.fill "#FF0000FF"
                             ]
-                            (
-                                    [ SvgAttr.width (String.fromFloat (width + 2.0))
-                                    , SvgAttr.height (String.fromFloat height)
-                                    ]
-                            )
+                            [ SvgAttr.width (String.fromFloat (width + 2.0))
+                            , SvgAttr.height (String.fromFloat height)
+                            ]
                         )
                         []
                     ]
+
                 NormalNeedle width height BombUp ->
                     bombViewUp x0 y0 (width + 2.0) height "#FF0000"
+
                 NormalNeedle width height BombLeft ->
                     bombViewLeft x0 y0 (width + 2.0) height "#FF0000"
+
                 NormalNeedle width height Upwards ->
                     needleViewUp x0 y0 (width + 2.0) height "#FF0000"
+
                 NormalNeedle width height Downwards ->
                     needleViewDown x0 y0 (width + 2.0) height "#FF0000"
 
@@ -302,90 +318,159 @@ viewOneNeedle model needle =
         _ ->
             []
 
+
 {-| View one appearance of needle, used in viewOneNeedle, not exposed.
 -}
 needleViewUp : Float -> Float -> Float -> Float -> String -> List (Svg MainType.Msg)
-needleViewUp x y w h color=
+needleViewUp x y w h color =
     [ Svg.polygon
-        [ SvgAttr.points (String.fromFloat x ++ " " ++ String.fromFloat (y + h) ++ ", " ++ 
-            String.fromFloat (x + 0.125 * w) ++ " " ++ String.fromFloat y ++ ", " ++
-            String.fromFloat (x + 0.25 * w) ++ " " ++ String.fromFloat (y + h)
-        )
+        [ SvgAttr.points
+            (String.fromFloat x
+                ++ " "
+                ++ String.fromFloat (y + h)
+                ++ ", "
+                ++ String.fromFloat (x + 0.125 * w)
+                ++ " "
+                ++ String.fromFloat y
+                ++ ", "
+                ++ String.fromFloat (x + 0.25 * w)
+                ++ " "
+                ++ String.fromFloat (y + h)
+            )
         , SvgAttr.fill color
         ]
         []
-        ,
-        Svg.polygon
-        [ SvgAttr.points (String.fromFloat (x + 0.25 * w) ++ " " ++ String.fromFloat (y + h) ++ ", " ++ 
-            String.fromFloat (x + 0.375 * w) ++ " " ++ String.fromFloat y ++ ", " ++
-            String.fromFloat (x + 0.5 * w) ++ " " ++ String.fromFloat (y + h)
-        )
+    , Svg.polygon
+        [ SvgAttr.points
+            (String.fromFloat (x + 0.25 * w)
+                ++ " "
+                ++ String.fromFloat (y + h)
+                ++ ", "
+                ++ String.fromFloat (x + 0.375 * w)
+                ++ " "
+                ++ String.fromFloat y
+                ++ ", "
+                ++ String.fromFloat (x + 0.5 * w)
+                ++ " "
+                ++ String.fromFloat (y + h)
+            )
         , SvgAttr.fill color
         ]
         []
-        ,
-        Svg.polygon
-        [ SvgAttr.points (String.fromFloat (x + 0.5 * w) ++ " " ++ String.fromFloat (y + h) ++ ", " ++ 
-            String.fromFloat (x + 0.625 * w) ++ " " ++ String.fromFloat y ++ ", " ++
-            String.fromFloat (x + 0.75 * w) ++ " " ++ String.fromFloat (y + h)
-        )
+    , Svg.polygon
+        [ SvgAttr.points
+            (String.fromFloat (x + 0.5 * w)
+                ++ " "
+                ++ String.fromFloat (y + h)
+                ++ ", "
+                ++ String.fromFloat (x + 0.625 * w)
+                ++ " "
+                ++ String.fromFloat y
+                ++ ", "
+                ++ String.fromFloat (x + 0.75 * w)
+                ++ " "
+                ++ String.fromFloat (y + h)
+            )
         , SvgAttr.fill color
         ]
         []
-        ,
-        Svg.polygon
-        [ SvgAttr.points (String.fromFloat (x + 0.75 * w) ++ " " ++ String.fromFloat (y + h) ++ ", " ++ 
-            String.fromFloat (x + 0.875 * w) ++ " " ++ String.fromFloat y ++ ", " ++
-            String.fromFloat (x + w) ++ " " ++ String.fromFloat (y + h)
-        )
+    , Svg.polygon
+        [ SvgAttr.points
+            (String.fromFloat (x + 0.75 * w)
+                ++ " "
+                ++ String.fromFloat (y + h)
+                ++ ", "
+                ++ String.fromFloat (x + 0.875 * w)
+                ++ " "
+                ++ String.fromFloat y
+                ++ ", "
+                ++ String.fromFloat (x + w)
+                ++ " "
+                ++ String.fromFloat (y + h)
+            )
         , SvgAttr.fill color
         ]
         []
     ]
+
 
 {-| View one appearance of needle, used in viewOneNeedle, not exposed.
 -}
 needleViewDown : Float -> Float -> Float -> Float -> String -> List (Svg MainType.Msg)
-needleViewDown x y w h color=
+needleViewDown x y w h color =
     [ Svg.polygon
-        [ SvgAttr.points (String.fromFloat x ++ " " ++ String.fromFloat y ++ ", " ++ 
-            String.fromFloat (x + 0.125 * w) ++ " " ++ String.fromFloat (y + h) ++ ", " ++
-            String.fromFloat (x + 0.25 * w) ++ " " ++ String.fromFloat y
-        )
+        [ SvgAttr.points
+            (String.fromFloat x
+                ++ " "
+                ++ String.fromFloat y
+                ++ ", "
+                ++ String.fromFloat (x + 0.125 * w)
+                ++ " "
+                ++ String.fromFloat (y + h)
+                ++ ", "
+                ++ String.fromFloat (x + 0.25 * w)
+                ++ " "
+                ++ String.fromFloat y
+            )
         , SvgAttr.fill color
         ]
         []
-        ,
-        Svg.polygon
-        [ SvgAttr.points (String.fromFloat (x + 0.25 * w) ++ " " ++ String.fromFloat y ++ ", " ++ 
-            String.fromFloat (x + 0.375 * w) ++ " " ++ String.fromFloat (y + h) ++ ", " ++
-            String.fromFloat (x + 0.5 * w) ++ " " ++ String.fromFloat y
-        )
+    , Svg.polygon
+        [ SvgAttr.points
+            (String.fromFloat (x + 0.25 * w)
+                ++ " "
+                ++ String.fromFloat y
+                ++ ", "
+                ++ String.fromFloat (x + 0.375 * w)
+                ++ " "
+                ++ String.fromFloat (y + h)
+                ++ ", "
+                ++ String.fromFloat (x + 0.5 * w)
+                ++ " "
+                ++ String.fromFloat y
+            )
         , SvgAttr.fill color
         ]
         []
-        ,
-        Svg.polygon
-        [ SvgAttr.points (String.fromFloat (x + 0.5 * w) ++ " " ++ String.fromFloat y ++ ", " ++ 
-            String.fromFloat (x + 0.625 * w) ++ " " ++ String.fromFloat (y + h) ++ ", " ++
-            String.fromFloat (x + 0.75 * w) ++ " " ++ String.fromFloat y
-        )
+    , Svg.polygon
+        [ SvgAttr.points
+            (String.fromFloat (x + 0.5 * w)
+                ++ " "
+                ++ String.fromFloat y
+                ++ ", "
+                ++ String.fromFloat (x + 0.625 * w)
+                ++ " "
+                ++ String.fromFloat (y + h)
+                ++ ", "
+                ++ String.fromFloat (x + 0.75 * w)
+                ++ " "
+                ++ String.fromFloat y
+            )
         , SvgAttr.fill color
         ]
         []
-        ,
-        Svg.polygon
-        [ SvgAttr.points (String.fromFloat (x + 0.75 * w) ++ " " ++ String.fromFloat y ++ ", " ++ 
-            String.fromFloat (x + 0.875 * w) ++ " " ++ String.fromFloat (y + h) ++ ", " ++
-            String.fromFloat (x + w) ++ " " ++ String.fromFloat y
-        )
+    , Svg.polygon
+        [ SvgAttr.points
+            (String.fromFloat (x + 0.75 * w)
+                ++ " "
+                ++ String.fromFloat y
+                ++ ", "
+                ++ String.fromFloat (x + 0.875 * w)
+                ++ " "
+                ++ String.fromFloat (y + h)
+                ++ ", "
+                ++ String.fromFloat (x + w)
+                ++ " "
+                ++ String.fromFloat y
+            )
         , SvgAttr.fill color
         ]
         []
     ]
 
+
 bombViewUp : Float -> Float -> Float -> Float -> String -> List (Svg MainType.Msg)
-bombViewUp x y w h color=
+bombViewUp x y w h color =
     [ Svg.path
         [ SvgAttr.d
             ("M"
@@ -426,8 +511,7 @@ bombViewUp x y w h color=
         , SvgAttr.strokeWidth "1"
         ]
         []
-    ,
-    Svg.path
+    , Svg.path
         [ SvgAttr.d
             ("M"
                 ++ String.fromFloat (x + 0.5 * w)
@@ -459,8 +543,7 @@ bombViewUp x y w h color=
         , SvgAttr.strokeWidth "1"
         ]
         []
-    , 
-    Svg.line
+    , Svg.line
         [ SvgAttr.x1 (String.fromFloat (x + 0.4 * w))
         , SvgAttr.y1 (String.fromFloat (y + 0.6 * h))
         , SvgAttr.x2 (String.fromFloat (x + 0.6 * w))
@@ -469,8 +552,7 @@ bombViewUp x y w h color=
         , SvgAttr.strokeWidth "2"
         ]
         []
-    , 
-    Svg.line
+    , Svg.line
         [ SvgAttr.x1 (String.fromFloat (x + 0.24 * w))
         , SvgAttr.y1 (String.fromFloat (y + 0.4 * h))
         , SvgAttr.x2 (String.fromFloat (x + 0.4 * w))
@@ -479,8 +561,7 @@ bombViewUp x y w h color=
         , SvgAttr.strokeWidth "2"
         ]
         []
-    , 
-    Svg.line
+    , Svg.line
         [ SvgAttr.x1 (String.fromFloat (x + 0.4 * w))
         , SvgAttr.y1 (String.fromFloat (y + 0.45 * h))
         , SvgAttr.x2 (String.fromFloat (x + 0.24 * w))
@@ -489,8 +570,7 @@ bombViewUp x y w h color=
         , SvgAttr.strokeWidth "2"
         ]
         []
-    , 
-    Svg.line
+    , Svg.line
         [ SvgAttr.x1 (String.fromFloat (x + 0.76 * w))
         , SvgAttr.y1 (String.fromFloat (y + 0.4 * h))
         , SvgAttr.x2 (String.fromFloat (x + 0.6 * w))
@@ -499,8 +579,7 @@ bombViewUp x y w h color=
         , SvgAttr.strokeWidth "2"
         ]
         []
-    , 
-    Svg.line
+    , Svg.line
         [ SvgAttr.x1 (String.fromFloat (x + 0.6 * w))
         , SvgAttr.y1 (String.fromFloat (y + 0.45 * h))
         , SvgAttr.x2 (String.fromFloat (x + 0.76 * w))
@@ -511,8 +590,9 @@ bombViewUp x y w h color=
         []
     ]
 
+
 bombViewLeft : Float -> Float -> Float -> Float -> String -> List (Svg MainType.Msg)
-bombViewLeft x y w h color=
+bombViewLeft x y w h color =
     [ Svg.path
         [ SvgAttr.d
             ("M"
@@ -553,8 +633,7 @@ bombViewLeft x y w h color=
         , SvgAttr.strokeWidth "1"
         ]
         []
-    ,
-    Svg.path
+    , Svg.path
         [ SvgAttr.d
             ("M"
                 ++ String.fromFloat (x + 1.15 * w + 0.5)
@@ -586,8 +665,7 @@ bombViewLeft x y w h color=
         , SvgAttr.strokeWidth "1"
         ]
         []
-    , 
-    Svg.line
+    , Svg.line
         [ SvgAttr.x1 (String.fromFloat (x + 0.6 * w))
         , SvgAttr.y1 (String.fromFloat (y + 0.4 * h))
         , SvgAttr.x2 (String.fromFloat (x + 0.6 * w))
@@ -596,8 +674,7 @@ bombViewLeft x y w h color=
         , SvgAttr.strokeWidth "2"
         ]
         []
-    , 
-    Svg.line
+    , Svg.line
         [ SvgAttr.x1 (String.fromFloat (x + 0.4 * w))
         , SvgAttr.y1 (String.fromFloat (y + 0.24 * h))
         , SvgAttr.x2 (String.fromFloat (x + 0.45 * w + 1))
@@ -606,8 +683,7 @@ bombViewLeft x y w h color=
         , SvgAttr.strokeWidth "2"
         ]
         []
-    , 
-    Svg.line
+    , Svg.line
         [ SvgAttr.x1 (String.fromFloat (x + 0.45 * w))
         , SvgAttr.y1 (String.fromFloat (y + 0.4 * h))
         , SvgAttr.x2 (String.fromFloat (x + 0.5 * w))
@@ -616,8 +692,7 @@ bombViewLeft x y w h color=
         , SvgAttr.strokeWidth "2"
         ]
         []
-    , 
-    Svg.line
+    , Svg.line
         [ SvgAttr.x1 (String.fromFloat (x + 0.4 * w))
         , SvgAttr.y1 (String.fromFloat (y + 0.76 * h))
         , SvgAttr.x2 (String.fromFloat (x + 0.45 * w + 1))
@@ -626,8 +701,7 @@ bombViewLeft x y w h color=
         , SvgAttr.strokeWidth "2"
         ]
         []
-    , 
-    Svg.line
+    , Svg.line
         [ SvgAttr.x1 (String.fromFloat (x + 0.45 * w))
         , SvgAttr.y1 (String.fromFloat (y + 0.6 * h))
         , SvgAttr.x2 (String.fromFloat (x + 0.5 * w))
@@ -638,7 +712,8 @@ bombViewLeft x y w h color=
         []
     ]
 
-{-| view function of needle
+
+{-| view function of needle. Will view each needle according to its appearance.
 -}
 view : { model | needles : Array Needle, windowBoundary : GlobalBasics.Pos, levelBoundary : GlobalBasics.Pos, player : Player.Player } -> List (Svg MainType.Msg)
 view model =
@@ -652,7 +727,7 @@ view model =
     List.concat svgNeedleListList
 
 
-{-| update function of needle unit
+{-| update function of needle unit. Update each needle individually.
 -}
 update : ( { model | player : Player.Player, needles : Array Needle, actEvent : Array Event.ActEvent, sound : Sound.Sound }, Cmd MainType.Msg ) -> ( { model | player : Player.Player, needles : Array Needle, actEvent : Array Event.ActEvent, sound : Sound.Sound }, Cmd MainType.Msg )
 update ( model, cmd ) =
@@ -735,8 +810,7 @@ updateOneNeedleCollision id model =
                         newNeedlesModel
 
                     else
-                        Sound.trigger ( Player.playerDead newNeedlesModel Player.StepOnNeedle ) Sound.Needle
-
+                        Sound.trigger (Player.playerDead newNeedlesModel Player.StepOnNeedle) Sound.Needle
 
                 _ ->
                     newNeedlesModel

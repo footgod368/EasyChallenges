@@ -53,6 +53,7 @@ type BrickAppearance
     | Pill String
     | Helmet
 
+
 {-| brickWidth Constant
 -}
 brickWidth : Float
@@ -86,7 +87,7 @@ defBrick =
     initPos ( 0, 0 )
 
 
-{-| initiate a brick, with full functions
+{-| initiate a brick, with full functions. See in level5Init for examples, it's quite easy to see how to use.
 -}
 init : ( Float, Float ) -> BrickAppearance -> GlobalModule.Visibility -> GlobalModule.Collision -> GlobalModule.Move -> Brick
 init ( x, y ) brickAppearance visibility brickCollision brickMove =
@@ -99,7 +100,8 @@ init ( x, y ) brickAppearance visibility brickCollision brickMove =
     }
 
 
-{-| default appearance, always visible, have collision, don't move
+{-| default appearance, always visible, have collision, don't move. See in level5Init for examples, it's quite easy to
+see how to use.
 -}
 initPos : ( Float, Float ) -> Brick
 initPos ( x, y ) =
@@ -112,7 +114,8 @@ initPos ( x, y ) =
     }
 
 
-{-| another version of 'quickInit'. can be used to create bricks with 'Detailed' appearance type.
+{-| another version of 'quickInit'. can be used to create bricks with 'Detailed' appearance type. See in level5Init for
+examples, it's quite easy to see how to use.
 -}
 initPosVolumeColor : ( Float, Float ) -> ( Float, Float ) -> String -> Brick
 initPosVolumeColor ( x, y ) ( width, height ) color =
@@ -125,21 +128,23 @@ initPosVolumeColor ( x, y ) ( width, height ) color =
     }
 
 
-{-| A brick with a tunnel's appearance
+{-| A brick with a tunnel's appearance, See in level5Init for examples, it's quite easy to see how to use.
 -}
 quickTunnel : ( Float, Float ) -> Brick
 quickTunnel pos =
     initPosVolumeColor (GlobalBasics.blockPosFloat pos) ( 2 * 40, 3.5 * 40 ) "#008000"
 
 
-{-| quick function to create a row of bricks by providing 'row index' n, 'starting point' x, 'ending point' y.
+{-| quick function to create a row of bricks by providing 'row index' n, 'starting point' x, 'ending point' y. See in
+level5Init for examples, it's quite easy to see how to use.
 -}
 initRow : Int -> Int -> Int -> List Brick
 initRow n x y =
     List.map (\i -> initPos (GlobalBasics.blockPos ( i, n ))) (List.range x y)
 
 
-{-| quick function to create one 'falling brick' by providing 'positon' of the brick and 'id' of trigger envent.
+{-| quick function to create one 'falling brick' by providing 'positon' of the brick and 'id' of trigger envent. See in
+level5Init for examples, it's quite easy to see how to use.
 -}
 initFallingBrick : ( Float, Float ) -> Int -> Brick
 initFallingBrick ( x, y ) id =
@@ -166,13 +171,15 @@ initFallingBrick ( x, y ) id =
 
 
 {-| quick function to create a row of 'falling bricks' by providing 'row index' n, 'starting point' x, 'ending point' y.
+See in level5Init for examples, it's quite easy to see how to use.
 -}
 initFallingRow : Int -> Int -> Int -> Int -> List Brick
 initFallingRow n x y id =
     List.map (\i -> initFallingBrick (GlobalBasics.blockPos ( i, n )) id) (List.range x y)
 
 
-{-| quick function to create one 'hidden brick' which is initially invisible but always collidable.
+{-| quick function to create one 'hidden brick' which is initially invisible but always collidable. See in level5Init
+for examples, it's quite easy to see how to use.
 -}
 initNoCollideHidden : ( Float, Float ) -> Int -> Brick
 initNoCollideHidden ( x, y ) id =
@@ -185,7 +192,8 @@ initNoCollideHidden ( x, y ) id =
     }
 
 
-{-| quick function to create one 'hidden brick' which is initially invisible and initially non-collidable.
+{-| quick function to create one 'hidden brick' which is initially invisible and initially non-collidable. See in
+level5Init for examples, it's quite easy to see how to use.
 -}
 initCollideHidden : ( Float, Float ) -> Int -> Brick
 initCollideHidden ( x, y ) id =
@@ -198,7 +206,8 @@ initCollideHidden ( x, y ) id =
     }
 
 
-{-| A row of hidden block, used `initCollideHidden` function.
+{-| A row of hidden block, used `initCollideHidden` function. See in level5Init for examples, it's quite easy to see how
+to use.
 -}
 initCollideHiddenRow : Int -> Int -> Int -> Int -> List Brick
 initCollideHiddenRow n x y id =
@@ -219,6 +228,7 @@ brickCollisionBox brickAppearance =
                     , ( ( 0.0, height ), ( 0.0, 0.0 ) )
                     ]
                 )
+
         _ ->
             GlobalBasics.Polygon
                 (Array.fromList
@@ -230,7 +240,8 @@ brickCollisionBox brickAppearance =
                 )
 
 
-{-| quick function to yield the 'collisionBox' of a brick given the position
+{-| quick function to yield the 'collisionBox' of a brick given the position, See in level5Init for examples, it's quite
+easy to see how to use.
 -}
 quickCollisionBox : ( Float, Float ) -> BrickAppearance -> GlobalBasics.CollisionBox
 quickCollisionBox ( x, y ) brickAppearance =
@@ -259,14 +270,13 @@ viewOneBrick model brick =
                             , SvgAttr.stroke "#000000"
                             , SvgAttr.fill "#00000050"
                             ]
-                            (
-                                    [ SvgAttr.width (String.fromFloat brickWidth)
-                                    , SvgAttr.height (String.fromFloat brickHeight)
-                                    ]
-                            )
+                            [ SvgAttr.width (String.fromFloat brickWidth)
+                            , SvgAttr.height (String.fromFloat brickHeight)
+                            ]
                         )
                         []
                     ]
+
                 Detailed width height color ->
                     let
                         ( brickX, brickY ) =
@@ -280,14 +290,13 @@ viewOneBrick model brick =
                             , SvgAttr.stroke "#000000"
                             , SvgAttr.fill color
                             ]
-                            (
-                                    [ SvgAttr.width (String.fromFloat width)
-                                    , SvgAttr.height (String.fromFloat height)
-                                    ]
-                            )
+                            [ SvgAttr.width (String.fromFloat width)
+                            , SvgAttr.height (String.fromFloat height)
+                            ]
                         )
                         []
                     ]
+
                 Wings ->
                     let
                         ( brickX, brickY ) =
@@ -296,31 +305,43 @@ viewOneBrick model brick =
                     [ Svg.image
                         [ SvgAttr.x (String.fromFloat (ViewMove.deltaX model + brickX))
                         , SvgAttr.y (String.fromFloat (ViewMove.deltaY model + brickY))
-                        , SvgAttr.width (String.fromFloat   brickWidth)
-                        , SvgAttr.height (String.fromFloat  brickHeight)
+                        , SvgAttr.width (String.fromFloat brickWidth)
+                        , SvgAttr.height (String.fromFloat brickHeight)
                         , SvgAttr.xlinkHref "assets/wings2.png"
                         ]
                         []
                     ]
+
                 Switch bool ->
                     let
                         ( brickX, brickY ) =
                             brick.pos
-                        x0 = ViewMove.deltaX model + brickX
-                        y0 = ViewMove.deltaY model + brickY
+
+                        x0 =
+                            ViewMove.deltaX model + brickX
+
+                        y0 =
+                            ViewMove.deltaY model + brickY
                     in
                     if bool then
                         drawSwitch1 x0 y0 "#00CCFF"
+
                     else
                         drawSwitch2 x0 y0 "#00CCFF"
+
                 Pill color ->
                     let
                         ( brickX, brickY ) =
                             brick.pos
-                        x0 = ViewMove.deltaX model + brickX
-                        y0 = ViewMove.deltaY model + brickY
+
+                        x0 =
+                            ViewMove.deltaX model + brickX
+
+                        y0 =
+                            ViewMove.deltaY model + brickY
                     in
                     drawPill x0 y0 color
+
                 Helmet ->
                     let
                         ( brickX, brickY ) =
@@ -329,17 +350,19 @@ viewOneBrick model brick =
                     [ Svg.image
                         [ SvgAttr.x (String.fromFloat (ViewMove.deltaX model + brickX))
                         , SvgAttr.y (String.fromFloat (ViewMove.deltaY model + brickY))
-                        , SvgAttr.width (String.fromFloat   brickWidth)
-                        , SvgAttr.height (String.fromFloat  brickHeight)
+                        , SvgAttr.width (String.fromFloat brickWidth)
+                        , SvgAttr.height (String.fromFloat brickHeight)
                         , SvgAttr.xlinkHref "assets/helmet.png"
                         ]
                         []
                     ]
+
         GlobalModule.Invisible _ ->
             []
 
         _ ->
             []
+
 
 {-| View of pill, not exposed.
 -}
@@ -362,7 +385,7 @@ drawPill x y color =
         , SvgAttr.stroke "#000000"
         , SvgAttr.strokeWidth "1"
         ]
-        [] 
+        []
     , Svg.rect
         [ SvgAttr.x (String.fromFloat (x + 10))
         , SvgAttr.y (String.fromFloat (y + 21))
@@ -398,6 +421,7 @@ drawPill x y color =
         ]
         []
     ]
+
 
 {-| View of switch, not exposed.
 -}
@@ -454,6 +478,7 @@ drawSwitch2 x y color =
         []
     ]
 
+
 {-| View of switch, not exposed.
 -}
 drawSwitch1 : Float -> Float -> String -> List (Svg MainType.Msg)
@@ -509,6 +534,7 @@ drawSwitch1 x y color =
         []
     ]
 
+
 {-| view function of brick
 -}
 view : { model | bricks : Array Brick, windowBoundary : GlobalBasics.Pos, levelBoundary : GlobalBasics.Pos, player : Player.Player } -> List (Svg MainType.Msg)
@@ -523,7 +549,7 @@ view model =
     List.concat svgBrickListList
 
 
-{-| update function of brick unit
+{-| update function of brick unit by update each brick individually.
 -}
 update : ( { model | player : Player.Player, bricks : Array Brick, actEvent : Array Event.ActEvent }, Cmd MainType.Msg ) -> ( { model | player : Player.Player, bricks : Array Brick, actEvent : Array Event.ActEvent }, Cmd MainType.Msg )
 update ( model, cmd ) =

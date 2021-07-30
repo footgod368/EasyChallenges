@@ -19,7 +19,7 @@ import MainFunction.MainType as MainType
 import Menu.MenuType as MenuType
 
 
-{-| This main model stores level1 Model
+{-| This main model stores sub-models for menu page and each level, a mainscene stores the current game status.
 -}
 type alias Model =
     { mainScene : MainType.MainScene

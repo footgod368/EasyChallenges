@@ -25,7 +25,8 @@ import Modules.SavePoint as SavePoint
 import Modules.Sound as Sound
 
 
-{-| `update` of Level1
+{-| `update` of Level1. Handles Resize, GetViewPort which handles the windows size change correctly. Handles KeyUp,
+KeyDown will change the keyPressed in the level model. Handles Tick, update each module individually.
 -}
 update : MainType.Msg -> Level1Type.Model -> ( Level1Type.Model, Cmd MainType.Msg )
 update msg model =
@@ -59,12 +60,11 @@ update msg model =
                             |> Monster.update
                             |> Player.updateJustPlayerPos
                             |> checkPill
-                            |> GameControl.update ( MainType.Tick timePassed )
-
+                            |> GameControl.update (MainType.Tick timePassed)
 
                     else
                         ( model, Cmd.none )
-                            |> GameControl.update ( MainType.Tick timePassed )
+                            |> GameControl.update (MainType.Tick timePassed)
             in
             if List.member 82 newModel.keyPressed then
                 SavePoint.updateReset Level1Init.init ( model, Cmd.none )
@@ -74,6 +74,7 @@ update msg model =
 
         buttonMsg ->
             GameControl.update buttonMsg ( model, Cmd.none )
+
 
 {-| check whether player gets the pill and kill them if so
 -}

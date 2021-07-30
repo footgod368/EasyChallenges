@@ -340,9 +340,6 @@ ifCollideLSLS ls1 ls2 =
             v1P2_2P1 =
                 minusPosPos ls1P2 ls2P1
 
-            v1P2_2P2 =
-                minusPosPos ls1P2 ls2P2
-
             if1P1 =
                 vecCrossProd v1P1_2P1 v1P1_1P2 * vecCrossProd v1P1_2P2 v1P1_1P2 < 0
 
@@ -432,6 +429,7 @@ blockSize. You can use it like this
     pos : Pos
     pos =
         blockPos ( 1, 2 )
+
 -}
 blockPos : ( Int, Int ) -> ( Float, Float )
 blockPos ( x, y ) =

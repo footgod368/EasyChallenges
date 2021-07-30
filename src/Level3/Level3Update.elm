@@ -24,7 +24,7 @@ import Modules.SavePoint as SavePoint
 import Modules.Sound as Sound
 
 
-{-| `update` of Level3
+{-| `update` of Level3, see in level1Update, highly repetition.
 -}
 update : MainType.Msg -> Level3Type.Model -> ( Level3Type.Model, Cmd MainType.Msg )
 update msg model =
@@ -56,11 +56,11 @@ update msg model =
                             |> Needle.update
                             |> Sound.update
                             |> Player.updateJustPlayerPos
-                            |> GameControl.update ( MainType.Tick timePassed )
+                            |> GameControl.update (MainType.Tick timePassed)
 
                     else
                         ( model, Cmd.none )
-                            |> GameControl.update ( MainType.Tick timePassed )
+                            |> GameControl.update (MainType.Tick timePassed)
             in
             if List.member 82 newModel.keyPressed then
                 SavePoint.updateReset Level3Init.init ( model, Cmd.none )

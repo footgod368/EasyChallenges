@@ -119,7 +119,7 @@ viewOneBoundary model anchor area boundaryType =
         []
 
 
-{-| `view` draws the four boundaries due to their `BoundaryType`
+{-| `view` draws the four boundaries due to their `BoundaryType`.
 -}
 view : { model | boundary : Boundary, windowBoundary : GlobalBasics.Pos, levelBoundary : GlobalBasics.Pos, player : Player.Player } -> List (Svg MainType.Msg)
 view model =
@@ -210,7 +210,7 @@ updateOneBoundary anchor area boundaryType ( model, cmd ) =
             )
 
 
-{-| `update` updates collision of the boundaries
+{-| `update` updates collision of the boundaries, will act the correct action due to their identical BoundaryType.
 -}
 update : ( { model | boundary : Boundary, windowBoundary : GlobalBasics.Pos, levelBoundary : GlobalBasics.Pos, player : Player.Player, sound : Sound.Sound }, Cmd MainType.Msg ) -> ( { model | boundary : Boundary, windowBoundary : GlobalBasics.Pos, levelBoundary : GlobalBasics.Pos, player : Player.Player, sound : Sound.Sound }, Cmd MainType.Msg )
 update ( model, cmd ) =

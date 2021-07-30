@@ -12,7 +12,6 @@ module Level3.Level3Init exposing (init)
 import Array
 import Browser.Dom exposing (getViewport)
 import GlobalFunction.GlobalBasics as GlobalBasics
-import GlobalFunction.GlobalModule as GlobalModule
 import Level3.Level3Type as Level3Type
 import MainFunction.MainType as MainType
 import Modules.Boundary as Boundary
@@ -28,7 +27,7 @@ import Modules.Sound as Sound
 import Task
 
 
-{-| `init` of Level3 \`Model
+{-| `init` of Level3 Model, see in level1Init, highly repetition
 -}
 init : () -> ( Level3Type.Model, Cmd MainType.Msg )
 init a =
@@ -55,10 +54,10 @@ init a =
                         [ Brick.initRow 15 1 12
                         , Brick.initRow 15 17 54
                         , [ NoticeBoard.boundary ( 2, 4.2 ) ( 7, 5.2 ) ]
-                        , [ Brick.initPosVolumeColor (GlobalBasics.blockPosFloat ( 2, 11 )) (40,40) "#FFFF00"
-                          , Brick.initPosVolumeColor (GlobalBasics.blockPosFloat ( 4, 11 )) (40,40) "#FFFF00"
-                          , Brick.initPosVolumeColor (GlobalBasics.blockPosFloat ( 6, 11 )) (40,40) "#FFFF00"
-                          , Brick.initPosVolumeColor (GlobalBasics.blockPosFloat ( 8, 11 )) (40,40) "#FFFF00"
+                        , [ Brick.initPosVolumeColor (GlobalBasics.blockPosFloat ( 2, 11 )) ( 40, 40 ) "#FFFF00"
+                          , Brick.initPosVolumeColor (GlobalBasics.blockPosFloat ( 4, 11 )) ( 40, 40 ) "#FFFF00"
+                          , Brick.initPosVolumeColor (GlobalBasics.blockPosFloat ( 6, 11 )) ( 40, 40 ) "#FFFF00"
+                          , Brick.initPosVolumeColor (GlobalBasics.blockPosFloat ( 8, 11 )) ( 40, 40 ) "#FFFF00"
                           ]
                         , Brick.initFallingRow 15 13 16 5
                         , [ NoticeBoard.boundary ( 46, 8 ) ( 6.5, 4 ) ]
@@ -89,19 +88,19 @@ init a =
             , needles =
                 Array.fromList
                     (List.concat
-                        [ [ Needle.initHidden ( 2, 12 ) 1 Needle.Downwards]
-                        , [ Needle.initHidden ( 4, 12 ) 2 Needle.Downwards]
-                        , [ Needle.initHidden ( 6, 12 ) 3 Needle.Downwards]
-                        , [ Needle.initHidden ( 8, 12 ) 4 Needle.Downwards]
-                        , [ Needle.sword ( 14, 16 ) ( 14, -3 ) ( 2, 3 ) 8.0 6 Needle.BombUp]
+                        [ [ Needle.initHidden ( 2, 12 ) 1 Needle.Downwards ]
+                        , [ Needle.initHidden ( 4, 12 ) 2 Needle.Downwards ]
+                        , [ Needle.initHidden ( 6, 12 ) 3 Needle.Downwards ]
+                        , [ Needle.initHidden ( 8, 12 ) 4 Needle.Downwards ]
+                        , [ Needle.sword ( 14, 16 ) ( 14, -3 ) ( 2, 3 ) 8.0 6 Needle.BombUp ]
                         ]
                     )
             , keyPressed = []
-            , gameControl = GameControl.init MainType.Level4 [["Go right and then hit \"Silver Dog\""]]
+            , gameControl = GameControl.init MainType.Level4 [ [ "Go right and then hit \"Silver Dog\"" ] ]
             , sound =
-                Sound.init [
-                    Sound.Event 6 Sound.Sword
-                ]
+                Sound.init
+                    [ Sound.Event 6 Sound.Sword
+                    ]
             , mainScene = MainType.Level3
             }
     in

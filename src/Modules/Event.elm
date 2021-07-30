@@ -581,7 +581,7 @@ updateOneEventActCounter ( model, event ) =
                 ( model, { event | actCounter = EventActTill (timeLeft - 1) } )
 
 
-{-| quick functions to create 'Event'
+{-| quick functions to create 'Event'. See in level5Init for examples, it's quite easy to see how to use.
 -}
 hitBlock : Int -> String -> ( Float, Float ) -> ( Float, Float ) -> Event
 hitBlock id_ name_ ( x_, y_ ) ( width_, height_ ) =
@@ -609,7 +609,8 @@ hitBlock id_ name_ ( x_, y_ ) ( width_, height_ ) =
         (quickDuration 10)
 
 
-{-| The event activated when the player hit a line Segment
+{-| The event activated when the player hit a line Segment. See in level5Init for examples, it's quite easy to see how
+to use.
 -}
 hitLineSeg : Int -> String -> ( Float, Float ) -> ( Float, Float ) -> Event
 hitLineSeg id_ name_ pos1_ pos2_ =
@@ -622,7 +623,8 @@ hitLineSeg id_ name_ pos1_ pos2_ =
         (quickDuration 10)
 
 
-{-| Delete an event when another event happens, by ID
+{-| Delete an event when another event happens, by ID. See in level5Init for examples, it's quite easy to see how to
+use.
 -}
 deleteEventById : { model | event : Array Event, actEvent : Array ActEvent } -> Int -> Int -> { model | event : Array Event, actEvent : Array ActEvent }
 deleteEventById model flagEventId targetEventId =
@@ -633,7 +635,8 @@ deleteEventById model flagEventId targetEventId =
         model
 
 
-{-| The event activated when the player hit a brick after a Event is activated
+{-| The event activated when the player hit a brick after a Event is activated. See in level5Init for examples, it's
+quite easy to see how to use.
 -}
 hitBlockAfter : Int -> String -> ( Float, Float ) -> ( Float, Float ) -> Int -> Event
 hitBlockAfter id_ name_ ( x_, y_ ) ( width_, height_ ) afterID =
@@ -661,7 +664,8 @@ hitBlockAfter id_ name_ ( x_, y_ ) ( width_, height_ ) afterID =
         (quickDuration 10)
 
 
-{-| The event activated when the player hit a line Segment after a Event is activated
+{-| The event activated when the player hit a line Segment after a Event is activated. See in level5Init for examples,
+it's quite easy to see how to use.
 -}
 hitLineSegAfter : Int -> String -> ( Float, Float ) -> ( Float, Float ) -> Int -> Event
 hitLineSegAfter id_ name_ pos1_ pos2_ afterID =

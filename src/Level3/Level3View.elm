@@ -26,7 +26,7 @@ import Svg
 import Svg.Attributes as SvgAttr
 
 
-{-| `view` of level3.
+{-| `view` of level3. See in level1View, highly repetition.
 -}
 view : Level3Type.Model -> Html MainType.Msg
 view model =
@@ -41,7 +41,7 @@ view model =
             [ SvgAttr.width (String.fromFloat (Tuple.first model.windowBoundary))
             , SvgAttr.height (String.fromFloat (Tuple.second model.windowBoundary))
             ]
-            ( Sound.view model
+            (Sound.view model
                 ++ SavePoint.view model
                 ++ Brick.view model
                 ++ Boundary.view model

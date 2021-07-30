@@ -22,7 +22,8 @@ import Menu.MenuInit as MenuInit
 import Task
 
 
-{-| The `init` of MainModel.
+{-| The `init` of MainModel. Store the mainScene which stores the current game status. Other models just store the level
+information.
 -}
 init : () -> ( MainModel.Model, Cmd MainType.Msg )
 init a =

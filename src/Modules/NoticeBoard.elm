@@ -83,7 +83,7 @@ defNoticeBoard =
     quickInit ( 0, 0 ) "" 0
 
 
-{-| Full init of the NoticeBoard
+{-| Full init of the NoticeBoard. See in level5Init for examples, it's quite easy to see how to use.
 -}
 init : GlobalBasics.Pos -> NoticeBoardVisibility -> GlobalModule.Move -> Int -> NoticeBoard
 init pos noticeBoardVisibility noticeBoardMove fontSize =
@@ -94,7 +94,7 @@ init pos noticeBoardVisibility noticeBoardMove fontSize =
     }
 
 
-{-| Quick init, always visible.
+{-| Quick init, always visible. See in level5Init for examples, it's quite easy to see how to use.
 -}
 quickInit : GlobalBasics.Pos -> String -> Int -> NoticeBoard
 quickInit pos info fontSize =
@@ -105,7 +105,8 @@ quickInit pos info fontSize =
     }
 
 
-{-| quick function to create a 'brick' with proper 'Detailed' type as the boundary of 'NoticeBoard'
+{-| quick function to create a 'brick' with proper 'Detailed' type as the boundary of 'NoticeBoard'. See in level5Init
+for examples, it's quite easy to see how to use.
 -}
 boundary : ( Float, Float ) -> ( Float, Float ) -> Brick.Brick
 boundary ( x, y ) ( width, height ) =
@@ -120,7 +121,7 @@ boundary ( x, y ) ( width, height ) =
 
 
 {-| quick function to create a 'brick' with proper 'Detailed' type as the boundary of 'NoticeBoard', which has
-collision.
+collision. See in level5Init for examples, it's quite easy to see how to use.
 -}
 boundaryCollide : ( Float, Float ) -> ( Float, Float ) -> Brick.Brick
 boundaryCollide ( x, y ) ( width, height ) =
@@ -134,7 +135,7 @@ boundaryCollide ( x, y ) ( width, height ) =
     { tempBrick | collision = GlobalModule.Collide GlobalModule.NoNextCollision }
 
 
-{-| update function of noticeBoard unit
+{-| update function of noticeBoard unit. Will update the words on the noticeBoard individually.
 -}
 update : ( { model | player : Player.Player, noticeBoards : Array NoticeBoard, actEvent : Array Event.ActEvent }, Cmd MainType.Msg ) -> ( { model | player : Player.Player, noticeBoards : Array NoticeBoard, actEvent : Array Event.ActEvent }, Cmd MainType.Msg )
 update ( model, cmd ) =
@@ -238,7 +239,7 @@ viewOneNoticeBoard model noticeBoard =
             []
 
 
-{-| view function of noticeBoard
+{-| view function of noticeBoard. Will view its boundary and string showed on it.
 -}
 view : { model | noticeBoards : Array NoticeBoard, windowBoundary : GlobalBasics.Pos, levelBoundary : GlobalBasics.Pos, player : Player.Player } -> List (Svg MainType.Msg)
 view model =

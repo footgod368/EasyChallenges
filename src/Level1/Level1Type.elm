@@ -25,7 +25,11 @@ import Modules.SavePoint as SavePoint
 import Modules.Sound as Sound
 
 
-{-| `Model` that used in level1
+{-| `Model` that used in level1. Nothing special. windowBoundary stores the size of the current window, levelBoundary
+stores the size of the levels. These two sizes work together to make window in the game changes correctly. actEvent is
+the events that are activated in the game, which is part of the event module. The following a lot are the modules of the
+level individually. mainScene stores that current game status (which level is in), changing it will cause to the whole
+game status change. keyPressed stores the keys that player presses.
 -}
 type alias Model =
     { windowBoundary : GlobalBasics.Pos

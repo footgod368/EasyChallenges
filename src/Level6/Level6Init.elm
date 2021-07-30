@@ -26,10 +26,9 @@ import Modules.Player as Player
 import Modules.SavePoint as SavePoint
 import Modules.Sound as Sound
 import Task
-import Modules.Needle exposing (Needle)
 
 
-{-| `init` of Level6 \`Model
+{-| `init` of Level6 Model. See in level1Init for detail, highly repetition.
 -}
 init : () -> ( Level6Type.Model, Cmd MainType.Msg )
 init a =
@@ -295,9 +294,9 @@ init a =
                                         )
                             }
                           ]
-                        , [Brick.initPos (GlobalBasics.blockPosFloat ( 25, 9.5 ))]
-                        , [Brick.initPos (GlobalBasics.blockPosFloat ( 27, 9.5 ))]
-                        , [Brick.initPosVolumeColor ( GlobalBasics.blockPosFloat ( 26, 9.5 )) ( 40, 40 ) "#FFFF00"]
+                        , [ Brick.initPos (GlobalBasics.blockPosFloat ( 25, 9.5 )) ]
+                        , [ Brick.initPos (GlobalBasics.blockPosFloat ( 27, 9.5 )) ]
+                        , [ Brick.initPosVolumeColor (GlobalBasics.blockPosFloat ( 26, 9.5 )) ( 40, 40 ) "#FFFF00" ]
                         , let
                             base0 =
                                 Brick.initPosVolumeColor (GlobalBasics.blockPosFloat ( 26.1, 9.3 )) ( 32, 8 ) "#700000"
@@ -497,7 +496,7 @@ init a =
                                 , pos = GlobalBasics.blockPosFloat ( 9.5, 6 )
                             }
                           ]
-                        , [ Needle.initPos ( 181, 280 ) Needle.Downwards, Needle.initPos ( 221, 280 ) Needle.Downwards]
+                        , [ Needle.initPos ( 181, 280 ) Needle.Downwards, Needle.initPos ( 221, 280 ) Needle.Downwards ]
                         , let
                             tempNeedle1 =
                                 Needle.initPos (GlobalBasics.blockPosFloat ( 10.5, 10.9 )) Needle.Upwards
@@ -544,10 +543,10 @@ init a =
                                 (GlobalModule.NoCollide (GlobalModule.CollideAfterEvent 7 (GlobalModule.NoCollideAfterEvent 34 GlobalModule.NoNextCollision)))
                                 GlobalModule.NoNextMove
                           ]
-                        , [ Needle.sword ( 55, 10.5 ) ( 19, 10.5 ) ( 4, 2 ) 20 36 Needle.BombLeft]
-                        , [ Needle.initHidden ( 50, 11 ) 51 Needle.Downwards]
-                        , [ Needle.initHidden ( 50, 10 ) 51 Needle.Downwards]
-                        , [ Needle.sword ( 57, 20 ) ( 57, -4 ) ( 2, 3 ) 12 53 Needle.BombUp]
+                        , [ Needle.sword ( 55, 10.5 ) ( 19, 10.5 ) ( 4, 2 ) 20 36 Needle.BombLeft ]
+                        , [ Needle.initHidden ( 50, 11 ) 51 Needle.Downwards ]
+                        , [ Needle.initHidden ( 50, 10 ) 51 Needle.Downwards ]
+                        , [ Needle.sword ( 57, 20 ) ( 57, -4 ) ( 2, 3 ) 12 53 Needle.BombUp ]
                         , [ Needle.init (GlobalBasics.blockPosFloat ( 69.35, 8 ))
                                 (Needle.NormalNeedle 12 191 Needle.Laser)
                                 (GlobalModule.Invisible (GlobalModule.VisibleAfterEvent 54 (GlobalModule.InvisibleAfterEvent 55 GlobalModule.NoNextVisibility)))
@@ -636,23 +635,26 @@ init a =
                                     (GlobalModule.Move (Array.fromList [ GlobalBasics.blockPosFloat ( 72.4, 5.025 ) ]) 1.5 -1 GlobalModule.NoNextMove)
                                 )
                           ]
-                        , [ Needle.initFalling ( 62, 7 ) 63 Needle.Downwards]
+                        , [ Needle.initFalling ( 62, 7 ) 63 Needle.Downwards ]
                         ]
                     )
             , keyPressed = []
-            , gameControl = GameControl.init MainType.Level1 [["At the beginning of the level, ","you can just rush to the right ","and ignore the two falling needles"],
-                ["Before the second savepoint, ","you have to dodge three attacks from ","the horizontal laser, jump ","before the first and the third attacks"],
-                ["In the final part, "," jump onto the inverse magic box ","and jump again to dodge the first laser"],
-                ["You can hide under the bricks ","to dodge the second laser"]]
+            , gameControl =
+                GameControl.init MainType.Level1
+                    [ [ "At the beginning of the level, ", "you can just rush to the right ", "and ignore the two falling needles" ]
+                    , [ "Before the second savepoint, ", "you have to dodge three attacks from ", "the horizontal laser, jump ", "before the first and the third attacks" ]
+                    , [ "In the final part, ", " jump onto the inverse magic box ", "and jump again to dodge the first laser" ]
+                    , [ "You can hide under the bricks ", "to dodge the second laser" ]
+                    ]
             , sound =
-                Sound.init [
-                    Sound.Event 34 Sound.RandomBox
+                Sound.init
+                    [ Sound.Event 34 Sound.RandomBox
                     , Sound.Event 55 Sound.RandomBox
                     , Sound.Event 36 Sound.Sword
                     , Sound.Event 53 Sound.Sword
                     , Sound.Event 35 Sound.RandomBox
                     , Sound.Event 52 Sound.RandomBox
-                ]
+                    ]
             , mainScene = MainType.Level6
             }
     in

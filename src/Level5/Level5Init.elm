@@ -16,19 +16,19 @@ import GlobalFunction.GlobalModule as GlobalModule
 import Level5.Level5Type as Level5Type
 import MainFunction.MainType as MainType
 import Modules.Boundary as Boundary
-import Modules.Brick as Brick exposing (Brick)
+import Modules.Brick as Brick
 import Modules.EndPoint as EndPoint
-import Modules.Event as Event exposing (Event, hitBlock)
+import Modules.Event as Event
 import Modules.GameControl as GameControl
 import Modules.Needle as Needle
 import Modules.NoticeBoard as NoticeBoard
-import Modules.Player as Player exposing (Player)
+import Modules.Player as Player
 import Modules.SavePoint as SavePoint
 import Modules.Sound as Sound
 import Task
 
 
-{-| `init` of Level5 \`Model
+{-| `init` of Level5 Model. See in level1Init, highly repetition
 -}
 init : () -> ( Level5Type.Model, Cmd MainType.Msg )
 init a =
@@ -41,8 +41,10 @@ init a =
                 | playerJumpNum = 999999
                 , ifPlayerJumpOnTheGround = False
             }
+
         newnewProperty =
-          {newProperty | isGreen = True}
+            { newProperty | isGreen = True }
+
         newModel =
             { windowBoundary = ( 1000.0, 800.0 )
             , levelBoundary = ( 70 * 40, 40 * 40.0 )
@@ -85,7 +87,7 @@ init a =
                         , [ Brick.initPosVolumeColor (GlobalBasics.blockPosFloat ( 3, 37 )) ( 40, 40 ) "#FFFF00" ]
                         , [ Brick.init
                                 (GlobalBasics.blockPosFloat ( 3, 36 ))
-                                (Brick.Wings)
+                                Brick.Wings
                                 (GlobalModule.Invisible (GlobalModule.VisibleAfterEvent 3 (GlobalModule.InvisibleAfterEvent 1 GlobalModule.NoNextVisibility)))
                                 (GlobalModule.NoCollide GlobalModule.NoNextCollision)
                                 GlobalModule.NoNextMove
@@ -173,21 +175,22 @@ init a =
                           , Needle.deadlyBlock ( 44, 34 ) ( 2, 6 )
                           ]
                         , let
-                            tempNeedle =  Needle.deadlyBlock (53,10.5) (10,1)
+                            tempNeedle =
+                                Needle.deadlyBlock ( 53, 10.5 ) ( 10, 1 )
                           in
-                          [{tempNeedle | collision = GlobalModule.Collide (GlobalModule.NoCollideAfterEvent 15 GlobalModule.NoNextCollision)}]
+                          [ { tempNeedle | collision = GlobalModule.Collide (GlobalModule.NoCollideAfterEvent 15 GlobalModule.NoNextCollision) } ]
                         ]
                     )
             , keyPressed = []
-            , gameControl = GameControl.init MainType.Level6 [["Hit the first\"?\"","to get the wings"],["Hit the last two \"?\" again","to mix blue with red"]]
+            , gameControl = GameControl.init MainType.Level6 [ [ "Hit the first\"?\"", "to get the wings" ], [ "Hit the last two \"?\" again", "to mix blue with red" ] ]
             , sound =
-                Sound.init [
-                  Sound.Event 3 Sound.RandomBox
-                ,    Sound.Event 4 Sound.RandomBox
-                ,    Sound.Event 5 Sound.RandomBox
-                ,    Sound.Event 11 Sound.RandomBox
-                ,    Sound.Event 12 Sound.RandomBox
-                ]
+                Sound.init
+                    [ Sound.Event 3 Sound.RandomBox
+                    , Sound.Event 4 Sound.RandomBox
+                    , Sound.Event 5 Sound.RandomBox
+                    , Sound.Event 11 Sound.RandomBox
+                    , Sound.Event 12 Sound.RandomBox
+                    ]
             , mainScene = MainType.Level5
             , number = []
             }

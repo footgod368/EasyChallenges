@@ -57,7 +57,8 @@ changeToLevel newScene ( model, cmd ) =
             ( newModel, cmd )
 
 
-{-| `update` of main game
+{-| `update` of main game, will change the mainStatus if the mainStatus in the sub-level is changed. mainStatus in the
+sub-level works as a tunnel of communication to the mainStatus.
 -}
 update : MainType.Msg -> MainModel.Model -> ( MainModel.Model, Cmd MainType.Msg )
 update msg model =

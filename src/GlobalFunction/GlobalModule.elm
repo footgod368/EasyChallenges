@@ -99,20 +99,20 @@ type Move
 module model. Then, you can use it like this.
 
     type alias Module =
-    { visibility : Visibility
-    }
+        { visibility : Visibility
+        }
 
     myModule : Module
     myModule =
-        Module ( Invisible ( VisibleAfterEvent 2 NoNextVisibility ) )
+        Module (Invisible (VisibleAfterEvent 2 NoNextVisibility))
 
     type alias Model =
-    { actEvent : Array Event.ActEvent
-    }
+        { actEvent : Array Event.ActEvent
+        }
 
     model : Model
     model =
-        Model ( Array.fromList [{id = 2, label = "event2"}] )
+        Model (Array.fromList [ { id = 2, label = "event2" } ])
 
     -- updateModule == Module  ( Visible NoNextVisibility ), this is because eventID = 2 is activated
     updateModule : Module
@@ -163,22 +163,22 @@ updateOneVisibility model myModule =
 module model. Then, you can use it like this.
 
     type alias Module =
-    { collision : Collision
-    }
+        { collision : Collision
+        }
 
     myModule : Module
     myModule =
-        Module ( NoCollide ( CollideAfterEvent 2 NoNextCollision ) )
+        Module (NoCollide (CollideAfterEvent 2 NoNextCollide))
 
     type alias Model =
-    { actEvent : Array Event.ActEvent
-    }
+        { actEvent : Array Event.ActEvent
+        }
 
     model : Model
     model =
-        Model ( Array.fromList [{id = 2, label = "event2"}] )
+        Model (Array.fromList [ { id = 2, label = "event2" } ])
 
-    -- updateModule == Module  ( Collide NoNextCollision ), this is because eventID = 2 is activated
+    -- updateModule == Module  ( Collide NoNextCollide ), this is because eventID = 2 is activated
     updateModule : Module
     updateModule =
         updateOneCollision model myModule
@@ -223,16 +223,16 @@ updateOneCollision model myModule =
     newModule
 
 
-{-| update move. Used in update for individual module. Assume there's actEvent in model while collision in
+{-| update move. Used in update for individual update. Assume there's actEvent in model while move in
 module model. Then, you can use it like this.
 
     type alias Module =
-    { collision : Collision
+    { move : Move
     }
 
     myModule : Module
     myModule =
-        Module ( NoCollide ( CollideAfterEvent 2 NoNextCollision ) )
+        Module ( Move ( Array.fromList [ ( 100.0, 0.0 ) ] 10.0 2 NoNextMove)
 
     type alias Model =
     { actEvent : Array Event.ActEvent
@@ -242,10 +242,10 @@ module model. Then, you can use it like this.
     model =
         Model ( Array.fromList [{id = 2, label = "event2"}] )
 
-    -- updateModule == Module  ( Collide NoNextCollision ), this is because eventID = 2 is activated
+    -- updateModule == Module NoNextMove, this is because eventID = 2 is activated and module reach the endPoint
     updateModule : Module
     updateModule =
-        updateOneCollision model myModule
+        updateOneMove model myModule
 
 -}
 updateOneMove : { model | actEvent : Array Event.ActEvent } -> { myModule | pos : GlobalBasics.Pos, move : Move } -> { myModule | pos : GlobalBasics.Pos, move : Move }
