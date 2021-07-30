@@ -31,7 +31,6 @@ type MainScene
     | Level4
     | Level6
     | Level5
-    | Level7
 
 
 {-| `Msg` stores the callbacks of subscriptions. Tick means 8ms just passed, we need to update our game. KeyUp means

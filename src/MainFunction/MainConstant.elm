@@ -1,6 +1,6 @@
 module MainFunction.MainConstant exposing
     ( soundLouderButton, soundQuieterButton
-    , menuButtonLevel7, menuButtonLevel1, menuButtonLevel2, menuButtonLevel3, menuButtonLevel4, menuButtonLevel5
+    ,  menuButtonLevel1, menuButtonLevel2, menuButtonLevel3, menuButtonLevel4, menuButtonLevel5
     , menuButtonLevel6
     , gameBackButton, gameNextLevelButton, gameHintButton, gameHintCloseButton
     , buttonNormalColor, buttonDownColor, buttonOverColor
@@ -16,7 +16,7 @@ module MainFunction.MainConstant exposing
 
 # Menu
 
-@docs menuButtonLevel7, menuButtonLevel1, menuButtonLevel2, menuButtonLevel3, menuButtonLevel4, menuButtonLevel5
+@docs  menuButtonLevel1, menuButtonLevel2, menuButtonLevel3, menuButtonLevel4, menuButtonLevel5
 @docs menuButtonLevel6
 
 
@@ -31,12 +31,6 @@ module MainFunction.MainConstant exposing
 
 -}
 
-
-{-| Id of button, the button that goes to level7 in menu page.
--}
-menuButtonLevel7 : Int
-menuButtonLevel7 =
-    7
 
 
 {-| Id of button, the button that goes to level1 in menu page.

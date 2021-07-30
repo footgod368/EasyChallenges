@@ -1,5 +1,5 @@
 module Modules.Player exposing
-    ( Player, PlayerProperty, defPlayerProperty, PropertyChange(..), LiveState(..), DeadType(..)
+    ( Player, PlayerProperty, defPlayerProperty, normalPlayerProperty, PropertyChange(..), LiveState(..), DeadType(..)
     , init
     , update, updateJustPlayerPos
     , view
@@ -11,7 +11,7 @@ module Modules.Player exposing
 
 # Player
 
-@docs Player, PlayerProperty, defPlayerProperty, PropertyChange, LiveState, DeadType
+@docs Player, PlayerProperty, defPlayerProperty, normalPlayerProperty, PropertyChange, LiveState, DeadType
 
 
 # init
@@ -82,13 +82,28 @@ defPlayerProperty =
     , playerJumpNum = 1
     , ifPlayerJumpOnTheGround = True
     , playerJumpFrames = 20
-    , playerJumpInitialAcce = 0.6
+    , playerJumpInitialAcce = 0.55
     , playerJumpInitialSpeed = -1.0
     , playerHorizontalSpeed = 1.93
     , gravityAcce = 0.1
     , isGreen = False
     }
 
+{-| player property
+-}
+normalPlayerProperty : PlayerProperty
+normalPlayerProperty =
+    { playerWidth = 10.0
+    , playerHeight = 25.0
+    , playerJumpNum = 1
+    , ifPlayerJumpOnTheGround = True
+    , playerJumpFrames = 20
+    , playerJumpInitialAcce = 0.55
+    , playerJumpInitialSpeed = -1.0
+    , playerHorizontalSpeed = 1.93
+    , gravityAcce = 0.1
+    , isGreen = False
+    }
 
 {-| Almost the same structure as the Visibility, The Int is a EventID, after this Event is activated, the
 playerProperty will change to `PlayerProperty`

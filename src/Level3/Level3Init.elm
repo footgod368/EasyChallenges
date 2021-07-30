@@ -54,10 +54,10 @@ init a =
                         [ Brick.initRow 15 1 12
                         , Brick.initRow 15 17 54
                         , [ NoticeBoard.boundary ( 2, 4.2 ) ( 7, 5.2 ) ]
-                        , [ Brick.initPos (GlobalBasics.blockPosFloat ( 2, 11 ))
-                          , Brick.initPos (GlobalBasics.blockPosFloat ( 4, 11 ))
-                          , Brick.initPos (GlobalBasics.blockPosFloat ( 6, 11 ))
-                          , Brick.initPos (GlobalBasics.blockPosFloat ( 8, 11 ))
+                        , [ Brick.initPosVolumeColor (GlobalBasics.blockPosFloat ( 2, 11 )) (40,40) "#FFFF00"
+                          , Brick.initPosVolumeColor (GlobalBasics.blockPosFloat ( 4, 11 )) (40,40) "#FFFF00"
+                          , Brick.initPosVolumeColor (GlobalBasics.blockPosFloat ( 6, 11 )) (40,40) "#FFFF00"
+                          , Brick.initPosVolumeColor (GlobalBasics.blockPosFloat ( 8, 11 )) (40,40) "#FFFF00"
                           ]
                         , Brick.initFallingRow 15 13 16 5
                         , [ NoticeBoard.boundary ( 46, 8 ) ( 6.5, 4 ) ]
