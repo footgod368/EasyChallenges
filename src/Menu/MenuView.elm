@@ -31,7 +31,7 @@ view model =
         , HtmlAttr.style "height" "100%"
         , HtmlAttr.style "left" "50"
         , HtmlAttr.style "top" "50"
-        , HtmlAttr.style "background-image" "url(assets/menuBackground.png)"
+        , HtmlAttr.style "background-image" "url(assets/images/menuBackground.png)"
         , HtmlAttr.style "background-size" "100% 100%"
         , HtmlAttr.style "background-position" "0px 0px"
         ]
@@ -77,7 +77,7 @@ view model =
 -- , SvgAttr.y "0"
 -- , SvgAttr.width "100"
 -- , SvgAttr.height "100"
--- , SvgAttr.xlinkHref "assets/silverDogLogo.svg"
+-- , SvgAttr.xlinkHref "assets/images/silverDogLogo.svg"
 -- ]
 -- []
 --  Svg.text_

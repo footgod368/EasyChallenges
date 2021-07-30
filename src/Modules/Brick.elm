@@ -307,7 +307,7 @@ viewOneBrick model brick =
                         , SvgAttr.y (String.fromFloat (ViewMove.deltaY model + brickY))
                         , SvgAttr.width (String.fromFloat brickWidth)
                         , SvgAttr.height (String.fromFloat brickHeight)
-                        , SvgAttr.xlinkHref "assets/wings2.png"
+                        , SvgAttr.xlinkHref "assets/images/wings2.png"
                         ]
                         []
                     ]
@@ -352,7 +352,7 @@ viewOneBrick model brick =
                         , SvgAttr.y (String.fromFloat (ViewMove.deltaY model + brickY))
                         , SvgAttr.width (String.fromFloat brickWidth)
                         , SvgAttr.height (String.fromFloat brickHeight)
-                        , SvgAttr.xlinkHref "assets/helmet.png"
+                        , SvgAttr.xlinkHref "assets/images/helmet.png"
                         ]
                         []
                     ]
