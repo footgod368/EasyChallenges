@@ -24,7 +24,7 @@ import Modules.SavePoint as SavePoint
 import Modules.Sound as Sound
 
 
-{-| `Model` that used in level2
+{-| `Model` that used in level2. See details in Level1Type, highly repetition.
 -}
 type alias Model =
     { windowBoundary : GlobalBasics.Pos
