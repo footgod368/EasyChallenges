@@ -28,7 +28,8 @@ import Svg
 import Svg.Attributes as SvgAttr
 
 
-{-| `view` of level1.
+{-| `view` of level1. Handles the resize by showing the windowBoundary in svg boundary. Others just view the modules
+individually.
 -}
 view : Level1Type.Model -> Html MainType.Msg
 view model =
