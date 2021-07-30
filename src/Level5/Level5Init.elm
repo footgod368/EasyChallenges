@@ -58,8 +58,8 @@ init a =
                     , Event.hitBlockAfter 7 "get red" ( 58, 36 ) ( 1, 1 ) 5
                     , Event.hitLineSegAfter 8 "hit red then blue" (GlobalBasics.blockPosFloat ( 56.05, 38.01 )) (GlobalBasics.blockPosFloat ( 56.95, 38.01 )) 5
                     , Event.hitLineSegAfter 8 "hit blue then red" (GlobalBasics.blockPosFloat ( 58.05, 38.01 )) (GlobalBasics.blockPosFloat ( 58.95, 38.01 )) 4
-                    , Event.hitLineSegAfter 9 "hit blue then land" (GlobalBasics.blockPosFloat ( 1, 39.9 )) (GlobalBasics.blockPosFloat ( 70, 39.9 )) 4
-                    , Event.hitLineSegAfter 10 "hit red then land" (GlobalBasics.blockPosFloat ( 1, 39.9 )) (GlobalBasics.blockPosFloat ( 70, 39.9 )) 5
+                    , Event.hitLineSegAfter 9 "hit blue then land" (GlobalBasics.blockPosFloat ( 1, 39.9 )) (GlobalBasics.blockPosFloat ( 70, 39.9 )) 8
+                    , Event.hitLineSegAfter 10 "hit red then land" (GlobalBasics.blockPosFloat ( 1, 39.9 )) (GlobalBasics.blockPosFloat ( 70, 39.9 )) 8
                     , Event.hitLineSegAfter 11 "second ? again" (GlobalBasics.blockPosFloat ( 56.05, 38.01 )) (GlobalBasics.blockPosFloat ( 56.95, 38.01 )) 9
                     , Event.hitLineSegAfter 12 "third ? again" (GlobalBasics.blockPosFloat ( 58.05, 38.01 )) (GlobalBasics.blockPosFloat ( 58.95, 38.01 )) 10
                     , Event.hitLineSegAfter 13 "hit again red then blue" (GlobalBasics.blockPosFloat ( 56.05, 38.01 )) (GlobalBasics.blockPosFloat ( 56.95, 38.01 )) 12

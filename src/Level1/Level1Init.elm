@@ -66,6 +66,7 @@ init a =
                             (GlobalBasics.Polygon (Array.fromList [ ( GlobalBasics.blockPosFloat ( 46, 1 ), GlobalBasics.blockPosFloat ( 46, 15 ) ) ]))
                         )
                         (Event.quickDuration 10)
+                    , Event.hitBlockAfter 13 "get pill" (25,11) (1,1) 4
                     ]
             , boundary = Boundary.normalInit
             , playerAtLastSavePoint = Player.init ( 50.0, 490.0 ) Player.defPlayerProperty Player.NoNextPropertyChange
@@ -106,6 +107,12 @@ init a =
                         , [ Brick.initPosVolumeColor (GlobalBasics.blockPosFloat ( 55, 11.5 )) ( 2.0 * 40.0, 3.5 * 40.0 ) "#008000"
                           , Brick.initPosVolumeColor (GlobalBasics.blockPosFloat ( 67, 11.5 )) ( 2.0 * 40.0, 3.5 * 40.0 ) "#008000"
                           ]
+                        , [Brick.init 
+                                (GlobalBasics.blockPosFloat (25,11))
+                                (Brick.Pill "#FF0000")
+                                (GlobalModule.Invisible (GlobalModule.VisibleAfterEvent 4 GlobalModule.NoNextVisibility))
+                                (GlobalModule.NoCollide (GlobalModule.CollideAfterEvent 4 GlobalModule.NoNextCollision))
+                                GlobalModule.NoNextMove ]
                         ]
                     )
             , savePoints =
@@ -127,7 +134,7 @@ init a =
                     (List.concat
                         [ [ Needle.initHidden ( 15, 13 ) 2 Needle.Downwards]
                         , Needle.initFallingRow 13 22 26 3 Needle.Downwards
-                        , [ Needle.initHiddenCollideAfter ( 25, 12 ) 4 Needle.Upwards]
+                        -- , [ Needle.initHiddenCollideAfter ( 25, 12 ) 4 Needle.Upwards]
                         , Needle.initHiddenRow 9 31 37 9 Needle.Downwards
 
                         -- , [ Needle.initPos (GlobalBasics.blockPosFloat ( 46.0, 14.75 ))
