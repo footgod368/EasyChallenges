@@ -27,7 +27,6 @@ import Modules.Player as Player
 import Modules.SavePoint as SavePoint
 import Modules.Sound as Sound
 import Task
-import Array exposing (Array)
 
 
 {-| init of Level1 Model. This stores the whole game info.
@@ -66,7 +65,7 @@ init _ =
                         ( 56 * 40, 65 * 40 )
                     ]
             , keyPressed = []
-            , gameControl = GameControl.init MainType.Level2 [["To circumvent the moonster,","jump back onto the first tunnel","and then jump over the monster."]]
+            , gameControl = GameControl.init MainType.Level2 [ [ "To circumvent the moonster,", "jump back onto the first tunnel", "and then jump over the monster." ] ]
             , sound =
                 initSound
             , mainScene = MainType.Level1
@@ -76,7 +75,7 @@ init _ =
 
 
 initEvent : Array Event.Event
-initEvent = 
+initEvent =
     Array.fromList
         [ Event.hitLineSeg 1 "first falling ground" (GlobalBasics.blockPosFloat ( 6, 12.5 )) (GlobalBasics.blockPosFloat ( 6, 15 ))
         , Event.hitLineSeg 2 "first ?" ( 564, 491 ) ( 604, 491 )
@@ -104,7 +103,7 @@ initEvent =
                 (GlobalBasics.Polygon (Array.fromList [ ( GlobalBasics.blockPosFloat ( 46, 1 ), GlobalBasics.blockPosFloat ( 46, 15 ) ) ]))
             )
             (Event.quickDuration 10)
-        , Event.hitBlockAfter 13 "get pill" (25,11) (1,1) 4
+        , Event.hitBlockAfter 13 "get pill" ( 25, 11 ) ( 1, 1 ) 4
         ]
 
 
@@ -120,39 +119,41 @@ initBricks =
             , [ Brick.initPosVolumeColor (GlobalBasics.blockPosFloat ( 15, 12 )) ( 40, 40 ) "#FFFF00" ]
             , [ Brick.initPosVolumeColor (GlobalBasics.blockPosFloat ( 24, 9 )) ( 40, 40 ) "#FFFF00" ]
             , [ Brick.initCollideHidden ( 22, 8 ) 4
-                , Brick.initCollideHidden ( 23, 8 ) 4
-                , Brick.initCollideHidden ( 24, 8 ) 4
-                , Brick.initCollideHidden ( 25, 8 ) 4
-                , Brick.initCollideHidden ( 26, 8 ) 4
-                , Brick.initCollideHidden ( 22, 9 ) 4
-                , Brick.initCollideHidden ( 26, 9 ) 4
-                , Brick.initCollideHidden ( 26, 10 ) 4
-                , Brick.initCollideHidden ( 26, 11 ) 4
-                , Brick.initCollideHidden ( 22, 10 ) 4
-                , Brick.initCollideHidden ( 22, 11 ) 4
-                ]
+              , Brick.initCollideHidden ( 23, 8 ) 4
+              , Brick.initCollideHidden ( 24, 8 ) 4
+              , Brick.initCollideHidden ( 25, 8 ) 4
+              , Brick.initCollideHidden ( 26, 8 ) 4
+              , Brick.initCollideHidden ( 22, 9 ) 4
+              , Brick.initCollideHidden ( 26, 9 ) 4
+              , Brick.initCollideHidden ( 26, 10 ) 4
+              , Brick.initCollideHidden ( 26, 11 ) 4
+              , Brick.initCollideHidden ( 22, 10 ) 4
+              , Brick.initCollideHidden ( 22, 11 ) 4
+              ]
             , [ Brick.initNoCollideHidden ( 4.5, 12 ) 5
-                , Brick.initNoCollideHidden ( 5.5, 12 ) 6
-                ]
+              , Brick.initNoCollideHidden ( 5.5, 12 ) 6
+              ]
             , Brick.initRow 15 36 80
             , [ NoticeBoard.boundary ( 31, 5 ) ( 7, 4 ) ]
             , [ Brick.initNoCollideHidden ( 32.5, 12 ) 7
-                , Brick.initNoCollideHidden ( 33.5, 12 ) 8
-                ]
+              , Brick.initNoCollideHidden ( 33.5, 12 ) 8
+              ]
             , [ Brick.initNoCollideHidden ( 44, 12 ) 10
-                , Brick.initNoCollideHidden ( 45, 12 ) 11
-                ]
+              , Brick.initNoCollideHidden ( 45, 12 ) 11
+              ]
             , [ Brick.initPosVolumeColor (GlobalBasics.blockPosFloat ( 55, 11.5 )) ( 2.0 * 40.0, 3.5 * 40.0 ) "#008000"
-                , Brick.initPosVolumeColor (GlobalBasics.blockPosFloat ( 67, 11.5 )) ( 2.0 * 40.0, 3.5 * 40.0 ) "#008000"
-                ]
-            , [Brick.init 
-                    (GlobalBasics.blockPosFloat (25,11))
+              , Brick.initPosVolumeColor (GlobalBasics.blockPosFloat ( 67, 11.5 )) ( 2.0 * 40.0, 3.5 * 40.0 ) "#008000"
+              ]
+            , [ Brick.init
+                    (GlobalBasics.blockPosFloat ( 25, 11 ))
                     (Brick.Pill "#FF0000")
                     (GlobalModule.Invisible (GlobalModule.VisibleAfterEvent 4 GlobalModule.NoNextVisibility))
                     (GlobalModule.NoCollide (GlobalModule.CollideAfterEvent 4 GlobalModule.NoNextCollision))
-                    GlobalModule.NoNextMove ]
+                    GlobalModule.NoNextMove
+              ]
             ]
         )
+
 
 initNoticeBoards : Array NoticeBoard.NoticeBoard
 initNoticeBoards =
@@ -164,36 +165,38 @@ initNoticeBoards =
         , NoticeBoard.quickInit (GlobalBasics.blockPosFloat ( 15.0, 7.0 )) "Press R to respawn" 40
         ]
 
+
 initSound : Sound.Sound
-initSound = 
-    Sound.init [
-        Sound.Event 2 Sound.RandomBox
-    ,   Sound.Event 3 Sound.Needle
-    ,   Sound.Event 4 Sound.RandomBox
-    ,   Sound.Event 5 Sound.RandomBox
-    ,   Sound.Event 6 Sound.RandomBox
-    ,   Sound.Event 7 Sound.RandomBox
-    ,   Sound.Event 8 Sound.RandomBox
-    ,   Sound.Event 9 Sound.Needle
-    ,   Sound.Event 10 Sound.RandomBox
-    ,   Sound.Event 11 Sound.RandomBox
-    ]
+initSound =
+    Sound.init
+        [ Sound.Event 2 Sound.RandomBox
+        , Sound.Event 3 Sound.Needle
+        , Sound.Event 4 Sound.RandomBox
+        , Sound.Event 5 Sound.RandomBox
+        , Sound.Event 6 Sound.RandomBox
+        , Sound.Event 7 Sound.RandomBox
+        , Sound.Event 8 Sound.RandomBox
+        , Sound.Event 9 Sound.Needle
+        , Sound.Event 10 Sound.RandomBox
+        , Sound.Event 11 Sound.RandomBox
+        ]
+
 
 initNeedles : Array Needle.Needle
 initNeedles =
     Array.fromList
         (List.concat
-            [ [ Needle.initHidden ( 15, 13 ) 2 Needle.Downwards]
+            [ [ Needle.initHidden ( 15, 13 ) 2 Needle.Downwards ]
             , Needle.initFallingRow 13 22 26 3 Needle.Downwards
             , Needle.initHiddenRow 9 31 37 9 Needle.Downwards
             , let
                 tempSword =
                     Needle.sword ( 46, 14.75 ) ( 46, -2 ) ( 4, 0.25 ) 6.0 12 Needle.Upwards
-                in
-                [ { tempSword
+              in
+              [ { tempSword
                     | visibility = GlobalModule.Visible GlobalModule.NoNextVisibility
                     , collision = GlobalModule.Collide GlobalModule.NoNextCollision
                 }
-                ]
+              ]
             ]
         )

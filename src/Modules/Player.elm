@@ -69,7 +69,7 @@ type alias PlayerProperty =
     , playerJumpInitialSpeed : Float
     , playerHorizontalSpeed : Float
     , gravityAcce : Float
-    , isGreen: Bool
+    , isGreen : Bool
     }
 
 
@@ -89,6 +89,7 @@ defPlayerProperty =
     , isGreen = False
     }
 
+
 {-| player property
 -}
 normalPlayerProperty : PlayerProperty
@@ -105,6 +106,7 @@ normalPlayerProperty =
     , isGreen = False
     }
 
+
 {-| Almost the same structure as the Visibility, The Int is a EventID, after this Event is activated, the
 playerProperty will change to `PlayerProperty`
 -}
@@ -112,12 +114,14 @@ type PropertyChange
     = ChangeTo PlayerProperty Int PropertyChange
     | NoNextPropertyChange
 
+
 {-| the face direction of player, used in 'view'. Left means player is facing left, while right means player is facing
 right.
 -}
 type FaceDirection
     = Left
     | Right
+
 
 {-| Definition of player, `pos` is current position, `lastPos` store the last position, used in collision test,
 `velocity` is its velocity, divided into x-axis and y-axis. `collisionBox` is its `CollisionBox`, `jumpNum` is how
@@ -130,7 +134,7 @@ type alias Player =
     , pos : GlobalBasics.Pos
     , lastPos : GlobalBasics.Pos
     , velocity : GlobalBasics.Pos
-    , faceDirection: FaceDirection
+    , faceDirection : FaceDirection
     , jump : PlayerJump
     , ifThisFrameOnGround : Bool
     , collisionBox : GlobalBasics.CollisionBox
@@ -273,7 +277,6 @@ update ( model, cmd ) =
                 |> updatePlayerPos
                 |> updatePlayerVelocity
 
-
         Dead ->
             ( model, cmd )
 
@@ -342,12 +345,15 @@ updatePlayerVelocity ( model, cmd ) =
             else
                 0.0
 
-        newFaceDirection = if velocityX > 0 then
-                                Right
-                            else if velocityX < 0 then
-                                Left
-                            else
-                                model.player.faceDirection
+        newFaceDirection =
+            if velocityX > 0 then
+                Right
+
+            else if velocityX < 0 then
+                Left
+
+            else
+                model.player.faceDirection
 
         ( newJump, velocityY ) =
             case model.player.jump of
@@ -387,7 +393,7 @@ updatePlayerVelocity ( model, cmd ) =
             model.player
 
         newPlayer =
-            { oldPlayer | jump = newJump, velocity = ( velocityX, velocityY ), ifThisFrameOnGround = False , faceDirection = newFaceDirection}
+            { oldPlayer | jump = newJump, velocity = ( velocityX, velocityY ), ifThisFrameOnGround = False, faceDirection = newFaceDirection }
 
         newModel =
             if Tuple.second newPlayer.velocity == model.player.property.playerJumpInitialSpeed then
@@ -494,36 +500,39 @@ view model =
         , SvgAttr.y (String.fromFloat (playerY - model.player.property.playerHeight * 0.9 + playerDeltaY model))
         , SvgAttr.width (String.fromFloat (model.player.property.playerWidth * 2.6))
         , SvgAttr.height (String.fromFloat (model.player.property.playerHeight * 2.6))
-        ,if model.player.faceDirection == Right then
+        , if model.player.faceDirection == Right then
             if model.player.property.ifPlayerJumpOnTheGround then
                 SvgAttr.xlinkHref "assets/playerRight.svg"
+
+            else if model.player.property.isGreen then
+                SvgAttr.xlinkHref "assets/playerGreenRight.png"
+
             else
-                if model.player.property.isGreen then
-                    SvgAttr.xlinkHref "assets/playerGreenRight.png"
-                else
-                    SvgAttr.xlinkHref "assets/playerWingsRight.png"
-        else
-            if model.player.property.ifPlayerJumpOnTheGround then
-                SvgAttr.xlinkHref "assets/playerLeft.svg"
-            else
-                if model.player.property.isGreen then
-                    SvgAttr.xlinkHref "assets/playerGreenLeft.png"
-                else
-                    SvgAttr.xlinkHref "assets/playerWingsLeft.png"
+                SvgAttr.xlinkHref "assets/playerWingsRight.png"
+
+          else if model.player.property.ifPlayerJumpOnTheGround then
+            SvgAttr.xlinkHref "assets/playerLeft.svg"
+
+          else if model.player.property.isGreen then
+            SvgAttr.xlinkHref "assets/playerGreenLeft.png"
+
+          else
+            SvgAttr.xlinkHref "assets/playerWingsLeft.png"
         ]
         []
     , Svg.rect
-        [
-        if playerX + playerDeltaX model < 350.0 then
+        [ if playerX + playerDeltaX model < 350.0 then
             SvgAttr.x "0"
-        else if playerX + playerDeltaX model + 350.0 > windowBoundaryX then
+
+          else if playerX + playerDeltaX model + 350.0 > windowBoundaryX then
             SvgAttr.x (String.fromFloat (windowBoundaryX - 700))
-        else
+
+          else
             SvgAttr.x (String.fromFloat (playerX + playerDeltaX model - 350.0))
-        ,
-        if playerY + playerDeltaY model < windowBoundaryY / 2.0 then
+        , if playerY + playerDeltaY model < windowBoundaryY / 2.0 then
             SvgAttr.y (String.fromFloat (playerY + playerDeltaY model + 30.0))
-        else
+
+          else
             SvgAttr.y (String.fromFloat (playerY + playerDeltaY model - 210.0))
         , SvgAttr.width (String.fromFloat 700)
         , SvgAttr.height (String.fromFloat 200)
@@ -532,17 +541,18 @@ view model =
         ]
         []
     , Svg.text_
-        [
-        if playerX + playerDeltaX model < 350.0 then
+        [ if playerX + playerDeltaX model < 350.0 then
             SvgAttr.x "350"
-        else if playerX + playerDeltaX model + 350.0 > windowBoundaryX then
+
+          else if playerX + playerDeltaX model + 350.0 > windowBoundaryX then
             SvgAttr.x (String.fromFloat (windowBoundaryX - 350))
-        else
+
+          else
             SvgAttr.x (String.fromFloat (playerX + playerDeltaX model))
-        ,
-        if playerY + playerDeltaY model < windowBoundaryY / 2.0 then
+        , if playerY + playerDeltaY model < windowBoundaryY / 2.0 then
             SvgAttr.y (String.fromFloat (playerY + playerDeltaY model + 130.0))
-        else
+
+          else
             SvgAttr.y (String.fromFloat (playerY + playerDeltaY model - 110.0))
         , SvgAttr.fontSize "50"
         , SvgAttr.textAnchor "middle"
@@ -552,17 +562,18 @@ view model =
         [ Svg.text ("You die! Times of death: " ++ String.fromInt (Tuple.first model.player.deadTimes))
         ]
     , Svg.text_
-        [
-        if playerX + playerDeltaX model < 350.0 then
+        [ if playerX + playerDeltaX model < 350.0 then
             SvgAttr.x "350"
-        else if playerX + playerDeltaX model + 350.0 > windowBoundaryX then
+
+          else if playerX + playerDeltaX model + 350.0 > windowBoundaryX then
             SvgAttr.x (String.fromFloat (windowBoundaryX - 350))
-        else
+
+          else
             SvgAttr.x (String.fromFloat (playerX + playerDeltaX model))
-        ,
-        if playerY + playerDeltaY model < windowBoundaryY / 2.0 then
+        , if playerY + playerDeltaY model < windowBoundaryY / 2.0 then
             SvgAttr.y (String.fromFloat (playerY + playerDeltaY model + 130.0))
-        else
+
+          else
             SvgAttr.y (String.fromFloat (playerY + playerDeltaY model - 110.0))
         , SvgAttr.fontSize "50"
         , SvgAttr.textAnchor "middle"

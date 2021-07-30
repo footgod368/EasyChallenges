@@ -54,11 +54,11 @@ update msg model =
                             |> Needle.update
                             |> Sound.update
                             |> Player.updateJustPlayerPos
-                            |> GameControl.update ( MainType.Tick timePassed )
+                            |> GameControl.update (MainType.Tick timePassed)
 
                     else
                         ( model, Cmd.none )
-                            |> GameControl.update ( MainType.Tick timePassed )
+                            |> GameControl.update (MainType.Tick timePassed)
             in
             if List.member 82 newModel.keyPressed then
                 SavePoint.updateReset Level6Init.init ( model, Cmd.none )

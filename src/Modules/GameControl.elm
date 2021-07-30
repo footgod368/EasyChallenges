@@ -163,18 +163,17 @@ update msg ( model, cmd ) =
                                     model.gameControl
 
                                 oldNewGameControl =
-                                    { oldOldGameControl | soundLoudness = max (oldOldGameControl.soundLoudness - 0.1) 0}
-
+                                    { oldOldGameControl | soundLoudness = max (oldOldGameControl.soundLoudness - 0.1) 0 }
                             in
                             ( { model | gameControl = oldNewGameControl }
-                            ,   Cmd.batch
-                                    [ changeVolume ( "BackGround", oldNewGameControl.soundLoudness )
-                                    , changeVolume ( "Jump", oldNewGameControl.soundLoudness )
-                                    , changeVolume ( "RandomBox", oldNewGameControl.soundLoudness )
-                                    , changeVolume ( "Needle", oldNewGameControl.soundLoudness )
-                                    , changeVolume ( "Dead", oldNewGameControl.soundLoudness )
-                                    , changeVolume ( "Sword", oldNewGameControl.soundLoudness )
-                                    ]
+                            , Cmd.batch
+                                [ changeVolume ( "BackGround", oldNewGameControl.soundLoudness )
+                                , changeVolume ( "Jump", oldNewGameControl.soundLoudness )
+                                , changeVolume ( "RandomBox", oldNewGameControl.soundLoudness )
+                                , changeVolume ( "Needle", oldNewGameControl.soundLoudness )
+                                , changeVolume ( "Dead", oldNewGameControl.soundLoudness )
+                                , changeVolume ( "Sword", oldNewGameControl.soundLoudness )
+                                ]
                             )
 
                         4 ->
@@ -184,18 +183,17 @@ update msg ( model, cmd ) =
                                     model.gameControl
 
                                 oldNewGameControl =
-                                    { oldOldGameControl | soundLoudness = min (oldOldGameControl.soundLoudness + 0.1) 1.0}
-
+                                    { oldOldGameControl | soundLoudness = min (oldOldGameControl.soundLoudness + 0.1) 1.0 }
                             in
                             ( { model | gameControl = oldNewGameControl }
-                            ,   Cmd.batch
-                                    [ changeVolume ( "BackGround", oldNewGameControl.soundLoudness )
-                                    , changeVolume ( "Jump", oldNewGameControl.soundLoudness )
-                                    , changeVolume ( "RandomBox", oldNewGameControl.soundLoudness )
-                                    , changeVolume ( "Needle", oldNewGameControl.soundLoudness )
-                                    , changeVolume ( "Dead", oldNewGameControl.soundLoudness )
-                                    , changeVolume ( "Sword", oldNewGameControl.soundLoudness )
-                                    ]
+                            , Cmd.batch
+                                [ changeVolume ( "BackGround", oldNewGameControl.soundLoudness )
+                                , changeVolume ( "Jump", oldNewGameControl.soundLoudness )
+                                , changeVolume ( "RandomBox", oldNewGameControl.soundLoudness )
+                                , changeVolume ( "Needle", oldNewGameControl.soundLoudness )
+                                , changeVolume ( "Dead", oldNewGameControl.soundLoudness )
+                                , changeVolume ( "Sword", oldNewGameControl.soundLoudness )
+                                ]
                             )
 
                         _ ->
@@ -211,14 +209,14 @@ update msg ( model, cmd ) =
 
         _ ->
             ( model
-            ,   Cmd.batch
-                    [ changeVolume ( "BackGround", model.gameControl.soundLoudness )
-                    , changeVolume ( "Jump", model.gameControl.soundLoudness )
-                    , changeVolume ( "RandomBox", model.gameControl.soundLoudness )
-                    , changeVolume ( "Needle", model.gameControl.soundLoudness )
-                    , changeVolume ( "Dead", model.gameControl.soundLoudness )
-                    , changeVolume ( "Sword", model.gameControl.soundLoudness )
-                    ]
+            , Cmd.batch
+                [ changeVolume ( "BackGround", model.gameControl.soundLoudness )
+                , changeVolume ( "Jump", model.gameControl.soundLoudness )
+                , changeVolume ( "RandomBox", model.gameControl.soundLoudness )
+                , changeVolume ( "Needle", model.gameControl.soundLoudness )
+                , changeVolume ( "Dead", model.gameControl.soundLoudness )
+                , changeVolume ( "Sword", model.gameControl.soundLoudness )
+                ]
             )
 
 
@@ -362,6 +360,7 @@ view model =
                             "Close"
                         ]
         ]
+
 
 {-| This is a port function that can help you to control the volume of the music.
 For example, if you want to change the volume of a audio tag, you need to make sure that the audio tag is written like this in view:

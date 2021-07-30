@@ -219,16 +219,16 @@ init a =
                         ]
                     )
             , keyPressed = []
-            , gameControl = GameControl.init MainType.Level3 [["To circumvent the first NoticeBoard,","triger the switch and back off quickly,","then jump onto the NoticeBoard"],["The big \"?\" will disturb","your direction control"]]
+            , gameControl = GameControl.init MainType.Level3 [ [ "To circumvent the first NoticeBoard,", "triger the switch and back off quickly,", "then jump onto the NoticeBoard" ], [ "The big \"?\" will disturb", "your direction control" ] ]
             , sound =
-                Sound.init [
-                    Sound.Event 2 Sound.RandomBox
-                ,   Sound.Event 7 Sound.RandomBox
-                ,   Sound.Event 10 Sound.RandomBox
-                ,   Sound.Event 11 Sound.RandomBox
-                ,   Sound.Event 14 Sound.RandomBox
-                ,   Sound.Event 15 Sound.RandomBox
-                ]
+                Sound.init
+                    [ Sound.Event 2 Sound.RandomBox
+                    , Sound.Event 7 Sound.RandomBox
+                    , Sound.Event 10 Sound.RandomBox
+                    , Sound.Event 11 Sound.RandomBox
+                    , Sound.Event 14 Sound.RandomBox
+                    , Sound.Event 15 Sound.RandomBox
+                    ]
             , mainScene = MainType.Level2
             }
     in

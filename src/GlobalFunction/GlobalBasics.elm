@@ -429,6 +429,7 @@ blockSize. You can use it like this
     pos : Pos
     pos =
         blockPos ( 1, 2 )
+
 -}
 blockPos : ( Int, Int ) -> ( Float, Float )
 blockPos ( x, y ) =

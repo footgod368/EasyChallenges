@@ -60,11 +60,13 @@ type alias Monster =
     , fixY : Float
     }
 
+
 {-| the face direction of monster
 -}
 type FaceDirection
     = Right
     | Left
+
 
 {-| MonsterAppearance currently describes the size of the monster, maybe different styles will be implemented later.
 -}
@@ -240,6 +242,7 @@ updateOneMonsterMoveX id model =
 
             else
                 monster.xSpeed
+
         newMonster =
             { monster | pos = ( newX, Tuple.second monster.pos ), xSpeed = newSpeed }
 

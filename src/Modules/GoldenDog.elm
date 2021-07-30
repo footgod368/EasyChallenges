@@ -45,27 +45,33 @@ viewGoldenDog : List (Svg MainType.Msg)
 viewGoldenDog =
     [ Svg.image
         [ SvgAttr.x (String.fromFloat 10.0)
+
         --[ SvgAttr.x (String.fromFloat 400.0)
         , SvgAttr.y (String.fromFloat -50.0)
+
         --, SvgAttr.y (String.fromFloat 400.0)
         , SvgAttr.width "160"
         , SvgAttr.height "160"
         , SvgAttr.direction "180"
         , SvgAttr.transform "translate(170,0) scale(-1, 1)"
+
         --, SvgAttr.fill "#000000"
         , SvgAttr.xlinkHref "assets/goldenDog.svg"
         ]
         []
     ]
-    --[ Svg.rect
-    --    [ SvgAttr.x (String.fromFloat 10.0)
-    --    , SvgAttr.y (String.fromFloat 10.0)
-    --    , SvgAttr.width "80"
-    --    , SvgAttr.height "80"
-    --    , SvgAttr.fill "#DDDD00"
-    --    ]
-    --    []
-    --]
+
+
+
+--[ Svg.rect
+--    [ SvgAttr.x (String.fromFloat 10.0)
+--    , SvgAttr.y (String.fromFloat 10.0)
+--    , SvgAttr.width "80"
+--    , SvgAttr.height "80"
+--    , SvgAttr.fill "#DDDD00"
+--    ]
+--    []
+--]
 
 
 viewOneLine : ( Float, Float ) -> String -> List (Svg MainType.Msg)

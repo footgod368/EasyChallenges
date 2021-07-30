@@ -172,21 +172,23 @@ view model =
         ]
 
 
-updateOneSoundTrigger : { model | actEvent : Array { id : Int, name : String} } -> SoundTrigger -> SoundTrigger
+updateOneSoundTrigger : { model | actEvent : Array { id : Int, name : String } } -> SoundTrigger -> SoundTrigger
 updateOneSoundTrigger model soundTrigger =
     case soundTrigger of
         Event eventId soundEffect ->
-            if Array.foldl
-               (\actEvent sum ->
-                   if actEvent.id == eventId then
-                       sum + 1
+            if
+                Array.foldl
+                    (\actEvent sum ->
+                        if actEvent.id == eventId then
+                            sum + 1
 
-                   else
-                       sum
-               )
-               0
-               model.actEvent
-               /= 0 then
+                        else
+                            sum
+                    )
+                    0
+                    model.actEvent
+                    /= 0
+            then
                 case soundEffect of
                     BackGround ->
                         Activated backGroundLength soundEffect soundTrigger
@@ -259,7 +261,7 @@ trigger model soundEffect =
 
 {-| Update soundTrigger individually.
 -}
-update : ( { model | sound : Sound, actEvent : Array { id : Int, name : String} }, Cmd MainType.Msg ) -> ( { model | sound : Sound, actEvent : Array { id : Int, name : String} }, Cmd MainType.Msg )
+update : ( { model | sound : Sound, actEvent : Array { id : Int, name : String } }, Cmd MainType.Msg ) -> ( { model | sound : Sound, actEvent : Array { id : Int, name : String } }, Cmd MainType.Msg )
 update ( model, cmd ) =
     let
         oldSound =

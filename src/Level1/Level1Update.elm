@@ -60,12 +60,11 @@ update msg model =
                             |> Monster.update
                             |> Player.updateJustPlayerPos
                             |> checkPill
-                            |> GameControl.update ( MainType.Tick timePassed )
-
+                            |> GameControl.update (MainType.Tick timePassed)
 
                     else
                         ( model, Cmd.none )
-                            |> GameControl.update ( MainType.Tick timePassed )
+                            |> GameControl.update (MainType.Tick timePassed)
             in
             if List.member 82 newModel.keyPressed then
                 SavePoint.updateReset Level1Init.init ( model, Cmd.none )
@@ -75,6 +74,7 @@ update msg model =
 
         buttonMsg ->
             GameControl.update buttonMsg ( model, Cmd.none )
+
 
 {-| check whether player gets the pill and kill them if so
 -}

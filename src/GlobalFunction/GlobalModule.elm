@@ -99,20 +99,20 @@ type Move
 module model. Then, you can use it like this.
 
     type alias Module =
-    { visibility : Visibility
-    }
+        { visibility : Visibility
+        }
 
     myModule : Module
     myModule =
-        Module ( Invisible ( VisibleAfterEvent 2 NoNextVisibility ) )
+        Module (Invisible (VisibleAfterEvent 2 NoNextVisibility))
 
     type alias Model =
-    { actEvent : Array Event.ActEvent
-    }
+        { actEvent : Array Event.ActEvent
+        }
 
     model : Model
     model =
-        Model ( Array.fromList [{id = 2, label = "event2"}] )
+        Model (Array.fromList [ { id = 2, label = "event2" } ])
 
     -- updateModule == Module  ( Visible NoNextVisibility ), this is because eventID = 2 is activated
     updateModule : Module
@@ -163,20 +163,20 @@ updateOneVisibility model myModule =
 module model. Then, you can use it like this.
 
     type alias Module =
-    { collision : Collision
-    }
+        { collision : Collision
+        }
 
     myModule : Module
     myModule =
-        Module ( NoCollide ( CollideAfterEvent 2 NoNextCollide ) )
+        Module (NoCollide (CollideAfterEvent 2 NoNextCollide))
 
     type alias Model =
-    { actEvent : Array Event.ActEvent
-    }
+        { actEvent : Array Event.ActEvent
+        }
 
     model : Model
     model =
-        Model ( Array.fromList [{id = 2, label = "event2"}] )
+        Model (Array.fromList [ { id = 2, label = "event2" } ])
 
     -- updateModule == Module  ( Collide NoNextCollide ), this is because eventID = 2 is activated
     updateModule : Module
@@ -232,7 +232,7 @@ module model. Then, you can use it like this.
 
     myModule : Module
     myModule =
-        Module ( Move ( Array.fromList [ ( 100.0, 0.0 ) ] 10.0 2 NoNextMove) 
+        Module ( Move ( Array.fromList [ ( 100.0, 0.0 ) ] 10.0 2 NoNextMove)
 
     type alias Model =
     { actEvent : Array Event.ActEvent

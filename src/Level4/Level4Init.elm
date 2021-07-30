@@ -28,7 +28,7 @@ import Modules.Sound as Sound
 import Task
 
 
-{-| `init` of Level4  Model, see in level4Init, highly repetition.
+{-| `init` of Level4 Model, see in level4Init, highly repetition.
 -}
 init : () -> ( Level4Type.Model, Cmd MainType.Msg )
 init a =
@@ -76,7 +76,7 @@ init a =
                         , [ NoticeBoard.boundary ( 19, 7 ) ( 6, 3 ) ]
                         , [ Brick.init
                                 (GlobalBasics.blockPosFloat ( 20, 14 ))
-                                (Brick.Helmet)
+                                Brick.Helmet
                                 (GlobalModule.Invisible (GlobalModule.VisibleAfterEvent 8 (GlobalModule.InvisibleAfterEvent 9 GlobalModule.NoNextVisibility)))
                                 (GlobalModule.NoCollide GlobalModule.NoNextCollision)
                                 GlobalModule.NoNextMove
@@ -114,26 +114,26 @@ init a =
                                 (GlobalModule.Collide (GlobalModule.NoCollideAfterEvent 9 GlobalModule.NoNextCollision))
                                 GlobalModule.NoNextMove
                           ]
-                        , [ Needle.sword ( 12, 15 ) ( 12, -10 ) ( 3, 5 ) 7.0 11 Needle.BombUp]
-                        , [ Needle.sword ( 28, 12 ) ( -10, 12 ) ( 4, 2 ) 7.0 12 Needle.BombLeft]
+                        , [ Needle.sword ( 12, 15 ) ( 12, -10 ) ( 3, 5 ) 7.0 11 Needle.BombUp ]
+                        , [ Needle.sword ( 28, 12 ) ( -10, 12 ) ( 4, 2 ) 7.0 12 Needle.BombLeft ]
                         ]
                     )
             , keyPressed = []
-            , gameControl = GameControl.init MainType.Level5 [["Note that the \"?\"","on the NoticeBoard also counts"],["The helmet can protect","you from the last \"?\""]]
+            , gameControl = GameControl.init MainType.Level5 [ [ "Note that the \"?\"", "on the NoticeBoard also counts" ], [ "The helmet can protect", "you from the last \"?\"" ] ]
             , sound =
-                Sound.init [
-                    Sound.Event 1 Sound.RandomBox
-                ,    Sound.Event 2 Sound.RandomBox
-                ,    Sound.Event 3 Sound.RandomBox
-                ,    Sound.Event 4 Sound.RandomBox
-                ,    Sound.Event 5 Sound.RandomBox
-                ,    Sound.Event 6 Sound.RandomBox
-                ,    Sound.Event 7 Sound.RandomBox
-                ,    Sound.Event 8 Sound.RandomBox
-                ,    Sound.Event 10 Sound.Needle
-                ,    Sound.Event 11 Sound.Sword
-                ,    Sound.Event 12 Sound.Sword
-                ]
+                Sound.init
+                    [ Sound.Event 1 Sound.RandomBox
+                    , Sound.Event 2 Sound.RandomBox
+                    , Sound.Event 3 Sound.RandomBox
+                    , Sound.Event 4 Sound.RandomBox
+                    , Sound.Event 5 Sound.RandomBox
+                    , Sound.Event 6 Sound.RandomBox
+                    , Sound.Event 7 Sound.RandomBox
+                    , Sound.Event 8 Sound.RandomBox
+                    , Sound.Event 10 Sound.Needle
+                    , Sound.Event 11 Sound.Sword
+                    , Sound.Event 12 Sound.Sword
+                    ]
             , mainScene = MainType.Level4
             , number = []
             }

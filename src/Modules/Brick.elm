@@ -53,6 +53,7 @@ type BrickAppearance
     | Pill String
     | Helmet
 
+
 {-| brickWidth Constant
 -}
 brickWidth : Float
@@ -227,6 +228,7 @@ brickCollisionBox brickAppearance =
                     , ( ( 0.0, height ), ( 0.0, 0.0 ) )
                     ]
                 )
+
         _ ->
             GlobalBasics.Polygon
                 (Array.fromList
@@ -268,14 +270,13 @@ viewOneBrick model brick =
                             , SvgAttr.stroke "#000000"
                             , SvgAttr.fill "#00000050"
                             ]
-                            (
-                                    [ SvgAttr.width (String.fromFloat brickWidth)
-                                    , SvgAttr.height (String.fromFloat brickHeight)
-                                    ]
-                            )
+                            [ SvgAttr.width (String.fromFloat brickWidth)
+                            , SvgAttr.height (String.fromFloat brickHeight)
+                            ]
                         )
                         []
                     ]
+
                 Detailed width height color ->
                     let
                         ( brickX, brickY ) =
@@ -289,14 +290,13 @@ viewOneBrick model brick =
                             , SvgAttr.stroke "#000000"
                             , SvgAttr.fill color
                             ]
-                            (
-                                    [ SvgAttr.width (String.fromFloat width)
-                                    , SvgAttr.height (String.fromFloat height)
-                                    ]
-                            )
+                            [ SvgAttr.width (String.fromFloat width)
+                            , SvgAttr.height (String.fromFloat height)
+                            ]
                         )
                         []
                     ]
+
                 Wings ->
                     let
                         ( brickX, brickY ) =
@@ -305,31 +305,43 @@ viewOneBrick model brick =
                     [ Svg.image
                         [ SvgAttr.x (String.fromFloat (ViewMove.deltaX model + brickX))
                         , SvgAttr.y (String.fromFloat (ViewMove.deltaY model + brickY))
-                        , SvgAttr.width (String.fromFloat   brickWidth)
-                        , SvgAttr.height (String.fromFloat  brickHeight)
+                        , SvgAttr.width (String.fromFloat brickWidth)
+                        , SvgAttr.height (String.fromFloat brickHeight)
                         , SvgAttr.xlinkHref "assets/wings2.png"
                         ]
                         []
                     ]
+
                 Switch bool ->
                     let
                         ( brickX, brickY ) =
                             brick.pos
-                        x0 = ViewMove.deltaX model + brickX
-                        y0 = ViewMove.deltaY model + brickY
+
+                        x0 =
+                            ViewMove.deltaX model + brickX
+
+                        y0 =
+                            ViewMove.deltaY model + brickY
                     in
                     if bool then
                         drawSwitch1 x0 y0 "#00CCFF"
+
                     else
                         drawSwitch2 x0 y0 "#00CCFF"
+
                 Pill color ->
                     let
                         ( brickX, brickY ) =
                             brick.pos
-                        x0 = ViewMove.deltaX model + brickX
-                        y0 = ViewMove.deltaY model + brickY
+
+                        x0 =
+                            ViewMove.deltaX model + brickX
+
+                        y0 =
+                            ViewMove.deltaY model + brickY
                     in
                     drawPill x0 y0 color
+
                 Helmet ->
                     let
                         ( brickX, brickY ) =
@@ -338,17 +350,19 @@ viewOneBrick model brick =
                     [ Svg.image
                         [ SvgAttr.x (String.fromFloat (ViewMove.deltaX model + brickX))
                         , SvgAttr.y (String.fromFloat (ViewMove.deltaY model + brickY))
-                        , SvgAttr.width (String.fromFloat   brickWidth)
-                        , SvgAttr.height (String.fromFloat  brickHeight)
+                        , SvgAttr.width (String.fromFloat brickWidth)
+                        , SvgAttr.height (String.fromFloat brickHeight)
                         , SvgAttr.xlinkHref "assets/helmet.png"
                         ]
                         []
                     ]
+
         GlobalModule.Invisible _ ->
             []
 
         _ ->
             []
+
 
 {-| View of pill, not exposed.
 -}
@@ -371,7 +385,7 @@ drawPill x y color =
         , SvgAttr.stroke "#000000"
         , SvgAttr.strokeWidth "1"
         ]
-        [] 
+        []
     , Svg.rect
         [ SvgAttr.x (String.fromFloat (x + 10))
         , SvgAttr.y (String.fromFloat (y + 21))
@@ -407,6 +421,7 @@ drawPill x y color =
         ]
         []
     ]
+
 
 {-| View of switch, not exposed.
 -}
@@ -463,6 +478,7 @@ drawSwitch2 x y color =
         []
     ]
 
+
 {-| View of switch, not exposed.
 -}
 drawSwitch1 : Float -> Float -> String -> List (Svg MainType.Msg)
@@ -517,6 +533,7 @@ drawSwitch1 x y color =
         ]
         []
     ]
+
 
 {-| view function of brick
 -}

@@ -59,11 +59,11 @@ update msg model =
                             |> checkBlue
                             |> checkRed
                             |> checkBlueAndRed
-                            |> GameControl.update ( MainType.Tick timePassed )
+                            |> GameControl.update (MainType.Tick timePassed)
 
                     else
                         ( model, Cmd.none )
-                            |> GameControl.update ( MainType.Tick timePassed )
+                            |> GameControl.update (MainType.Tick timePassed)
             in
             if List.member 82 newModel.keyPressed then
                 SavePoint.updateReset Level5Init.init ( model, Cmd.none )
@@ -158,6 +158,7 @@ notBlueOrRed brick =
     case brick.appearance of
         Brick.Pill color ->
             color /= "#1E90FF" && color /= "#FF0000"
+
         _ ->
             True
 
