@@ -26,10 +26,9 @@ import Modules.Player as Player
 import Modules.SavePoint as SavePoint
 import Modules.Sound as Sound
 import Task
-import Modules.Needle exposing (Needle)
 
 
-{-| `init` of Level6 \`Model
+{-| `init` of Level6 Model. See in level1Init for detail, highly repetition.
 -}
 init : () -> ( Level6Type.Model, Cmd MainType.Msg )
 init a =
