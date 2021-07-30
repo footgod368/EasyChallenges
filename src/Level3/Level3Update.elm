@@ -24,7 +24,7 @@ import Modules.SavePoint as SavePoint
 import Modules.Sound as Sound
 
 
-{-| `update` of Level3
+{-| `update` of Level3, see in level1Update, highly repetition.
 -}
 update : MainType.Msg -> Level3Type.Model -> ( Level3Type.Model, Cmd MainType.Msg )
 update msg model =
